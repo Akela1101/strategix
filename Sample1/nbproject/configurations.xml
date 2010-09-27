@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="69">
+  <logicalFolder name="root" displayName="root" projectFiles="true">
+    <logicalFolder name="include" displayName="include" projectFiles="true">
+      <itemPath>OgreWrap/include/EntityManager.h</itemPath>
+      <itemPath>OgreWrap/include/ExampleApplication.h</itemPath>
+      <itemPath>OgreWrap/include/ExampleFrameListener.h</itemPath>
+      <itemPath>OgreWrap/include/LabelManager.h</itemPath>
+      <itemPath>OgreWrap/include/MapTexture.h</itemPath>
+      <itemPath>OgreWrap/include/MovingManager.h</itemPath>
+      <itemPath>OgreWrap/include/MyFrameListener.h</itemPath>
+      <itemPath>OgreWrap/include/MyMouseListener.h</itemPath>
+      <itemPath>OgreWrap/include/ObjectTitle.h</itemPath>
+      <itemPath>OgreWrap/include/OgreWrap.h</itemPath>
+      <itemPath>OgreWrap/include/OgreWrapCommon.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="ResourceFiles"
+                   displayName="Resource Files"
+                   projectFiles="true"
+                   kind="SOURCE_LOGICAL_FOLDER">
+    </logicalFolder>
+    <logicalFolder name="src" displayName="src" projectFiles="true">
+      <itemPath>OgreWrap/src/EntityManager.cpp</itemPath>
+      <itemPath>OgreWrap/src/LabelManager.cpp</itemPath>
+      <itemPath>OgreWrap/src/MapTexture.cpp</itemPath>
+      <itemPath>OgreWrap/src/MovingManager.cpp</itemPath>
+      <itemPath>OgreWrap/src/MyFrameListener.cpp</itemPath>
+      <itemPath>OgreWrap/src/MyMouseListener.cpp</itemPath>
+      <itemPath>OgreWrap/src/ObjectTitle.cpp</itemPath>
+      <itemPath>OgreWrap/src/OgreWrap.cpp</itemPath>
+      <itemPath>src/Sample1.cpp</itemPath>
+    </logicalFolder>
+    <logicalFolder name="TestFiles"
+                   displayName="Test Files"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <sourceRootList>
+    <Elem>include</Elem>
+    <Elem>src</Elem>
+    <Elem>OgreWrap/include</Elem>
+    <Elem>OgreWrap/src</Elem>
+  </sourceRootList>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Debug" type="1">
+      <toolsSet>
+        <developmentServer>localhost</developmentServer>
+        <compilerSet>GNU|GNU</compilerSet>
+        <platform>2</platform>
+      </toolsSet>
+      <compileType>
+        <ccTool>
+          <incDir>
+            <pElem>include</pElem>
+            <pElem>OgreWrap/include</pElem>
+            <pElem>../Strategix/include</pElem>
+            <pElem>/usr/local/boost_1_42_0</pElem>
+            <pElem>/usr/local/include</pElem>
+            <pElem>/usr/local/include/OGRE</pElem>
+            <pElem>/usr/local/include/OIS</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <linkerAddLib>
+            <pElem>/usr/local/lib</pElem>
+            <pElem>/usr/local/lib/OGRE</pElem>
+          </linkerAddLib>
+          <linkerLibItems>
+            <linkerLibLibItem>CEGUIBase</linkerLibLibItem>
+            <linkerLibLibItem>CEGUIOgreRenderer</linkerLibLibItem>
+            <linkerLibLibItem>OIS</linkerLibLibItem>
+            <linkerLibLibItem>OgreMain</linkerLibLibItem>
+            <linkerLibProjectItem>
+              <makeArtifact PL="../Strategix"
+                            CT="3"
+                            CN="Debug"
+                            AC="false"
+                            BL="true"
+                            WD="../Strategix"
+                            BC="${MAKE}  -f Makefile CONF=Debug"
+                            CC="${MAKE}  -f Makefile CONF=Debug clean"
+                            OP="dist/Debug/GNU-Linux-x86/libstrategix.a">
+              </makeArtifact>
+            </linkerLibProjectItem>
+          </linkerLibItems>
+        </linkerTool>
+        <requiredProjects>
+          <makeArtifact PL="../Strategix"
+                        CT="3"
+                        CN="Debug"
+                        AC="false"
+                        BL="true"
+                        WD="../Strategix"
+                        BC="${MAKE}  -f Makefile CONF=Debug"
+                        CC="${MAKE}  -f Makefile CONF=Debug clean"
+                        OP="dist/Debug/GNU-Linux-x86/libstrategix.a">
+          </makeArtifact>
+        </requiredProjects>
+      </compileType>
+    </conf>
+    <conf name="Release" type="1">
+      <toolsSet>
+        <developmentServer>localhost</developmentServer>
+        <compilerSet>GNU|GNU</compilerSet>
+        <platform>2</platform>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <developmentMode>5</developmentMode>
+        </cTool>
+        <ccTool>
+          <developmentMode>5</developmentMode>
+          <incDir>
+            <pElem>include</pElem>
+            <pElem>OgreWrap/include</pElem>
+            <pElem>../Strategix/include</pElem>
+            <pElem>/usr/local/boost_1_42_0</pElem>
+            <pElem>/usr/local/include</pElem>
+            <pElem>/usr/local/include/OGRE</pElem>
+            <pElem>/usr/local/include/OIS</pElem>
+          </incDir>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>5</developmentMode>
+        </asmTool>
+        <linkerTool>
+          <linkerAddLib>
+            <pElem>/usr/local/lib</pElem>
+            <pElem>/usr/local/lib/OGRE</pElem>
+          </linkerAddLib>
+          <linkerLibItems>
+            <linkerLibLibItem>CEGUIBase</linkerLibLibItem>
+            <linkerLibLibItem>CEGUIOgreRenderer</linkerLibLibItem>
+            <linkerLibLibItem>OIS</linkerLibLibItem>
+            <linkerLibLibItem>OgreMain</linkerLibLibItem>
+            <linkerLibProjectItem>
+              <makeArtifact PL="../Strategix"
+                            CT="3"
+                            CN="Release"
+                            AC="true"
+                            BL="true"
+                            WD="../Strategix"
+                            BC="${MAKE}  -f Makefile CONF=Release"
+                            CC="${MAKE}  -f Makefile CONF=Release clean"
+                            OP="dist/Release/GNU-Linux-x86/libstrategix.a">
+              </makeArtifact>
+            </linkerLibProjectItem>
+          </linkerLibItems>
+        </linkerTool>
+        <requiredProjects>
+          <makeArtifact PL="../Strategix"
+                        CT="3"
+                        CN="Release"
+                        AC="true"
+                        BL="true"
+                        WD="../Strategix"
+                        BC="${MAKE}  -f Makefile CONF=Release"
+                        CC="${MAKE}  -f Makefile CONF=Release clean"
+                        OP="dist/Release/GNU-Linux-x86/libstrategix.a">
+          </makeArtifact>
+        </requiredProjects>
+      </compileType>
+    </conf>
+  </confs>
+</configurationDescriptor>

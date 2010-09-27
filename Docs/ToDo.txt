@@ -1,0 +1,14 @@
+
+Reread ogre for beginners
+
+Mouse at begin is not in a center of screen. + Strange mouse movment CEGUI
+
+How to create worldFragment from mesh ?
+
+Добавить в MapEditor перемещение объекта.
+
+Наделать моделек.
+
+Попробовать profiling.
+
+Написать уже что-ньть на докувики!

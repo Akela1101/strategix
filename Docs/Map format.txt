@@ -1,0 +1,12 @@
+"Top String" (string)
+"Terrains definition file name" (string)
+"Map Name"
+
+"width" "height" (int int)
+""contents"" (int)[][]
+
+"Number of players" (int)
+""initial positions"" (int int)[]
+
+"Number of objects" (int)
+""Objects""(int int object)[]

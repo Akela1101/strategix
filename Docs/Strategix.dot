@@ -1,0 +1,52 @@
+digraph G 
+{
+	rankdir=LR;
+
+	Kernel -> {TechTree_Full; Map_Full}
+	Kernel -> Player [arrowhead = dot]	
+	{rank = same; TechTree_Full; Map_Full; Player}
+	
+	TechTree_Full [label = "TechTree\nFull"]
+	Map_Full [label = "Map\nFull"]	
+		
+	Player -> {Resources; Map; TechTree;} 
+	Player -> Entity [arrowhead = dot]
+	{rank = same; Resources; Map; TechTree; Entity}
+	
+	Resources [color = orange]
+	
+	subgraph cluster0
+	{
+		color = red;
+		Map -> Map_Full [arrowhead = tee]
+		Map -> Info
+		Map -> Cell [arrowhead = dot]
+			Cell -> CellParams
+			Cell -> Entity
+	}
+	Map [color = red]
+	
+	subgraph cluster1
+	{
+		color = green;
+		TechTree -> TechTree_Full [arrowhead = tee]
+		TechTree -> TechNode [arrowhead = dot]
+			TechNode -> TechParams
+			TechNode -> {Depends; Provides} [arrowhead = dot]
+				Depends -> TechNode
+				Provides -> TechNode
+	}
+	TechTree [color = green]
+
+	subgraph cluster2
+	{
+		color = blue;
+		Entity -> EntityParams
+		Entity -> Action [arrowhead = dot]
+		Entity -> ActionQueue
+			Action -> ActionParams
+			Action -> Animation		
+			ActionQueue -> Action [arrowhead = dot]
+	}
+	Entity [color = blue]
+}

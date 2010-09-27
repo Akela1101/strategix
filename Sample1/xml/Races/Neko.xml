@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Technology Tree Definition -->
+
+<race>
+	<entities>
+		<entity>
+			<name>MainBuilding</name>	
+			<kind>building</kind>			
+			<cost>
+				<gold>10000</gold>
+			</cost>
+			<hp>1000</hp>
+			<creates>
+				<name>Worker</name>
+			</creates>
+		</entity>
+		<entity>
+			<name>Worker</name>
+			<kind>unit</kind>
+			<cost>
+				<gold>500</gold>
+			</cost>
+			<hp>50</hp>
+			<depends>
+				<name>MainBuilding</name>
+			</depends>
+			<creates>
+				<name>MainBuilding</name>
+			</creates>
+		</entity>
+	</entities>
+</race>

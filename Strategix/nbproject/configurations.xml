@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="69">
+  <logicalFolder name="root" displayName="root" projectFiles="true">
+    <logicalFolder name="include" displayName="include" projectFiles="true">
+      <itemPath>include/Entity.h</itemPath>
+      <itemPath>include/EntityInfo.h</itemPath>
+      <itemPath>include/Exception.h</itemPath>
+      <itemPath>include/GameStructs.h</itemPath>
+      <itemPath>include/Kernel.h</itemPath>
+      <itemPath>include/Map.h</itemPath>
+      <itemPath>include/MapSAstar.h</itemPath>
+      <itemPath>include/Nya.hpp</itemPath>
+      <itemPath>include/Player.h</itemPath>
+      <itemPath>include/StraxLog.h</itemPath>
+      <itemPath>include/StraxSingleton.h</itemPath>
+      <itemPath>include/TechTree.h</itemPath>
+      <itemPath>include/TechTreeBuilder.h</itemPath>
+      <itemPath>include/TechTreeBuilderFromXml.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="ResourceFiles"
+                   displayName="Resource Files"
+                   projectFiles="true"
+                   kind="SOURCE_LOGICAL_FOLDER">
+    </logicalFolder>
+    <logicalFolder name="src" displayName="src" projectFiles="true">
+      <itemPath>src/Entity.cpp</itemPath>
+      <itemPath>src/EntityInfo.cpp</itemPath>
+      <itemPath>src/Kernel.cpp</itemPath>
+      <itemPath>src/Map.cpp</itemPath>
+      <itemPath>src/MapSAstar.cpp</itemPath>
+      <itemPath>src/Player.cpp</itemPath>
+      <itemPath>src/StraxLog.cpp</itemPath>
+      <itemPath>src/TechTree.cpp</itemPath>
+      <itemPath>src/TechTreeBuilderFromXml.cpp</itemPath>
+    </logicalFolder>
+    <logicalFolder name="TestFiles"
+                   displayName="Test Files"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <sourceRootList>
+    <Elem>include</Elem>
+    <Elem>src</Elem>
+  </sourceRootList>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Debug" type="3">
+      <toolsSet>
+        <developmentServer>localhost</developmentServer>
+        <compilerSet>GNU|GNU</compilerSet>
+        <platform>2</platform>
+      </toolsSet>
+      <compileType>
+        <ccTool>
+          <incDir>
+            <pElem>include</pElem>
+            <pElem>/usr/local/boost_1_42_0</pElem>
+          </incDir>
+        </ccTool>
+        <archiverTool>
+        </archiverTool>
+      </compileType>
+    </conf>
+    <conf name="Release" type="3">
+      <toolsSet>
+        <developmentServer>localhost</developmentServer>
+        <compilerSet>GNU|GNU</compilerSet>
+        <platform>2</platform>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <developmentMode>5</developmentMode>
+        </cTool>
+        <ccTool>
+          <developmentMode>5</developmentMode>
+          <incDir>
+            <pElem>include</pElem>
+            <pElem>/usr/local/boost_1_42_0</pElem>
+          </incDir>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>5</developmentMode>
+        </asmTool>
+        <archiverTool>
+        </archiverTool>
+      </compileType>
+    </conf>
+  </confs>
+</configurationDescriptor>
