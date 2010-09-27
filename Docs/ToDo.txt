@@ -12,3 +12,5 @@ How to create worldFragment from mesh ?
 Попробовать profiling.
 
 Написать уже что-ньть на докувики!
+
+Test git
