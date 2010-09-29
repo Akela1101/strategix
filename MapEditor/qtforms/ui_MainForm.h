@@ -1,10 +1,10 @@
 /********************************************************************************
-** Form generated from reading ui file 'MainForm.ui'
+** Form generated from reading UI file 'MainForm.ui'
 **
-** Created: Mon Sep 27 19:46:28 2010
-**      by: Qt User Interface Compiler version 4.5.2
+** Created: Wed Sep 29 20:26:43 2010
+**      by: Qt User Interface Compiler version 4.6.2
 **
-** WARNING! All changes made in this file will be lost when recompiling ui file!
+** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
 
 #ifndef UI_MAINFORM_H

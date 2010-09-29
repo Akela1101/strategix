@@ -1,10 +1,10 @@
 /********************************************************************************
-** Form generated from reading ui file 'DialogNew.ui'
+** Form generated from reading UI file 'DialogNew.ui'
 **
-** Created: Mon Sep 27 19:46:28 2010
-**      by: Qt User Interface Compiler version 4.5.2
+** Created: Wed Sep 29 20:26:43 2010
+**      by: Qt User Interface Compiler version 4.6.2
 **
-** WARNING! All changes made in this file will be lost when recompiling ui file!
+** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
 
 #ifndef UI_DIALOGNEW_H
@@ -164,7 +164,6 @@ public:
         cancelButton->setText(QApplication::translate("DialogNew", "Cancel", 0, QApplication::UnicodeUTF8));
         label_2->setText(QString());
         createButton->setText(QApplication::translate("DialogNew", "Create", 0, QApplication::UnicodeUTF8));
-        Q_UNUSED(DialogNew);
     } // retranslateUi
 
 };
