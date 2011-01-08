@@ -27,6 +27,7 @@ MyFrameListener::MyFrameListener(RenderWindow* mWindow, Camera* mCamera, SceneMa
 	mMouse->setEventCallback(p_mouse_listener);
 
 	CreateLabels();
+	ShowLabels(false);
 }
 
 MyFrameListener::~MyFrameListener()
@@ -40,50 +41,32 @@ bool MyFrameListener::frameStarted(const FrameEvent &event)
 	if( !ExampleFrameListener::frameStarted(event) )
 		return false;
 
-	// Setup the scene query
 	Vector3 camPos = mCamera->getPosition();
 
-	// Set mCamera positon under the terrain
+	// Set mCamera positon over the terrain
 	static Vector3 lastCamPos;
 	if( lastCamPos != camPos )
 	{
+		using Strategix::Map;
+
+		float w = Map::GS().GetWidth() * tile_length;
+		float l = Map::GS().GetLength() * tile_length;
+
+		if( camPos.y < tile_length )
+			camPos.y = tile_length;
+
+//		if( camPos.x < 0 )
+//			camPos.x = 0;
+//		if( camPos.x > w )
+//			camPos.x = w;
+//
+//		if( camPos.z < 0 )
+//			camPos.z = 0;
+//		if( camPos.z > l )
+//			camPos.z = l;
+
+		mCamera->setPosition(camPos);
 		lastCamPos = camPos;
-
-		Ray cameraRay(Vector3(camPos.x, 5000.0f, camPos.z), Vector3::NEGATIVE_UNIT_Y);
-		raySceneQuery->setRay(cameraRay);
-
-		// Perform the scene query
-		RaySceneQueryResult &result = raySceneQuery->execute();
-		RaySceneQueryResult::iterator itr = result.begin();
-
-		// Get the results, set the mCamera height
-		bool is_over_terrain = false;
-		for(; itr != result.end(); ++itr )
-		{
-			if( itr->worldFragment )
-			{
-				is_over_terrain = true;
-				Real terrainHeight = itr->worldFragment->singleIntersection.y;
-				if( (terrainHeight + 10.0f) > camPos.y )
-					mCamera->setPosition(camPos.x, terrainHeight + 10.0f, camPos.z);
-			}
-		}
-
-		// Camera must be over the terrain for ray to execute !
-		if( !is_over_terrain )
-		{
-			using Strategix::Map;
-
-			Vector3 camera_pos = mCamera->getPosition();
-			if( camera_pos.x < 0 ) camera_pos.x = 0;
-			float w = Map::GS().GetWidth() * tile_length;
-			if( camera_pos.x > w ) camera_pos.x = w;
-			if( camera_pos.z < 0 ) camera_pos.z = 0;
-			float l = Map::GS().GetLength() * tile_length;
-			if( camera_pos.z > l ) camera_pos.z = l;
-
-			mCamera->setPosition(camera_pos);
-		}
 	}
 
 	return true;
@@ -174,6 +157,7 @@ bool MyFrameListener::processUnbufferedKeyInput(const FrameEvent& evt)
 	}
 
 	static bool displayCameraDetails = false;
+
 	if( mKeyboard->isKeyDown(OIS::KC_P) && mTimeUntilNextToggle <= 0 )
 	{
 		displayCameraDetails = !displayCameraDetails;
@@ -190,9 +174,7 @@ bool MyFrameListener::processUnbufferedKeyInput(const FrameEvent& evt)
 	// @#~
 	if( mKeyboard->isKeyDown(OIS::KC_1) && mTimeUntilNextToggle <= 0 )
 	{
-		static bool isShow = true;
-		isShow = !isShow;
-		ShowLabels(isShow);
+		ShowLabels(!isShowLabels);
 
 		mTimeUntilNextToggle = 0.2;
 	}
@@ -231,6 +213,8 @@ void MyFrameListener::CreateLabels()
 
 void MyFrameListener::ShowLabels(bool isShow)
 {
+	isShowLabels = isShow;
+
 	for( LabelVector::iterator it = labelVector.begin(); it != labelVector.end(); ++it )
 	{
 		(*it)->Show(isShow);

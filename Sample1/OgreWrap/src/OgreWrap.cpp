@@ -77,13 +77,9 @@ void OgreWrap::CreateStaticTerrain()
 			AddTileToTerrainMesh(mo, Vector2(x, z), rc, offset);
 		}
 	}
-
 	mo.end();
 	mo.convertToMesh("TerrainMesh");
-
-	//
 	Entity *terrain_ent = mSceneMgr->createEntity("terrain", "TerrainMesh");
-	//terrain_ent->setQueryFlags(TERRAIN_MASK); // Don't work
 	
 	StaticGeometry *sg = mSceneMgr->createStaticGeometry("TerrainArea");
 
@@ -94,7 +90,7 @@ void OgreWrap::CreateStaticTerrain()
 	sg->setRegionDimensions(Vector3(map_width, map_max_hight, map_length));
 	sg->setOrigin(Vector3(0, 0, 0));
 
-	sg->addEntity(terrain_ent, Vector3(0, tile_length / 512, 0)); // a bit higher, (kind of magic ^_^)
+	sg->addEntity(terrain_ent, Vector3(0, 0, 0)); // From 0,0 to XZ ↓→
 
 	sg->build();
 
@@ -116,12 +112,6 @@ void OgreWrap::createScene()
 	mSceneMgr->setAmbientLight(ColourValue(1, 1, 1));
 	mSceneMgr->setSkyBox(true, "Examples/SpaceSkyBox");
 
-	// Using for getting ray results,
-	// while i don't know how create world fragment from mesh.
-	// And i noticed, ray don't work if is not above terrain !
-	mSceneMgr->setWorldGeometry("terrain.cfg");
-
-	//	
 	CreateStaticTerrain();
 
 	MovingManager *p_entity_manager = new MovingManager("Robot", mSceneMgr, Strategix::MapCoord(4, 4));

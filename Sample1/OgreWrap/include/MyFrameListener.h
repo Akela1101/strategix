@@ -27,6 +27,7 @@ namespace Sample1
 		typedef sh_p<LabelManager> SHP_LabelManager;
 		typedef std::vector<SHP_LabelManager> LabelVector;
 		LabelVector labelVector;
+		bool isShowLabels;
 
 	protected:
 		SceneManager *sceneManager; // A pointer to the scene manager

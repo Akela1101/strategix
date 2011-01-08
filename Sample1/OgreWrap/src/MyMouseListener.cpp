@@ -64,34 +64,34 @@ bool MyMouseListener::mousePressed(const OIS::MouseEvent &mouse_event, OIS::Mous
 		Ray mouseRay = camera->getCameraToViewportRay(
 				d_x / float(mouse_event.state.width),
 				d_y / float(mouse_event.state.height));
-		raySceneQuery->setRay(mouseRay);
-		//raySceneQuery->setSortByDistance(true);
-		//raySceneQuery->setQueryMask(~TERRAIN_MASK); // don't work
 
-		RaySceneQueryResult &result = raySceneQuery->execute();
-		RaySceneQueryResult::iterator itr = result.begin();
-
-		for( ; itr != result.end(); ++itr )
+		if( p_currEntity ) // Move currently selected Entity.
 		{
-			// No selection => Select
-			if( !p_currEntity && itr->movable && itr->movable->getName() == "Robot" ) // by name - bad ((
-			{
-				p_currEntity = dynamic_cast<Entity*>(itr->movable);
-				p_currEntity->getParentSceneNode()->showBoundingBox(true);
-				break;
-			}
-			// There is selection => Move it
-			else if( p_currEntity && itr->worldFragment ) // Try to do it with mesh not a world
-			{
-				MovingManager *p_entityManager = any_cast<MovingManager*>(p_currEntity->getUserAny());
+			// Interset camera-mouse ray with plane XZ.
+			Plane terrainPlane(Vector3(0, 1, 0), 0); // XZ
+			Real dist = mouseRay.intersects(terrainPlane).second;
+			Vector3 intersectPoint = mouseRay.getPoint(dist);
 
-				// _Debug : First time - show, then go
-				//p_entityManager->AddWayTo_Debug(itr->worldFragment->singleIntersection);
-				p_entityManager->AddWayTo(itr->worldFragment->singleIntersection);
-				break;
+			MovingManager *p_entityManager = any_cast<MovingManager*>(p_currEntity->getUserAny());
+			//p_entityManager->AddWayTo_Debug(itr->worldFragment->singleIntersection);
+			p_entityManager->AddWayTo(intersectPoint);
+		}
+		else // No selection => Select
+		{
+			raySceneQuery->setRay(mouseRay);
+			raySceneQuery->setSortByDistance(true);
+			RaySceneQueryResult &result = raySceneQuery->execute();
+
+			foreach( RaySceneQueryResultEntry entry, result )
+			{
+				if( entry.movable && entry.movable->getName() == "Robot" ) // by name - bad ((
+				{
+					p_currEntity = dynamic_cast<Entity*>(entry.movable);
+					p_currEntity->getParentSceneNode()->showBoundingBox(true);
+					break;
+				}
 			}
 		}
-
 	}
 	return true;
 }
