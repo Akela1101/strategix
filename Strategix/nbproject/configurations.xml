@@ -61,7 +61,6 @@
         <ccTool>
           <incDir>
             <pElem>include</pElem>
-            <pElem>/usr/local/boost_1_42_0</pElem>
           </incDir>
         </ccTool>
         <archiverTool>
@@ -82,7 +81,6 @@
           <developmentMode>5</developmentMode>
           <incDir>
             <pElem>include</pElem>
-            <pElem>/usr/local/boost_1_42_0</pElem>
           </incDir>
         </ccTool>
         <fortranCompilerTool>

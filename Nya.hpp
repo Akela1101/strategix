@@ -10,8 +10,9 @@
 
 #include <boost/foreach.hpp>
 #define foreach         BOOST_FOREACH
-#define reverse_foreach BOOST_REVERSE_FOREACH
+#define rforeach        BOOST_REVERSE_FOREACH
 
+#include "boost/smart_ptr.hpp"
 #define sc_p boost::scoped_ptr
 #define sc_a boost::scoped_array
 #define sh_p boost::shared_ptr

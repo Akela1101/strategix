@@ -62,22 +62,19 @@
             <pElem>include</pElem>
             <pElem>OgreWrap/include</pElem>
             <pElem>../Strategix/include</pElem>
-            <pElem>/usr/local/boost_1_42_0</pElem>
-            <pElem>/usr/local/include</pElem>
-            <pElem>/usr/local/include/OGRE</pElem>
-            <pElem>/usr/local/include/OIS</pElem>
+            <pElem>/usr/include/OGRE</pElem>
+            <pElem>/usr/include/OIS</pElem>
+            <pElem>/usr/include/CEGUI</pElem>
           </incDir>
         </ccTool>
         <linkerTool>
           <linkerAddLib>
-            <pElem>/usr/local/lib</pElem>
-            <pElem>/usr/local/lib/OGRE</pElem>
+            <pElem>/usr/lib</pElem>
+            <pElem>/usr/lib/OGRE</pElem>
           </linkerAddLib>
           <linkerLibItems>
-            <linkerLibLibItem>CEGUIBase</linkerLibLibItem>
-            <linkerLibLibItem>CEGUIOgreRenderer</linkerLibLibItem>
-            <linkerLibLibItem>OIS</linkerLibLibItem>
             <linkerLibLibItem>OgreMain</linkerLibLibItem>
+            <linkerLibLibItem>OIS</linkerLibLibItem>
             <linkerLibProjectItem>
               <makeArtifact PL="../Strategix"
                             CT="3"
@@ -90,6 +87,7 @@
                             OP="dist/Debug/GNU-Linux-x86/libstrategix.a">
               </makeArtifact>
             </linkerLibProjectItem>
+            <linkerLibLibItem>CEGUIOpenGLRenderer</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
         <requiredProjects>
@@ -122,10 +120,9 @@
             <pElem>include</pElem>
             <pElem>OgreWrap/include</pElem>
             <pElem>../Strategix/include</pElem>
-            <pElem>/usr/local/boost_1_42_0</pElem>
-            <pElem>/usr/local/include</pElem>
-            <pElem>/usr/local/include/OGRE</pElem>
-            <pElem>/usr/local/include/OIS</pElem>
+            <pElem>/usr/include/OGRE</pElem>
+            <pElem>/usr/include/OIS</pElem>
+            <pElem>/usr/include/CEGUI</pElem>
           </incDir>
         </ccTool>
         <fortranCompilerTool>
@@ -136,14 +133,12 @@
         </asmTool>
         <linkerTool>
           <linkerAddLib>
-            <pElem>/usr/local/lib</pElem>
-            <pElem>/usr/local/lib/OGRE</pElem>
+            <pElem>/usr/lib</pElem>
+            <pElem>/usr/lib/OGRE</pElem>
           </linkerAddLib>
           <linkerLibItems>
-            <linkerLibLibItem>CEGUIBase</linkerLibLibItem>
-            <linkerLibLibItem>CEGUIOgreRenderer</linkerLibLibItem>
-            <linkerLibLibItem>OIS</linkerLibLibItem>
             <linkerLibLibItem>OgreMain</linkerLibLibItem>
+            <linkerLibLibItem>OIS</linkerLibLibItem>
             <linkerLibProjectItem>
               <makeArtifact PL="../Strategix"
                             CT="3"
@@ -156,6 +151,7 @@
                             OP="dist/Release/GNU-Linux-x86/libstrategix.a">
               </makeArtifact>
             </linkerLibProjectItem>
+            <linkerLibLibItem>CEGUIOpenGLRenderer</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
         <requiredProjects>

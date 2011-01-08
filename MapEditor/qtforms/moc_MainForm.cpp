@@ -1,8 +1,8 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'MainForm.h'
 **
-** Created: Wed Sep 29 20:27:01 2010
-**      by: The Qt Meta Object Compiler version 62 (Qt 4.6.2)
+** Created: Wed Jan 5 19:02:17 2011
+**      by: The Qt Meta Object Compiler version 62 (Qt 4.6.3)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -11,7 +11,7 @@
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'MainForm.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 62
-#error "This file was generated using the moc from 4.6.2. It"
+#error "This file was generated using the moc from 4.6.3. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif

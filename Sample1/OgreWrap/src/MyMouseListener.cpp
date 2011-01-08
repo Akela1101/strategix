@@ -6,11 +6,6 @@
  */
 
 #include "MyMouseListener.h"
-
-#include <CEGUI/CEGUISystem.h>
-#include <CEGUI/CEGUISchemeManager.h>
-#include <CEGUI/RendererModules/Ogre/CEGUIOgreRenderer.h>
-
 #include "MovingManager.h"
 
 
@@ -27,21 +22,22 @@ MyMouseListener::MyMouseListener(Camera* camera, RaySceneQuery *raySceneQuery)
 	camera_zoom_speed = 0.05f;
 	p_currEntity = 0;
 
-	// CEGUI setup
-	CEGUI::OgreRenderer::bootstrapSystem();
+//  ### for CEGUI 7.1
+//	// CEGUI setup
+//	CEGUI::OgreRenderer::bootstrapSystem();
+//
+//	// Mouse
+//	CEGUI::SchemeManager::getSingleton().create((CEGUI::utf8*)"TaharezLook.scheme");
+//	CEGUI::MouseCursor::getSingleton().setImage("TaharezLook", "MouseArrow");
+//	CEGUI::System::getSingleton().setMouseMoveScaling(4);
 
-	// Mouse
-	CEGUI::SchemeManager::getSingleton().create((CEGUI::utf8*)"TaharezLook.scheme");
-	CEGUI::MouseCursor::getSingleton().setImage("TaharezLook", "MouseArrow");
-	CEGUI::System::getSingleton().setMouseMoveScaling(4);
+	
 }
 
 bool MyMouseListener::mouseMoved(const OIS::MouseEvent &mouse_event)
-{
+{	
 	// Update CEGUI with the mouse motion
-	//CEGUI::System::getSingleton().injectMouseMove(mouse_event.state.X.rel, mouse_event.state.Y.rel);
-
-	CEGUI::System::getSingleton().injectMousePosition(mouse_event.state.X.abs, mouse_event.state.Y.abs);
+	//CEGUI::System::getSingleton().injectMousePosition(mouse_event.state.X.abs, mouse_event.state.Y.abs);
 
 	camera->moveRelative(Vector3(0, 0, -camera_zoom_speed * mouse_event.state.Z.rel));
 
@@ -61,10 +57,13 @@ bool MyMouseListener::mousePressed(const OIS::MouseEvent &mouse_event, OIS::Mous
 
 	if( id == OIS::MB_Left )
 	{
-		CEGUI::Point mousePos = CEGUI::MouseCursor::getSingleton().getPosition();
+		//CEGUI::Point mousePos = CEGUI::MouseCursor::getSingleton().getPosition();
+		int d_x = mouse_event.state.X.abs;
+		int d_y = mouse_event.state.Y.abs;
+
 		Ray mouseRay = camera->getCameraToViewportRay(
-				mousePos.d_x / float(mouse_event.state.width),
-				mousePos.d_y / float(mouse_event.state.height));
+				d_x / float(mouse_event.state.width),
+				d_y / float(mouse_event.state.height));
 		raySceneQuery->setRay(mouseRay);
 		//raySceneQuery->setSortByDistance(true);
 		//raySceneQuery->setQueryMask(~TERRAIN_MASK); // don't work
@@ -94,19 +93,11 @@ bool MyMouseListener::mousePressed(const OIS::MouseEvent &mouse_event, OIS::Mous
 		}
 
 	}
-	else if( id == OIS::MB_Right )
-	{
-		CEGUI::MouseCursor::getSingleton().hide();
-	}
 	return true;
 }
 
 bool MyMouseListener::mouseReleased(const OIS::MouseEvent &mouse_event, OIS::MouseButtonID id)
 {
-	if( id == OIS::MB_Right )
-	{
-		CEGUI::MouseCursor::getSingleton().show();
-	}
 	return true;
 }
 

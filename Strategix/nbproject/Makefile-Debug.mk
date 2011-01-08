@@ -73,47 +73,47 @@ dist/Debug/GNU-Linux-x86/libstrategix.a: ${OBJECTFILES}
 ${OBJECTDIR}/src/Kernel.o: src/Kernel.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Iinclude -I/usr/local/boost_1_42_0 -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Kernel.o src/Kernel.cpp
+	$(COMPILE.cc) -g -Iinclude -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Kernel.o src/Kernel.cpp
 
 ${OBJECTDIR}/src/MapSAstar.o: src/MapSAstar.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Iinclude -I/usr/local/boost_1_42_0 -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/MapSAstar.o src/MapSAstar.cpp
+	$(COMPILE.cc) -g -Iinclude -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/MapSAstar.o src/MapSAstar.cpp
 
 ${OBJECTDIR}/src/Player.o: src/Player.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Iinclude -I/usr/local/boost_1_42_0 -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Player.o src/Player.cpp
+	$(COMPILE.cc) -g -Iinclude -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Player.o src/Player.cpp
 
 ${OBJECTDIR}/src/Map.o: src/Map.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Iinclude -I/usr/local/boost_1_42_0 -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Map.o src/Map.cpp
+	$(COMPILE.cc) -g -Iinclude -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Map.o src/Map.cpp
 
 ${OBJECTDIR}/src/TechTree.o: src/TechTree.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Iinclude -I/usr/local/boost_1_42_0 -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/TechTree.o src/TechTree.cpp
+	$(COMPILE.cc) -g -Iinclude -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/TechTree.o src/TechTree.cpp
 
 ${OBJECTDIR}/src/EntityInfo.o: src/EntityInfo.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Iinclude -I/usr/local/boost_1_42_0 -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/EntityInfo.o src/EntityInfo.cpp
+	$(COMPILE.cc) -g -Iinclude -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/EntityInfo.o src/EntityInfo.cpp
 
 ${OBJECTDIR}/src/StraxLog.o: src/StraxLog.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Iinclude -I/usr/local/boost_1_42_0 -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/StraxLog.o src/StraxLog.cpp
+	$(COMPILE.cc) -g -Iinclude -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/StraxLog.o src/StraxLog.cpp
 
 ${OBJECTDIR}/src/Entity.o: src/Entity.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Iinclude -I/usr/local/boost_1_42_0 -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Entity.o src/Entity.cpp
+	$(COMPILE.cc) -g -Iinclude -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Entity.o src/Entity.cpp
 
 ${OBJECTDIR}/src/TechTreeBuilderFromXml.o: src/TechTreeBuilderFromXml.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Iinclude -I/usr/local/boost_1_42_0 -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/TechTreeBuilderFromXml.o src/TechTreeBuilderFromXml.cpp
+	$(COMPILE.cc) -g -Iinclude -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/TechTreeBuilderFromXml.o src/TechTreeBuilderFromXml.cpp
 
 # Subprojects
 .build-subprojects:
