@@ -33,15 +33,16 @@ OBJECTDIR=build/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/src/Game.o \
+	${OBJECTDIR}/src/TechTreesBuilderFromXml.o \
 	${OBJECTDIR}/src/Kernel.o \
 	${OBJECTDIR}/src/MapSAstar.o \
 	${OBJECTDIR}/src/Player.o \
 	${OBJECTDIR}/src/Map.o \
 	${OBJECTDIR}/src/TechTree.o \
 	${OBJECTDIR}/src/EntityInfo.o \
-	${OBJECTDIR}/src/StraxLog.o \
-	${OBJECTDIR}/src/Entity.o \
-	${OBJECTDIR}/src/TechTreeBuilderFromXml.o
+	${OBJECTDIR}/src/Ent.o \
+	${OBJECTDIR}/src/Log.o
 
 
 # C Compiler Flags
@@ -69,6 +70,16 @@ dist/Release/GNU-Linux-x86/libstrategix.a: ${OBJECTFILES}
 	${RM} dist/Release/GNU-Linux-x86/libstrategix.a
 	${AR} -rv ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libstrategix.a ${OBJECTFILES} 
 	$(RANLIB) dist/Release/GNU-Linux-x86/libstrategix.a
+
+${OBJECTDIR}/src/Game.o: src/Game.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -Iinclude -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Game.o src/Game.cpp
+
+${OBJECTDIR}/src/TechTreesBuilderFromXml.o: src/TechTreesBuilderFromXml.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -Iinclude -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/TechTreesBuilderFromXml.o src/TechTreesBuilderFromXml.cpp
 
 ${OBJECTDIR}/src/Kernel.o: src/Kernel.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
@@ -100,20 +111,15 @@ ${OBJECTDIR}/src/EntityInfo.o: src/EntityInfo.cpp
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -Iinclude -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/EntityInfo.o src/EntityInfo.cpp
 
-${OBJECTDIR}/src/StraxLog.o: src/StraxLog.cpp 
+${OBJECTDIR}/src/Ent.o: src/Ent.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -O2 -Iinclude -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/StraxLog.o src/StraxLog.cpp
+	$(COMPILE.cc) -O2 -Iinclude -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Ent.o src/Ent.cpp
 
-${OBJECTDIR}/src/Entity.o: src/Entity.cpp 
+${OBJECTDIR}/src/Log.o: src/Log.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -O2 -Iinclude -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Entity.o src/Entity.cpp
-
-${OBJECTDIR}/src/TechTreeBuilderFromXml.o: src/TechTreeBuilderFromXml.cpp 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} $@.d
-	$(COMPILE.cc) -O2 -Iinclude -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/TechTreeBuilderFromXml.o src/TechTreeBuilderFromXml.cpp
+	$(COMPILE.cc) -O2 -Iinclude -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Log.o src/Log.cpp
 
 # Subprojects
 .build-subprojects:

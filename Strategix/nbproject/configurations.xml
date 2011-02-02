@@ -2,36 +2,33 @@
 <configurationDescriptor version="69">
   <logicalFolder name="root" displayName="root" projectFiles="true">
     <logicalFolder name="include" displayName="include" projectFiles="true">
-      <itemPath>include/Entity.h</itemPath>
+      <itemPath>include/Ent.h</itemPath>
       <itemPath>include/EntityInfo.h</itemPath>
       <itemPath>include/Exception.h</itemPath>
+      <itemPath>include/Game.h</itemPath>
       <itemPath>include/GameStructs.h</itemPath>
       <itemPath>include/Kernel.h</itemPath>
+      <itemPath>include/Log.h</itemPath>
       <itemPath>include/Map.h</itemPath>
       <itemPath>include/MapSAstar.h</itemPath>
       <itemPath>include/Nya.hpp</itemPath>
       <itemPath>include/Player.h</itemPath>
-      <itemPath>include/StraxLog.h</itemPath>
-      <itemPath>include/StraxSingleton.h</itemPath>
+      <itemPath>include/StrategixSingleton.h</itemPath>
       <itemPath>include/TechTree.h</itemPath>
-      <itemPath>include/TechTreeBuilder.h</itemPath>
-      <itemPath>include/TechTreeBuilderFromXml.h</itemPath>
-    </logicalFolder>
-    <logicalFolder name="ResourceFiles"
-                   displayName="Resource Files"
-                   projectFiles="true"
-                   kind="SOURCE_LOGICAL_FOLDER">
+      <itemPath>include/TechTreesBuilder.h</itemPath>
+      <itemPath>include/TechTreesBuilderFromXml.h</itemPath>
     </logicalFolder>
     <logicalFolder name="src" displayName="src" projectFiles="true">
-      <itemPath>src/Entity.cpp</itemPath>
+      <itemPath>src/Ent.cpp</itemPath>
       <itemPath>src/EntityInfo.cpp</itemPath>
+      <itemPath>src/Game.cpp</itemPath>
       <itemPath>src/Kernel.cpp</itemPath>
+      <itemPath>src/Log.cpp</itemPath>
       <itemPath>src/Map.cpp</itemPath>
       <itemPath>src/MapSAstar.cpp</itemPath>
       <itemPath>src/Player.cpp</itemPath>
-      <itemPath>src/StraxLog.cpp</itemPath>
       <itemPath>src/TechTree.cpp</itemPath>
-      <itemPath>src/TechTreeBuilderFromXml.cpp</itemPath>
+      <itemPath>src/TechTreesBuilderFromXml.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"

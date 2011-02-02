@@ -16,29 +16,20 @@
 namespace Strategix
 {
 	using namespace std;
-	
-	struct Resources
-	{
-		typedef int ResType;
-		map<string, ResType > res;
-	};
 
-	struct Params
-	{
-		typedef int HpType;
-		HpType hp;
-		typedef float SpeedType;
-		SpeedType speed;
-	};
-
+// EntityInfo
+	typedef int HpType;
+	typedef float SpeedType;
+	typedef int SingleResType;
+	typedef map<string, SingleResType> ResType;
 	typedef vector<string> Names;
 
-	struct GameSets
-	{
-		set<string> raceSet;
-		set<string> entKindSet;
-		set<string> resourcesSet;
+	struct Params
+	{		
+		HpType hp;		
+		SpeedType speed;
 	};
+// **********
 
 	struct MapCoord
 	{
@@ -73,13 +64,6 @@ namespace Strategix
 		HUMAN,
 		AI,
 		NET
-	};
-
-	struct PlayerInitial
-	{
-		PlayerType playerType;
-		int mapPos;
-		string raceName;
 	};
 }
 

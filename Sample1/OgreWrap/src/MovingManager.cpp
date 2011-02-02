@@ -5,35 +5,40 @@
  * Created on 15 Апрель 2010 г., 13:57
  */
 
+#include "Nya.hpp"
+#include "Game.h"
 #include "MovingManager.h"
 #include "OgreWrapCommon.h"
-#include "OgreException.h"
-
-
 #include "LabelManager.h"
+
+#include "OgreException.h"
 #include <vector>
-#include <boost/smart_ptr.hpp>
 #include <sstream>
 
 namespace Sample1
 {
+	using namespace Strategix;
 	using namespace Ogre;
 	using namespace std;
 
-MovingManager::MovingManager(const String &name, SceneManager *sceneManager, const Strategix::MapCoord &mapCoord)
-	: EntityManager( name, sceneManager )
+MovingManager::MovingManager(Player *player, const String &name,
+		MyManager *myManager, const Strategix::MapCoord &mapCoord)
+	:
+	EntityManager(player, name, myManager, mapCoord )
 {
-	this->mapCoord = mapCoord;
+	const EntityInfo *ei = player->techTree->techMap[name].get();
+	
+	string meshFile = ei->file;
+	entity = myManager->sceneManager->createEntity(name, meshFile);
+	entity->setUserAny(Any(sh_p<MovingManager>(this))); // Link from Entity to itself
+	//entity->setQueryFlags(ROBOT_MASK);
 
-	// name == Robot !!!!!!!
-	entity = sceneManager->createEntity("Robot", "robot.mesh");
-	entity->setUserAny(Any(this)); // Link to manager
-	entity->setQueryFlags(ROBOT_MASK);
-
-	node = sceneManager->getRootSceneNode()->createChildSceneNode();
+	node = myManager->sceneManager->getRootSceneNode()->createChildSceneNode();
 	node->attachObject(entity);
-	float scale = 0.18f;
+	float scale = ei->scale;
 	node->setScale(scale, scale, scale);
+
+	// @#~ Get vector from map !!!!!
 	node->setPosition(Vector3((mapCoord.x + 0.5f) * tile_length, 0, (mapCoord.y + 0.5f) * tile_length));
 
 	animationState = entity->getAnimationState("Idle");
@@ -45,20 +50,21 @@ MovingManager::MovingManager(const String &name, SceneManager *sceneManager, con
 	destination = node->getPosition();
 	distance = 0.0f;
 
-	// Title
-	Camera* camera = sceneManager->getCamera("Camera");
-	if( !camera )
-		OGRE_EXCEPT(1, "No camera named Camera", "");
-
-	//objectTitle = new ObjectTitle("Title", entity, camera, "This is Robot", "StarWars");
+//	// Title
+//	Camera* camera = sceneManager->getCamera("Camera");
+//	if( !camera )
+//		OGRE_EXCEPT(1, "No camera named Camera", "");
+//
+//	objectTitle = new ObjectTitle("Title", entity, camera, "This is Robot", "StarWars");
 }
 
 MovingManager::~MovingManager()
 {
+	// delete walkList ?
 	//delete objectTitle;
 	node->detachObject(entity);
-	sceneManager->destroyEntity(entity);
-	sceneManager->destroySceneNode(node);
+	myManager->sceneManager->destroyEntity(entity);
+	myManager->sceneManager->destroySceneNode(node);
 }
 
 bool MovingManager::frameRenderingQueued(const FrameEvent &event)
@@ -71,7 +77,7 @@ bool MovingManager::frameRenderingQueued(const FrameEvent &event)
 void MovingManager::AddWayTo(Vector3 &pos)
 {
 	delete walkList;
-	walkList = Strategix::Map::GS().BuildWay(mapCoord, GetMapCoord(pos));
+	walkList = Strategix::Game::GS().GetMap().BuildWay(mapCoord, GetMapCoord(pos));
 }
 
 void MovingManager::AddWayTo_Debug(Vector3 &pos)
@@ -92,9 +98,9 @@ void MovingManager::AddWayTo_Debug(Vector3 &pos)
 		typedef std::list<Strategix::Map::Cell*> CellList;
 		CellList *p_closed = 0;
 
-		saved_walkList = Strategix::Map::GS().BuildWay_Debug(mapCoord, newMapCoord, p_closed);
+		saved_walkList = Strategix::Game::GS().GetMap().BuildWay_Debug(mapCoord, newMapCoord, p_closed);
 
-		//Strategix::StraxLog::GS().Log("hahahah\n");
+		//Strategix::Log::GS().Write("hahahah\n");
 
 		// Draw debug info
 		typedef sh_p<LabelManager> SHP_LabelManager;
@@ -111,7 +117,7 @@ void MovingManager::AddWayTo_Debug(Vector3 &pos)
 		{
 			std::stringstream title;
 			title << "\n" << (*at)->G << " + " << (*at)->H << "\n = " << (*at)->F ;
-			SHP_LabelManager shp_labelManager(new LabelManager(sceneManager, (*at)->mc, title.str().c_str()));
+			SHP_LabelManager shp_labelManager(new LabelManager(myManager, (*at)->mc, title.str().c_str()));
 
 			if( saved_walkList->end() != find(saved_walkList->begin(), saved_walkList->end(), (*at)->mc) )
 				shp_labelManager->SetColor(ColourValue(1.0, 1.0, 1.0, 1.0));
@@ -146,7 +152,7 @@ void MovingManager::MoveOnTime(Real time)
 		}
 		else // Moving next position
 		{
-			animationState = entity->getAnimationState("Walk");
+			animationState = entity->getAnimationState("Move");
 			animationState->setLoop(true);
 			animationState->setEnabled(true);
 
@@ -169,7 +175,7 @@ void MovingManager::MoveOnTime(Real time)
 			}
 		}
 
-		animationState->addTime(time); // Just for fun
+		animationState->addTime(time); 
 	}
 	else // Moving if( distance > 0.0f )
 	{
@@ -177,7 +183,7 @@ void MovingManager::MoveOnTime(Real time)
 		distance -= move;
 		node->translate(Vector3(direction.x, 0, direction.z) * move);
 
-		animationState->addTime(time * walkSpeed / 5); // Just for fun
+		animationState->addTime(time * walkSpeed / 10); 
 	}
 }
 

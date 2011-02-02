@@ -13,10 +13,10 @@ namespace Sample1
 	using namespace Ogre;
 	using namespace std;
 
-MapTexture::MapTexture(const char file_name[])
+MapTexture::MapTexture(const char fileName[])
 {
 	// Зачем названия текстур читать ?!
-	ifstream fin(file_name);
+	ifstream fin(fileName);
 	char cString[100];
 	fin.getline(cString, 100);
 	name = "Terrains"; // !!!!!! Name of material, not the texture file

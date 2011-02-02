@@ -8,41 +8,32 @@
 #ifndef _KERNEL_H
 #define	_KERNEL_H
 
-#include "StraxLog.h"
-
-#include "Map.h"
-#include "Player.h"
+#include "StrategixSingleton.h"
 #include "TechTree.h"
+
+#include "Game.h"
 #include "GameStructs.h"
 
-#include <iostream>
-#include <vector>
 #include <string>
-#include <map>
-#include "boost/smart_ptr.hpp"
+#include <vector>
 
 
 namespace Strategix
 {
+	using namespace std;
 	using namespace boost;
 
-	class Kernel
+	class Kernel : public StrategixSingleton<Kernel>
 	{
-	private:
-		Map *shared_map;
-		vector<Player> players;
-		map<string, shared_ptr<TechTree> > techTrees;
+	public:
+		TechTreesType techTrees;
 
 	public:
 		Kernel();		
 		virtual ~Kernel();
 
-		// Get initial params, and prepare to start game.
-		void InitGame(string mapName, vector<PlayerInitial> playerInitials);
-
-	private:
-		Kernel(const Kernel& orig);
-		Kernel &operator=(const Kernel &);
+		sh_p<vector<string> > GetMapNames();
+		sh_p<vector<string> > GetRaceNames();
 	};
 }
 

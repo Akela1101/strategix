@@ -5,59 +5,82 @@
  * Created on 14 Февраль 2010 г., 0:15
  */
 
+#include "Nya.hpp"
 #include "Kernel.h"
 #include "OgreWrap.h"
 
+#include <boost/filesystem.hpp>
+
 using namespace Strategix;
 using namespace Sample1;
+using namespace std;
 
 #if defined( __WIN32__ ) || defined( _WIN32 )
 #define WIN32_LEAN_AND_MEAN
 #include "windows.h"
 INT WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR strCmdLine, INT)
 {
+	//SetCurrentDirectory("C:\\.......");
 #else
 
-#include <unistd.h>
-
+#include "stdlib.h"
 int main(int argc, char *argv[])
-{	
-	// If run directory fails to set !!!!!!!!!!!!!!!
-	// Also change plugin folder respectively	
-	int ret = chdir("NetBeansProjects/Strategix/Sample1");
-
-	char buffer[301];
-	getcwd(buffer, 300);
-	cout << "Current dir: " << buffer << endl;
+{
+	//int ret = chdir("NetBeansProjects/Strategix/Sample1");
 #endif
+	// Also change plugin folder respectively
 
-	// Load kernel
-	Kernel kernel;
+	// What is current path? Must be as in chdir.
+	cout << "Current dir: " << boost::filesystem::current_path() << endl;
 
-	// Get all map list from Kernel
-	// std::vector<MapInfo> mapInfo = kernel.GetAllMapInfos();
-
-	// Get all races from Kernel
-	// std::vector<std::string> raceNames = kernel.GetAllRaceNames();
-
-	// Choose map, playerType, position, race
-	std::string mapName = "1x1";
-	std::string mapPath = "Maps/"; mapPath += mapName + ".map";
-
-	std::vector<PlayerInitial> playerInitials;
-	PlayerInitial playerInitial = {HUMAN, 0, "Neko"};
-	kernel.InitGame(mapPath, playerInitials);
-
-	// Graphics init.
-	OgreWrap ogre_wrap;
-	try
+	//
+	cout << endl << "Mapss: " << endl;
+	sh_p<std::vector<std::string> > mapNames = Kernel::GS().GetMapNames();
+	foreach(std::string mapName, *mapNames)
 	{
-		ogre_wrap.go();
+		cout << mapName << endl;
 	}
-	catch( Exception& e )
+
+	//
+	cout << endl << "Race names: " << endl;
+	sh_p<std::vector<std::string> > raceNames = Kernel::GS().GetRaceNames();
+	foreach(std::string raceName, *raceNames)
 	{
-		cerr << "Ogre exception: " << e.what() << endl;
+		cout << raceName << endl;
 	}
+
+	//cout << endl << Kernel::GS().techTrees["Spher"]->techMap["Spher_Worker"]->file << endl;
+
+	// One Game
+	{
+		std::vector<sh_p<Player> > players;
+		players.push_back(sh_p<Player>(new Player("Neko", HUMAN, 0, "Spher")));
+
+		//cout << endl << players[0].get()->techTree->techMap["Spher_Worker"]->file << endl << endl;
+
+		Game::GS().Start("1x1", players);
+
+		// Graphics init.
+		OgreWrap ogre_wrap;
+		try
+		{
+			ogre_wrap.go();
+		}
+		catch( Exception& e )
+		{
+			cerr << "Ogre exception: " << e.what() << endl;
+		}
+		catch( std::exception &e )
+		{
+			cerr << "Exception: " << e.what() << endl;
+		}
+	}
+
+	// Reenable autorepeat in KDE ! *WALL*
+#if !defined( __WIN32__ ) && !defined( _WIN32 )
+	cout << endl << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+	std::system("xset r");
+#endif
 
 	return 0;
 }

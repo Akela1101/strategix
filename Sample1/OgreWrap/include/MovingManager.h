@@ -10,32 +10,27 @@
 
 #include "Nya.hpp"
 #include "EntityManager.h"
-#include "ObjectTitle.h"
 
 #include "Kernel.h"
 #include <deque>
 
 namespace Sample1
 {
+	using namespace Strategix;
 	using namespace Ogre;
 
 	class MovingManager : public EntityManager
 	{
 	protected:
-		AnimationState *animationState; // The current animation state of the object
-
 		Real distance; // The distance the object has left to travel
 		Vector3 direction; // The direction the object is moving
 		Vector3 destination; // The destination the object is moving towards
 		std::deque<Strategix::MapCoord> *walkList; // The list of points we are walking on
 		Real walkSpeed; // The speed at which the object is moving
 
-		Strategix::MapCoord mapCoord; // Coordinates on Map
-
-		ObjectTitle *objectTitle;
-
 	public:
-		MovingManager(const String &name, SceneManager *sceneManager, const Strategix::MapCoord &mapCoord);
+		MovingManager(Player *player, const String &name,
+				MyManager *myManager, const Strategix::MapCoord &mapCoord);
 		virtual ~MovingManager();
 		virtual bool frameRenderingQueued(const FrameEvent &event);
 

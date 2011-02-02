@@ -9,7 +9,6 @@
 #define	_MAP_H
 
 #include "GameStructs.h"
-#include "StraxSingleton.h"
 #include "Exception.h"
 
 #include <string>
@@ -21,7 +20,7 @@ namespace Strategix
 {
 	using namespace std;
 	
-	class Map : public StraxSingleton<Map>
+	class Map
 	{
 	public:
 		struct Cell
@@ -55,41 +54,50 @@ namespace Strategix
 				this->retard = retard;
 			}
 		};
-		// Map[terrType, Terrain]
+		// map[terrType, Terrain]
 		typedef map<short, Terrain> TerrainTypes;	
 
 	private:
+		static TerrainTypes terrains;
+
 		string name;
 		int width, length, nPlayers;
-		Cell **cells; // [rows][columns] (i.e. [y][x])
-		TerrainTypes terrains;
+		mutable Cell **cells; // [rows][columns] (i.e. [y][x])
+
+	public:
 		vector<MapCoord> initialPositions;
 
 	public:
+		static const Terrain &GetTerrain(const short terrType) { return terrains[terrType]; }
+
+		Map(const string name) throw(StrategixError);
+		
 		const int &GetWidth() const { return width; }
 		const int &GetLength() const { return length; }
 		const Cell &operator ()(const int x, const int y) const { return cells[y][x]; }
-		const Terrain &GetTerrain(const short terrType) { return terrains[terrType]; } // cannot be const because of map.[]
-
-		void InitFromTextFile(string file_name) throw(StraxError);
-		void OutMatrix();
+				
+		void OutMatrix() const;
 
 		bool IsIn(const list<Cell*> &list, const Cell *cell) const;
-		bool IsAccessible(const MapCoord &mc);
+		bool IsAccessible(const MapCoord &mc) const;
 		int Distance(const MapCoord &a, const MapCoord &b) const;
-		deque<MapCoord> *BuildWay(const MapCoord &from, const MapCoord &till);
+		deque<MapCoord> *BuildWay(const MapCoord &from, const MapCoord &till) const;
 
-		deque<MapCoord> *BuildWay_Debug(const MapCoord &from, const MapCoord &till, list<Cell*> *&p_closed);
+		deque<MapCoord> *BuildWay_Debug(const MapCoord &from, const MapCoord &till, list<Cell*> *&p_closed) const;
 
 	private:
-		inline Cell *getCell(const MapCoord &mc)
+		static bool LoadTerrains();		
+
+		static const string GetFilePath(const string name);
+
+		inline Cell *getCell(const MapCoord &mc) const
 		{
 			if( mc.x < 0 || mc.x >= width || mc.y < 0 || mc.y >= length )
 				return 0;
 			return &cells[mc.y][mc.x];
 		}
 
-	};
+	};	
 }
 
 

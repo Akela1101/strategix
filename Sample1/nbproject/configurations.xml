@@ -9,15 +9,11 @@
       <itemPath>OgreWrap/include/MapTexture.h</itemPath>
       <itemPath>OgreWrap/include/MovingManager.h</itemPath>
       <itemPath>OgreWrap/include/MyFrameListener.h</itemPath>
+      <itemPath>include/MyManager.h</itemPath>
       <itemPath>OgreWrap/include/MyMouseListener.h</itemPath>
       <itemPath>OgreWrap/include/ObjectTitle.h</itemPath>
       <itemPath>OgreWrap/include/OgreWrap.h</itemPath>
       <itemPath>OgreWrap/include/OgreWrapCommon.h</itemPath>
-    </logicalFolder>
-    <logicalFolder name="ResourceFiles"
-                   displayName="Resource Files"
-                   projectFiles="true"
-                   kind="SOURCE_LOGICAL_FOLDER">
     </logicalFolder>
     <logicalFolder name="src" displayName="src" projectFiles="true">
       <itemPath>OgreWrap/src/EntityManager.cpp</itemPath>
@@ -25,6 +21,7 @@
       <itemPath>OgreWrap/src/MapTexture.cpp</itemPath>
       <itemPath>OgreWrap/src/MovingManager.cpp</itemPath>
       <itemPath>OgreWrap/src/MyFrameListener.cpp</itemPath>
+      <itemPath>src/MyManager.cpp</itemPath>
       <itemPath>OgreWrap/src/MyMouseListener.cpp</itemPath>
       <itemPath>OgreWrap/src/ObjectTitle.cpp</itemPath>
       <itemPath>OgreWrap/src/OgreWrap.cpp</itemPath>
@@ -88,6 +85,7 @@
               </makeArtifact>
             </linkerLibProjectItem>
             <linkerLibLibItem>CEGUIOpenGLRenderer</linkerLibLibItem>
+            <linkerLibLibItem>boost_filesystem</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
         <requiredProjects>
@@ -152,6 +150,7 @@
               </makeArtifact>
             </linkerLibProjectItem>
             <linkerLibLibItem>CEGUIOpenGLRenderer</linkerLibLibItem>
+            <linkerLibLibItem>boost_filesystem</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
         <requiredProjects>

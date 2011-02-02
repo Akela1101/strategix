@@ -6,34 +6,51 @@
  */
 
 #include "Kernel.h"
-#include "TechTreeBuilderFromXml.h"
+
+#include "Nya.hpp"
+#include "Log.h"
+#include "TechTreesBuilderFromXml.h"
+
+#include <boost/filesystem.hpp>
 
 using namespace std;
 using namespace boost;
 using namespace Strategix;
+namespace fs = boost::filesystem;
 
 Kernel::Kernel()
 {
+	// Build Tech Trees
+	TechTreesBuilderFromXml ttBuilder;
+	ttBuilder.Build(&techTrees);	
 }
 
 Kernel::~Kernel()
 {
 }
 
-void Kernel::InitGame(string mapName, vector<PlayerInitial> playerInitials)
+sh_p<vector<string> > Kernel::GetMapNames()
 {
-	// Load Tech Tree	
-	string raceName = "Neko";
-	shared_ptr<TechTree> shpTechTree(new TechTree(raceName));
+	sh_p<vector<string> > mapNames(new vector<string>());
 
-	TechTreeBuilderFromXml ttBuilder;
-	shpTechTree->Build(ttBuilder);
+	fs::recursive_directory_iterator it("Maps/"), eod;
+	foreach( const fs::path &p, std::make_pair(it, eod) )
+	{
+		if( fs::is_regular_file(p) && fs::extension(p) == ".map" )
+		{
+			mapNames->push_back(p.stem());
+		}
+	}
+	return mapNames;
+}
 
-	techTrees.insert(pair<string, shared_ptr<TechTree> >(raceName, shpTechTree));
+sh_p<vector<string> > Kernel::GetRaceNames()
+{
+	sh_p<vector<string> > raceNames(new vector<string>());
 
-	cout << techTrees["Neko"]->techMap["Worker"]->name;
-	
-	// Load Map
-	Map::GS().InitFromTextFile(mapName);
-	//Map::GS().OutMatrix();
+	foreach( const TechTreesType::value_type &tt_pair, techTrees )
+	{
+		raceNames->push_back(tt_pair.second->raceName);
+	}
+	return raceNames;
 }

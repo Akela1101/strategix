@@ -12,7 +12,6 @@
 #include "MapInfo.h"
 
 #include "ui_MainForm.h"
-#include <boost/shared_ptr.hpp>
 #include <map>
 #include <vector>
 

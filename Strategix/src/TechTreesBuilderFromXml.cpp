@@ -1,0 +1,96 @@
+/* 
+ * File:   TechTreesBuilderFromXml.cpp
+ * Author: Akela1101
+ * 
+ * Created on 12 Март 2010 г., 18:37
+ */
+
+#include "Nya.hpp"
+#include "TechTreesBuilderFromXml.h"
+#include "TechTree.h"
+#include "Exception.h"
+
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/xml_parser.hpp>
+#include <boost/filesystem.hpp>
+#include <iostream>
+
+using namespace std;
+using namespace boost;
+using namespace Strategix;
+namespace pt = boost::property_tree;
+namespace fs = boost::filesystem;
+
+void TechTreesBuilderFromXml::Build(TechTreesType *pTechTrees)
+{
+	this->pTechTrees = pTechTrees;
+	
+	fs::recursive_directory_iterator it("xml/Races/"), eod;
+	foreach( const fs::path &p, std::make_pair(it, eod) )
+	{
+		if( fs::is_regular_file(p) && fs::extension(p) == ".xml" )
+		{
+			pt::ptree propTree;
+
+			try
+			{
+				pt::read_xml(p.string(), propTree);
+			}
+			catch( const pt::xml_parser_error & )
+			{
+				throw STRATEGIX_ERROR( string("Can't parse file: ") + p.string() );
+			}
+
+			BuildRace(p.stem(), propTree);
+		}
+	}
+}
+
+void TechTreesBuilderFromXml::BuildRace(const string &raceName, const pt::ptree &propTree)
+{
+	sh_p<TechTree> techTree(new TechTree(raceName));
+
+	foreach( const pt::ptree::value_type &v, propTree.get_child("race.entities") )
+	{
+		BuildEntity(techTree, v.second);
+	}
+
+	pTechTrees->insert(TechTreesType::value_type(raceName, techTree));
+}
+
+void TechTreesBuilderFromXml::BuildEntity(sh_p<TechTree> techTree, const pt::ptree &entityPropTree)
+{
+	sh_p<EntityInfo> entityInfo(new EntityInfo);
+
+	entityInfo->name = entityPropTree.get<string>("name");
+	entityInfo->kind = entityPropTree.get<string>("kind");
+
+	foreach( const pt::ptree::value_type &v, entityPropTree.get_child("res") )
+	{
+		const pt::ptree &resLeaf = v.second;
+		entityInfo->res[v.first] = resLeaf.get_value<SingleResType>();
+	}
+
+	entityInfo->params.hp = entityPropTree.get<HpType>("params.hp");
+	entityInfo->params.speed = entityPropTree.get<SpeedType>("params.speed", 0);
+
+	foreach( const pt::ptree::value_type &v, entityPropTree.get_child("depends", pt::ptree()) ) // Empty if no depends
+	{
+		const pt::ptree &resLeaf = v.second;
+		entityInfo->depends.push_back( resLeaf.get_value<string>() );
+	}
+
+	foreach( const pt::ptree::value_type &v, entityPropTree.get_child("provides", pt::ptree()) ) // Empty if no provides
+	{
+		const pt::ptree &resLeaf = v.second;
+		entityInfo->provides.push_back( resLeaf.get_value<string>() );
+	}
+
+	entityInfo->file = entityPropTree.get<string>("file");
+	entityInfo->scale = entityPropTree.get<float>("scale");
+
+	// U can catch( ptree_error == ptree_bad_path || ptree_bad_data )
+	// in place of setting default value
+	
+	techTree->AddNode(entityInfo);
+}

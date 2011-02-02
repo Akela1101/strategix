@@ -24,7 +24,7 @@ namespace Sample1
 		short divs; // Number of divisions of picture's square
 		map<string, short> positions; // Map[terrain name, position of terrain on picture]
 
-		MapTexture(const char file_name[]);
+		MapTexture(const char fileName[]);
 
 		// Coordinates of the part of picture with such name.
 		const FloatRect GetTexRect(string terrName);

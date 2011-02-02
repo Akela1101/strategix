@@ -11,7 +11,6 @@
 #include "Map.h"
 #include "MapTexture.h"
 #include "MovingManager.h"
-#include "LabelManager.h"
 
 #include <string>
 
@@ -53,12 +52,14 @@ void OgreWrap::AddTileToTerrainMesh(ManualObject &mo, const Vector2 &coord, cons
 void OgreWrap::CreateStaticTerrain()
 {
 	using Strategix::Map;
-	
-	MapTexture map_texture("terrains.def");
-	
+	const Map &gameMap = Strategix::Game::GS().GetMap();
+
+	MapTexture map_texture("Maps/terrains.def"); // WTF ?
+
+	// @#~ Must be done with drawing on texture of one Rectangular mesh!!!
 	ManualObject mo("TerrainObject");
-	const int width = Map::GS().GetWidth();
-	const int length = Map::GS().GetLength();
+	const int width = gameMap.GetWidth();
+	const int length = gameMap.GetLength();
 
 	mo.begin(map_texture.name, RenderOperation::OT_TRIANGLE_LIST);
 
@@ -68,9 +69,9 @@ void OgreWrap::CreateStaticTerrain()
 		for( int x = 0; x < width; ++x )
 		{
 			// Getting terrain type (x, z)
-			short terrType = Map::GS()(x, z).terrType;
+			short terrType = gameMap(x, z).terrType;
 			// Getting it's name
-			const string &tex_name = Map::GS().GetTerrain(terrType).name;
+			const string &tex_name = Map::GetTerrain(terrType).name;
 			// Getting picture's part rectangle
 			const FloatRect rc = map_texture.GetTexRect(tex_name);
 			// Adding to (x, z) square with this texture
@@ -90,20 +91,21 @@ void OgreWrap::CreateStaticTerrain()
 	sg->setRegionDimensions(Vector3(map_width, map_max_hight, map_length));
 	sg->setOrigin(Vector3(0, 0, 0));
 
-	sg->addEntity(terrain_ent, Vector3(0, 0, 0)); // From 0,0 to XZ ↓→
+	sg->addEntity(terrain_ent, Vector3(0, 0, 0)); // From 0,0 to ZX ↓→
 
 	sg->build();
 
-	//
-	mCamera->setPosition(map_width / 2, map_width / 1.5, map_length);
-	mCamera->lookAt(map_width / 2, 0, map_length / 1.5);
+	// Camera !!
+	mCamera->setPosition(map_width / 1.7, map_width / 4, map_length * 1.2);
+	mCamera->lookAt(map_width / 2, 0, 0);
 }
 
 //==============================================================================
 void OgreWrap::chooseSceneManager()
 {
-	// Use the terrain scene manager.
-	mSceneMgr = mRoot->createSceneManager(ST_EXTERIOR_CLOSE);
+	// ST_EXTERIOR_CLOSE was when terrain used.
+	mSceneMgr = mRoot->createSceneManager(ST_GENERIC);
+	myManager.sceneManager = mSceneMgr;
 }
 
 //==============================================================================
@@ -114,13 +116,39 @@ void OgreWrap::createScene()
 
 	CreateStaticTerrain();
 
-	MovingManager *p_entity_manager = new MovingManager("Robot", mSceneMgr, Strategix::MapCoord(4, 4));
+	using namespace Strategix;
+
+	// Install initial objects on map
+	foreach( sh_p<Player> &p, Game::GS().players )
+	{
+		// Getting Base's name.
+		const string *baseName = 0;
+		foreach( const TechMapPairType &entPair, p->techTree->techMap )
+		{
+			if( entPair.second->kind == "building_base" )
+			{
+				baseName = &entPair.second->name;
+				break;
+			}
+		}
+		if( !baseName )
+		{
+			throw STRATEGIX_ERROR("There is no defined entity with kind=building_base");
+		}
+
+		// Getting Initial Position
+		MapCoord &mapCoord = Game::GS().GetMap().initialPositions[p->playerNumber];
+
+		// Creating Base
+		sh_p<MovingManager> base(new MovingManager(p.get(), *baseName, &myManager, mapCoord));
+		myManager.AddEntityManager(base);
+	}
 }
 
 //==============================================================================
 void OgreWrap::createFrameListener()
 {
-	mFrameListener = new MyFrameListener(mWindow, mCamera, mSceneMgr);
+	mFrameListener = new MyFrameListener(mWindow, mCamera, &myManager);
 	mFrameListener->showDebugOverlay(true);
 	mRoot->addFrameListener(mFrameListener);
 }

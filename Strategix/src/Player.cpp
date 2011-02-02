@@ -6,15 +6,18 @@
  */
 
 #include "Player.h"
+#include "StrategixSingleton.h"
+#include "Kernel.h"
 
 using namespace Strategix;
 
-Player::Player()
+Player::Player(string name, PlayerType playerType, int playerNumber, string raceName)
+	:
+	name(name),
+	playerType(playerType),
+	playerNumber(playerNumber)
 {
-}
-
-Player::Player(const Player& orig)
-{
+	techTree = Kernel::GS().techTrees[raceName].get();
 }
 
 Player::~Player()

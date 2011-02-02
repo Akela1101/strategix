@@ -11,7 +11,7 @@
 #include "GameStructs.h"
 #include "TechTree.h"
 #include "GameStructs.h"
-#include "Entity.h"
+#include "Ent.h"
 
 #include "list"
 
@@ -21,16 +21,20 @@ namespace Strategix
 
 	class Player
 	{
-		string name;
-		Resources resources;
+	public:
+		string name; // Name gived by user.
+		PlayerType playerType; // human, ai, net
+		const int playerNumber; // number of player on the map
+
+		ResType res;
 		TechTree *techTree;
-		list<Entity> entities;
+		list<Ent> entities;
 
 	public:
-		Player();
-		Player(const Player& orig);
+		Player(string name, PlayerType playerType, int playerNumber, string raceName);
 		virtual ~Player();
 	private:
+		Player(const Player& orig);
 
 	};
 }

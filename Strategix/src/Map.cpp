@@ -6,49 +6,73 @@
  */
 
 #include "Map.h"
-#include "StraxLog.h"
+#include "Log.h"
 #include <fstream>
 #include <iostream>
 #include <algorithm>
 #include <deque>
 #include <list>
+#include <string>
+
 
 using namespace Strategix;
 using namespace std;
 
-void Map::InitFromTextFile(string file_name) throw(StraxError)
+Map::TerrainTypes Map::terrains;
+
+bool Map::LoadTerrains()
 {
-	// Сделать это при загрузке ядра, а не для каждой карты !!!
-	ifstream fdesc("terrains.def");
+	ifstream fdesc("Maps/terrains.def");
 	char cString[100];
 	fdesc.getline(cString, 100);
-	
+
 	// Terrain Name and Retard
 	int nTypes = -1;
 	fdesc >> nTypes;
 	nTypes *= nTypes; // nTypes^2
 
 	if( nTypes <= 0)
-		throw STRAX_ERROR((string("Wrong map dimentions in file: ") + file_name).c_str());
+		return false;
 
-	string name;
+	string type;
 	float retard;
 	for( short n = 0; n < nTypes; ++n )
 	{
-		fdesc >> retard >> name;
+		fdesc >> retard >> type;
 
-		terrains[n] = Terrain(name, retard);
-	}	
+		terrains[n] = Terrain(type, retard);
+	}
 	fdesc.close();
+	return true;
+}
 
-	ifstream fin(file_name.c_str());
+const string Map::GetFilePath(const string name)
+{
+	string mapPath = "Maps/";
+	mapPath += name + ".map";
+	return mapPath;
+}
 
+Map::Map(const string name) throw(StrategixError)
+{
+	if( !terrains.size() )
+	{
+		if( !LoadTerrains() )
+		{
+			throw STRATEGIX_ERROR("Wrong terrains.def");
+		}
+	}
+
+	const string &fileName = GetFilePath(name);
+	ifstream fin(fileName.c_str());
+
+	char cString[101];
 	fin.getline(cString, 100); // mapFileTopString
 	fin.getline(cString, 100); // terrainsDefinitionFileName
 
 	// Name
 	fin.getline(cString, 100);
-	name = cString;
+	this->name = cString;
 
 	// Map Content
 	fin >> width >> length;
@@ -68,7 +92,7 @@ void Map::InitFromTextFile(string file_name) throw(StraxError)
 			}
 			else
 			{
-				throw STRAX_ERROR((string("Wrong map format in file: ") + file_name).c_str());
+				throw STRATEGIX_ERROR((string("Wrong map format in file: ") + fileName).c_str());
 			}
 		}
 	}
@@ -88,7 +112,7 @@ void Map::InitFromTextFile(string file_name) throw(StraxError)
 	fin.close();
 }
 
-void Map::OutMatrix()
+void Map::OutMatrix() const
 {
 	cout << endl << endl;
 
@@ -107,7 +131,7 @@ bool Map::IsIn(const list<Cell*> &list, const Cell *cell) const
 	return list.end() != find(list.begin(), list.end(), cell);
 }
 
-bool Map::IsAccessible(const MapCoord &mc)
+bool Map::IsAccessible(const MapCoord &mc) const
 {
 	if( terrains[ cells[mc.y][mc.x].terrType ].retard <= 0 ) // water or mount
 		return false;
@@ -119,7 +143,7 @@ int Map::Distance(const MapCoord &a, const MapCoord &b) const
 	return (abs(a.x - b.x) + abs(a.y - b.y)) * 10;
 }
 
-deque<MapCoord> *Map::BuildWay(const MapCoord &from, const MapCoord &till)
+deque<MapCoord> *Map::BuildWay(const MapCoord &from, const MapCoord &till) const
 {
 	list<Cell*> *p_closed = 0;
 	deque<MapCoord> *way = BuildWay_Debug(from, till, p_closed);
@@ -128,7 +152,7 @@ deque<MapCoord> *Map::BuildWay(const MapCoord &from, const MapCoord &till)
 	return way;
 }
 
-deque<MapCoord> *Map::BuildWay_Debug(const MapCoord &from, const MapCoord &till, list<Cell*> *&p_closed)
+deque<MapCoord> *Map::BuildWay_Debug(const MapCoord &from, const MapCoord &till, list<Cell*> *&p_closed) const
 {
 	deque<MapCoord> *way = new deque<MapCoord>();
 

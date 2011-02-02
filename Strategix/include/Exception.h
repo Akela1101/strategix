@@ -10,38 +10,45 @@
 
 #include <exception>
 #include <sstream>
+#include <string>
 
 
 namespace Strategix
 {
 	using namespace std;
 	
-	class StraxError : public std::exception
+	class StrategixError : public std::exception
 	{
 		const char *file;
 		int line;
 		const char *message;
 
 	public:
-		StraxError(const char *_file, int _line, const char *_message) throw()
+		StrategixError(const char *_file, int _line, const char *_message) throw()
 		{
 			file = _file;
 			line = _line;
 			message = _message;
 		}
 
-		virtual ~StraxError() throw() {}
+		StrategixError(const char *_file, int _line, const string &_message) throw()
+		{
+			file = _file;
+			line = _line;
+			message = _message.c_str();
+		}
+
+		virtual ~StrategixError() throw() {}
 
 		virtual const char* what() const throw()
 		{
 			stringstream ss;
-			ss << "Error in " << file << " on line = " << line << endl
-				<< message << endl;
+			ss << "Error  on line " << line  << " in file: " << file << " >> " << message << endl;
 			return ss.str().c_str();
 		}
 	};
 
-	#define STRAX_ERROR(message) StraxError(__FILE__, __LINE__, message)
+	#define STRATEGIX_ERROR(message) StrategixError(__FILE__, __LINE__, message)
 }
 
 #endif	/* _EXCEPTION_H */

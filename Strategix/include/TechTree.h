@@ -8,33 +8,30 @@
 #ifndef _TECHTREE_H
 #define	_TECHTREE_H
 
+#include "Nya.hpp"
+#include "EntityInfo.h"
+
 #include <map>
 #include <string>
-#include "boost/smart_ptr.hpp"
-
-#include "EntityInfo.h"
-#include "TechTreeBuilder.h"
 
 
 namespace Strategix
 {
+	using namespace std;
 	using namespace boost;
 
-	class TechTreeBuilder;
+	typedef map<string, sh_p<EntityInfo> > TechMapType;
+	typedef std::pair<string, sh_p<EntityInfo> > TechMapPairType;
 
 	class TechTree
 	{
 	public:
-		string raceName;
-		typedef map<string, shared_ptr<EntityInfo> > TechMapType;
+		string raceName;		
 		TechMapType techMap;
 
 	public:
 		TechTree(const string &raceName);
-
-		const string &GetRaceName() const;
-		void Build(TechTreeBuilder &ttBuilder);
-		void AddNode(const shared_ptr<EntityInfo> &shpEntityInfo);
+		void AddNode(const sh_p<EntityInfo> &shpEntityInfo);
 
 	private:
 		TechTree(const TechTree &_c);
@@ -42,6 +39,8 @@ namespace Strategix
 		inline void init(const TechTree &_c);
 
 	};
+
+	typedef map<string, sh_p<TechTree> > TechTreesType;
 }
 
 #endif	/* _TECHTREE_H */

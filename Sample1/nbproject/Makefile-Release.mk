@@ -40,6 +40,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/OgreWrap/src/MyFrameListener.o \
 	${OBJECTDIR}/OgreWrap/src/OgreWrap.o \
 	${OBJECTDIR}/OgreWrap/src/LabelManager.o \
+	${OBJECTDIR}/src/MyManager.o \
 	${OBJECTDIR}/OgreWrap/src/EntityManager.o \
 	${OBJECTDIR}/OgreWrap/src/ObjectTitle.o
 
@@ -58,7 +59,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=-L/usr/lib -L/usr/lib/OGRE -lOgreMain -lOIS ../Strategix/dist/Release/GNU-Linux-x86/libstrategix.a -lCEGUIOpenGLRenderer
+LDLIBSOPTIONS=-L/usr/lib -L/usr/lib/OGRE -lOgreMain -lOIS ../Strategix/dist/Release/GNU-Linux-x86/libstrategix.a -lCEGUIOpenGLRenderer -lboost_filesystem
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
@@ -104,6 +105,11 @@ ${OBJECTDIR}/OgreWrap/src/LabelManager.o: OgreWrap/src/LabelManager.cpp
 	${MKDIR} -p ${OBJECTDIR}/OgreWrap/src
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -Iinclude -IOgreWrap/include -I../Strategix/include -I/usr/include/OGRE -I/usr/include/OIS -I/usr/include/CEGUI -MMD -MP -MF $@.d -o ${OBJECTDIR}/OgreWrap/src/LabelManager.o OgreWrap/src/LabelManager.cpp
+
+${OBJECTDIR}/src/MyManager.o: src/MyManager.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -Iinclude -IOgreWrap/include -I../Strategix/include -I/usr/include/OGRE -I/usr/include/OIS -I/usr/include/CEGUI -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/MyManager.o src/MyManager.cpp
 
 ${OBJECTDIR}/OgreWrap/src/EntityManager.o: OgreWrap/src/EntityManager.cpp 
 	${MKDIR} -p ${OBJECTDIR}/OgreWrap/src

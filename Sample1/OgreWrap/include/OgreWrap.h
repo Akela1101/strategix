@@ -8,7 +8,9 @@
 #ifndef _OGREWRAP_H
 #define	_OGREWRAP_H
 
+#include "MyManager.h"
 #include "ExampleApplication.h"
+
 
 namespace Sample1
 {
@@ -16,6 +18,8 @@ namespace Sample1
 
 	class OgreWrap : public ExampleApplication
 	{
+		MyManager myManager;
+
 		void chooseSceneManager();
 		void createScene();
 		void createFrameListener();

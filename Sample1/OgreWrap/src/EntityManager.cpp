@@ -7,27 +7,36 @@
 
 #include "EntityManager.h"
 
-
 namespace Sample1
 {
+	using namespace Strategix;
 	using namespace Ogre;
 
-EntityManager::EntityManager(const String &name, SceneManager *sceneManager)
+EntityManager::EntityManager(Player *player, const String &name,
+		MyManager *myManager, const Strategix::MapCoord &mapCoord)
+	:
+	player(player),
+	name(name),
+	myManager(myManager),
+	mapCoord(mapCoord)
 {
-	this->name = name;
-	this->sceneManager = sceneManager;
-
 	Root::getSingletonPtr()->addFrameListener(this);
 }
 
-EntityManager::~EntityManager()
+void EntityManager::BeginDestruction()
 {
-	// Bad ! 'Case it stays in Root on one frame !!!
 	Root::getSingletonPtr()->removeFrameListener(this);
 
-	// Using after this destructor
-	// Root::getSingleton().renderOneFrame();
-	// will prevent from "Segmentation fault"
+	// Add to deletion list
+	//
+}
+
+EntityManager::~EntityManager()
+{	
+	// removeFrameListener must be earier than this destructor on one frame
+	// elsewise there will be try to render deleted object!!!
+	// Solution is to add this object to deletion list, called after one frame.
+	// Or to hit on the head someone from OGRE developers :)
 }
 
 }

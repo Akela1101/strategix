@@ -11,10 +11,8 @@
 #include "Nya.hpp"
 #include "ExampleFrameListener.h"
 #include "MyMouseListener.h"
-
-
-
 #include "ObjectTitle.h"
+#include "MyManager.h"
 #include "LabelManager.h"
 
 namespace Sample1
@@ -30,15 +28,15 @@ namespace Sample1
 		bool isShowLabels;
 
 	protected:
-		SceneManager *sceneManager; // A pointer to the scene manager
-		RaySceneQuery *raySceneQuery; // The ray scene query pointer
-		MyMouseListener *p_mouse_listener;
+		MyManager *myManager;
+		RaySceneQuery *raySceneQuery; 
+		sh_p<MyMouseListener> mouseListener;
 
 		void CreateLabels();
 		void ShowLabels(bool isShow);
 
 	public:
-		MyFrameListener(RenderWindow* mWindow, Camera* mCamera, SceneManager *sceneManager);
+		MyFrameListener(RenderWindow* mWindow, Camera* mCamera, MyManager *myManager);
 		~MyFrameListener();
 		bool frameStarted(const FrameEvent &event);
 		virtual bool processUnbufferedKeyInput(const FrameEvent& evt);

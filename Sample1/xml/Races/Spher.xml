@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Technology Tree Definition -->
+
+<race>
+	<entities>
+	
+		<entity>
+			<name>Spher_Base</name>
+			<kind>building_base</kind>
+			<res>
+				<gold>10000</gold>
+			</res>
+			<params>
+			  <hp>1000</hp>
+      </params>
+			<provides>
+				<name>Spher_Worker</name>
+			</provides>
+			<file>Spher_Base.mesh</file>
+			<scale>1.0</scale>
+		</entity>
+		
+		<entity>
+			<name>Spher_Worker</name>
+			<kind>unit_worker</kind>
+			<res>
+				<gold>500</gold>
+			</res>
+			<params>
+			  <hp>50</hp>
+			  <speed>5</speed>
+      </params>
+			<depends>
+				<name>Spher_Base</name>
+			</depends>
+			<provides>
+				<name>Spher_Base</name>
+			</provides>
+			<file>Spher_Worker.mesh</file>
+			<scale>1.0</scale>
+		</entity>
+		
+	</entities>
+</race>

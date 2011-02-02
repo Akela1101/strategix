@@ -9,21 +9,36 @@
 #define	_ENTITYMANAGER_H
 
 #include <Ogre.h>
+#include "ObjectTitle.h"
+#include "GameStructs.h"
+#include "MyManager.h"
+#include "Player.h"
+
 
 namespace Sample1
 {
+	using namespace Strategix;
 	using namespace Ogre;
+
+	class MyManager;
 
 	class EntityManager : public FrameListener
 	{
 	protected:
+		Player *player;
 		String name;
-		SceneManager *sceneManager;
+		MyManager *myManager;
 		SceneNode *node;
 		Entity *entity;
+		AnimationState *animationState;
+		Strategix::MapCoord mapCoord; // Coordinates on Map
+
+		ObjectTitle *objectTitle;
 
 	public:
-		EntityManager(const String &name, SceneManager *sceneManager);
+		EntityManager(Player *player, const String &name,
+				MyManager *myManager, const Strategix::MapCoord &mapCoord);
+		void BeginDestruction(); // Don't redefine this! Must be called in place of destructor.
 		virtual ~EntityManager();
 	};
 }

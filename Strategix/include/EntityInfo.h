@@ -22,10 +22,16 @@ namespace Strategix
 	public:
 		string name;
 		string kind;
-		Resources cost;
-		Params params;
-		Names depends;
-		Names provides;
+		ResType res; // map<string, SingleResType>
+		Params params; // {HP, speed, ...}
+		Names depends; // vector<string>
+		Names provides; // vector<string>
+
+		string file; // file name with mesh|config|...(put here the file you need)
+		float scale; // Scale of mesh|pictures
+
+		// Add here Entity variables, than add some strings in TechTreesBuilder*.Build(),
+		// than use it as Kernel::GS().techTrees[race]->techMap[entity]->your_variable
 
 	public:
 		EntityInfo();

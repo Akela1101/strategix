@@ -16,15 +16,14 @@ namespace Sample1
 {
 	using namespace Ogre;
 
-MyFrameListener::MyFrameListener(RenderWindow* mWindow, Camera* mCamera, SceneManager *sceneManager)
-: ExampleFrameListener(mWindow, mCamera, false, true)
-{
-	this->sceneManager = sceneManager;
-	raySceneQuery = sceneManager->createRayQuery(Ray());
-
-	// Register this so that we get mouse events.
-	p_mouse_listener = new MyMouseListener(mCamera, raySceneQuery);
-	mMouse->setEventCallback(p_mouse_listener);
+MyFrameListener::MyFrameListener(RenderWindow* mWindow, Camera* mCamera, MyManager *myManager)
+	:
+	ExampleFrameListener(mWindow, mCamera, false, true),
+	myManager(myManager),
+	raySceneQuery(myManager->sceneManager->createRayQuery(Ray())),
+	mouseListener(new MyMouseListener(mCamera, raySceneQuery))
+{	
+	mMouse->setEventCallback(mouseListener.get());
 
 	CreateLabels();
 	ShowLabels(false);
@@ -32,8 +31,8 @@ MyFrameListener::MyFrameListener(RenderWindow* mWindow, Camera* mCamera, SceneMa
 
 MyFrameListener::~MyFrameListener()
 {
-	delete p_mouse_listener;
-	sceneManager->destroyQuery(raySceneQuery);
+	myManager->sceneManager->destroyQuery(raySceneQuery);
+	// @#~ may be delete also needed ?
 }
 
 bool MyFrameListener::frameStarted(const FrameEvent &event)
@@ -47,10 +46,10 @@ bool MyFrameListener::frameStarted(const FrameEvent &event)
 	static Vector3 lastCamPos;
 	if( lastCamPos != camPos )
 	{
-		using Strategix::Map;
+		using Strategix::Game;
 
-		float w = Map::GS().GetWidth() * tile_length;
-		float l = Map::GS().GetLength() * tile_length;
+		float w = Game::GS().GetMap().GetWidth() * tile_length;
+		float l = Game::GS().GetMap().GetLength() * tile_length;
 
 		if( camPos.y < tile_length )
 			camPos.y = tile_length;
@@ -185,14 +184,14 @@ bool MyFrameListener::processUnbufferedKeyInput(const FrameEvent& evt)
 
 #include "LabelManager.h"
 #include <vector>
-#include <boost/smart_ptr.hpp>
+#include <Nya.hpp>
 #include <sstream>
 
 void MyFrameListener::CreateLabels()
 {
-	Strategix::Map &r_map = Strategix::Map::GS();
-	const int width = r_map.GetWidth();
-	const int length = r_map.GetLength();
+	const Strategix::Map &map = Strategix::Game::GS().GetMap();
+	const int width = map.GetWidth();
+	const int length = map.GetLength();
 
 	labelVector.reserve(width * length);
 
@@ -201,8 +200,8 @@ void MyFrameListener::CreateLabels()
 		for( int z = 0; z < length; ++z )
 		{
 			std::stringstream title;
-			title << "   " << r_map(x, z).retard;
-			SHP_LabelManager shp_labelManager(new LabelManager(sceneManager, Strategix::MapCoord(x, z), title.str().c_str()));
+			title << "   " << map(x, z).retard;
+			SHP_LabelManager shp_labelManager(new LabelManager(myManager, Strategix::MapCoord(x, z), title.str().c_str()));
 
 			shp_labelManager->SetColor(ColourValue(1.0, 0.4, 0.4, 1.0));
 

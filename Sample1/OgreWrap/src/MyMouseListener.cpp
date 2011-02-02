@@ -41,10 +41,12 @@ bool MyMouseListener::mouseMoved(const OIS::MouseEvent &mouse_event)
 
 	camera->moveRelative(Vector3(0, 0, -camera_zoom_speed * mouse_event.state.Z.rel));
 
-	if( mouse_event.state.buttonDown(OIS::MB_Right) )
+	if( mouse_event.state.buttonDown(OIS::MB_Middle) )
 	{
 		// We don't want to yaw in strategy.
-		//camera->yaw(Degree(-mouse_event.state.X.rel * camera_speed));
+		// comment next line later !!
+		camera->yaw(Degree(-mouse_event.state.X.rel * camera_speed));
+
 		camera->pitch(Degree(-mouse_event.state.Y.rel * camera_speed));
 	}
 
@@ -64,19 +66,8 @@ bool MyMouseListener::mousePressed(const OIS::MouseEvent &mouse_event, OIS::Mous
 		Ray mouseRay = camera->getCameraToViewportRay(
 				d_x / float(mouse_event.state.width),
 				d_y / float(mouse_event.state.height));
-
-		if( p_currEntity ) // Move currently selected Entity.
-		{
-			// Interset camera-mouse ray with plane XZ.
-			Plane terrainPlane(Vector3(0, 1, 0), 0); // XZ
-			Real dist = mouseRay.intersects(terrainPlane).second;
-			Vector3 intersectPoint = mouseRay.getPoint(dist);
-
-			MovingManager *p_entityManager = any_cast<MovingManager*>(p_currEntity->getUserAny());
-			//p_entityManager->AddWayTo_Debug(itr->worldFragment->singleIntersection);
-			p_entityManager->AddWayTo(intersectPoint);
-		}
-		else // No selection => Select
+		
+		if( !p_currEntity ) // No selection => Select
 		{
 			raySceneQuery->setRay(mouseRay);
 			raySceneQuery->setSortByDistance(true);
@@ -84,13 +75,24 @@ bool MyMouseListener::mousePressed(const OIS::MouseEvent &mouse_event, OIS::Mous
 
 			foreach( RaySceneQueryResultEntry entry, result )
 			{
-				if( entry.movable && entry.movable->getName() == "Robot" ) // by name - bad ((
+				if( entry.movable && entry.movable->getName() == "Spher_Worker" ) // by name - bad ((
 				{
 					p_currEntity = dynamic_cast<Entity*>(entry.movable);
 					p_currEntity->getParentSceneNode()->showBoundingBox(true);
 					break;
 				}
 			}
+		}
+		else // Move currently selected Entity.
+		{
+			// Interset camera-mouse ray with plane XZ.
+			Plane terrainPlane(Vector3(0, 1, 0), 0); // XZ
+			Real dist = mouseRay.intersects(terrainPlane).second;
+			Vector3 intersectPoint = mouseRay.getPoint(dist);
+
+			sh_p<MovingManager> entityManager = any_cast<sh_p<MovingManager> >(p_currEntity->getUserAny());
+			//entityManager->AddWayTo_Debug(itr->worldFragment->singleIntersection);
+			entityManager->AddWayTo(intersectPoint);
 		}
 	}
 	return true;

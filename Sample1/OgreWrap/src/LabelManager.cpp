@@ -16,8 +16,9 @@ namespace Sample1
 	using namespace Ogre;
 	using namespace std;
 
-LabelManager::LabelManager(SceneManager *sceneManager, const Strategix::MapCoord &mapCoord, const String &title)
-	: EntityManager( "", sceneManager )
+LabelManager::LabelManager(MyManager *myManager, const Strategix::MapCoord &mapCoord, const String &title)
+	:
+	EntityManager(0, "", myManager, mapCoord)
 {
 	this->mapCoord = mapCoord;
 
@@ -33,13 +34,13 @@ LabelManager::LabelManager(SceneManager *sceneManager, const Strategix::MapCoord
 		isNoMesh = false;
 	}
 
-	entity = sceneManager->createEntity("TileMesh");
-	node = sceneManager->getRootSceneNode()->createChildSceneNode();
+	entity = myManager->sceneManager->createEntity("TileMesh");
+	node = myManager->sceneManager->getRootSceneNode()->createChildSceneNode();
 	node->attachObject(entity);
 	node->setPosition(Vector3((mapCoord.x + 0.5f) * tile_length, tile_length, (mapCoord.y + 0.5f) * tile_length));
 
 	// Title
-	Camera* camera = sceneManager->getCamera("Camera");
+	Camera* camera = myManager->sceneManager->getCamera("Camera");
 	if( !camera )
 		OGRE_EXCEPT(1, "No camera named Camera", "");
 
@@ -53,8 +54,8 @@ LabelManager::~LabelManager()
 {
 	delete objectTitle;
 	node->detachObject(entity);
-	sceneManager->destroyEntity(entity);
-	sceneManager->destroySceneNode(node);
+	myManager->sceneManager->destroyEntity(entity);
+	myManager->sceneManager->destroySceneNode(node);
 }
 
 bool LabelManager::frameRenderingQueued(const FrameEvent &event)

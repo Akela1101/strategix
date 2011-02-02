@@ -13,24 +13,15 @@ using namespace boost;
 using namespace Strategix;
 
 TechTree::TechTree(const string &raceName)
+	:
+	raceName(raceName)
 {
-	this->raceName = raceName;
 }
 
-const string &TechTree::GetRaceName() const
+void TechTree::AddNode(const sh_p<EntityInfo> &entityInfo)
 {
-	return raceName;
-}
-
-void TechTree::Build(TechTreeBuilder &ttBuilder)
-{
-	ttBuilder.Build(this);
-}
-
-void TechTree::AddNode(const shared_ptr<EntityInfo> &shpEntityInfo)
-{
-	pair<string, shared_ptr<EntityInfo> > pairEl(shpEntityInfo->name, shpEntityInfo);
+	pair<string, sh_p<EntityInfo> > pairEl(entityInfo->name, entityInfo);
 	pair<TechMapType::iterator, bool> retPair = techMap.insert(pairEl);
 	if( retPair.second == false )
-		throw STRAX_ERROR("There is at least 2 entities with the same name.");
+		throw STRATEGIX_ERROR( string("More than one EntityInfo with name: ") + entityInfo->name );
 }
