@@ -1,12 +1,12 @@
 /* 
- * File:   EntityInfo.h
+ * File:   EntiInfo.h
  * Author: Akela1101
  *
  * Created on 12 Март 2010 г., 18:34
  */
 
-#ifndef _ENTITYINFO_H
-#define	_ENTITYINFO_H
+#ifndef _ENTIINFO_H
+#define	_ENTIINFO_H
 
 #include <map>
 #include <string>
@@ -17,32 +17,32 @@ namespace Strategix
 {
 	using namespace std;
 
-	class EntityInfo
+	class EntiInfo
 	{
 	public:
 		string name;
 		string kind;
-		ResType res; // map<string, SingleResType>
-		Params params; // {HP, speed, ...}
+		map<string, ResType> resources;
+		Params params; // {HP, ...}
 		Names depends; // vector<string>
 		Names provides; // vector<string>
 
 		string file; // file name with mesh|config|...(put here the file you need)
 		float scale; // Scale of mesh|pictures
+		map<string, Action> actions;
 
 		// Add here Entity variables, than add some strings in TechTreesBuilder*.Build(),
 		// than use it as Kernel::GS().techTrees[race]->techMap[entity]->your_variable
 
 	public:
-		EntityInfo();
-		EntityInfo(const EntityInfo &_c);
-		EntityInfo & operator =(const EntityInfo &_c);
-		virtual ~EntityInfo();
-	private:
-		inline void init(const EntityInfo &_c);
+		EntiInfo();
+		virtual ~EntiInfo();
 
+	private:
+		EntiInfo(const EntiInfo &_c);
+		EntiInfo & operator =(const EntiInfo &_c);
 	};
 }
 
-#endif	/* _ENTITYINFO_H */
+#endif	/* _ENTIINFO_H */
 

@@ -11,7 +11,7 @@
 #include "GameStructs.h"
 #include "TechTree.h"
 #include "GameStructs.h"
-#include "Ent.h"
+#include "Enti.h"
 
 #include "list"
 
@@ -26,9 +26,9 @@ namespace Strategix
 		PlayerType playerType; // human, ai, net
 		const int playerNumber; // number of player on the map
 
-		ResType res;
+		map<string, ResType> resources;
 		TechTree *techTree;
-		list<Ent> entities;
+		list<Enti> entis;
 
 	public:
 		Player(string name, PlayerType playerType, int playerNumber, string raceName);

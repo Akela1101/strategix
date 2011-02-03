@@ -17,17 +17,27 @@ namespace Strategix
 {
 	using namespace std;
 
-// EntityInfo
+// EntiInfo
 	typedef int HpType;
-	typedef float SpeedType;
-	typedef int SingleResType;
-	typedef map<string, SingleResType> ResType;
+	typedef int ResType;
 	typedef vector<string> Names;
+	typedef float FeatureType;
 
 	struct Params
 	{		
 		HpType hp;		
-		SpeedType speed;
+	};
+
+	struct Action
+	{
+		string name;
+		map<string, FeatureType> features;
+	};
+
+	struct ActionHolder
+	{
+		Action *action;
+		map<string, FeatureType> features;
 	};
 // **********
 

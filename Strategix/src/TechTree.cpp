@@ -18,10 +18,10 @@ TechTree::TechTree(const string &raceName)
 {
 }
 
-void TechTree::AddNode(const sh_p<EntityInfo> &entityInfo)
+void TechTree::AddNode(const sh_p<EntiInfo> &entityInfo)
 {
-	pair<string, sh_p<EntityInfo> > pairEl(entityInfo->name, entityInfo);
+	pair<string, sh_p<EntiInfo> > pairEl(entityInfo->name, entityInfo);
 	pair<TechMapType::iterator, bool> retPair = techMap.insert(pairEl);
 	if( retPair.second == false )
-		throw STRATEGIX_ERROR( string("More than one EntityInfo with name: ") + entityInfo->name );
+		throw STRATEGIX_ERROR( string("More than one EntiInfo with name: ") + entityInfo->name );
 }

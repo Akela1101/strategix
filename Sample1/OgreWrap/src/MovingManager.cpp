@@ -23,31 +23,27 @@ namespace Sample1
 
 MovingManager::MovingManager(Player *player, const String &name, const MapCoord &mapCoord)
 	:
-	EntityManager(player, name, mapCoord )
+	EntityManager(player, name, mapCoord ),
+	distance(0.0f),
+	moveSpeed(30.0f)
 {
-	const EntityInfo *ei = player->techTree->techMap[name].get();
+	const EntiInfo *ei = player->techTree->techMap[name].get();
 	
 	string meshFile = ei->file;
-	entity = sceneManager->createEntity(name, meshFile);
+	entity = sceneManager->createEntity(meshFile);
 	entity->setUserAny(Any(this)); // Link from Entity to itself
-	//entity->setQueryFlags(ROBOT_MASK);
+	entity->setQueryFlags(MOV_MASK);
 
 	node = sceneManager->getRootSceneNode()->createChildSceneNode();
 	node->attachObject(entity);
 	float scale = ei->scale;
 	node->setScale(scale, scale, scale);
-
-	// @#~ Get vector from map !!!!!
-	node->setPosition(Vector3((mapCoord.x + 0.5f) * tile_length, 0, (mapCoord.y + 0.5f) * tile_length));
-
-	animationState = entity->getAnimationState("Idle");
+	node->setPosition(GetDiscretePos(mapCoord));
+	destination = node->getPosition();
 
 	// @#~ Maybe better to = 0 and so on
-	walkList = new std::deque<Strategix::MapCoord>();
+	moveList = new std::deque<Strategix::MapCoord>();
 
-	walkSpeed = 30.0f;
-	destination = node->getPosition();
-	distance = 0.0f;
 
 //	// Title
 //	Camera* camera = sceneManager->getCamera("Camera");
@@ -59,7 +55,7 @@ MovingManager::MovingManager(Player *player, const String &name, const MapCoord 
 
 MovingManager::~MovingManager()
 {
-	// delete walkList ?
+	// delete moveList ?
 	//delete objectTitle;
 	node->detachObject(entity);
 	sceneManager->destroyEntity(entity);
@@ -75,8 +71,8 @@ bool MovingManager::frameRenderingQueued(const FrameEvent &event)
 
 void MovingManager::AddWayTo(Vector3 &pos)
 {
-	delete walkList;
-	walkList = Strategix::Game::GS().GetMap().BuildWay(mapCoord, GetMapCoord(pos));
+	delete moveList;
+	moveList = Strategix::Game::GS().GetMap().BuildWay(mapCoord, GetMapCoord(pos));
 }
 
 void MovingManager::AddWayTo_Debug(Vector3 &pos)
@@ -87,7 +83,7 @@ void MovingManager::AddWayTo_Debug(Vector3 &pos)
 	MapCoord newMapCoord = GetMapCoord(pos);
 
 	typedef std::deque<Strategix::MapCoord> MapCoordDeque;
-	static MapCoordDeque *saved_walkList;
+	static MapCoordDeque *saved_moveList;
 
 	// First time mouse click => Draw path
 	if( oldMapCoord != newMapCoord )
@@ -97,7 +93,7 @@ void MovingManager::AddWayTo_Debug(Vector3 &pos)
 		typedef std::list<Strategix::Map::Cell*> CellList;
 		CellList *p_closed = 0;
 
-		saved_walkList = Strategix::Game::GS().GetMap().BuildWay_Debug(mapCoord, newMapCoord, p_closed);
+		saved_moveList = Strategix::Game::GS().GetMap().BuildWay_Debug(mapCoord, newMapCoord, p_closed);
 
 		//Strategix::Log::GS().Write("hahahah\n");
 
@@ -118,7 +114,7 @@ void MovingManager::AddWayTo_Debug(Vector3 &pos)
 			title << "\n" << (*at)->G << " + " << (*at)->H << "\n = " << (*at)->F ;
 			SHP_LabelManager shp_labelManager(new LabelManager((*at)->mc, title.str().c_str()));
 
-			if( saved_walkList->end() != find(saved_walkList->begin(), saved_walkList->end(), (*at)->mc) )
+			if( saved_moveList->end() != find(saved_moveList->begin(), saved_moveList->end(), (*at)->mc) )
 				shp_labelManager->SetColor(ColourValue(1.0, 1.0, 1.0, 1.0));
 			else
 				shp_labelManager->SetColor(ColourValue(5.0, 0.0, 0.8, 1.0));
@@ -131,9 +127,9 @@ void MovingManager::AddWayTo_Debug(Vector3 &pos)
 	// Second time mouse click => Go
 	else
 	{
-		if( walkList != saved_walkList )
-			delete walkList;
-		walkList = saved_walkList;
+		if( moveList != saved_moveList )
+			delete moveList;
+		moveList = saved_moveList;
 	}
 }
 
@@ -143,21 +139,28 @@ void MovingManager::MoveOnTime(Real time)
 	{
 		node->setPosition(destination);
 
-		if( walkList->empty() ) // Standing
+		if( moveList->empty() ) // Standing
 		{
-			animationState = entity->getAnimationState("Idle");
-			animationState->setLoop(true);
-			animationState->setEnabled(true);
+			try
+			{
+				animationState = entity->getAnimationState("Idle");
+				animationState->setLoop(true);
+				animationState->setEnabled(true);
+			}
+			catch( ItemIdentityException )
+			{
+				cout << endl << "No default Idle action" << endl;
+			}			
 		}
 		else // Moving next position
-		{
+		{			
 			animationState = entity->getAnimationState("Move");
 			animationState->setLoop(true);
 			animationState->setEnabled(true);
 
-			mapCoord = walkList->front(); // Setting current position
+			mapCoord = moveList->front(); // Setting current position
 			destination = GetDiscretePos(mapCoord); // Setting 3D coordinates
-			walkList->pop_front();
+			moveList->pop_front();
 
 			direction = destination - node->getPosition();
 			distance = direction.normalise();
@@ -178,11 +181,11 @@ void MovingManager::MoveOnTime(Real time)
 	}
 	else // Moving if( distance > 0.0f )
 	{
-		Real move = walkSpeed * time;
+		Real move = moveSpeed * time;
 		distance -= move;
 		node->translate(Vector3(direction.x, 0, direction.z) * move);
 
-		animationState->addTime(time * walkSpeed / 10); 
+		animationState->addTime(time * moveSpeed / 10); 
 	}
 }
 

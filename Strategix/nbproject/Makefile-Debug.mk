@@ -37,12 +37,12 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/TechTreesBuilderFromXml.o \
 	${OBJECTDIR}/src/Kernel.o \
 	${OBJECTDIR}/src/MapSAstar.o \
+	${OBJECTDIR}/src/EntiInfo.o \
 	${OBJECTDIR}/src/Player.o \
 	${OBJECTDIR}/src/Map.o \
 	${OBJECTDIR}/src/TechTree.o \
-	${OBJECTDIR}/src/EntityInfo.o \
-	${OBJECTDIR}/src/Ent.o \
-	${OBJECTDIR}/src/Log.o
+	${OBJECTDIR}/src/Log.o \
+	${OBJECTDIR}/src/Enti.o
 
 
 # C Compiler Flags
@@ -74,52 +74,52 @@ dist/Debug/GNU-Linux-x86/libstrategix.a: ${OBJECTFILES}
 ${OBJECTDIR}/src/Game.o: src/Game.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Iinclude -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Game.o src/Game.cpp
+	$(COMPILE.cc) -g -Iinclude -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Game.o src/Game.cpp
 
 ${OBJECTDIR}/src/TechTreesBuilderFromXml.o: src/TechTreesBuilderFromXml.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Iinclude -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/TechTreesBuilderFromXml.o src/TechTreesBuilderFromXml.cpp
+	$(COMPILE.cc) -g -Iinclude -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/TechTreesBuilderFromXml.o src/TechTreesBuilderFromXml.cpp
 
 ${OBJECTDIR}/src/Kernel.o: src/Kernel.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Iinclude -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Kernel.o src/Kernel.cpp
+	$(COMPILE.cc) -g -Iinclude -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Kernel.o src/Kernel.cpp
 
 ${OBJECTDIR}/src/MapSAstar.o: src/MapSAstar.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Iinclude -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/MapSAstar.o src/MapSAstar.cpp
+	$(COMPILE.cc) -g -Iinclude -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/MapSAstar.o src/MapSAstar.cpp
+
+${OBJECTDIR}/src/EntiInfo.o: src/EntiInfo.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -g -Iinclude -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/EntiInfo.o src/EntiInfo.cpp
 
 ${OBJECTDIR}/src/Player.o: src/Player.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Iinclude -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Player.o src/Player.cpp
+	$(COMPILE.cc) -g -Iinclude -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Player.o src/Player.cpp
 
 ${OBJECTDIR}/src/Map.o: src/Map.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Iinclude -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Map.o src/Map.cpp
+	$(COMPILE.cc) -g -Iinclude -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Map.o src/Map.cpp
 
 ${OBJECTDIR}/src/TechTree.o: src/TechTree.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Iinclude -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/TechTree.o src/TechTree.cpp
-
-${OBJECTDIR}/src/EntityInfo.o: src/EntityInfo.cpp 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} $@.d
-	$(COMPILE.cc) -g -Iinclude -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/EntityInfo.o src/EntityInfo.cpp
-
-${OBJECTDIR}/src/Ent.o: src/Ent.cpp 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} $@.d
-	$(COMPILE.cc) -g -Iinclude -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Ent.o src/Ent.cpp
+	$(COMPILE.cc) -g -Iinclude -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/TechTree.o src/TechTree.cpp
 
 ${OBJECTDIR}/src/Log.o: src/Log.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Iinclude -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Log.o src/Log.cpp
+	$(COMPILE.cc) -g -Iinclude -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Log.o src/Log.cpp
+
+${OBJECTDIR}/src/Enti.o: src/Enti.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -g -Iinclude -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Enti.o src/Enti.cpp
 
 # Subprojects
 .build-subprojects:

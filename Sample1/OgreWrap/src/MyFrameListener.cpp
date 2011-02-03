@@ -30,7 +30,6 @@ MyFrameListener::MyFrameListener(RenderWindow* mWindow, Camera* mCamera)
 MyFrameListener::~MyFrameListener()
 {
 	sceneManager->destroyQuery(raySceneQuery);
-	// @#~ may be delete also needed ?
 }
 
 bool MyFrameListener::frameStarted(const FrameEvent &event)
@@ -199,11 +198,11 @@ void MyFrameListener::CreateLabels()
 		{
 			std::stringstream title;
 			title << "   " << map(x, z).retard;
-			SHP_LabelManager shp_labelManager(new LabelManager(Strategix::MapCoord(x, z), title.str().c_str()));
+			sh_p<LabelManager> labelManager(new LabelManager(Strategix::MapCoord(x, z), title.str().c_str()));
 
-			shp_labelManager->SetColor(ColourValue(1.0, 0.4, 0.4, 1.0));
+			labelManager->SetColor(ColourValue(1.0, 0.4, 0.4, 1.0));
 
-			labelVector.push_back(shp_labelManager);
+			labelVector.push_back(labelManager);
 		}
 	}
 }

@@ -21,8 +21,7 @@ namespace Sample1
 
 	class MyFrameListener : public ExampleFrameListener
 	{
-		typedef sh_p<LabelManager> SHP_LabelManager;
-		typedef std::vector<SHP_LabelManager> LabelVector;
+		typedef std::vector<sh_p<LabelManager> > LabelVector;
 		LabelVector labelVector;
 		bool isShowLabels;
 

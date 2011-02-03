@@ -49,6 +49,7 @@ private slots:
 private:
 	bool TrySaveMap();
 	QString SaveMap();
+	QString GetMapsPath() const;
 	void AddToListWidget(const int objId, const QString name, const QPixmap pixmap,
 		std::map<int, sh_p<ObjectInfo> > *pInfos, QListWidget *listWidget);
 

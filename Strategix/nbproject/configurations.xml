@@ -2,8 +2,8 @@
 <configurationDescriptor version="69">
   <logicalFolder name="root" displayName="root" projectFiles="true">
     <logicalFolder name="include" displayName="include" projectFiles="true">
-      <itemPath>include/Ent.h</itemPath>
-      <itemPath>include/EntityInfo.h</itemPath>
+      <itemPath>include/Enti.h</itemPath>
+      <itemPath>include/EntiInfo.h</itemPath>
       <itemPath>include/Exception.h</itemPath>
       <itemPath>include/Game.h</itemPath>
       <itemPath>include/GameStructs.h</itemPath>
@@ -11,7 +11,7 @@
       <itemPath>include/Log.h</itemPath>
       <itemPath>include/Map.h</itemPath>
       <itemPath>include/MapSAstar.h</itemPath>
-      <itemPath>include/Nya.hpp</itemPath>
+      <itemPath>../common_include/Nya.hpp</itemPath>
       <itemPath>include/Player.h</itemPath>
       <itemPath>include/StrategixSingleton.h</itemPath>
       <itemPath>include/TechTree.h</itemPath>
@@ -19,8 +19,8 @@
       <itemPath>include/TechTreesBuilderFromXml.h</itemPath>
     </logicalFolder>
     <logicalFolder name="src" displayName="src" projectFiles="true">
-      <itemPath>src/Ent.cpp</itemPath>
-      <itemPath>src/EntityInfo.cpp</itemPath>
+      <itemPath>src/Enti.cpp</itemPath>
+      <itemPath>src/EntiInfo.cpp</itemPath>
       <itemPath>src/Game.cpp</itemPath>
       <itemPath>src/Kernel.cpp</itemPath>
       <itemPath>src/Log.cpp</itemPath>
@@ -58,6 +58,7 @@
         <ccTool>
           <incDir>
             <pElem>include</pElem>
+            <pElem>../common_include</pElem>
           </incDir>
         </ccTool>
         <archiverTool>
@@ -78,6 +79,7 @@
           <developmentMode>5</developmentMode>
           <incDir>
             <pElem>include</pElem>
+            <pElem>../common_include</pElem>
           </incDir>
         </ccTool>
         <fortranCompilerTool>

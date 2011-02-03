@@ -4,7 +4,7 @@
     <logicalFolder name="include" displayName="include" projectFiles="true">
       <itemPath>include/MapArea.h</itemPath>
       <itemPath>include/MapInfo.h</itemPath>
-      <itemPath>include/Nya.hpp</itemPath>
+      <itemPath>../common_include/Nya.hpp</itemPath>
     </logicalFolder>
     <logicalFolder name="qtforms" displayName="qtforms" projectFiles="true">
       <itemPath>qtforms/DialogNew.cpp</itemPath>
@@ -57,6 +57,7 @@
           <incDir>
             <pElem>include</pElem>
             <pElem>qtforms</pElem>
+            <pElem>../common_include</pElem>
           </incDir>
         </ccTool>
       </compileType>
@@ -83,6 +84,7 @@
           <incDir>
             <pElem>include</pElem>
             <pElem>qtforms</pElem>
+            <pElem>../common_include</pElem>
           </incDir>
         </ccTool>
         <fortranCompilerTool>

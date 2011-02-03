@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'MapArea.h'
 **
-** Created: Wed Jan 5 19:02:21 2011
+** Created: Sun Feb 6 19:35:37 2011
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.6.3)
 **
 ** WARNING! All changes made in this file will be lost!

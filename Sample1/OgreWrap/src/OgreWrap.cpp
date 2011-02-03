@@ -89,7 +89,7 @@ void OgreWrap::CreateStaticTerrain()
 	}
 	mo.end();
 	mo.convertToMesh("TerrainMesh");
-	Entity *terrain_ent = mSceneMgr->createEntity("terrain", "TerrainMesh");
+	Entity *terrainEntity = mSceneMgr->createEntity("terrain", "TerrainMesh");
 	
 	StaticGeometry *sg = mSceneMgr->createStaticGeometry("TerrainArea");
 
@@ -100,7 +100,7 @@ void OgreWrap::CreateStaticTerrain()
 	sg->setRegionDimensions(Vector3(map_width, map_max_hight, map_length));
 	sg->setOrigin(Vector3(0, 0, 0));
 
-	sg->addEntity(terrain_ent, Vector3(0, 0, 0)); // From 0,0 to ZX ↓→
+	sg->addEntity(terrainEntity, Vector3(0, 0, 0)); // From 0,0 to ZX ↓→
 
 	sg->build();
 
@@ -122,6 +122,8 @@ void OgreWrap::createScene()
 {	
 	mSceneMgr->setAmbientLight(ColourValue(1, 1, 1));
 	mSceneMgr->setSkyBox(true, "Examples/SpaceSkyBox");
+
+	MovableObject::setDefaultQueryFlags(0); // very important to precise this string before any Entity definition.
 
 	CreateStaticTerrain();
 

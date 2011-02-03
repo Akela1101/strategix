@@ -22,6 +22,7 @@ LabelManager::LabelManager(const Strategix::MapCoord &mapCoord, const String &ti
 {
 	this->mapCoord = mapCoord;
 
+	// Creating point mesh for all.
 	static bool isNoMesh = true;
 	if( isNoMesh )
 	{
@@ -29,15 +30,16 @@ LabelManager::LabelManager(const Strategix::MapCoord &mapCoord, const String &ti
 		mo.begin("BaseWhiteNoLighting", RenderOperation::OT_POINT_LIST);
 		mo.position(0, 0, 0);
 		mo.end();
-		mo.convertToMesh("TileMesh");
+		mo.convertToMesh("PointMesh");
 
 		isNoMesh = false;
 	}
 
-	entity = sceneManager->createEntity("TileMesh");
+	entity = sceneManager->createEntity("PointMesh");
 	node = sceneManager->getRootSceneNode()->createChildSceneNode();
 	node->attachObject(entity);
 	node->setPosition(Vector3((mapCoord.x + 0.5f) * tile_length, tile_length, (mapCoord.y + 0.5f) * tile_length));
+	node->setVisible(false);
 
 	// Title
 	Camera* camera = sceneManager->getCamera("Camera");

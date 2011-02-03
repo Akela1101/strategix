@@ -54,9 +54,8 @@ int main(int argc, char *argv[])
 	// One Game
 	{
 		std::vector<sh_p<Player> > players;
-		players.push_back(sh_p<Player>(new Player("Neko", HUMAN, 0, "Spher")));
-
-		//cout << endl << players[0].get()->techTree->techMap["Spher_Worker"]->file << endl << endl;
+		players.push_back(sh_p<Player>(new Player("Neko123", HUMAN, 0, "Spher")));
+		players.push_back(sh_p<Player>(new Player("Inu456", AI, 1, "Spher")));
 
 		Game::GS().Start("1x1", players);
 
@@ -68,18 +67,18 @@ int main(int argc, char *argv[])
 		}
 		catch( Exception& e )
 		{
-			cerr << "Ogre exception: " << e.what() << endl;
+			cerr << endl << e.what() << endl;
 		}
 		catch( std::exception &e )
 		{
-			cerr << "Exception: " << e.what() << endl;
+			cerr << endl << e.what() << endl;
 		}
-		cout << endl << "@@@@@@@@@@@@@@@@@" << endl;
+		cout << endl << "Exit from Ogre. Start to destruct it." << endl;
 	}
 
 	// Reenable autorepeat in KDE ! *WALL*
 #if !defined( __WIN32__ ) && !defined( _WIN32 )
-	cout << endl << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+	cout << endl << "Setting keyboard autorepeat back ON." << endl;
 	std::system("xset r");
 #endif
 

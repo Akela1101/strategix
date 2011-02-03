@@ -25,8 +25,8 @@ namespace Sample1
 		Real distance; // The distance the object has left to travel
 		Vector3 direction; // The direction the object is moving
 		Vector3 destination; // The destination the object is moving towards
-		std::deque<Strategix::MapCoord> *walkList; // The list of points we are walking on
-		Real walkSpeed; // The speed at which the object is moving
+		std::deque<Strategix::MapCoord> *moveList; // The list of points we are moveing on
+		Real moveSpeed; // The speed at which the object is moving
 
 	public:
 		MovingManager(Player *player, const String &name, const MapCoord &mapCoord);

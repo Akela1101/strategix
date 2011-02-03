@@ -17,8 +17,15 @@ QMessageBox::information(this, "Nya!", "Nyaaaaaaaaa!");
 */
 
 extern const char mapFileTopString[] = "Strategix Map v.0.1";
-extern const char terrainsDefinitionFileName[] = "Maps/terrains.def";
+extern const char terrainsDefinitionFileName[] = "terrains.def";
 static const QString sTitle = "Map Editor";
+
+QString MainForm::GetMapsPath() const
+{
+	return QDir::currentPath() + "/../Sample1/Maps/";
+}
+
+//===========================================================================
 
 MainForm::MainForm()
 {
@@ -38,7 +45,7 @@ MainForm::MainForm()
 	{
 		using namespace std;
 
-		ifstream fin(terrainsDefinitionFileName);
+		ifstream fin((GetMapsPath() + terrainsDefinitionFileName).toStdString().c_str());
 		fin.getline(terrainsImageFileName, 100);
 		fin >> divs;
 
@@ -57,7 +64,7 @@ MainForm::MainForm()
 
 	// 1. Load terrain images and add them as icons to List.
 	QPixmap pixmap;
-	if( !pixmap.load(QString("Maps/") + terrainsImageFileName) )
+	if( !pixmap.load(GetMapsPath() + terrainsImageFileName) )
 	{
 		QMessageBox::warning(this, tr("Open Image"), tr("The image files could not be loaded."),
 				QMessageBox::Cancel);
@@ -140,7 +147,7 @@ void MainForm::FileLoad()
 		return;
 
 	QString loadFileName = QFileDialog::getOpenFileName(this, "Load the map",
-				QDir::currentPath() + "/Maps/", "Maps (*.map)");
+				GetMapsPath(), "Maps (*.map)");
 
 	if( !loadFileName.isEmpty() )
 	{
@@ -210,7 +217,7 @@ QString MainForm::SaveMap()
 	if( fileName.isEmpty() )
 	{
 		fileName = QFileDialog::getSaveFileName(this, "Save the map", 
-				QDir::currentPath() + "/Maps/", "Maps (*.map)");
+				GetMapsPath(), "Maps (*.map)");
 
 		this->statusBar()->showMessage(fileName, 3000);
 

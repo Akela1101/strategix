@@ -16,8 +16,8 @@ namespace Sample1
 {
 	enum QueryFlags
 	{
-		TERRAIN_MASK = 1 << 0, // Don't work
-		ROBOT_MASK = 1 << 1
+		NON_MASK = 0, // For nothing
+		MOV_MASK = 1 << 0  // For created inside moving manager
 	};
 
 	class MyManager;

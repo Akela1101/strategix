@@ -10,6 +10,8 @@
 
 #include <Ogre.h>
 #include <OIS/OIS.h>
+#include "OgreWrapCommon.h"
+
 
 namespace Sample1
 {
@@ -20,7 +22,8 @@ namespace Sample1
 		Camera* camera;
 		RaySceneQuery *raySceneQuery;
 		float camera_speed, camera_zoom_speed;
-		Entity *p_currEntity;
+		Entity *currEntity, *lastEntity;
+		QueryFlags currMask;
 
 	public:
 		MyMouseListener(Camera* camera, RaySceneQuery *raySceneQuery);
@@ -29,6 +32,9 @@ namespace Sample1
 		bool mouseMoved(const OIS::MouseEvent &mouse_event);
 		bool mousePressed(const OIS::MouseEvent &mouse_event, OIS::MouseButtonID id);
 		bool mouseReleased(const OIS::MouseEvent &mouse_event, OIS::MouseButtonID id);
+
+	private:
+		inline Ray GetMouseRay(const OIS::MouseEvent &mouse_event) const;
 
 	};
 }
