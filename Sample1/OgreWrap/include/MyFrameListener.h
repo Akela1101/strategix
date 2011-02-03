@@ -12,7 +12,6 @@
 #include "ExampleFrameListener.h"
 #include "MyMouseListener.h"
 #include "ObjectTitle.h"
-#include "MyManager.h"
 #include "LabelManager.h"
 
 namespace Sample1
@@ -28,7 +27,6 @@ namespace Sample1
 		bool isShowLabels;
 
 	protected:
-		MyManager *myManager;
 		RaySceneQuery *raySceneQuery; 
 		sh_p<MyMouseListener> mouseListener;
 
@@ -36,9 +34,9 @@ namespace Sample1
 		void ShowLabels(bool isShow);
 
 	public:
-		MyFrameListener(RenderWindow* mWindow, Camera* mCamera, MyManager *myManager);
-		~MyFrameListener();
-		bool frameStarted(const FrameEvent &event);
+		MyFrameListener(RenderWindow* mWindow, Camera* mCamera);
+		virtual ~MyFrameListener();
+		virtual bool frameStarted(const FrameEvent &event);
 		virtual bool processUnbufferedKeyInput(const FrameEvent& evt);
 	};
 }

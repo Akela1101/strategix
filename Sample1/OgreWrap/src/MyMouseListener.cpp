@@ -90,7 +90,7 @@ bool MyMouseListener::mousePressed(const OIS::MouseEvent &mouse_event, OIS::Mous
 			Real dist = mouseRay.intersects(terrainPlane).second;
 			Vector3 intersectPoint = mouseRay.getPoint(dist);
 
-			sh_p<MovingManager> entityManager = any_cast<sh_p<MovingManager> >(p_currEntity->getUserAny());
+			MovingManager *entityManager = any_cast<MovingManager*>(p_currEntity->getUserAny());
 			//entityManager->AddWayTo_Debug(itr->worldFragment->singleIntersection);
 			entityManager->AddWayTo(intersectPoint);
 		}

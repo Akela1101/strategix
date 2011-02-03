@@ -19,8 +19,17 @@ namespace Sample1
 	//using namespace Strategix;
 	using namespace Ogre;
 
-// GLOBAL
-const float tile_length = 10.0f; // Lenght of tile's side
+	// GLOBALS
+	const float tile_length = 10.0f; // Lenght of tile's side
+	SceneManager *sceneManager;
+	MyManager *myManager;
+
+
+OgreWrap::OgreWrap() : ExampleApplication()
+{
+	mResourcePath = "OgreWrap/";
+    mConfigPath = mResourcePath;
+}
 
 //==============================================================================
 // Adding tile to map in tile's coordinates coord{x,y}
@@ -105,12 +114,12 @@ void OgreWrap::chooseSceneManager()
 {
 	// ST_EXTERIOR_CLOSE was when terrain used.
 	mSceneMgr = mRoot->createSceneManager(ST_GENERIC);
-	myManager.sceneManager = mSceneMgr;
+	sceneManager = mSceneMgr; // Make it global
 }
 
 //==============================================================================
 void OgreWrap::createScene()
-{
+{	
 	mSceneMgr->setAmbientLight(ColourValue(1, 1, 1));
 	mSceneMgr->setSkyBox(true, "Examples/SpaceSkyBox");
 
@@ -119,6 +128,8 @@ void OgreWrap::createScene()
 	using namespace Strategix;
 
 	// Install initial objects on map
+	myManager = new MyManager();
+	
 	foreach( sh_p<Player> &p, Game::GS().players )
 	{
 		// Getting Base's name.
@@ -140,15 +151,21 @@ void OgreWrap::createScene()
 		MapCoord &mapCoord = Game::GS().GetMap().initialPositions[p->playerNumber];
 
 		// Creating Base
-		sh_p<MovingManager> base(new MovingManager(p.get(), *baseName, &myManager, mapCoord));
-		myManager.AddEntityManager(base);
-	}
+		sh_p<MovingManager> base(new MovingManager(p.get(), *baseName, mapCoord));
+		myManager->AddEntityManager(base);
+	}	 
+}
+
+//==============================================================================
+void OgreWrap::destroyScene()
+{
+	delete myManager;
 }
 
 //==============================================================================
 void OgreWrap::createFrameListener()
 {
-	mFrameListener = new MyFrameListener(mWindow, mCamera, &myManager);
+	mFrameListener = new MyFrameListener(mWindow, mCamera);
 	mFrameListener->showDebugOverlay(true);
 	mRoot->addFrameListener(mFrameListener);
 }

@@ -6,7 +6,6 @@
  */
 
 #include "MyFrameListener.h"
-
 #include "OgreWrapCommon.h"
 #include "Kernel.h"
 
@@ -16,11 +15,10 @@ namespace Sample1
 {
 	using namespace Ogre;
 
-MyFrameListener::MyFrameListener(RenderWindow* mWindow, Camera* mCamera, MyManager *myManager)
+MyFrameListener::MyFrameListener(RenderWindow* mWindow, Camera* mCamera)
 	:
 	ExampleFrameListener(mWindow, mCamera, false, true),
-	myManager(myManager),
-	raySceneQuery(myManager->sceneManager->createRayQuery(Ray())),
+	raySceneQuery(sceneManager->createRayQuery(Ray())),
 	mouseListener(new MyMouseListener(mCamera, raySceneQuery))
 {	
 	mMouse->setEventCallback(mouseListener.get());
@@ -31,7 +29,7 @@ MyFrameListener::MyFrameListener(RenderWindow* mWindow, Camera* mCamera, MyManag
 
 MyFrameListener::~MyFrameListener()
 {
-	myManager->sceneManager->destroyQuery(raySceneQuery);
+	sceneManager->destroyQuery(raySceneQuery);
 	// @#~ may be delete also needed ?
 }
 
@@ -201,7 +199,7 @@ void MyFrameListener::CreateLabels()
 		{
 			std::stringstream title;
 			title << "   " << map(x, z).retard;
-			SHP_LabelManager shp_labelManager(new LabelManager(myManager, Strategix::MapCoord(x, z), title.str().c_str()));
+			SHP_LabelManager shp_labelManager(new LabelManager(Strategix::MapCoord(x, z), title.str().c_str()));
 
 			shp_labelManager->SetColor(ColourValue(1.0, 0.4, 0.4, 1.0));
 

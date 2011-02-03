@@ -29,8 +29,7 @@ namespace Sample1
 		Real walkSpeed; // The speed at which the object is moving
 
 	public:
-		MovingManager(Player *player, const String &name,
-				MyManager *myManager, const Strategix::MapCoord &mapCoord);
+		MovingManager(Player *player, const String &name, const MapCoord &mapCoord);
 		virtual ~MovingManager();
 		virtual bool frameRenderingQueued(const FrameEvent &event);
 

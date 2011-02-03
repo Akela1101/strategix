@@ -24,6 +24,7 @@ namespace Sample1
 
 	public:
 		MyMouseListener(Camera* camera, RaySceneQuery *raySceneQuery);
+		virtual ~MyMouseListener() {}
 
 		bool mouseMoved(const OIS::MouseEvent &mouse_event);
 		bool mousePressed(const OIS::MouseEvent &mouse_event, OIS::MouseButtonID id);

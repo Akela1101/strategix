@@ -74,6 +74,7 @@ int main(int argc, char *argv[])
 		{
 			cerr << "Exception: " << e.what() << endl;
 		}
+		cout << endl << "@@@@@@@@@@@@@@@@@" << endl;
 	}
 
 	// Reenable autorepeat in KDE ! *WALL*

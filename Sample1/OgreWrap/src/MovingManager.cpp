@@ -21,19 +21,18 @@ namespace Sample1
 	using namespace Ogre;
 	using namespace std;
 
-MovingManager::MovingManager(Player *player, const String &name,
-		MyManager *myManager, const Strategix::MapCoord &mapCoord)
+MovingManager::MovingManager(Player *player, const String &name, const MapCoord &mapCoord)
 	:
-	EntityManager(player, name, myManager, mapCoord )
+	EntityManager(player, name, mapCoord )
 {
 	const EntityInfo *ei = player->techTree->techMap[name].get();
 	
 	string meshFile = ei->file;
-	entity = myManager->sceneManager->createEntity(name, meshFile);
-	entity->setUserAny(Any(sh_p<MovingManager>(this))); // Link from Entity to itself
+	entity = sceneManager->createEntity(name, meshFile);
+	entity->setUserAny(Any(this)); // Link from Entity to itself
 	//entity->setQueryFlags(ROBOT_MASK);
 
-	node = myManager->sceneManager->getRootSceneNode()->createChildSceneNode();
+	node = sceneManager->getRootSceneNode()->createChildSceneNode();
 	node->attachObject(entity);
 	float scale = ei->scale;
 	node->setScale(scale, scale, scale);
@@ -63,8 +62,8 @@ MovingManager::~MovingManager()
 	// delete walkList ?
 	//delete objectTitle;
 	node->detachObject(entity);
-	myManager->sceneManager->destroyEntity(entity);
-	myManager->sceneManager->destroySceneNode(node);
+	sceneManager->destroyEntity(entity);
+	sceneManager->destroySceneNode(node);
 }
 
 bool MovingManager::frameRenderingQueued(const FrameEvent &event)
@@ -117,7 +116,7 @@ void MovingManager::AddWayTo_Debug(Vector3 &pos)
 		{
 			std::stringstream title;
 			title << "\n" << (*at)->G << " + " << (*at)->H << "\n = " << (*at)->F ;
-			SHP_LabelManager shp_labelManager(new LabelManager(myManager, (*at)->mc, title.str().c_str()));
+			SHP_LabelManager shp_labelManager(new LabelManager((*at)->mc, title.str().c_str()));
 
 			if( saved_walkList->end() != find(saved_walkList->begin(), saved_walkList->end(), (*at)->mc) )
 				shp_labelManager->SetColor(ColourValue(1.0, 1.0, 1.0, 1.0));

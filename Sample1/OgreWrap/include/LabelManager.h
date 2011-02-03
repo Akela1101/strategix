@@ -24,7 +24,7 @@ namespace Sample1
 	protected:
 
 	public:
-		LabelManager(MyManager *myManager, const Strategix::MapCoord &mapCoord, const String &title);
+		LabelManager(const Strategix::MapCoord &mapCoord, const String &title);
 		virtual ~LabelManager();
 		virtual bool frameRenderingQueued(const FrameEvent &event);
 		void SetColor(const ColourValue& color);

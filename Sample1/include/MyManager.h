@@ -10,7 +10,6 @@
 
 #include "Nya.hpp"
 #include "EntityManager.h"
-#include <Ogre.h>
 #include <list>
 
 namespace Sample1
@@ -23,9 +22,6 @@ namespace Sample1
 	{
 	protected:
 		std::list<sh_p<EntityManager> > entityManagers;
-
-	public:
-		SceneManager *sceneManager;
 
 	public:
 		MyManager();

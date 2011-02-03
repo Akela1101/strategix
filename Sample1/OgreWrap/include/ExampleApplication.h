@@ -137,7 +137,7 @@ public:
         mResourcePath = macBundlePath() + "/";
         mConfigPath = mResourcePath;
 #else
-		mResourcePath = "OgreWrap/";
+		mResourcePath = "/";
         mConfigPath = mResourcePath;
 #endif
 

@@ -12,20 +12,18 @@ namespace Sample1
 	using namespace Strategix;
 	using namespace Ogre;
 
-EntityManager::EntityManager(Player *player, const String &name,
-		MyManager *myManager, const Strategix::MapCoord &mapCoord)
+EntityManager::EntityManager(Player *player, const String &name, const Strategix::MapCoord &mapCoord)
 	:
 	player(player),
 	name(name),
-	myManager(myManager),
 	mapCoord(mapCoord)
 {
-	Root::getSingletonPtr()->addFrameListener(this);
+	Root::getSingleton().addFrameListener(this);
 }
 
 void EntityManager::BeginDestruction()
 {
-	Root::getSingletonPtr()->removeFrameListener(this);
+	Root::getSingleton().removeFrameListener(this);
 
 	// Add to deletion list
 	//

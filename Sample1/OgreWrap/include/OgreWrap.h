@@ -8,7 +8,6 @@
 #ifndef _OGREWRAP_H
 #define	_OGREWRAP_H
 
-#include "MyManager.h"
 #include "ExampleApplication.h"
 
 
@@ -18,11 +17,15 @@ namespace Sample1
 
 	class OgreWrap : public ExampleApplication
 	{
-		MyManager myManager;
+	public:
+		OgreWrap();
+		virtual ~OgreWrap() {}
 
-		void chooseSceneManager();
-		void createScene();
-		void createFrameListener();
+	protected:
+		virtual void chooseSceneManager();
+		virtual void createScene();
+		virtual void destroyScene();
+		virtual void createFrameListener();
 
 		void AddTileToTerrainMesh(ManualObject &mo, const Vector2 &coord, const FloatRect &tex_rect, int &offset);
 		void CreateStaticTerrain();

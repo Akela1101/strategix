@@ -8,6 +8,10 @@
 #ifndef _OGREWRAPCOMMON_H
 #define	_OGREWRAPCOMMON_H
 
+#include "OgreSceneManager.h"
+#include "MyManager.h"
+
+
 namespace Sample1
 {
 	enum QueryFlags
@@ -16,7 +20,12 @@ namespace Sample1
 		ROBOT_MASK = 1 << 1
 	};
 
+	class MyManager;
+
+	// GLOBALS
 	extern const float tile_length; // Lenght of tile's side
+	extern Ogre::SceneManager *sceneManager;
+	extern MyManager *myManager;
 }
 
 #endif	/* _OGREWRAPCOMMON_H */
