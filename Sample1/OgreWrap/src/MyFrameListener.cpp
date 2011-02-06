@@ -9,8 +9,6 @@
 #include "OgreWrapCommon.h"
 #include "Kernel.h"
 
-#include <CEGUI/CEGUISystem.h>
-
 namespace Sample1
 {
 	using namespace Ogre;

@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
 	cout << "Current dir: " << boost::filesystem::current_path() << endl;
 
 	//
-	cout << endl << "Mapss: " << endl;
+	cout << endl << "Maps: " << endl;
 	sh_p<std::vector<std::string> > mapNames = Kernel::GS().GetMapNames();
 	foreach(std::string mapName, *mapNames)
 	{

@@ -73,6 +73,7 @@ void TechTreesBuilderFromXml::BuildEntity(sh_p<TechTree> techTree, const pt::ptr
 
 	entityInfo->params.hp = entityPropTree.get<HpType>("params.hp");
 
+	if( entityPropTree.get_child("depends").size() )
 	foreach( const pt::ptree::value_type &v, entityPropTree.get_child("depends", pt::ptree()) ) // Empty if no depends
 	{
 		const pt::ptree &dependLeaf = v.second; // name

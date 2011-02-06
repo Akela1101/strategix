@@ -53,7 +53,7 @@ const string Map::GetFilePath(const string name)
 	return mapPath;
 }
 
-Map::Map(const string name) throw(StrategixError)
+Map::Map(const string name)
 {
 	if( !terrains.size() )
 	{

@@ -70,7 +70,7 @@ namespace Strategix
 	public:
 		static const Terrain &GetTerrain(const short terrType) { return terrains[terrType]; }
 
-		Map(const string name) throw(StrategixError);
+		Map(const string name);
 		
 		const int &GetWidth() const { return width; }
 		const int &GetLength() const { return length; }
