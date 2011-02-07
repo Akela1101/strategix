@@ -197,8 +197,7 @@ protected:
     /** Sets up the application - returns false if the user chooses to abandon configuration. */
     virtual bool setup(void)
     {
-
-		String pluginsPath;
+		String pluginsPath, cfgPath;
 		// only use plugins.cfg if not static
 #ifndef OGRE_STATIC_LIB
 	#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
@@ -210,8 +209,16 @@ protected:
 	#else
 		pluginsPath = mResourcePath + "plugins_Linux.cfg";
 	#endif
-#endif		
-        mRoot = OGRE_NEW Root(pluginsPath, mConfigPath + "ogre.cfg", mResourcePath + "Ogre.log");
+#endif
+
+#ifndef OGRE_STATIC_LIB
+	#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+		cfgPath = mConfigPath + "ogre_Windows.cfg";
+	#else
+		cfgPath = mConfigPath + "ogre_Linux.cfg";
+	#endif
+#endif
+        mRoot = OGRE_NEW Root(pluginsPath, cfgPath, mResourcePath + "Ogre.log");
 
 #ifdef OGRE_STATIC_LIB
 		mStaticPluginLoader.load();
