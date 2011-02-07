@@ -18,7 +18,6 @@ namespace Sample1
 	class OgreWrap : public ExampleApplication
 	{
 	public:
-		OgreWrap();
 		virtual ~OgreWrap() {}
 
 	protected:

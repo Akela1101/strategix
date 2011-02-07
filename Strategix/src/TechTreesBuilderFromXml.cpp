@@ -72,8 +72,7 @@ void TechTreesBuilderFromXml::BuildEntity(sh_p<TechTree> techTree, const pt::ptr
 	}
 
 	entityInfo->params.hp = entityPropTree.get<HpType>("params.hp");
-
-	if( entityPropTree.get_child("depends").size() )
+/*
 	foreach( const pt::ptree::value_type &v, entityPropTree.get_child("depends", pt::ptree()) ) // Empty if no depends
 	{
 		const pt::ptree &dependLeaf = v.second; // name
@@ -85,7 +84,7 @@ void TechTreesBuilderFromXml::BuildEntity(sh_p<TechTree> techTree, const pt::ptr
 		const pt::ptree &provideLeaf = v.second; // name
 		entityInfo->provides.push_back( provideLeaf.get_value<string>() );
 	}
-
+*/
 	entityInfo->file = entityPropTree.get<string>("file");
 	entityInfo->scale = entityPropTree.get<float>("scale");
 
@@ -96,11 +95,16 @@ void TechTreesBuilderFromXml::BuildEntity(sh_p<TechTree> techTree, const pt::ptr
 		Action &action = entityInfo->actions[actionName]; // add new action to Info
 		
 		action.name = actionName;
-		foreach( const pt::ptree::value_type &v, actionLeaf.get_child("features", pt::ptree()) ) // Empty if no features
+		try
+		{
+			const pt::ptree &derevo = actionLeaf.get_child("features");
+
+		foreach( const pt::ptree::value_type &v, derevo ) // Empty if no features
 		{
 			const pt::ptree &featureLeaf = v.second;
 			action.features[v.first] = featureLeaf.get_value<FeatureType>();
 		}
+		}catch(pt::ptree_error){}
 	}
 	
 	techTree->AddNode(entityInfo);

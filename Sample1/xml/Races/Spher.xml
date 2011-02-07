@@ -1,60 +1,55 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-
-<!-- Technology Tree Definition -->
-
+﻿<?xml version='1.0' encoding='UTF-8'?>
+<!-- Technology Tree Definition --><!-- This document was created with Syntext Serna Free. -->
 <race>
-	<entities>
-	
-		<entity>
-			<name>Spher_Base</name>
-			<kind>building_base</kind>
-			<resources>
-				<gold>10000</gold>
-			</resources>
-			<params>
-			  <hp>1000</hp>
+  <entities>
+    <entity>
+      <name>Spher_Base</name>
+      <kind>building_base</kind>
+      <resources>
+        <gold>10000</gold>
+      </resources>
+      <params>
+        <hp>1000</hp>
       </params>
-			<provides>
-				<name>Spher_Worker</name>
-			</provides>
-			<file>Spher_Base.mesh</file>
-			<scale>1.0</scale>
-			<actions>
-			  <action>
-			    <name>Idle</name>
-			  </action>
-			</actions>
-		</entity>
-		
-		<entity>
-			<name>Spher_Worker</name>
-			<kind>unit_worker</kind>
-			<resources>
-				<gold>500</gold>
-			</resources>
-			<params>
-			  <hp>50</hp>
+      <provides>
+        <name>Spher_Worker</name>
+      </provides>
+      <file>Spher_Base.mesh</file>
+      <scale>1.0</scale>
+      <actions>
+        <action>
+          <name>Idle</name>
+        </action>
+      </actions>
+    </entity>
+    <entity>
+      <name>Spher_Worker</name>
+      <kind>unit_worker</kind>
+      <resources>
+        <gold>500</gold>
+      </resources>
+      <params>
+        <hp>50</hp>
       </params>
-			<depends>
-				<name>Spher_Base</name>
-			</depends>
-			<provides>
-				<name>Spher_Base</name>
-			</provides>
-			<file>Spher_Worker.mesh</file>
-			<scale>1.0</scale>
-			<actions>
-			  <action>
-			    <name>Idle</name>
-			  </action>
-			  <action>
-			    <name>Move</name>
-			    <features>
+      <depends>
+        <name>Spher_Base</name>
+      </depends>
+      <provides>
+        <name>Spher_Base</name>
+      </provides>
+      <file>Spher_Worker.mesh</file>
+      <scale>1.0</scale>
+      <actions>
+        <action>
+          <name>Idle</name>
+        </action>
+        <action>
+          <name>Move</name>
+          <features>
             <speed>5</speed>
           </features>
-			  </action>
-			</actions>
-		</entity>
-		
-	</entities>
+        </action>
+      </actions>
+    </entity>
+  </entities>
 </race>

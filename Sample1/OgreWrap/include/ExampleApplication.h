@@ -137,7 +137,7 @@ public:
         mResourcePath = macBundlePath() + "/";
         mConfigPath = mResourcePath;
 #else
-		mResourcePath = "/";
+		mResourcePath = "OgreWrap/";
         mConfigPath = mResourcePath;
 #endif
 
@@ -201,11 +201,18 @@ protected:
 		String pluginsPath;
 		// only use plugins.cfg if not static
 #ifndef OGRE_STATIC_LIB
-		pluginsPath = mResourcePath + "plugins.cfg";
-#endif
-		
-        mRoot = OGRE_NEW Root(pluginsPath, 
-            mConfigPath + "ogre.cfg", mResourcePath + "Ogre.log");
+	#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+		#ifdef _DEBUG
+			pluginsPath = mResourcePath + "plugins_Windows_d.cfg";
+		#else
+			pluginsPath = mResourcePath + "plugins_Windows.cfg";
+		#endif
+	#else
+		pluginsPath = mResourcePath + "plugins_Linux.cfg";
+	#endif
+#endif		
+        mRoot = OGRE_NEW Root(pluginsPath, mConfigPath + "ogre.cfg", mResourcePath + "Ogre.log");
+
 #ifdef OGRE_STATIC_LIB
 		mStaticPluginLoader.load();
 #endif

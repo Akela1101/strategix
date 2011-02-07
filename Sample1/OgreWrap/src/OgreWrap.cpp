@@ -25,12 +25,6 @@ namespace Sample1
 	MyManager *myManager;
 
 
-OgreWrap::OgreWrap() : ExampleApplication()
-{
-	mResourcePath = "OgreWrap/";
-    mConfigPath = mResourcePath;
-}
-
 //==============================================================================
 // Adding tile to map in tile's coordinates coord{x,y}
 // with part of texture given from rectangle.
@@ -121,7 +115,7 @@ void OgreWrap::chooseSceneManager()
 void OgreWrap::createScene()
 {	
 	mSceneMgr->setAmbientLight(ColourValue(1, 1, 1));
-	mSceneMgr->setSkyBox(true, "Examples/SpaceSkyBox");
+	mSceneMgr->setSkyBox(true, "SpaceSkyBox");
 
 	MovableObject::setDefaultQueryFlags(0); // very important to precise this string before any Entity definition.
 
