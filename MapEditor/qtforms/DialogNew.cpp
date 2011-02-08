@@ -6,7 +6,7 @@
  */
 
 #include "DialogNew.h"
-#include <qt4/QtGui/qmessagebox.h>
+#include <QtGui/qmessagebox.h>
 
 
 DialogNew::DialogNew()

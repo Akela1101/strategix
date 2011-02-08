@@ -9,3 +9,4 @@ dist/
 Debug/
 Release/
 nbproject/private/
+*.ncb

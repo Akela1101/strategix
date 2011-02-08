@@ -11,7 +11,7 @@
 #include <QtGui>
 
 
-#include <qt4/QtGui/qmessagebox.h>
+#include <QtGui/qmessagebox.h>
 /*
 //QMessageBox::information(this, tr("Nya!"), tr("Nyaaaaaaaaa!"));
 */

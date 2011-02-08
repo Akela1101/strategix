@@ -10,8 +10,8 @@
 
 #include <fstream>
 #include <string>
-#include <qt4/QtGui/qmessagebox.h>
-#include <qt4/QtGui/qwindowdefs.h>
+#include <QtGui/qmessagebox.h>
+#include <QtGui/qwindowdefs.h>
 /*
 QMessageBox::information(this, "Nya!", "Nyaaaaaaaaa!");
 */

@@ -111,7 +111,7 @@ void OgreWrap::chooseSceneManager()
 	sceneManager = mSceneMgr; // Make it global
 }
 
-//==============================================================================
+//==	============================================================================
 void OgreWrap::createScene()
 {	
 	mSceneMgr->setAmbientLight(ColourValue(1, 1, 1));
