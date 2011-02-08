@@ -1,0 +1,12 @@
+Compiled on:
+
+C++ GNU 4.4.4
+Boost 1.42.0
+OGRE 1.7.1
+Qt 4.6.3
+DirectX 9.0c
+OpenGL ??? but it works everywhere!
+### CEGUI 0.7.1 - excluded due to it's stupidness
+
+NetBeans 6.9
+VisualC 9.1

@@ -9,7 +9,7 @@
 
 #include <fstream>
 #include <list>
-#include <qt4/QtGui/qmessagebox.h>
+#include <QtGui/qmessagebox.h>
 
 extern const char mapFileTopString[];
 extern const char terrainsDefinitionFileName[];

@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'MainForm.h'
 **
-** Created: Sun Feb 6 19:35:32 2011
+** Created: Tue 8. Feb 18:30:32 2011
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.6.3)
 **
 ** WARNING! All changes made in this file will be lost!
