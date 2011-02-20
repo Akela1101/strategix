@@ -21,7 +21,7 @@ namespace Strategix
 	using namespace boost;
 
 	typedef map<string, sh_p<EntiInfo> > TechMapType;
-	typedef std::pair<string, sh_p<EntiInfo> > TechMapPairType;
+	//typedef std::pair<string, sh_p<EntiInfo> > TechMapPairType;
 
 	class TechTree
 	{
@@ -31,12 +31,12 @@ namespace Strategix
 
 	public:
 		TechTree(const string &raceName);
-		void AddNode(const sh_p<EntiInfo> &shpEntiInfo);
-
-	private:
 		TechTree(const TechTree &_c);
 		TechTree & operator =(const TechTree &_c);
 		inline void init(const TechTree &_c);
+		virtual ~TechTree();
+
+		void AddNode(const sh_p<EntiInfo> &shpEntiInfo);
 
 	};
 

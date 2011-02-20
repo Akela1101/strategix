@@ -27,7 +27,7 @@ namespace Strategix
 		const int playerNumber; // number of player on the map
 
 		map<string, ResType> resources;
-		TechTree *techTree;
+		TechTree techTree; // local copy of race tree
 		list<Enti> entis;
 
 	public:

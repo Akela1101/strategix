@@ -15,9 +15,9 @@ Player::Player(string name, PlayerType playerType, int playerNumber, string race
 	:
 	name(name),
 	playerType(playerType),
-	playerNumber(playerNumber)
-{
-	techTree = Kernel::GS().techTrees[raceName].get();
+	playerNumber(playerNumber),
+	techTree(*Kernel::GS().techTrees[raceName])
+{	
 }
 
 Player::~Player()

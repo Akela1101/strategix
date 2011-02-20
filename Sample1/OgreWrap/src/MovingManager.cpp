@@ -27,7 +27,7 @@ MovingManager::MovingManager(Player *player, const String &name, const MapCoord 
 	distance(0.0f),
 	moveSpeed(30.0f)
 {
-	const EntiInfo *ei = player->techTree->techMap[name].get();
+	const EntiInfo *ei = player->techTree.techMap[name].get();
 	
 	string meshFile = ei->file;
 	entity = sceneManager->createEntity(meshFile);

@@ -9,9 +9,6 @@
 
 using namespace Strategix;
 
-EntiInfo::EntiInfo()
-{
-}
 
 EntiInfo::~EntiInfo()
 {

@@ -8,18 +8,35 @@
 #ifndef _ENTI_H
 #define	_ENTI_H
 
-class Enti
+#include <map>
+#include <string>
+
+#include "GameStructs.h"
+#include "EntiInfo.h"
+
+
+namespace Strategix
 {
-public:
-	Enti();	
-	virtual ~Enti();
+	using namespace std;
 
-private:
-	Enti(const Enti &_c);
-	Enti & operator =(const Enti &_c);
-	inline void init(const Enti &_c);
+	class Enti
+	{
+	public:
+		const EntiInfo *ei; // Link to tree
+		Params params;
+		map<string, Action> actions;
+		MapCoord mapCoord;
 
-};
+	public:
+		Enti(const EntiInfo *ei, const MapCoord &mapCoord);
+		virtual ~Enti();
 
+	private:
+		Enti(const Enti &_c);
+		Enti & operator =(const Enti &_c);
+		inline void init(const Enti &_c);
+
+	};
+}
 #endif	/* _ENTI_H */
 

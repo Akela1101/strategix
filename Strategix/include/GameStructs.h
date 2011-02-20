@@ -34,11 +34,6 @@ namespace Strategix
 		map<string, FeatureType> features;
 	};
 
-	struct ActionHolder
-	{
-		Action *action;
-		map<string, FeatureType> features;
-	};
 // **********
 
 	struct MapCoord

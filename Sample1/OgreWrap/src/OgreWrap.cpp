@@ -130,7 +130,7 @@ void OgreWrap::createScene()
 	{
 		// Getting Base's name.
 		const string *baseName = 0;
-		foreach( const TechMapPairType &entPair, p->techTree->techMap )
+		foreach( const TechMapType::value_type &entPair, p->techTree.techMap )
 		{
 			if( entPair.second->kind == "building_base" )
 			{

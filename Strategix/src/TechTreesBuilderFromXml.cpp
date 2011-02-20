@@ -99,11 +99,11 @@ void TechTreesBuilderFromXml::BuildEntity(sh_p<TechTree> techTree, const pt::ptr
 		{
 			const pt::ptree &derevo = actionLeaf.get_child("features");
 
-		foreach( const pt::ptree::value_type &v, derevo ) // Empty if no features
-		{
-			const pt::ptree &featureLeaf = v.second;
-			action.features[v.first] = featureLeaf.get_value<FeatureType>();
-		}
+			foreach( const pt::ptree::value_type &v, derevo ) // Empty if no features
+			{
+				const pt::ptree &featureLeaf = v.second;
+				action.features[v.first] = featureLeaf.get_value<FeatureType>();
+			}
 		}catch(pt::ptree_error){}
 	}
 	

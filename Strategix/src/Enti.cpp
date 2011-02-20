@@ -7,10 +7,18 @@
 
 #include "Enti.h"
 
-Enti::Enti()
+
+using namespace Strategix;
+
+
+Enti::Enti(const EntiInfo *ei, const MapCoord &mapCoord)
+	:
+	ei(ei),
+	mapCoord(mapCoord)
 {
 }
 
+/*
 Enti::Enti(const Enti &_c)
 {
 	init(_c);
@@ -28,6 +36,7 @@ Enti &Enti::operator =(const Enti &_c)
 void Enti::init(const Enti &_c)
 {
 }
+*/
 
 Enti::~Enti()
 {
