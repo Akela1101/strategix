@@ -8,9 +8,10 @@
 #ifndef _MYMOUSELISTENER_H
 #define	_MYMOUSELISTENER_H
 
+#include "MyAppCommon.h"
+
 #include <Ogre.h>
 #include <OIS/OIS.h>
-#include "OgreWrapCommon.h"
 
 
 namespace Sample1

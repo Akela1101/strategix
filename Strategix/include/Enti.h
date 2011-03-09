@@ -8,16 +8,17 @@
 #ifndef _ENTI_H
 #define	_ENTI_H
 
+#include "GameStructs.h"
+
 #include <map>
 #include <string>
-
-#include "GameStructs.h"
-#include "EntiInfo.h"
 
 
 namespace Strategix
 {
 	using namespace std;
+
+	class EntiInfo;
 
 	class Enti
 	{
@@ -25,7 +26,9 @@ namespace Strategix
 		const EntiInfo *ei; // Link to tree
 		Params params;
 		map<string, Action> actions;
-		MapCoord mapCoord;
+		MapCoord mapCoord; // Change to realCoord!!!
+
+		// Player *player; // link to owner
 
 	public:
 		Enti(const EntiInfo *ei, const MapCoord &mapCoord);

@@ -9,6 +9,7 @@
 #define	_TECHTREEBUILDER_H
 
 #include "TechTree.h"
+
 #include <map>
 
 namespace Strategix

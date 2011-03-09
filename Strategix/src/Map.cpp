@@ -5,8 +5,8 @@
  * Created on 14 Февраль 2010 г., 17:54
  */
 
-#include "Map.h"
 #include "Log.h"
+
 #include <fstream>
 #include <iostream>
 #include <algorithm>
@@ -14,11 +14,15 @@
 #include <list>
 #include <string>
 
+#include "Map.h"
 
 using namespace Strategix;
 using namespace std;
 
+
+// static
 Map::TerrainTypes Map::terrains;
+
 
 bool Map::LoadTerrains()
 {
@@ -59,7 +63,7 @@ Map::Map(const string name)
 	{
 		if( !LoadTerrains() )
 		{
-			throw STRATEGIX_ERROR("Wrong terrains.def");
+			STRATEGIX_ERROR("Wrong terrains.def");
 		}
 	}
 
@@ -92,7 +96,7 @@ Map::Map(const string name)
 			}
 			else
 			{
-				throw STRATEGIX_ERROR((string("Wrong map format in file: ") + fileName).c_str());
+				STRATEGIX_ERROR((string("Wrong map format in file: ") + fileName).c_str());
 			}
 		}
 	}

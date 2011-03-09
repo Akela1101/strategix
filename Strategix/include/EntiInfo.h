@@ -8,10 +8,11 @@
 #ifndef _ENTIINFO_H
 #define	_ENTIINFO_H
 
+#include "GameStructs.h"
+
 #include <map>
 #include <string>
 
-#include "GameStructs.h"
 
 namespace Strategix
 {

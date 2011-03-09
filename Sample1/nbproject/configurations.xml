@@ -3,29 +3,27 @@
   <logicalFolder name="root" displayName="root" projectFiles="true">
     <logicalFolder name="include" displayName="include" projectFiles="true">
       <itemPath>OgreWrap/include/EntityManager.h</itemPath>
-      <itemPath>OgreWrap/include/ExampleApplication.h</itemPath>
-      <itemPath>OgreWrap/include/ExampleFrameListener.h</itemPath>
       <itemPath>OgreWrap/include/LabelManager.h</itemPath>
       <itemPath>OgreWrap/include/MapTexture.h</itemPath>
+      <itemPath>OgreWrap/include/Mediator.h</itemPath>
       <itemPath>OgreWrap/include/MovingManager.h</itemPath>
+      <itemPath>OgreWrap/include/MyApp.h</itemPath>
+      <itemPath>OgreWrap/include/MyAppCommon.h</itemPath>
       <itemPath>OgreWrap/include/MyFrameListener.h</itemPath>
-      <itemPath>OgreWrap/include/MyManager.h</itemPath>
       <itemPath>OgreWrap/include/MyMouseListener.h</itemPath>
       <itemPath>OgreWrap/include/ObjectTitle.h</itemPath>
-      <itemPath>OgreWrap/include/OgreWrap.h</itemPath>
-      <itemPath>OgreWrap/include/OgreWrapCommon.h</itemPath>
     </logicalFolder>
     <logicalFolder name="src" displayName="src" projectFiles="true">
       <itemPath>OgreWrap/src/EntityManager.cpp</itemPath>
       <itemPath>OgreWrap/src/LabelManager.cpp</itemPath>
+      <itemPath>src/Main.cpp</itemPath>
       <itemPath>OgreWrap/src/MapTexture.cpp</itemPath>
+      <itemPath>OgreWrap/src/Mediator.cpp</itemPath>
       <itemPath>OgreWrap/src/MovingManager.cpp</itemPath>
+      <itemPath>OgreWrap/src/MyApp.cpp</itemPath>
       <itemPath>OgreWrap/src/MyFrameListener.cpp</itemPath>
-      <itemPath>OgreWrap/src/MyManager.cpp</itemPath>
       <itemPath>OgreWrap/src/MyMouseListener.cpp</itemPath>
       <itemPath>OgreWrap/src/ObjectTitle.cpp</itemPath>
-      <itemPath>OgreWrap/src/OgreWrap.cpp</itemPath>
-      <itemPath>src/Sample1.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"

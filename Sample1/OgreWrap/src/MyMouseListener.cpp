@@ -5,14 +5,14 @@
  * Created on 15 Апрель 2010 г., 16:51
  */
 
-#include "MyMouseListener.h"
 #include "MovingManager.h"
 
+#include "Nya.hpp"
+#include "MyMouseListener.h"
 
 namespace Sample1
 {
 	using namespace Ogre;
-
 
 MyMouseListener::MyMouseListener(Camera* camera, RaySceneQuery *raySceneQuery)
 	:
@@ -55,8 +55,6 @@ bool MyMouseListener::mouseMoved(const OIS::MouseEvent &mouse_event)
 
 bool MyMouseListener::mousePressed(const OIS::MouseEvent &mouse_event, OIS::MouseButtonID id)
 {
-	using namespace Ogre;
-
 	if( id == OIS::MB_Left ) // Selection
 	{
 		//CEGUI::Point mousePos = CEGUI::MouseCursor::getSingleton().getPosition();

@@ -5,11 +5,13 @@
  * Created on 23 Апрель 2010 г., 23:25
  */
 
-#include "Log.h"
 #include <fstream>
+
+#include "Log.h"
 
 using namespace Strategix;
 using namespace std;
+
 
 Log::Log()
 {

@@ -9,6 +9,7 @@
 #define	_TECHTREEBUILDERFROMXML_H
 
 #include "TechTreesBuilder.h"
+
 #include <boost/property_tree/ptree.hpp>
 
 namespace Strategix

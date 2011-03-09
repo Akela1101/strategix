@@ -5,15 +5,21 @@
  * Created on 15 Апрель 2010 г., 13:57
  */
 
-#include "Nya.hpp"
-#include "Game.h"
-#include "MovingManager.h"
-#include "OgreWrapCommon.h"
+#include "MyAppCommon.h"
 #include "LabelManager.h"
 
-#include "OgreException.h"
+#include "OgreSceneManager.h"
+
+#include "EntiInfo.h"
+#include "Map.h"
+#include "Game.h"
+#include "Exception.h"
+
 #include <vector>
 #include <sstream>
+
+#include "Nya.hpp"
+#include "MovingManager.h"
 
 namespace Sample1
 {
@@ -21,13 +27,20 @@ namespace Sample1
 	using namespace Ogre;
 	using namespace std;
 
-MovingManager::MovingManager(Player *player, const String &name, const MapCoord &mapCoord)
+	// Draw debug info
+		typedef sh_p<LabelManager> ShpLabelManager;
+		typedef std::vector<ShpLabelManager> LabelVector;
+		static LabelVector labelVector;
+		//
+
+MovingManager::MovingManager(const String &name, const MapCoord &mapCoord)
 	:
-	EntityManager(player, name, mapCoord ),
+	EntityManager(name, mapCoord ),
 	distance(0.0f),
 	moveSpeed(30.0f)
 {
-	const EntiInfo *ei = player->techTree.techMap[name].get();
+	// !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	const EntiInfo *ei;// = player->techTree.techMap[name].get();
 	
 	string meshFile = ei->file;
 	entity = sceneManager->createEntity(meshFile);
@@ -42,13 +55,13 @@ MovingManager::MovingManager(Player *player, const String &name, const MapCoord 
 	destination = node->getPosition();
 
 	// @#~ Maybe better to = 0 and so on
-	moveList = new std::deque<Strategix::MapCoord>();
+	moveList = new std::deque< MapCoord>();
 
 
 //	// Title
 //	Camera* camera = sceneManager->getCamera("Camera");
 //	if( !camera )
-//		OGRE_EXCEPT(1, "No camera named Camera", "");
+//		STRATEGIX_ERROR("No camera named Camera");
 //
 //	objectTitle = new ObjectTitle("Title", entity, camera, "This is Robot", "StarWars");
 }
@@ -62,101 +75,51 @@ MovingManager::~MovingManager()
 	sceneManager->destroySceneNode(node);
 }
 
-bool MovingManager::frameRenderingQueued(const FrameEvent &event)
-{
-	MoveOnTime(event.timeSinceLastFrame);
-	//objectTitle->update();
-	return true;
-}
-
-void MovingManager::AddWayTo(Vector3 &pos)
-{
-	delete moveList;
-	moveList = Strategix::Game::GS().GetMap().BuildWay(mapCoord, GetMapCoord(pos));
-}
-
-void MovingManager::AddWayTo_Debug(Vector3 &pos)
-{
-	using Strategix::MapCoord;
-	
-	static MapCoord oldMapCoord = MapCoord(-1, -1);
-	MapCoord newMapCoord = GetMapCoord(pos);
-
-	typedef std::deque<Strategix::MapCoord> MapCoordDeque;
-	static MapCoordDeque *saved_moveList;
-
-	// First time mouse click => Draw path
-	if( oldMapCoord != newMapCoord )
-	{
-		oldMapCoord = newMapCoord;
-
-		typedef std::list<Strategix::Map::Cell*> CellList;
-		CellList *p_closed = 0;
-
-		saved_moveList = Strategix::Game::GS().GetMap().BuildWay_Debug(mapCoord, newMapCoord, p_closed);
-
-		//Strategix::Log::GS().Write("hahahah\n");
-
-		// Draw debug info
-		typedef sh_p<LabelManager> SHP_LabelManager;
-		typedef std::vector<SHP_LabelManager> LabelVector;
-		static LabelVector labelVector;
-		//
-		labelVector.clear();
-		// Very Bad Solution of Very Simple Issue !!!!
-				Root::getSingleton().renderOneFrame();
-
-		labelVector.reserve(p_closed->size());
-
-		for( CellList::iterator at = p_closed->begin(); at != p_closed->end(); ++at)
-		{
-			std::stringstream title;
-			title << "\n" << (*at)->G << " + " << (*at)->H << "\n = " << (*at)->F ;
-			SHP_LabelManager shp_labelManager(new LabelManager((*at)->mc, title.str().c_str()));
-
-			if( saved_moveList->end() != find(saved_moveList->begin(), saved_moveList->end(), (*at)->mc) )
-				shp_labelManager->SetColor(ColourValue(1.0, 1.0, 1.0, 1.0));
-			else
-				shp_labelManager->SetColor(ColourValue(5.0, 0.0, 0.8, 1.0));
-
-			labelVector.push_back(shp_labelManager);
-		}
-
-		delete p_closed;
-	}
-	// Second time mouse click => Go
-	else
-	{
-		if( moveList != saved_moveList )
-			delete moveList;
-		moveList = saved_moveList;
-	}
-}
-
 void MovingManager::MoveOnTime(Real time)
 {
+	// Updating Titles above Entity
+	// objectTitle->update();
+	foreach( ShpLabelManager labelManager, labelVector )
+	{
+		labelManager->Update();
+	}
+
+	// Moving
 	if( distance <= 0.0f )
 	{
-		node->setPosition(destination);
-
 		if( moveList->empty() ) // Standing
 		{
+			node->setPosition(destination);
+
 			try
 			{
-				animationState = entity->getAnimationState("Idle");
-				animationState->setLoop(true);
-				animationState->setEnabled(true);
+				if( animationState != entity->getAnimationState("Idle") )
+				{
+					animationState = entity->getAnimationState("Idle");
+					animationState->setLoop(true);
+					animationState->setEnabled(true);
+				}
 			}
 			catch( ItemIdentityException )
 			{
 				cout << endl << "No default Idle action" << endl;
-			}			
+			}
 		}
 		else // Moving next position
-		{			
-			animationState = entity->getAnimationState("Move");
-			animationState->setLoop(true);
-			animationState->setEnabled(true);
+		{
+			try
+			{
+				if( animationState != entity->getAnimationState("Move") )
+				{
+					animationState = entity->getAnimationState("Move");
+					animationState->setLoop(true);
+					animationState->setEnabled(true);
+				}
+			}
+			catch( ItemIdentityException )
+			{
+				cout << endl << "No default Move action" << endl;
+			}
 
 			mapCoord = moveList->front(); // Setting current position
 			destination = GetDiscretePos(mapCoord); // Setting 3D coordinates
@@ -177,24 +140,79 @@ void MovingManager::MoveOnTime(Real time)
 			}
 		}
 
-		animationState->addTime(time); 
+		// animationState->addTime(time);
 	}
 	else // Moving if( distance > 0.0f )
 	{
-		Real move = moveSpeed * time;
-		distance -= move;
-		node->translate(Vector3(direction.x, 0, direction.z) * move);
+		Real moving = moveSpeed * time;
+		distance -= moving;
 
-		animationState->addTime(time * moveSpeed / 10); 
+		// @#~ Might be troubles, if distance become much less than 0!!!!
+
+		node->translate(Vector3(direction.x, 0, direction.z) * moving);
+
+		animationState->addTime(moving / 10);
 	}
 }
 
-inline Strategix::MapCoord MovingManager::GetMapCoord(const Vector3 &pos)
+void MovingManager::AddWayTo(Vector3 &pos)
 {
-	return Strategix::MapCoord(pos.x / tile_length, pos.z / tile_length);
+	delete moveList;
+	moveList = Game::GS().GetMap().BuildWay(mapCoord, GetMapCoord(pos));
 }
 
-inline Vector3 MovingManager::GetDiscretePos(const Strategix::MapCoord &mapCoord)
+void MovingManager::AddWayTo_Debug(Vector3 &pos)
+{	
+	static MapCoord oldMapCoord = MapCoord(-1, -1);
+	MapCoord newMapCoord = GetMapCoord(pos);
+
+	typedef std::deque< MapCoord> MapCoordDeque;
+	static MapCoordDeque *saved_moveList;
+
+	// First time mouse click => Draw path
+	if( oldMapCoord != newMapCoord )
+	{
+		oldMapCoord = newMapCoord;
+
+		typedef std::list< Map::Cell*> CellList;
+		CellList *p_closed = 0;
+
+		saved_moveList =  Game::GS().GetMap().BuildWay_Debug(mapCoord, newMapCoord, p_closed);
+
+		//
+		labelVector.clear();
+		labelVector.reserve(p_closed->size());
+
+		for( CellList::iterator at = p_closed->begin(); at != p_closed->end(); ++at)
+		{
+			std::stringstream title;
+			title << "\n" << (*at)->G << " + " << (*at)->H << "\n = " << (*at)->F ;
+			ShpLabelManager labelManager(new LabelManager((*at)->mc, title.str().c_str()));
+
+			if( saved_moveList->end() != find(saved_moveList->begin(), saved_moveList->end(), (*at)->mc) )
+				labelManager->SetColor(ColourValue(1.0, 1.0, 1.0, 1.0));
+			else
+				labelManager->SetColor(ColourValue(5.0, 0.0, 0.8, 1.0));
+
+			labelVector.push_back(labelManager);
+		}
+
+		delete p_closed;
+	}	
+	else // Second time mouse click => Go
+	{
+		if( moveList != saved_moveList )
+			delete moveList;
+		moveList = saved_moveList;
+	}
+}
+
+inline  MapCoord MovingManager::GetMapCoord(const Vector3 &pos)
+{
+	return  MapCoord(pos.x / tile_length, pos.z / tile_length);
+}
+
+inline Vector3 MovingManager::GetDiscretePos(const  MapCoord &mapCoord)
 {
 	return Vector3((mapCoord.x + 0.5f) * tile_length, 0, (mapCoord.y + 0.5f) * tile_length);
 }

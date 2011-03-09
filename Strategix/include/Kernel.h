@@ -8,11 +8,8 @@
 #ifndef _KERNEL_H
 #define	_KERNEL_H
 
-#include "StrategixSingleton.h"
 #include "TechTree.h"
-
-#include "Game.h"
-#include "GameStructs.h"
+#include "StrategixSingleton.h"
 
 #include <string>
 #include <vector>

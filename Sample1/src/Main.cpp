@@ -1,15 +1,20 @@
 /* 
- * File:   Sample1.cpp
+ * File:   Main.cpp
  * Author: Akela1101
  * 
  * Created on 14 Февраль 2010 г., 0:15
  */
 
-#include "Nya.hpp"
+#include "MyApp.h"
+
+#include "Player.h"
+#include "Game.h"
 #include "Kernel.h"
-#include "OgreWrap.h"
 
 #include <boost/filesystem.hpp>
+
+#include "Nya.hpp"
+
 
 using namespace Strategix;
 using namespace Sample1;
@@ -111,7 +116,7 @@ int main(int argc, char *argv[])
 		Game::GS().Start("1x1", players);
 
 		// Graphics init.
-		OgreWrap ogre_wrap;
+		MyApp ogre_wrap;
 		try
 		{
 			ogre_wrap.go();

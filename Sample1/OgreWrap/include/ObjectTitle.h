@@ -1,3 +1,7 @@
+
+// by some good guy who I don't really know...
+
+
 #ifndef _OBJECTTITLE_H
 #define	_OBJECTTITLE_H
 

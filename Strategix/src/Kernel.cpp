@@ -5,18 +5,19 @@
  * Created on 13 Февраль 2010 г., 23:19
  */
 
-#include "Kernel.h"
-
-#include "Nya.hpp"
-#include "Log.h"
 #include "TechTreesBuilderFromXml.h"
+#include "Log.h"
 
 #include <boost/filesystem.hpp>
+
+#include "Nya.hpp"
+#include "Kernel.h"
 
 using namespace std;
 using namespace boost;
 using namespace Strategix;
 namespace fs = boost::filesystem;
+
 
 Kernel::Kernel()
 {

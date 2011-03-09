@@ -9,15 +9,18 @@
 #define	_PLAYER_H
 
 #include "GameStructs.h"
-#include "TechTree.h"
-#include "GameStructs.h"
-#include "Enti.h"
 
-#include "list"
+#include <list>
+
+#include "Nya.hpp"
+
 
 namespace Strategix
 {
 	using namespace std;
+
+	class Enti;
+	class TechTree;
 
 	class Player
 	{
@@ -27,12 +30,15 @@ namespace Strategix
 		const int playerNumber; // number of player on the map
 
 		map<string, ResType> resources;
-		TechTree techTree; // local copy of race tree
+		sh_p<TechTree> techTree; // local copy of race tree
 		list<Enti> entis;
 
 	public:
 		Player(string name, PlayerType playerType, int playerNumber, string raceName);
 		virtual ~Player();
+
+		void Tick(const float seconds);
+
 	private:
 		Player(const Player& orig);
 

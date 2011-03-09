@@ -8,11 +8,10 @@
 #ifndef _TECHTREE_H
 #define	_TECHTREE_H
 
-#include "Nya.hpp"
-#include "EntiInfo.h"
-
 #include <map>
 #include <string>
+
+#include "Nya.hpp"
 
 
 namespace Strategix
@@ -20,8 +19,9 @@ namespace Strategix
 	using namespace std;
 	using namespace boost;
 
+	class EntiInfo;
+
 	typedef map<string, sh_p<EntiInfo> > TechMapType;
-	//typedef std::pair<string, sh_p<EntiInfo> > TechMapPairType;
 
 	class TechTree
 	{

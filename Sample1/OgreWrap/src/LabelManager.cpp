@@ -5,10 +5,17 @@
  * Created on 23 Апрель 2010 г., 11:49
  */
 
-#include "LabelManager.h"
-#include "OgreWrapCommon.h"
-#include "OgreException.h"
+
+#include "MyAppCommon.h"
+#include "ObjectTitle.h"
+
+#include "OgreSceneManager.h"
+
+#include "Exception.h"
+
 #include <sstream>
+
+#include "LabelManager.h"
 
 
 namespace Sample1
@@ -18,7 +25,7 @@ namespace Sample1
 
 LabelManager::LabelManager(const Strategix::MapCoord &mapCoord, const String &title)
 	:
-	EntityManager(0, "", mapCoord)
+	EntityManager("", mapCoord)
 {
 	this->mapCoord = mapCoord;
 
@@ -44,7 +51,7 @@ LabelManager::LabelManager(const Strategix::MapCoord &mapCoord, const String &ti
 	// Title
 	Camera* camera = sceneManager->getCamera("Camera");
 	if( !camera )
-		OGRE_EXCEPT(1, "No camera named Camera", "");
+		STRATEGIX_ERROR("No camera named Camera");
 
 	static int n = 1;
 	std::stringstream titleName;
@@ -60,10 +67,9 @@ LabelManager::~LabelManager()
 	sceneManager->destroySceneNode(node);
 }
 
-bool LabelManager::frameRenderingQueued(const FrameEvent &event)
+void LabelManager::Update()
 {
 	objectTitle->update();
-	return true;
 }
 
 void LabelManager::SetColor(const ColourValue& color)

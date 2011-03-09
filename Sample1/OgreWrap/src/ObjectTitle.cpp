@@ -1,3 +1,7 @@
+
+// by some good guy who I don't really know...
+
+
 #include "ObjectTitle.h"
 #include <OgreFontManager.h>
 

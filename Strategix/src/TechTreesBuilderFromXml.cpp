@@ -5,8 +5,7 @@
  * Created on 12 Март 2010 г., 18:37
  */
 
-#include "Nya.hpp"
-#include "TechTreesBuilderFromXml.h"
+#include "EntiInfo.h"
 #include "TechTree.h"
 #include "Exception.h"
 
@@ -15,11 +14,15 @@
 #include <boost/filesystem.hpp>
 #include <iostream>
 
+#include "Nya.hpp"
+#include "TechTreesBuilderFromXml.h"
+
 using namespace std;
 using namespace boost;
 using namespace Strategix;
 namespace pt = boost::property_tree;
 namespace fs = boost::filesystem;
+
 
 void TechTreesBuilderFromXml::Build(TechTreesType *pTechTrees)
 {
@@ -38,7 +41,7 @@ void TechTreesBuilderFromXml::Build(TechTreesType *pTechTrees)
 			}
 			catch( const pt::xml_parser_error & )
 			{
-				throw STRATEGIX_ERROR( string("Can't parse file: ") + p.string() );
+				STRATEGIX_ERROR( string("Can't parse file: ") + p.string() );
 			}
 
 			BuildRace(p.stem(), propTree);

@@ -48,7 +48,7 @@ namespace Strategix
 		}
 	};
 
-	#define STRATEGIX_ERROR(message) StrategixError(__FILE__, __LINE__, message)
+	#define STRATEGIX_ERROR(message) throw StrategixError(__FILE__, __LINE__, message)
 }
 
 #endif	/* _EXCEPTION_H */

@@ -5,6 +5,8 @@
  * Created on 4 Февраль 2011 г., 18:41
  */
 
+#include "EntiInfo.h"
+
 #include "Enti.h"
 
 

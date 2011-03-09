@@ -1,5 +1,5 @@
 /* 
- * File:   MyManager.h
+ * File:   Mediator.h
  * Author: Akela1101
  *
  * Created on 13 Январь 2011 г., 21:23
@@ -8,9 +8,17 @@
 #ifndef _MYMANAGER_H
 #define	_MYMANAGER_H
 
-#include "Nya.hpp"
-#include "EntityManager.h"
+#include "OgreFrameListener.h"
+
 #include <list>
+
+#include "Nya.hpp"
+
+
+namespace Strategix
+{
+	class Game;
+}
 
 namespace Sample1
 {
@@ -18,14 +26,18 @@ namespace Sample1
 
 	class EntityManager;
 
-	class MyManager
+	class Mediator : public FrameListener
 	{
+		Strategix::Game *game; // link to current game
+
 	protected:
 		std::list<sh_p<EntityManager> > entityManagers;
 
 	public:
-		MyManager();
-		virtual ~MyManager();
+		Mediator();
+		virtual ~Mediator();
+		virtual bool frameRenderingQueued(const FrameEvent &event);
+
 		void AddEntityManager(sh_p<EntityManager> entityManager);
 	};
 }

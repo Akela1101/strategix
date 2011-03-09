@@ -8,16 +8,12 @@
 #ifndef _LABELMANAGER_H
 #define	_LABELMANAGER_H
 
-#include "MyManager.h"
 #include "EntityManager.h"
 #include "GameStructs.h"
-#include <deque>
 
 namespace Sample1
 {
 	using namespace Ogre;
-
-	class MyManager;
 	
 	class LabelManager : public EntityManager
 	{
@@ -26,7 +22,7 @@ namespace Sample1
 	public:
 		LabelManager(const Strategix::MapCoord &mapCoord, const String &title);
 		virtual ~LabelManager();
-		virtual bool frameRenderingQueued(const FrameEvent &event);
+		void Update();
 		void SetColor(const ColourValue& color);
 		void Show(bool isShow);
 	};
