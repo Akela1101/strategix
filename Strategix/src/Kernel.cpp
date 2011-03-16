@@ -2,56 +2,31 @@
  * File:   Kernel.cpp
  * Author: Akela1101
  * 
- * Created on 13 Февраль 2010 г., 23:19
+ * Created on 10 Январь 2011 г., 10:09
  */
 
-#include "TechTreesBuilderFromXml.h"
-#include "Log.h"
+#include "Map.h"
+#include "Player.h"
 
-#include <boost/filesystem.hpp>
-
-#include "Nya.hpp"
 #include "Kernel.h"
 
-using namespace std;
-using namespace boost;
 using namespace Strategix;
-namespace fs = boost::filesystem;
 
 
-Kernel::Kernel()
+Kernel::Kernel(const string mapName)
 {
-	// Build Tech Trees
-	TechTreesBuilderFromXml ttBuilder;
-	ttBuilder.Build(&techTrees);	
+	fullMap.reset(new Map(mapName));
 }
 
-Kernel::~Kernel()
+void Kernel::AddPlayer(sh_p<Player> player)
 {
+	players.push_back(player);
 }
 
-sh_p<vector<string> > Kernel::GetMapNames()
+void Kernel::Tick(const float seconds)
 {
-	sh_p<vector<string> > mapNames(new vector<string>());
-
-	fs::recursive_directory_iterator it("Maps/"), eod;
-	foreach( const fs::path &p, std::make_pair(it, eod) )
+	foreach( sh_p<Player> player, players )
 	{
-		if( fs::is_regular_file(p) && fs::extension(p) == ".map" )
-		{
-			mapNames->push_back(p.stem());
-		}
+		player->Tick(seconds);
 	}
-	return mapNames;
-}
-
-sh_p<vector<string> > Kernel::GetRaceNames()
-{
-	sh_p<vector<string> > raceNames(new vector<string>());
-
-	foreach( const TechTreesType::value_type &tt_pair, techTrees )
-	{
-		raceNames->push_back(tt_pair.second->raceName);
-	}
-	return raceNames;
 }

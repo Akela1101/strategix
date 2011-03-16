@@ -1,25 +1,25 @@
 /*
- * File:   MovingManager.cpp
+ * File:   MovingUnit.cpp
  * Author: Akela1101
  *
  * Created on 15 Апрель 2010 г., 13:57
  */
 
 #include "MyAppCommon.h"
-#include "LabelManager.h"
+#include "LabelUnit.h"
 
 #include "OgreSceneManager.h"
 
 #include "EntiInfo.h"
 #include "Map.h"
-#include "Game.h"
+#include "Kernel.h"
 #include "Exception.h"
 
 #include <vector>
 #include <sstream>
 
 #include "Nya.hpp"
-#include "MovingManager.h"
+#include "MovingUnit.h"
 
 namespace Sample1
 {
@@ -28,14 +28,14 @@ namespace Sample1
 	using namespace std;
 
 	// Draw debug info
-		typedef sh_p<LabelManager> ShpLabelManager;
-		typedef std::vector<ShpLabelManager> LabelVector;
+		typedef sh_p<LabelUnit> ShpLabelUnit;
+		typedef std::vector<ShpLabelUnit> LabelVector;
 		static LabelVector labelVector;
 		//
 
-MovingManager::MovingManager(const String &name, const MapCoord &mapCoord)
+MovingUnit::MovingUnit(const String &name, const MapCoord &mapCoord)
 	:
-	EntityManager(name, mapCoord ),
+	EntityUnit(name, mapCoord ),
 	distance(0.0f),
 	moveSpeed(30.0f)
 {
@@ -66,7 +66,7 @@ MovingManager::MovingManager(const String &name, const MapCoord &mapCoord)
 //	objectTitle = new ObjectTitle("Title", entity, camera, "This is Robot", "StarWars");
 }
 
-MovingManager::~MovingManager()
+MovingUnit::~MovingUnit()
 {
 	// delete moveList ?
 	//delete objectTitle;
@@ -75,13 +75,13 @@ MovingManager::~MovingManager()
 	sceneManager->destroySceneNode(node);
 }
 
-void MovingManager::MoveOnTime(Real time)
+void MovingUnit::Tick(Real time)
 {
 	// Updating Titles above Entity
 	// objectTitle->update();
-	foreach( ShpLabelManager labelManager, labelVector )
+	foreach( ShpLabelUnit labelUnit, labelVector )
 	{
-		labelManager->Update();
+		labelUnit->Update();
 	}
 
 	// Moving
@@ -155,13 +155,14 @@ void MovingManager::MoveOnTime(Real time)
 	}
 }
 
-void MovingManager::AddWayTo(Vector3 &pos)
+void MovingUnit::AddWayTo(Vector3 &pos)
 {
 	delete moveList;
-	moveList = Game::GS().GetMap().BuildWay(mapCoord, GetMapCoord(pos));
+	// !!!!!!!!!!!!!!!!
+	// moveList = kernel->GetMap().BuildWay(mapCoord, GetMapCoord(pos));
 }
 
-void MovingManager::AddWayTo_Debug(Vector3 &pos)
+void MovingUnit::AddWayTo_Debug(Vector3 &pos)
 {	
 	static MapCoord oldMapCoord = MapCoord(-1, -1);
 	MapCoord newMapCoord = GetMapCoord(pos);
@@ -177,7 +178,8 @@ void MovingManager::AddWayTo_Debug(Vector3 &pos)
 		typedef std::list< Map::Cell*> CellList;
 		CellList *p_closed = 0;
 
-		saved_moveList =  Game::GS().GetMap().BuildWay_Debug(mapCoord, newMapCoord, p_closed);
+		// !!!!!!!!!!!!!!!
+		// saved_moveList =  kernel->GetMap().BuildWay_Debug(mapCoord, newMapCoord, p_closed);
 
 		//
 		labelVector.clear();
@@ -187,14 +189,14 @@ void MovingManager::AddWayTo_Debug(Vector3 &pos)
 		{
 			std::stringstream title;
 			title << "\n" << (*at)->G << " + " << (*at)->H << "\n = " << (*at)->F ;
-			ShpLabelManager labelManager(new LabelManager((*at)->mc, title.str().c_str()));
+			ShpLabelUnit labelUnit(new LabelUnit((*at)->mc, title.str().c_str()));
 
 			if( saved_moveList->end() != find(saved_moveList->begin(), saved_moveList->end(), (*at)->mc) )
-				labelManager->SetColor(ColourValue(1.0, 1.0, 1.0, 1.0));
+				labelUnit->SetColor(ColourValue(1.0, 1.0, 1.0, 1.0));
 			else
-				labelManager->SetColor(ColourValue(5.0, 0.0, 0.8, 1.0));
+				labelUnit->SetColor(ColourValue(5.0, 0.0, 0.8, 1.0));
 
-			labelVector.push_back(labelManager);
+			labelVector.push_back(labelUnit);
 		}
 
 		delete p_closed;
@@ -207,17 +209,17 @@ void MovingManager::AddWayTo_Debug(Vector3 &pos)
 	}
 }
 
-inline  MapCoord MovingManager::GetMapCoord(const Vector3 &pos)
+inline  MapCoord MovingUnit::GetMapCoord(const Vector3 &pos)
 {
 	return  MapCoord(pos.x / tile_length, pos.z / tile_length);
 }
 
-inline Vector3 MovingManager::GetDiscretePos(const  MapCoord &mapCoord)
+inline Vector3 MovingUnit::GetDiscretePos(const  MapCoord &mapCoord)
 {
 	return Vector3((mapCoord.x + 0.5f) * tile_length, 0, (mapCoord.y + 0.5f) * tile_length);
 }
 
-inline Vector3 MovingManager::GetDiscretePos(const Vector3 &pos)
+inline Vector3 MovingUnit::GetDiscretePos(const Vector3 &pos)
 {
 	return GetDiscretePos(GetMapCoord(pos));
 }

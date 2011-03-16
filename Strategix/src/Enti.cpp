@@ -5,6 +5,7 @@
  * Created on 4 Февраль 2011 г., 18:41
  */
 
+#include "Player.h"
 #include "EntiInfo.h"
 
 #include "Enti.h"
@@ -13,8 +14,10 @@
 using namespace Strategix;
 
 
-Enti::Enti(const EntiInfo *ei, const MapCoord &mapCoord)
+template<class Unit>
+Enti<Unit>::Enti(Player *player, const EntiInfo *ei, const MapCoord &mapCoord)
 	:
+	player(player),
 	ei(ei),
 	mapCoord(mapCoord)
 {
@@ -40,7 +43,8 @@ void Enti::init(const Enti &_c)
 }
 */
 
-Enti::~Enti()
+template<class Unit>
+Enti<Unit>::~Enti()
 {
 }
 

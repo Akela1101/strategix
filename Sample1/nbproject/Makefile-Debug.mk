@@ -37,11 +37,12 @@ OBJECTFILES= \
 	${OBJECTDIR}/OgreWrap/src/MyMouseListener.o \
 	${OBJECTDIR}/OgreWrap/src/MapTexture.o \
 	${OBJECTDIR}/OgreWrap/src/Mediator.o \
+	${OBJECTDIR}/OgreWrap/src/MovingUnit.o \
+	${OBJECTDIR}/src/MediatorFrameListener.o \
+	${OBJECTDIR}/OgreWrap/src/EntityUnit.o \
+	${OBJECTDIR}/OgreWrap/src/LabelUnit.o \
 	${OBJECTDIR}/OgreWrap/src/MyApp.o \
-	${OBJECTDIR}/OgreWrap/src/MovingManager.o \
 	${OBJECTDIR}/OgreWrap/src/MyFrameListener.o \
-	${OBJECTDIR}/OgreWrap/src/LabelManager.o \
-	${OBJECTDIR}/OgreWrap/src/EntityManager.o \
 	${OBJECTDIR}/OgreWrap/src/ObjectTitle.o
 
 
@@ -91,30 +92,35 @@ ${OBJECTDIR}/OgreWrap/src/Mediator.o: OgreWrap/src/Mediator.cpp
 	${RM} $@.d
 	$(COMPILE.cc) -g -Iinclude -I../common_include -IOgreWrap/include -I../Strategix/include -I/usr/include/OGRE -I/usr/include/OIS -I/usr/include/CEGUI -MMD -MP -MF $@.d -o ${OBJECTDIR}/OgreWrap/src/Mediator.o OgreWrap/src/Mediator.cpp
 
+${OBJECTDIR}/OgreWrap/src/MovingUnit.o: OgreWrap/src/MovingUnit.cpp 
+	${MKDIR} -p ${OBJECTDIR}/OgreWrap/src
+	${RM} $@.d
+	$(COMPILE.cc) -g -Iinclude -I../common_include -IOgreWrap/include -I../Strategix/include -I/usr/include/OGRE -I/usr/include/OIS -I/usr/include/CEGUI -MMD -MP -MF $@.d -o ${OBJECTDIR}/OgreWrap/src/MovingUnit.o OgreWrap/src/MovingUnit.cpp
+
+${OBJECTDIR}/src/MediatorFrameListener.o: src/MediatorFrameListener.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -g -Iinclude -I../common_include -IOgreWrap/include -I../Strategix/include -I/usr/include/OGRE -I/usr/include/OIS -I/usr/include/CEGUI -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/MediatorFrameListener.o src/MediatorFrameListener.cpp
+
+${OBJECTDIR}/OgreWrap/src/EntityUnit.o: OgreWrap/src/EntityUnit.cpp 
+	${MKDIR} -p ${OBJECTDIR}/OgreWrap/src
+	${RM} $@.d
+	$(COMPILE.cc) -g -Iinclude -I../common_include -IOgreWrap/include -I../Strategix/include -I/usr/include/OGRE -I/usr/include/OIS -I/usr/include/CEGUI -MMD -MP -MF $@.d -o ${OBJECTDIR}/OgreWrap/src/EntityUnit.o OgreWrap/src/EntityUnit.cpp
+
+${OBJECTDIR}/OgreWrap/src/LabelUnit.o: OgreWrap/src/LabelUnit.cpp 
+	${MKDIR} -p ${OBJECTDIR}/OgreWrap/src
+	${RM} $@.d
+	$(COMPILE.cc) -g -Iinclude -I../common_include -IOgreWrap/include -I../Strategix/include -I/usr/include/OGRE -I/usr/include/OIS -I/usr/include/CEGUI -MMD -MP -MF $@.d -o ${OBJECTDIR}/OgreWrap/src/LabelUnit.o OgreWrap/src/LabelUnit.cpp
+
 ${OBJECTDIR}/OgreWrap/src/MyApp.o: OgreWrap/src/MyApp.cpp 
 	${MKDIR} -p ${OBJECTDIR}/OgreWrap/src
 	${RM} $@.d
 	$(COMPILE.cc) -g -Iinclude -I../common_include -IOgreWrap/include -I../Strategix/include -I/usr/include/OGRE -I/usr/include/OIS -I/usr/include/CEGUI -MMD -MP -MF $@.d -o ${OBJECTDIR}/OgreWrap/src/MyApp.o OgreWrap/src/MyApp.cpp
 
-${OBJECTDIR}/OgreWrap/src/MovingManager.o: OgreWrap/src/MovingManager.cpp 
-	${MKDIR} -p ${OBJECTDIR}/OgreWrap/src
-	${RM} $@.d
-	$(COMPILE.cc) -g -Iinclude -I../common_include -IOgreWrap/include -I../Strategix/include -I/usr/include/OGRE -I/usr/include/OIS -I/usr/include/CEGUI -MMD -MP -MF $@.d -o ${OBJECTDIR}/OgreWrap/src/MovingManager.o OgreWrap/src/MovingManager.cpp
-
 ${OBJECTDIR}/OgreWrap/src/MyFrameListener.o: OgreWrap/src/MyFrameListener.cpp 
 	${MKDIR} -p ${OBJECTDIR}/OgreWrap/src
 	${RM} $@.d
 	$(COMPILE.cc) -g -Iinclude -I../common_include -IOgreWrap/include -I../Strategix/include -I/usr/include/OGRE -I/usr/include/OIS -I/usr/include/CEGUI -MMD -MP -MF $@.d -o ${OBJECTDIR}/OgreWrap/src/MyFrameListener.o OgreWrap/src/MyFrameListener.cpp
-
-${OBJECTDIR}/OgreWrap/src/LabelManager.o: OgreWrap/src/LabelManager.cpp 
-	${MKDIR} -p ${OBJECTDIR}/OgreWrap/src
-	${RM} $@.d
-	$(COMPILE.cc) -g -Iinclude -I../common_include -IOgreWrap/include -I../Strategix/include -I/usr/include/OGRE -I/usr/include/OIS -I/usr/include/CEGUI -MMD -MP -MF $@.d -o ${OBJECTDIR}/OgreWrap/src/LabelManager.o OgreWrap/src/LabelManager.cpp
-
-${OBJECTDIR}/OgreWrap/src/EntityManager.o: OgreWrap/src/EntityManager.cpp 
-	${MKDIR} -p ${OBJECTDIR}/OgreWrap/src
-	${RM} $@.d
-	$(COMPILE.cc) -g -Iinclude -I../common_include -IOgreWrap/include -I../Strategix/include -I/usr/include/OGRE -I/usr/include/OIS -I/usr/include/CEGUI -MMD -MP -MF $@.d -o ${OBJECTDIR}/OgreWrap/src/EntityManager.o OgreWrap/src/EntityManager.cpp
 
 ${OBJECTDIR}/OgreWrap/src/ObjectTitle.o: OgreWrap/src/ObjectTitle.cpp 
 	${MKDIR} -p ${OBJECTDIR}/OgreWrap/src

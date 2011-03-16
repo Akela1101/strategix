@@ -11,6 +11,9 @@
 #include "Ogre.h"
 //#include "OgreConfigFile.h"
 
+#include "Nya.hpp"
+
+
 // Static plugins declaration section
 // Note that every entry in here adds an extra header / library dependency
 #ifdef OGRE_STATIC_LIB
@@ -45,18 +48,26 @@
 #  include "OgreStaticPluginLoader.h"
 #endif
 
+namespace Strategix
+{
+	class Kernel;
+}
 
 namespace Sample1
 {
 	using namespace Ogre;
+	using namespace Strategix;
 
 	class MyFrameListener;
+	class Mediator;	
 
 	class MyApp
 	{
 	protected:
 		Root *mRoot;
-		MyFrameListener* mFrameListener;
+		sh_p<MyFrameListener> frameListener;
+		sh_p<Mediator> mediator;
+		sh_p<Kernel> kernel;
 
 	#ifdef OGRE_STATIC_LIB
 		StaticPluginLoader mStaticPluginLoader;
@@ -73,7 +84,7 @@ namespace Sample1
 	#endif
 
 	public:
-		MyApp();
+		MyApp(sh_p<Kernel> kernel);
 		virtual ~MyApp();
 		virtual void go();
 

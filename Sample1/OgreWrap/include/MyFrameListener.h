@@ -23,7 +23,7 @@ namespace Sample1
 	using namespace std;
 
 	class MyMouseListener;
-	class LabelManager;
+	class MediatorFrameListener;
 
 	class MyFrameListener : public FrameListener, public WindowEventListener
 	{
@@ -31,6 +31,7 @@ namespace Sample1
 		RenderWindow* mWindow;
 		Camera* mCamera;
 
+		// Camera
 		Vector3 mTranslateVector;
 		Real mCurrentSpeed;
 		bool mStatsOn;
@@ -61,10 +62,7 @@ namespace Sample1
 		//
 		RaySceneQuery *raySceneQuery;
 		sh_p<MyMouseListener> mouseListener;
-
-		typedef std::vector<sh_p<LabelManager> > LabelVector;
-		LabelVector labelVector;
-		bool isShowLabels;
+		sh_p<MediatorFrameListener> mediatorFrameListener;		
 
 	public:
 		MyFrameListener(RenderWindow* mWindow, Camera* mCamera);
@@ -81,9 +79,6 @@ namespace Sample1
 		virtual void windowResized(RenderWindow* rw);
 		virtual void windowClosed(RenderWindow* rw);
 		virtual void moveCamera();
-		
-		void CreateLabels();
-		void ShowLabels(bool isShow);
 	};
 }
 

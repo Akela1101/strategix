@@ -6,20 +6,13 @@
  */
 
 #include "MyMouseListener.h"
-#include "LabelManager.h"
+#include "MediatorFrameListener.h"
 #include "MyAppCommon.h"
 
 #include "OgreStringConverter.h"
-//#include "OgreException.h"
 
-#include "Map.h"
-#include "Game.h"
-#include "Kernel.h"
-
-#include <vector>
 #include <sstream>
 
-#include "Nya.hpp"
 #include "MyFrameListener.h"
 
 
@@ -45,7 +38,8 @@ MyFrameListener::MyFrameListener(RenderWindow* mWindow, Camera* mCamera)
 	mRotateSpeed(36),
 	mDebugOverlay(OverlayManager::getSingleton().getByName("Core/DebugOverlay")),
 	raySceneQuery(sceneManager->createRayQuery(Ray())),
-	mouseListener(new MyMouseListener(mCamera, raySceneQuery))
+	mouseListener(new MyMouseListener(mCamera, raySceneQuery)),
+	mediatorFrameListener(new MediatorFrameListener())
 {
 	LogManager::getSingletonPtr()->logMessage("*** Initializing OIS ***");
 	OIS::ParamList pl;
@@ -91,8 +85,10 @@ MyFrameListener::MyFrameListener(RenderWindow* mWindow, Camera* mCamera)
 
 	mMouse->setEventCallback(mouseListener.get());
 
-	CreateLabels();
-	ShowLabels(false);
+	Root::getSingleton().addFrameListener(mediatorFrameListener.get());
+
+	mediatorFrameListener->CreateLabels();
+	mediatorFrameListener->ShowLabels(false);
 }
 
 MyFrameListener::~MyFrameListener()
@@ -206,7 +202,8 @@ bool MyFrameListener::processUnbufferedKeyInput(const FrameEvent& evt)
 	// @#~
 	if( mKeyboard->isKeyDown(OIS::KC_1) && mTimeUntilNextToggle <= 0 )
 	{
-		ShowLabels(!isShowLabels);
+		static bool isShowLabels;
+		mediatorFrameListener->ShowLabels(!isShowLabels);
 
 		mTimeUntilNextToggle = 0.2;
 	}
@@ -223,23 +220,8 @@ bool MyFrameListener::frameStarted(const FrameEvent &event)
 	static Vector3 lastCamPos;
 	if( lastCamPos != camPos )
 	{
-		using Strategix::Game;
-
-		float w = Game::GS().GetMap().GetWidth() * tile_length;
-		float l = Game::GS().GetMap().GetLength() * tile_length;
-
 		if( camPos.y < tile_length )
 			camPos.y = tile_length;
-
-		//		if( camPos.x < 0 )
-		//			camPos.x = 0;
-		//		if( camPos.x > w )
-		//			camPos.x = w;
-		//
-		//		if( camPos.z < 0 )
-		//			camPos.z = 0;
-		//		if( camPos.z > l )
-		//			camPos.z = l;
 
 		mCamera->setPosition(camPos);
 		lastCamPos = camPos;
@@ -404,40 +386,6 @@ void MyFrameListener::showDebugOverlay(bool show)
 			mDebugOverlay->show();
 		else
 			mDebugOverlay->hide();
-	}
-}
-
-// Labels on every cell of Map, showing retard of terrain.
-void MyFrameListener::CreateLabels()
-{
-	const Strategix::Map &map = Strategix::Game::GS().GetMap();
-	const int width = map.GetWidth();
-	const int length = map.GetLength();
-
-	labelVector.reserve(width * length);
-
-	for( int x = 0; x < width; ++x )
-	{
-		for( int z = 0; z < length; ++z )
-		{
-			std::stringstream title;
-			title << "   " << map(x, z).retard;
-			sh_p<LabelManager> labelManager(new LabelManager(Strategix::MapCoord(x, z), title.str().c_str()));
-
-			labelManager->SetColor(ColourValue(1.0, 0.4, 0.4, 1.0));
-
-			labelVector.push_back(labelManager);
-		}
-	}
-}
-
-void MyFrameListener::ShowLabels(bool isShow)
-{
-	isShowLabels = isShow;
-
-	for( LabelVector::iterator it = labelVector.begin(); it != labelVector.end(); ++it )
-	{
-		(*it)->Show(isShow);
 	}
 }
 

@@ -33,7 +33,6 @@ OBJECTDIR=build/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/src/Game.o \
 	${OBJECTDIR}/src/TechTreesBuilderFromXml.o \
 	${OBJECTDIR}/src/Kernel.o \
 	${OBJECTDIR}/src/MapSAstar.o \
@@ -42,7 +41,8 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/Map.o \
 	${OBJECTDIR}/src/TechTree.o \
 	${OBJECTDIR}/src/Log.o \
-	${OBJECTDIR}/src/Enti.o
+	${OBJECTDIR}/src/Enti.o \
+	${OBJECTDIR}/src/KernelBase.o
 
 
 # C Compiler Flags
@@ -70,11 +70,6 @@ dist/Release/GNU-Linux-x86/libstrategix.a: ${OBJECTFILES}
 	${RM} dist/Release/GNU-Linux-x86/libstrategix.a
 	${AR} -rv ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libstrategix.a ${OBJECTFILES} 
 	$(RANLIB) dist/Release/GNU-Linux-x86/libstrategix.a
-
-${OBJECTDIR}/src/Game.o: src/Game.cpp 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} $@.d
-	$(COMPILE.cc) -O2 -Iinclude -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Game.o src/Game.cpp
 
 ${OBJECTDIR}/src/TechTreesBuilderFromXml.o: src/TechTreesBuilderFromXml.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
@@ -120,6 +115,11 @@ ${OBJECTDIR}/src/Enti.o: src/Enti.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -Iinclude -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Enti.o src/Enti.cpp
+
+${OBJECTDIR}/src/KernelBase.o: src/KernelBase.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -Iinclude -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/KernelBase.o src/KernelBase.cpp
 
 # Subprojects
 .build-subprojects:

@@ -8,8 +8,8 @@
 #include "MyApp.h"
 
 #include "Player.h"
-#include "Game.h"
 #include "Kernel.h"
+#include "KernelBase.h"
 
 #include <boost/filesystem.hpp>
 
@@ -82,7 +82,8 @@ INT WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR strCmdLine, INT)
 #include "stdlib.h"
 int main(int argc, char *argv[])
 {
-	//int ret = chdir("NetBeansProjects/Strategix/Sample1");
+	int ret;
+	// ret = chdir("NetBeansProjects/Strategix/Sample1");
 #endif
 	// Also change plugin folder respectively
 
@@ -91,7 +92,7 @@ int main(int argc, char *argv[])
 
 	//
 	cout << endl << "Maps: " << endl;
-	sh_p<std::vector<std::string> > mapNames = Kernel::GS().GetMapNames();
+	sh_p<std::vector<std::string> > mapNames = KernelBase::GS().GetMapNames();
 	foreach(std::string mapName, *mapNames)
 	{
 		cout << mapName << endl;
@@ -99,27 +100,25 @@ int main(int argc, char *argv[])
 
 	//
 	cout << endl << "Race names: " << endl;
-	sh_p<std::vector<std::string> > raceNames = Kernel::GS().GetRaceNames();
+	sh_p<std::vector<std::string> > raceNames = KernelBase::GS().GetRaceNames();
 	foreach(std::string raceName, *raceNames)
 	{
 		cout << raceName << endl;
 	}
 
-	//cout << endl << Kernel::GS().techTrees["Spher"]->techMap["Spher_Worker"]->file << endl;
+	//cout << endl << KernelBase::GS().techTrees["Spher"]->techMap["Spher_Worker"]->file << endl;
 
 	// One Game
 	{
-		std::vector<sh_p<Player> > players;
-		players.push_back(sh_p<Player>(new Player("Neko123", HUMAN, 0, "Spher")));
-		players.push_back(sh_p<Player>(new Player("Inu456", AI, 1, "Spher")));
-
-		Game::GS().Start("1x1", players);
+		sh_p<Kernel> kernel(new Kernel("1x1"));
+		kernel->AddPlayer(sh_p<Player>(new Player("Neko123", HUMAN, 0, "Spher")));
+		kernel->AddPlayer(sh_p<Player>(new Player("Inu456", AI, 1, "Spher")));
 
 		// Graphics init.
-		MyApp ogre_wrap;
+		MyApp myApp(kernel);
 		try
 		{
-			ogre_wrap.go();
+			myApp.go();
 		}
 		catch( Exception& e )
 		{
@@ -137,9 +136,9 @@ int main(int argc, char *argv[])
 #endif
 
 	// Reenable autorepeat in KDE ! *WALL*
-#if !defined( __WIN32__ ) && !defined( _WIN32 )
+#if !defined( __WIN32__ ) && !defined( _WIN32 ) // __LINUX ?????
 	cout << endl << "Setting keyboard autorepeat back ON." << endl;
-	std::system("xset r");
+	ret = std::system("xset r");
 #endif
 
 	return 0;

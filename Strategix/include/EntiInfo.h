@@ -33,7 +33,7 @@ namespace Strategix
 		map<string, Action> actions;
 
 		// Add here Entity variables, then add some strings in TechTreesBuilder*.Build(),
-		// than use it as Kernel::GS().techTrees[race]->techMap[entity]->your_variable
+		// than use it as KernelBase::GS().techTrees[race]->techMap[entity]->your_variable
 
 	public:
 //		EntiInfo();

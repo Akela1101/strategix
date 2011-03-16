@@ -18,20 +18,26 @@ namespace Strategix
 {
 	using namespace std;
 
+	class Player;
 	class EntiInfo;
 
+	template<class Unit>
 	class Enti
 	{
 	public:
+		Player *player; // Link to owner
 		const EntiInfo *ei; // Link to tree
 		Params params;
 		map<string, Action> actions;
 		MapCoord mapCoord; // Change to realCoord!!!
 
-		// Player *player; // link to owner
+	private:
+		Unit *unit;
+		typedef void (Unit::*TickType)(float time);
+		TickType Tick;
 
 	public:
-		Enti(const EntiInfo *ei, const MapCoord &mapCoord);
+		Enti(Player *player, const EntiInfo *ei, const MapCoord &mapCoord);
 		virtual ~Enti();
 
 	private:

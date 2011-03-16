@@ -1,12 +1,12 @@
 /* 
- * File:   EntityManager.h
+ * File:   EntityUnit.h
  * Author: Akela1101
  *
  * Created on 22 Апрель 2010 г., 21:14
  */
 
-#ifndef _ENTITYMANAGER_H
-#define	_ENTITYMANAGER_H
+#ifndef _ENTITYUNIT_H
+#define	_ENTITYUNIT_H
 
 #include <Ogre.h>
 #include "GameStructs.h"
@@ -19,7 +19,7 @@ namespace Sample1
 
 	class ObjectTitle;
 
-	class EntityManager
+	class EntityUnit
 	{
 	protected:
 		String name;
@@ -31,10 +31,10 @@ namespace Sample1
 		ObjectTitle *objectTitle;
 
 	public:
-		EntityManager(const String &name, const Strategix::MapCoord &mapCoord);
-		virtual ~EntityManager();
+		EntityUnit(const String &name, const Strategix::MapCoord &mapCoord);
+		virtual ~EntityUnit();
 	};
 }
 
-#endif	/* _ENTITYMANAGER_H */
+#endif	/* _ENTITYUNIT_H */
 

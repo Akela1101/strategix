@@ -1,5 +1,5 @@
 /* 
- * File:   LabelManager.cpp
+ * File:   LabelUnit.cpp
  * Author: Akela1101
  * 
  * Created on 23 Апрель 2010 г., 11:49
@@ -15,7 +15,7 @@
 
 #include <sstream>
 
-#include "LabelManager.h"
+#include "LabelUnit.h"
 
 
 namespace Sample1
@@ -23,9 +23,9 @@ namespace Sample1
 	using namespace Ogre;
 	using namespace std;
 
-LabelManager::LabelManager(const Strategix::MapCoord &mapCoord, const String &title)
+LabelUnit::LabelUnit(const Strategix::MapCoord &mapCoord, const String &title)
 	:
-	EntityManager("", mapCoord)
+	EntityUnit("", mapCoord)
 {
 	this->mapCoord = mapCoord;
 
@@ -59,7 +59,7 @@ LabelManager::LabelManager(const Strategix::MapCoord &mapCoord, const String &ti
 	objectTitle = new ObjectTitle(titleName.str().c_str(), entity, camera, title, "Calibri");
 }
 
-LabelManager::~LabelManager()
+LabelUnit::~LabelUnit()
 {
 	delete objectTitle;
 	node->detachObject(entity);
@@ -67,17 +67,17 @@ LabelManager::~LabelManager()
 	sceneManager->destroySceneNode(node);
 }
 
-void LabelManager::Update()
+void LabelUnit::Update()
 {
 	objectTitle->update();
 }
 
-void LabelManager::SetColor(const ColourValue& color)
+void LabelUnit::SetColor(const ColourValue& color)
 {
 	objectTitle->setColor(color);
 }
 
-void LabelManager::Show(bool isShow)
+void LabelUnit::Show(bool isShow)
 {
 	objectTitle->show(isShow);
 }

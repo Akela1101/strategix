@@ -19,7 +19,8 @@ namespace Strategix
 {
 	using namespace std;
 
-	class Enti;
+	template<class Unit> class Enti;
+
 	class TechTree;
 
 	class Player
@@ -31,7 +32,8 @@ namespace Strategix
 
 		map<string, ResType> resources;
 		sh_p<TechTree> techTree; // local copy of race tree
-		list<Enti> entis;
+
+		//list<sh_p<Enti > > entis;
 
 	public:
 		Player(string name, PlayerType playerType, int playerNumber, string raceName);

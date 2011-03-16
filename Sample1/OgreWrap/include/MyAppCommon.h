@@ -21,11 +21,7 @@ namespace Sample1
 		MOV_MASK = 1 << 0  // For created inside moving manager
 	};
 
-	class Mediator;
-	extern Mediator *mediator;
-
 	extern Ogre::SceneManager *sceneManager;
-
 	extern const float tile_length; // Lenght of tile's side
 }
 

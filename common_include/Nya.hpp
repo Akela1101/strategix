@@ -2,7 +2,9 @@
  * File:   Nya.hpp
  * Author: Akela1101
  *
- * Created on 11 Сентябрь 2010 г., 19:34
+ * 11.09.2010
+ *
+ * v.1.0
  */
 
 #ifndef _NYA_HPP

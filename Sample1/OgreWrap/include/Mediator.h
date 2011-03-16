@@ -5,8 +5,8 @@
  * Created on 13 Январь 2011 г., 21:23
  */
 
-#ifndef _MYMANAGER_H
-#define	_MYMANAGER_H
+#ifndef _MYUNIT_H
+#define	_MYUNIT_H
 
 #include "OgreFrameListener.h"
 
@@ -17,30 +17,31 @@
 
 namespace Strategix
 {
-	class Game;
+	class Kernel;
 }
 
 namespace Sample1
 {
 	using namespace std;
+	using namespace Strategix;
 
-	class EntityManager;
+	class EntityUnit;
 
 	class Mediator : public FrameListener
 	{
-		Strategix::Game *game; // link to current game
+		sh_p<Kernel> kernel;
 
 	protected:
-		std::list<sh_p<EntityManager> > entityManagers;
+		std::list<sh_p<EntityUnit> > entityUnits;
 
 	public:
-		Mediator();
+		Mediator(sh_p<Kernel> kernel);
 		virtual ~Mediator();
 		virtual bool frameRenderingQueued(const FrameEvent &event);
 
-		void AddEntityManager(sh_p<EntityManager> entityManager);
+		void AddEntityUnit(sh_p<EntityUnit> entityUnit);
 	};
 }
 
-#endif	/* _MYMANAGER_H */
+#endif	/* _MYUNIT_H */
 

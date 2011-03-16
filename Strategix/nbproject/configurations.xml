@@ -5,9 +5,9 @@
       <itemPath>include/Enti.h</itemPath>
       <itemPath>include/EntiInfo.h</itemPath>
       <itemPath>include/Exception.h</itemPath>
-      <itemPath>include/Game.h</itemPath>
       <itemPath>include/GameStructs.h</itemPath>
       <itemPath>include/Kernel.h</itemPath>
+      <itemPath>include/KernelBase.h</itemPath>
       <itemPath>include/Log.h</itemPath>
       <itemPath>include/Map.h</itemPath>
       <itemPath>include/MapSAstar.h</itemPath>
@@ -21,8 +21,8 @@
     <logicalFolder name="src" displayName="src" projectFiles="true">
       <itemPath>src/Enti.cpp</itemPath>
       <itemPath>src/EntiInfo.cpp</itemPath>
-      <itemPath>src/Game.cpp</itemPath>
       <itemPath>src/Kernel.cpp</itemPath>
+      <itemPath>src/KernelBase.cpp</itemPath>
       <itemPath>src/Log.cpp</itemPath>
       <itemPath>src/Map.cpp</itemPath>
       <itemPath>src/MapSAstar.cpp</itemPath>

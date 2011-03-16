@@ -8,10 +8,10 @@
 #include "MyFrameListener.h"
 #include "MapTexture.h"
 #include "Mediator.h"
-#include "MovingManager.h"
+#include "MovingUnit.h"
 #include "MyAppCommon.h"
 
-#include "Game.h"
+#include "Kernel.h"
 #include "Map.h"
 
 #include <string>
@@ -26,18 +26,15 @@ namespace Sample1
 
 	// GLOBALS
 	const float tile_length = 10.0f; // Lenght of tile's side
-	SceneManager *sceneManager; // link to Root::SceneManager
-	sh_p<Mediator> shpMediator;
-	Mediator *mediator; // link to shpMediator
+	SceneManager *sceneManager; // link to Root::SceneManager	
 
 
 //==============================================================================
-MyApp::MyApp()
+MyApp::MyApp(sh_p<Kernel> kernel)
 	:
-	mFrameListener(0),
-	mRoot(0),
 	mResourcePath("OgreWrap/"),
-	mConfigPath("OgreWrap/")
+	mConfigPath("OgreWrap/"),
+	kernel(kernel)
 {
 #ifdef USE_RTSHADER_SYSTEM
 	mShaderGenerator = NULL;
@@ -47,8 +44,6 @@ MyApp::MyApp()
 
 MyApp::~MyApp()
 {
-	if( mFrameListener )
-		delete mFrameListener;
 	if( mRoot )
 		OGRE_DELETE mRoot;
 
@@ -140,13 +135,7 @@ void MyApp::setupResources()
 		{
 			typeName = i->first;
 			archName = i->second;
-#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE || OGRE_PLATFORM == OGRE_PLATFORM_IPHONE
-			// OS X does not set the working directory relative to the app,
-			// In order to make things portable on OS X we need to provide
-			// the loading with it's own bundle path location
-			if( !StringUtil::startsWith(archName, "/", false) ) // only adjust relative dirs
-				archName = String(macBundlePath() + "/" + archName);
-#endif
+
 			ResourceGroupManager::getSingleton().addResourceLocation(
 					archName, typeName, secName);
 
@@ -220,21 +209,20 @@ void MyApp::createScene()
 	CreateStaticTerrain();
 
 	// Class, keeping all the gameplay!
-	mediator = new Mediator();
-	shpMediator.reset(mediator);
-	mRoot->addFrameListener(mediator);
+	mediator.reset(new Mediator(kernel));
+	mRoot->addFrameListener(mediator.get());
 }
 
 void MyApp::destroyScene()
 {
-	shpMediator.reset();
+	mediator.reset();
 }
 
 void MyApp::createFrameListener()
 {
-	mFrameListener = new MyFrameListener(mWindow, mCamera);
-	mFrameListener->showDebugOverlay(true);
-	mRoot->addFrameListener(mFrameListener);
+	frameListener.reset(new MyFrameListener(mWindow, mCamera));
+	frameListener->showDebugOverlay(true);
+	mRoot->addFrameListener(frameListener.get());
 }
 
 // Adding tile to map in tile's coordinates coord{x,y}
@@ -265,7 +253,7 @@ void MyApp::AddTileToTerrainMesh(ManualObject &mo, const Vector2 &coord, const F
 void MyApp::CreateStaticTerrain()
 {
 	using Strategix::Map;
-	const Map &gameMap = Strategix::Game::GS().GetMap();
+	const Map &gameMap = kernel->GetMap();
 
 	MapTexture map_texture("Maps/terrains.def"); // WTF ?
 
