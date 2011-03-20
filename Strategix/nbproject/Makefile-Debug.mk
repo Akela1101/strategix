@@ -35,14 +35,15 @@ OBJECTDIR=build/${CND_CONF}/${CND_PLATFORM}
 OBJECTFILES= \
 	${OBJECTDIR}/src/TechTreesBuilderFromXml.o \
 	${OBJECTDIR}/src/Kernel.o \
-	${OBJECTDIR}/src/MapSAstar.o \
 	${OBJECTDIR}/src/EntiInfo.o \
+	${OBJECTDIR}/src/Unit.o \
 	${OBJECTDIR}/src/Player.o \
 	${OBJECTDIR}/src/Map.o \
 	${OBJECTDIR}/src/TechTree.o \
 	${OBJECTDIR}/src/Log.o \
 	${OBJECTDIR}/src/Enti.o \
-	${OBJECTDIR}/src/KernelBase.o
+	${OBJECTDIR}/src/KernelBase.o \
+	${OBJECTDIR}/src/Mediator.o
 
 
 # C Compiler Flags
@@ -81,15 +82,15 @@ ${OBJECTDIR}/src/Kernel.o: src/Kernel.cpp
 	${RM} $@.d
 	$(COMPILE.cc) -g -Iinclude -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Kernel.o src/Kernel.cpp
 
-${OBJECTDIR}/src/MapSAstar.o: src/MapSAstar.cpp 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} $@.d
-	$(COMPILE.cc) -g -Iinclude -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/MapSAstar.o src/MapSAstar.cpp
-
 ${OBJECTDIR}/src/EntiInfo.o: src/EntiInfo.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.cc) -g -Iinclude -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/EntiInfo.o src/EntiInfo.cpp
+
+${OBJECTDIR}/src/Unit.o: src/Unit.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -g -Iinclude -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Unit.o src/Unit.cpp
 
 ${OBJECTDIR}/src/Player.o: src/Player.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
@@ -120,6 +121,11 @@ ${OBJECTDIR}/src/KernelBase.o: src/KernelBase.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.cc) -g -Iinclude -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/KernelBase.o src/KernelBase.cpp
+
+${OBJECTDIR}/src/Mediator.o: src/Mediator.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -g -Iinclude -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Mediator.o src/Mediator.cpp
 
 # Subprojects
 .build-subprojects:

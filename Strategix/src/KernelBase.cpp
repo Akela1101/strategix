@@ -13,10 +13,11 @@
 #include "Nya.hpp"
 #include "KernelBase.h"
 
-using namespace std;
-using namespace boost;
-using namespace Strategix;
-namespace fs = boost::filesystem;
+namespace Strategix
+{
+	using namespace std;
+	using namespace boost;
+	namespace fs = boost::filesystem;
 
 
 KernelBase::KernelBase()
@@ -56,4 +57,6 @@ sh_p<vector<string> > KernelBase::GetRaceNames()
 		raceNames->push_back(tt_pair.second->raceName);
 	}
 	return raceNames;
+}
+
 }

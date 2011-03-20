@@ -16,12 +16,13 @@
 
 #include "Map.h"
 
-using namespace Strategix;
-using namespace std;
 
+namespace Strategix
+{
+	using namespace std;
 
-// static
-Map::TerrainTypes Map::terrains;
+	// static
+	Map::TerrainTypes Map::terrains;
 
 
 bool Map::LoadTerrains()
@@ -249,4 +250,6 @@ deque<MapCoord> *Map::BuildWay_Debug(const MapCoord &from, const MapCoord &till,
 	}
 
 	return way;
+}
+
 }

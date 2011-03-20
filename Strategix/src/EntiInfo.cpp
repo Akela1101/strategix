@@ -7,10 +7,11 @@
 
 #include "EntiInfo.h"
 
-using namespace Strategix;
-
+namespace Strategix
+{
 
 EntiInfo::~EntiInfo()
 {
 }
 
+}

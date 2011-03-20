@@ -1,32 +1,47 @@
 /* 
- * File:   MediatorFrameListener.cpp
+ * File:   LabelsHolder.cpp
  * Author: Akela1101
  * 
  * Created on 13 Март 2011 г., 17:58
  */
 
-#include "LabelUnit.h"
+#include "LabelOObject.h"
 #include "MyAppCommon.h"
 
 #include "Map.h"
 #include "Kernel.h"
 
-#include "MediatorFrameListener.h"
+#include <Ogre.h>
+
+#include "LabelsHolder.h"
 
 
 namespace Sample1
 {
+	static char labelsPointMeshName[] = "LabelsPointMesh";
 
-MediatorFrameListener::MediatorFrameListener()
+LabelsHolder::LabelsHolder()
 {
+	// Creating point mesh for all labels to cling to
+	static bool isNoMesh = true;
+	if( isNoMesh )
+	{
+		ManualObject mo("TilePoint");
+		mo.begin("BaseWhiteNoLighting", RenderOperation::OT_POINT_LIST);
+		mo.position(0, 0, 0);
+		mo.end();
+		mo.convertToMesh(labelsPointMeshName);
+
+		isNoMesh = false;
+	}
 }
 
-MediatorFrameListener::~MediatorFrameListener()
+LabelsHolder::~LabelsHolder()
 {
 }
 
 // Labels on every cell of Map, showing retard of terrain.
-void MediatorFrameListener::CreateLabels()
+void LabelsHolder::CreateLabels()
 {
 //	const Strategix::Map &map = Strategix::kernel->GetMap();
 //	const int width = map.GetWidth();
@@ -40,7 +55,8 @@ void MediatorFrameListener::CreateLabels()
 //		{
 //			std::stringstream title;
 //			title << "   " << map(x, z).retard;
-//			sh_p<LabelUnit> labelUnit(new LabelUnit(Strategix::MapCoord(x, z), title.str().c_str()));
+//			sh_p<LabelOObject> labelUnit(new LabelOObject(
+//				labelsPointMeshName, title.str().c_str(), Strategix::MapCoord(x, z)));
 //
 //			labelUnit->SetColor(ColourValue(1.0, 0.4, 0.4, 1.0));
 //
@@ -49,11 +65,11 @@ void MediatorFrameListener::CreateLabels()
 //	}
 }
 
-void MediatorFrameListener::ShowLabels(bool isShow)
+void LabelsHolder::ShowLabels(bool isShow)
 {
 	for( LabelVector::iterator it = labelVector.begin(); it != labelVector.end(); ++it )
 	{
-		(*it)->Show(isShow);
+		(*it)->objectTitle->show(isShow);
 	}
 }
 

@@ -8,21 +8,23 @@
 #ifndef _MAPTEXTURE_H
 #define	_MAPTEXTURE_H
 
-#include <Ogre.h>
+#include <OgrePrerequisites.h>
+#include <OgreCommon.h>
+
 #include <map>
 #include <string>
+
 
 namespace Sample1
 {
 	using namespace std;
-	using std::map;
 	using namespace Ogre;
 
 	struct MapTexture
 	{
 		string name; // Texture name
 		short divs; // Number of divisions of picture's square
-		map<string, short> positions; // Map[terrain name, position of terrain on picture]
+		std::map<string, short> positions; // Map[terrain name, position of terrain on picture]
 
 		MapTexture(const char fileName[]);
 

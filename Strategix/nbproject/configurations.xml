@@ -1,18 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configurationDescriptor version="69">
   <logicalFolder name="root" displayName="root" projectFiles="true">
+    <logicalFolder name="f1" displayName="CallBack" projectFiles="true">
+      <logicalFolder name="f1" displayName="include" projectFiles="true">
+        <itemPath>include/Mediator.h</itemPath>
+        <itemPath>include/Unit.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f2" displayName="src" projectFiles="true">
+        <itemPath>src/Mediator.cpp</itemPath>
+        <itemPath>src/Unit.cpp</itemPath>
+      </logicalFolder>
+    </logicalFolder>
     <logicalFolder name="include" displayName="include" projectFiles="true">
+      <itemPath>include/CoordStructs.h</itemPath>
       <itemPath>include/Enti.h</itemPath>
       <itemPath>include/EntiInfo.h</itemPath>
-      <itemPath>include/Exception.h</itemPath>
       <itemPath>include/GameStructs.h</itemPath>
       <itemPath>include/Kernel.h</itemPath>
       <itemPath>include/KernelBase.h</itemPath>
       <itemPath>include/Log.h</itemPath>
       <itemPath>include/Map.h</itemPath>
-      <itemPath>include/MapSAstar.h</itemPath>
       <itemPath>../common_include/Nya.hpp</itemPath>
       <itemPath>include/Player.h</itemPath>
+      <itemPath>include/StrategixError.h</itemPath>
       <itemPath>include/StrategixSingleton.h</itemPath>
       <itemPath>include/TechTree.h</itemPath>
       <itemPath>include/TechTreesBuilder.h</itemPath>
@@ -25,7 +35,6 @@
       <itemPath>src/KernelBase.cpp</itemPath>
       <itemPath>src/Log.cpp</itemPath>
       <itemPath>src/Map.cpp</itemPath>
-      <itemPath>src/MapSAstar.cpp</itemPath>
       <itemPath>src/Player.cpp</itemPath>
       <itemPath>src/TechTree.cpp</itemPath>
       <itemPath>src/TechTreesBuilderFromXml.cpp</itemPath>

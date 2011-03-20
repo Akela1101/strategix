@@ -8,13 +8,15 @@
 #ifndef _MAP_H
 #define	_MAP_H
 
-#include "GameStructs.h"
-#include "Exception.h"
+#include "CoordStructs.h"
+#include "StrategixError.h"
 
 #include <string>
 #include <map>
 #include <deque>
 #include <list>
+#include <vector>
+
 
 namespace Strategix
 {

@@ -10,7 +10,7 @@
 
 #include "MyAppCommon.h"
 
-#include <Ogre.h>
+#include <OgrePrerequisites.h>
 #include <OIS/OIS.h>
 
 

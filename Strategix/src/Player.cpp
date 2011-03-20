@@ -5,15 +5,16 @@
  * Created on 14 Февраль 2010 г., 17:56
  */
 
+#include "Mediator.h"
 #include "KernelBase.h"
 #include "Enti.h"
 #include "TechTree.h"
-#include "StrategixSingleton.h"
 
 #include "Player.h"
 
-using namespace Strategix;
 
+namespace Strategix
+{
 
 Player::Player(string name, PlayerType playerType, int playerNumber, string raceName)
 	:
@@ -30,4 +31,13 @@ Player::~Player()
 
 void Player::Tick(const float seconds)
 {
+}
+
+void Player::AddEnti(sh_p<Enti> enti)
+{
+	entis.push_back(enti);
+	enti->player = this;
+	mediator->OnAddEnti(enti.get());
+}
+
 }

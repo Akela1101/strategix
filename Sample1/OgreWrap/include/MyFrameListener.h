@@ -23,7 +23,7 @@ namespace Sample1
 	using namespace std;
 
 	class MyMouseListener;
-	class MediatorFrameListener;
+	class LabelsHolder;
 
 	class MyFrameListener : public FrameListener, public WindowEventListener
 	{
@@ -62,7 +62,7 @@ namespace Sample1
 		//
 		RaySceneQuery *raySceneQuery;
 		sh_p<MyMouseListener> mouseListener;
-		sh_p<MediatorFrameListener> mediatorFrameListener;		
+		sh_p<LabelsHolder> labelsHolder;
 
 	public:
 		MyFrameListener(RenderWindow* mWindow, Camera* mCamera);

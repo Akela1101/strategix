@@ -10,8 +10,8 @@
 
 #include "Kernel.h"
 
-using namespace Strategix;
-
+namespace Strategix
+{
 
 Kernel::Kernel(const string mapName)
 {
@@ -29,4 +29,6 @@ void Kernel::Tick(const float seconds)
 	{
 		player->Tick(seconds);
 	}
+}
+
 }

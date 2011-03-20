@@ -8,8 +8,8 @@
 #ifndef _MYAPP_H
 #define	_MYAPP_H
 
-#include "Ogre.h"
-//#include "OgreConfigFile.h"
+#include <OgrePrerequisites.h>
+#include <OgreCommon.h>
 
 #include "Nya.hpp"
 
@@ -48,6 +48,7 @@
 #  include "OgreStaticPluginLoader.h"
 #endif
 
+
 namespace Strategix
 {
 	class Kernel;
@@ -59,14 +60,14 @@ namespace Sample1
 	using namespace Strategix;
 
 	class MyFrameListener;
-	class Mediator;	
+	class MediatorFrameListener;
 
 	class MyApp
 	{
 	protected:
 		Root *mRoot;
 		sh_p<MyFrameListener> frameListener;
-		sh_p<Mediator> mediator;
+		sh_p<MediatorFrameListener> mediatorFrameListener;
 		sh_p<Kernel> kernel;
 
 	#ifdef OGRE_STATIC_LIB

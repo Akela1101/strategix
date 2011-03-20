@@ -1,31 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configurationDescriptor version="69">
   <logicalFolder name="root" displayName="root" projectFiles="true">
+    <logicalFolder name="f1" displayName="Extern" projectFiles="true">
+      <itemPath>OgreWrap/src/ObjectTitle.cpp</itemPath>
+      <itemPath>OgreWrap/include/ObjectTitle.h</itemPath>
+    </logicalFolder>
     <logicalFolder name="include" displayName="include" projectFiles="true">
-      <itemPath>OgreWrap/include/EntityUnit.h</itemPath>
-      <itemPath>OgreWrap/include/LabelUnit.h</itemPath>
+      <itemPath>OgreWrap/include/LabelOObject.h</itemPath>
+      <itemPath>include/LabelsHolder.h</itemPath>
       <itemPath>OgreWrap/include/MapTexture.h</itemPath>
-      <itemPath>OgreWrap/include/Mediator.h</itemPath>
-      <itemPath>include/MediatorFrameListener.h</itemPath>
-      <itemPath>OgreWrap/include/MovingUnit.h</itemPath>
+      <itemPath>OgreWrap/include/MediatorFrameListener.h</itemPath>
       <itemPath>OgreWrap/include/MyApp.h</itemPath>
       <itemPath>OgreWrap/include/MyAppCommon.h</itemPath>
       <itemPath>OgreWrap/include/MyFrameListener.h</itemPath>
       <itemPath>OgreWrap/include/MyMouseListener.h</itemPath>
-      <itemPath>OgreWrap/include/ObjectTitle.h</itemPath>
+      <itemPath>OgreWrap/include/OObject.h</itemPath>
+      <itemPath>OgreWrap/include/OObjectUnit.h</itemPath>
+      <itemPath>OgreWrap/include/TitledOObject.h</itemPath>
     </logicalFolder>
     <logicalFolder name="src" displayName="src" projectFiles="true">
-      <itemPath>OgreWrap/src/EntityUnit.cpp</itemPath>
-      <itemPath>OgreWrap/src/LabelUnit.cpp</itemPath>
+      <itemPath>OgreWrap/src/LabelOObject.cpp</itemPath>
+      <itemPath>src/LabelsHolder.cpp</itemPath>
       <itemPath>src/Main.cpp</itemPath>
       <itemPath>OgreWrap/src/MapTexture.cpp</itemPath>
-      <itemPath>OgreWrap/src/Mediator.cpp</itemPath>
-      <itemPath>src/MediatorFrameListener.cpp</itemPath>
-      <itemPath>OgreWrap/src/MovingUnit.cpp</itemPath>
+      <itemPath>OgreWrap/src/MediatorFrameListener.cpp</itemPath>
       <itemPath>OgreWrap/src/MyApp.cpp</itemPath>
       <itemPath>OgreWrap/src/MyFrameListener.cpp</itemPath>
       <itemPath>OgreWrap/src/MyMouseListener.cpp</itemPath>
-      <itemPath>OgreWrap/src/ObjectTitle.cpp</itemPath>
+      <itemPath>OgreWrap/src/OObject.cpp</itemPath>
+      <itemPath>OgreWrap/src/OObjectUnit.cpp</itemPath>
+      <itemPath>OgreWrap/src/TitledOObject.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"

@@ -7,12 +7,14 @@
 
 #include "MyFrameListener.h"
 #include "MapTexture.h"
-#include "Mediator.h"
-#include "MovingUnit.h"
+#include "MediatorFrameListener.h"
+#include "OObjectUnit.h"
 #include "MyAppCommon.h"
 
 #include "Kernel.h"
 #include "Map.h"
+
+#include <Ogre.h>
 
 #include <string>
 
@@ -209,13 +211,13 @@ void MyApp::createScene()
 	CreateStaticTerrain();
 
 	// Class, keeping all the gameplay!
-	mediator.reset(new Mediator(kernel));
-	mRoot->addFrameListener(mediator.get());
+	mediatorFrameListener.reset(new MediatorFrameListener(kernel));
+	mRoot->addFrameListener(mediatorFrameListener.get());
 }
 
 void MyApp::destroyScene()
 {
-	mediator.reset();
+	mediatorFrameListener.reset();
 }
 
 void MyApp::createFrameListener()

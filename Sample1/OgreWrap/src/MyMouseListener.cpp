@@ -5,7 +5,9 @@
  * Created on 15 Апрель 2010 г., 16:51
  */
 
-#include "MovingUnit.h"
+#include "OObjectUnit.h"
+
+#include <Ogre.h>
 
 #include "Nya.hpp"
 #include "MyMouseListener.h"
@@ -68,7 +70,7 @@ bool MyMouseListener::mousePressed(const OIS::MouseEvent &mouse_event, OIS::Mous
 		currEntity = 0;
 		foreach( RaySceneQueryResultEntry entry, result )
 		{
-			// If movable and from MovingUnit
+			// If movable and from OObjectUnit
 			if( entry.movable && entry.movable->getQueryFlags() & MOV_MASK )
 			{
 				// Select the nearest
@@ -100,7 +102,7 @@ bool MyMouseListener::mousePressed(const OIS::MouseEvent &mouse_event, OIS::Mous
 			Real dist = mouseRay.intersects(terrainPlane).second;
 			Vector3 intersectPoint = mouseRay.getPoint(dist);
 
-			MovingUnit *entityUnit = any_cast<MovingUnit*>(currEntity->getUserAny());
+			OObjectUnit *entityUnit = any_cast<OObjectUnit*>(currEntity->getUserAny());
 			//entityUnit->AddWayTo_Debug(itr->worldFragment->singleIntersection);
 			entityUnit->AddWayTo(intersectPoint);
 		}

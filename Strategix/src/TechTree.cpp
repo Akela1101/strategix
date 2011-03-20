@@ -6,13 +6,15 @@
  */
 
 #include "EntiInfo.h"
-#include "Exception.h"
+#include "StrategixError.h"
 
 #include "TechTree.h"
 
-using namespace std;
-using namespace boost;
-using namespace Strategix;
+
+namespace Strategix
+{
+	using namespace std;
+	using namespace boost;
 
 
 TechTree::TechTree(const string &raceName)
@@ -54,4 +56,6 @@ void TechTree::AddNode(const sh_p<EntiInfo> &entityInfo)
 	pair<TechMapType::iterator, bool> retPair = techMap.insert(pairEl);
 	if( retPair.second == false )
 		STRATEGIX_ERROR( string("More than one EntiInfo with name: ") + entityInfo->name );
+}
+
 }

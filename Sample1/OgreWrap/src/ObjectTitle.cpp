@@ -1,21 +1,40 @@
 
-// by some good guy who I don't really know...
+// by some unknown good guy...
+// with little additions from me
 
+#include "MyAppCommon.h"
+
+#include <Ogre.h>
+#include <OgreFontManager.h>
+
+#include <sstream>
+#include <string>
 
 #include "ObjectTitle.h"
-#include <OgreFontManager.h>
 
 
 namespace Sample1
 {
 	using namespace Ogre;
 
-ObjectTitle::ObjectTitle(const String& name, MovableObject* object, Camera* camera, const String& title,
+ObjectTitle::ObjectTitle(MovableObject* object, const String& title,
 	const String& fontName, const ColourValue& color)
-	: object(object), camera(camera)
+	: object(object)
 {
 	OverlayManager *overlayManager = OverlayManager::getSingletonPtr();
 
+// !!!!!!!!!!!!!!!
+//
+	static int n = 1;
+	std::stringstream titleName;
+	titleName << "Title" << n++;
+	const std::string name = titleName.str();
+//
+	// sceneManager - local for this project :(
+	camera = sceneManager->getCamera("Camera");
+	if( !camera )
+		throw "No camera named Camera";
+//	
 	overlay = overlayManager->create(name + "_TitleOverlay");
 	container = (OverlayContainer*)overlayManager->createOverlayElement("Panel", name + "_TitleContainer");
 	overlay->add2D(container);

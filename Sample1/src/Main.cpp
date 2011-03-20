@@ -11,6 +11,8 @@
 #include "Kernel.h"
 #include "KernelBase.h"
 
+#include <OgreException.h>
+
 #include <boost/filesystem.hpp>
 
 #include "Nya.hpp"
@@ -90,21 +92,21 @@ int main(int argc, char *argv[])
 	// What is current path? Must be as in chdir.
 	cout << "Current dir: " << boost::filesystem::current_path() << endl;
 
-	//
-	cout << endl << "Maps: " << endl;
-	sh_p<std::vector<std::string> > mapNames = KernelBase::GS().GetMapNames();
-	foreach(std::string mapName, *mapNames)
-	{
-		cout << mapName << endl;
-	}
-
-	//
-	cout << endl << "Race names: " << endl;
-	sh_p<std::vector<std::string> > raceNames = KernelBase::GS().GetRaceNames();
-	foreach(std::string raceName, *raceNames)
-	{
-		cout << raceName << endl;
-	}
+//	//
+//	cout << endl << "Maps: " << endl;
+//	sh_p<std::vector<std::string> > mapNames = KernelBase::GS().GetMapNames();
+//	foreach(std::string mapName, *mapNames)
+//	{
+//		cout << mapName << endl;
+//	}
+//
+//	//
+//	cout << endl << "Race names: " << endl;
+//	sh_p<std::vector<std::string> > raceNames = KernelBase::GS().GetRaceNames();
+//	foreach(std::string raceName, *raceNames)
+//	{
+//		cout << raceName << endl;
+//	}
 
 	//cout << endl << KernelBase::GS().techTrees["Spher"]->techMap["Spher_Worker"]->file << endl;
 
@@ -120,7 +122,7 @@ int main(int argc, char *argv[])
 		{
 			myApp.go();
 		}
-		catch( Exception& e )
+		catch( Ogre::Exception& e )
 		{
 			cerr << endl << e.what() << endl;
 		}

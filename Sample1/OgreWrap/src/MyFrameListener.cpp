@@ -6,7 +6,7 @@
  */
 
 #include "MyMouseListener.h"
-#include "MediatorFrameListener.h"
+#include "LabelsHolder.h"
 #include "MyAppCommon.h"
 
 #include "OgreStringConverter.h"
@@ -39,7 +39,7 @@ MyFrameListener::MyFrameListener(RenderWindow* mWindow, Camera* mCamera)
 	mDebugOverlay(OverlayManager::getSingleton().getByName("Core/DebugOverlay")),
 	raySceneQuery(sceneManager->createRayQuery(Ray())),
 	mouseListener(new MyMouseListener(mCamera, raySceneQuery)),
-	mediatorFrameListener(new MediatorFrameListener())
+	labelsHolder(new LabelsHolder())
 {
 	LogManager::getSingletonPtr()->logMessage("*** Initializing OIS ***");
 	OIS::ParamList pl;
@@ -85,10 +85,10 @@ MyFrameListener::MyFrameListener(RenderWindow* mWindow, Camera* mCamera)
 
 	mMouse->setEventCallback(mouseListener.get());
 
-	Root::getSingleton().addFrameListener(mediatorFrameListener.get());
-
-	mediatorFrameListener->CreateLabels();
-	mediatorFrameListener->ShowLabels(false);
+//	Root::getSingleton().addFrameListener(labelsHolder.get());
+//
+//	labelsHolder->CreateLabels();
+//	labelsHolder->ShowLabels(false);
 }
 
 MyFrameListener::~MyFrameListener()
@@ -203,7 +203,7 @@ bool MyFrameListener::processUnbufferedKeyInput(const FrameEvent& evt)
 	if( mKeyboard->isKeyDown(OIS::KC_1) && mTimeUntilNextToggle <= 0 )
 	{
 		static bool isShowLabels;
-		mediatorFrameListener->ShowLabels(!isShowLabels);
+		labelsHolder->ShowLabels(!isShowLabels);
 
 		mTimeUntilNextToggle = 0.2;
 	}

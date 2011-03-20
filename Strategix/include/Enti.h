@@ -9,6 +9,7 @@
 #define	_ENTI_H
 
 #include "GameStructs.h"
+#include "CoordStructs.h"
 
 #include <map>
 #include <string>
@@ -20,8 +21,8 @@ namespace Strategix
 
 	class Player;
 	class EntiInfo;
+	class Unit;
 
-	template<class Unit>
 	class Enti
 	{
 	public:
@@ -31,20 +32,15 @@ namespace Strategix
 		map<string, Action> actions;
 		MapCoord mapCoord; // Change to realCoord!!!
 
-	private:
 		Unit *unit;
-		typedef void (Unit::*TickType)(float time);
-		TickType Tick;
 
 	public:
-		Enti(Player *player, const EntiInfo *ei, const MapCoord &mapCoord);
+		Enti(const EntiInfo *ei, const MapCoord &mapCoord);
 		virtual ~Enti();
 
 	private:
 		Enti(const Enti &_c);
 		Enti & operator =(const Enti &_c);
-		inline void init(const Enti &_c);
-
 	};
 }
 #endif	/* _ENTI_H */

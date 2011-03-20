@@ -5,8 +5,8 @@
  * Created on 10 Январь 2011 г., 10:09
  */
 
-#ifndef _GAME_H
-#define	_GAME_H
+#ifndef _KERNEL_H
+#define	_KERNEL_H
 
 #include <vector>
 
@@ -36,5 +36,5 @@ namespace Strategix
 	};
 }
 
-#endif	/* _GAME_H */
+#endif	/* _KERNEL_H */
 

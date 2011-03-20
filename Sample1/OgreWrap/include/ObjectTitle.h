@@ -5,7 +5,10 @@
 #ifndef _OBJECTTITLE_H
 #define	_OBJECTTITLE_H
 
-#include "Ogre.h"
+#include <OgrePrerequisites.h>
+#include <OgreVector2.h>
+#include <OgreColourValue.h>
+
 
 namespace Sample1
 {
@@ -23,14 +26,19 @@ namespace Sample1
 		bool isShow;
 
 	public:
-		ObjectTitle(const String& name, MovableObject* object, Camera* camera, const String& title,
+		ObjectTitle(MovableObject* object, const String& title,
 				const String& fontName, const ColourValue& color = ColourValue::White);
-		~ObjectTitle();
+		virtual ~ObjectTitle();
 
 		void setTitle(const String& title);
 		void setColor(const ColourValue& color);
 		void update();
 		void show(bool isShow);
+
+	private:
+		ObjectTitle(const ObjectTitle&);
+		ObjectTitle& operator=(const ObjectTitle&);
+
 
 	protected:
 		Vector2 getTextDimensions(String text);

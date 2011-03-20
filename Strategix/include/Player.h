@@ -19,13 +19,16 @@ namespace Strategix
 {
 	using namespace std;
 
-	template<class Unit> class Enti;
-
 	class TechTree;
+	class Enti;
+	class Mediator;
 
 	class Player
 	{
 	public:
+		Mediator *mediator; // Callback class
+
+		//
 		string name; // Name gived by user.
 		PlayerType playerType; // human, ai, net
 		const int playerNumber; // number of player on the map
@@ -33,13 +36,14 @@ namespace Strategix
 		map<string, ResType> resources;
 		sh_p<TechTree> techTree; // local copy of race tree
 
-		//list<sh_p<Enti > > entis;
+		list<sh_p<Enti> > entis;
 
 	public:
 		Player(string name, PlayerType playerType, int playerNumber, string raceName);
 		virtual ~Player();
 
 		void Tick(const float seconds);
+		void AddEnti(sh_p<Enti> enti);
 
 	private:
 		Player(const Player& orig);

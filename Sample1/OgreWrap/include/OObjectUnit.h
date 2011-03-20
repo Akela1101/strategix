@@ -1,15 +1,20 @@
 /* 
- * File:   MovingUnit.h
+ * File:   OObjectUnit.h
  * Author: Akela1101
  *
- * Created on 22 Апрель 2010 г., 21:10
+ * Created on 18 Март 2011 г., 15:58
  */
 
-#ifndef _MOVINGUNIT_H
-#define	_MOVINGUNIT_H
+#ifndef _OOBJECTUNIT_H
+#define	_OOBJECTUNIT_H
 
-#include "EntityUnit.h"
-#include <deque> // WHY ???????????????
+#include "OObject.h"
+
+#include "Unit.h"
+#include "CoordStructs.h"
+
+#include <OgrePrerequisites.h>
+#include <OgreVector3.h>
 
 
 namespace Sample1
@@ -17,29 +22,28 @@ namespace Sample1
 	using namespace Strategix;
 	using namespace Ogre;
 
-	class MovingUnit : public EntityUnit
+	class OObjectUnit : public Strategix::Unit, public OObject
 	{
 	protected:
 		Real distance; // The distance the object has left to travel
 		Vector3 direction; // The direction the object is moving
 		Vector3 destination; // The destination the object is moving towards
-		std::deque<MapCoord> *moveList; // The list of points we are moving on
-		Real moveSpeed; // The speed at which the object is moving
 
 	public:
-		MovingUnit(const String &name, const MapCoord &mapCoord);
-		virtual ~MovingUnit();
+		OObjectUnit(Enti *enti);
+		virtual ~OObjectUnit();
+
+		virtual void OnTick(float time);
 
 		void AddWayTo(Vector3 &pos); // Mouse pointer intersection with earth
 		void AddWayTo_Debug(Vector3 &pos);
 
-	protected:
-		void Tick(Real time);
+	protected:		
 		MapCoord GetMapCoord(const Vector3 &pos);
 		Vector3 GetDiscretePos(const MapCoord &mapCoord);
 		Vector3 GetDiscretePos(const Vector3 &pos);
 	};
 }
 
-#endif	/* _MOVINGUNIT_H */
+#endif	/* _OOBJECTUNIT_H */
 

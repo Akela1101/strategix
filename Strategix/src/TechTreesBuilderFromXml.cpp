@@ -7,7 +7,7 @@
 
 #include "EntiInfo.h"
 #include "TechTree.h"
-#include "Exception.h"
+#include "StrategixError.h"
 
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/xml_parser.hpp>
@@ -17,11 +17,13 @@
 #include "Nya.hpp"
 #include "TechTreesBuilderFromXml.h"
 
-using namespace std;
-using namespace boost;
-using namespace Strategix;
-namespace pt = boost::property_tree;
-namespace fs = boost::filesystem;
+
+namespace Strategix
+{
+	using namespace std;
+	using namespace boost;
+	namespace pt = boost::property_tree;
+	namespace fs = boost::filesystem;
 
 
 void TechTreesBuilderFromXml::Build(TechTreesType *pTechTrees)
@@ -114,4 +116,6 @@ void TechTreesBuilderFromXml::BuildEntity(sh_p<TechTree> techTree, const pt::ptr
 
 	// U can catch( ptree_error == ptree_bad_path || ptree_bad_data )
 	// in place of setting default value
+}
+
 }

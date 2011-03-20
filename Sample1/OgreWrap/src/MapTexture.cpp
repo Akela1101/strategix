@@ -5,8 +5,10 @@
  * Created on 4 Апрель 2010 г., 13:53
  */
 
-#include "MapTexture.h"
 #include <fstream>
+
+#include "MapTexture.h"
+
 
 namespace Sample1
 {

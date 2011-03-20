@@ -9,9 +9,9 @@
 
 #include "Log.h"
 
-using namespace Strategix;
-using namespace std;
-
+namespace Strategix
+{
+	using namespace std;
 
 Log::Log()
 {
@@ -26,3 +26,4 @@ void Log::Write(const char str[])
 	fout.close();
 }
 
+}

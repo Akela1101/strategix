@@ -9,7 +9,6 @@
 #define	_GAMESTRUCTS_H
 
 #include <map>
-#include <set>
 #include <string>
 #include <vector>
 
@@ -34,36 +33,7 @@ namespace Strategix
 		map<string, FeatureType> features;
 	};
 
-// **********
-
-	struct MapCoord
-	{
-		int x, y;
-
-		MapCoord() { x = 0; y = 0; }
-		MapCoord(int x, int y)
-		{
-			this->x = x;
-			this->y = y;
-		}
-
-		bool operator ==(const MapCoord &right) const
-		{
-			return x == right.x && y == right.y;
-		}
-
-		bool operator !=(const MapCoord &right) const
-		{
-			return x != right.x || y != right.y;
-		}
-
-		MapCoord operator +(const MapCoord &right) const
-		{
-			MapCoord ret(x + right.x, y + right.y);
-			return ret;
-		}
-	};
-
+// PlayerType
 	enum PlayerType
 	{
 		HUMAN,

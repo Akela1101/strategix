@@ -5,8 +5,8 @@
  * Created on 14 Март 2010 г., 0:09
  */
 
-#ifndef _EXCEPTION_H
-#define	_EXCEPTION_H
+#ifndef _STRATEGIXERROR_H
+#define	_STRATEGIXERROR_H
 
 #include <exception>
 #include <sstream>
@@ -51,5 +51,5 @@ namespace Strategix
 	#define STRATEGIX_ERROR(message) throw StrategixError(__FILE__, __LINE__, message)
 }
 
-#endif	/* _EXCEPTION_H */
+#endif	/* _STRATEGIXERROR_H */
 
