@@ -218,6 +218,7 @@ void MyApp::createScene()
 void MyApp::destroyScene()
 {
 	mediatorFrameListener.reset();
+	frameListener.reset();
 }
 
 void MyApp::createFrameListener()
