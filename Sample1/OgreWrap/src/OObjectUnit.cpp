@@ -6,7 +6,7 @@
  */
 
 #include "MyAppCommon.h"
-#include "LabelOObject.h"
+#include "OObjectLabel.h"
 
 #include "Enti.h"
 #include "EntiInfo.h"
@@ -29,118 +29,103 @@ namespace Sample1
 	using namespace Ogre;
 	using namespace std;
 
-	// Draw debug info
-		typedef sh_p<LabelOObject> ShpLabelUnit;
-		typedef std::vector<ShpLabelUnit> LabelVector;
+	// Draw debug info		
+		typedef std::vector<sh_p<OObjectLabel> > LabelVector;
 		static LabelVector labelVector;
 		//
 
 OObjectUnit::OObjectUnit(Enti *enti)
 	:
 	Unit(enti),
-	OObject(enti->ei->file),
-	distance(0.0f)
+	OObject(enti->ei->meshName),
+	animationState(0)
 {
+	// Check all animations for corresponding mesh
+
+	//
 	entity->setUserAny(Any(this)); // Link from Entity to itself
 	entity->setQueryFlags(MOV_MASK);
 	
-	const float scale = enti->ei->scale;
+	const float scale = enti->ei->meshScale;
 	node->setScale(scale, scale, scale);
-	node->setPosition(GetDiscretePos(enti->mapCoord));
-	destination = node->getPosition();
+	node->setPosition(enti->coord.x, 0, enti->coord.y);
 }
 
 OObjectUnit::~OObjectUnit()
 {	
 }
 
-void OObjectUnit::OnTick(float time)
+void OObjectUnit::OnTick(const float seconds)
 {
-//	foreach( ShpLabelUnit labelUnit, labelVector )
-//	{
-//		labelUnit->Update();
-//	}
-//
-//	// Moving
-//	if( distance <= 0.0f )
-//	{
-//		if( moveList->empty() ) // Standing
-//		{
-//			node->setPosition(destination);
-//
-//			try
-//			{
-//				if( animationState != entity->getAnimationState("Idle") )
-//				{
-//					animationState = entity->getAnimationState("Idle");
-//					animationState->setLoop(true);
-//					animationState->setEnabled(true);
-//				}
-//			}
-//			catch( ItemIdentityException )
-//			{
-//				cout << endl << "No default Idle action" << endl;
-//			}
-//		}
-//		else // Moving next position
-//		{
-//			try
-//			{
-//				if( animationState != entity->getAnimationState("Move") )
-//				{
-//					animationState = entity->getAnimationState("Move");
-//					animationState->setLoop(true);
-//					animationState->setEnabled(true);
-//				}
-//			}
-//			catch( ItemIdentityException )
-//			{
-//				cout << endl << "No default Move action" << endl;
-//			}
-//
-//			mapCoord = moveList->front(); // Setting current position
-//			destination = GetDiscretePos(mapCoord); // Setting 3D coordinates
-//			moveList->pop_front();
-//
-//			direction = destination - node->getPosition();
-//			distance = direction.normalise();
-//
-//			Vector3 src = node->getOrientation() * Vector3::UNIT_X;
-//			if( (1.0f + src.dotProduct(direction)) < 0.01f )
-//			{
-//				node->yaw(Degree(180));
-//			}
-//			else
-//			{
-//				Quaternion quat = src.getRotationTo(Vector3(direction.x, 0, direction.z));
-//				node->rotate(quat);
-//			}
-//		}
-//
-//		// animationState->addTime(time);
-//	}
-//	else // Moving if( distance > 0.0f )
-//	{
-//		Real moving = moveSpeed * time;
-//		distance -= moving;
-//
-//		// @#~ Might be troubles, if distance become much less than 0!!!!
-//
-//		node->translate(Vector3(direction.x, 0, direction.z) * moving);
-//
-//		animationState->addTime(moving / 10);
-//	}
+	foreach( sh_p<OObjectLabel> labelUnit, labelVector )
+	{
+		labelUnit->objectTitle->update();
+	}
+
+	if( animationState )
+	{
+		animationState->addTime(seconds);
+	}
 }
 
-void OObjectUnit::AddWayTo(Vector3 &pos)
+void OObjectUnit::OnMoveStart()
 {
-	// delete moveList;
-	// !!!!!!!!!!!!!!!!
-	// moveList = kernel->GetMap().BuildWay(mapCoord, GetMapCoord(pos));
+	try
+	{
+		AnimationState *newAnimationState = entity->getAnimationState("Move");
+		if( animationState != newAnimationState )
+		{
+			animationState = newAnimationState;
+			animationState->setLoop(true);
+			animationState->setEnabled(true);
+		}
+	}
+	catch( ItemIdentityException )
+	{
+		cout << endl << "Warning: No default Move action" << endl;
+	}
 }
 
-void OObjectUnit::AddWayTo_Debug(Vector3 &pos)
+void OObjectUnit::OnMove(const RealCoord newCoord)
 {
+	const Vector3 newPosition = Vector3(newCoord.x, 0, newCoord.y);
+	const Vector3 direction = newPosition - node->getPosition();
+
+	// Rotate
+	const Vector3 source = node->getOrientation() * Vector3::UNIT_X;
+	if( (1.0 + source.dotProduct(direction)) < 0.01 )
+	{
+		node->yaw(Degree(180)); // Evading strange rotations
+	}
+	else
+	{
+		Quaternion quat = source.getRotationTo(direction);
+		node->rotate(quat);
+	}
+	// Move
+	node->setPosition(newPosition);
+}
+
+void OObjectUnit::OnMoveStop()
+{
+	try
+	{
+		AnimationState *newAnimationState = entity->getAnimationState("Idle");
+		if( animationState != newAnimationState )
+		{
+			animationState = newAnimationState;
+			animationState->setLoop(true);
+			animationState->setEnabled(true);
+		}
+	}
+	catch( ItemIdentityException )
+	{
+		cout << endl << "Warning: No default Idle action" << endl;
+	}
+}
+
+//void OObjectUnit::AddWayTo_Debug(Vector3 &pos)
+//{
 //	static MapCoord oldMapCoord = MapCoord(-1, -1);
 //	MapCoord newMapCoord = GetMapCoord(pos);
 //
@@ -156,7 +141,7 @@ void OObjectUnit::AddWayTo_Debug(Vector3 &pos)
 //		CellList *p_closed = 0;
 //
 //		// !!!!!!!!!!!!!!!
-//		// saved_moveList =  kernel->GetMap().BuildWay_Debug(mapCoord, newMapCoord, p_closed);
+//		// saved_moveList =  kernel->GetMap().FindPath_Debug(mapCoord, newMapCoord, p_closed);
 //
 //		//
 //		labelVector.clear();
@@ -166,7 +151,7 @@ void OObjectUnit::AddWayTo_Debug(Vector3 &pos)
 //		{
 //			std::stringstream title;
 //			title << "\n" << (*at)->G << " + " << (*at)->H << "\n = " << (*at)->F ;
-//			ShpLabelUnit labelUnit(new LabelOObject((*at)->mc, title.str().c_str()));
+//			sh_p<OObjectLabel> labelUnit(new OObjectLabel((*at)->mc, title.str().c_str()));
 //
 //			if( saved_moveList->end() != find(saved_moveList->begin(), saved_moveList->end(), (*at)->mc) )
 //				labelUnit->SetColor(ColourValue(1.0, 1.0, 1.0, 1.0));
@@ -184,21 +169,6 @@ void OObjectUnit::AddWayTo_Debug(Vector3 &pos)
 //			delete moveList;
 //		moveList = saved_moveList;
 //	}
-}
-
-inline  MapCoord OObjectUnit::GetMapCoord(const Vector3 &pos)
-{
-	return  MapCoord(pos.x / tile_length, pos.z / tile_length);
-}
-
-inline Vector3 OObjectUnit::GetDiscretePos(const  MapCoord &mapCoord)
-{
-	return Vector3((mapCoord.x + 0.5f) * tile_length, 0, (mapCoord.y + 0.5f) * tile_length);
-}
-
-inline Vector3 OObjectUnit::GetDiscretePos(const Vector3 &pos)
-{
-	return GetDiscretePos(GetMapCoord(pos));
-}
+//}
 
 }

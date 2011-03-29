@@ -7,6 +7,9 @@
 
 #include "OObjectUnit.h"
 
+#include "Enti.h"
+#include "FeatureMove.h"
+
 #include <Ogre.h>
 
 #include "Nya.hpp"
@@ -102,9 +105,8 @@ bool MyMouseListener::mousePressed(const OIS::MouseEvent &mouse_event, OIS::Mous
 			Real dist = mouseRay.intersects(terrainPlane).second;
 			Vector3 intersectPoint = mouseRay.getPoint(dist);
 
-			OObjectUnit *entityUnit = any_cast<OObjectUnit*>(currEntity->getUserAny());
-			//entityUnit->AddWayTo_Debug(itr->worldFragment->singleIntersection);
-			entityUnit->AddWayTo(intersectPoint);
+			OObjectUnit *oObjectUnit = any_cast<OObjectUnit*>(currEntity->getUserAny());
+			oObjectUnit->enti->Move()(RealCoord(intersectPoint.x, intersectPoint.z));
 		}
 	}
 

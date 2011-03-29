@@ -11,32 +11,84 @@
 
 namespace Strategix
 {
-	struct MapCoord
+	template<typename T>
+	struct Coord
 	{
-		int x, y;
+		T x, y;
 
-		MapCoord() {}
+		Coord() {}		
+		Coord(const Coord &_c) : x(_c.x), y(_c.y) {}
+		Coord(const T x, const T y) : x(x), y(y) {}
 
-		MapCoord(int x, int y) : x(x), y(y)
+		template<typename Y>
+		operator Coord<Y>() const
 		{
+			return Coord<Y>(x, y); // Throw template error ???? how?
 		}
 
-		bool operator ==(const MapCoord &right) const
+		bool operator ==(const Coord &_r) const
 		{
-			return x == right.x && y == right.y;
+			return x == _r.x && y == _r.y;
 		}
 
-		bool operator !=(const MapCoord &right) const
+		bool operator !=(const Coord &_r) const
 		{
-			return x != right.x || y != right.y;
+			return x != _r.x || y != _r.y;
 		}
 
-		MapCoord operator +(const MapCoord &right) const
+		Coord operator +(const Coord &_r) const
+		{			
+			return Coord(x + _r.x, y + _r.y);
+		}
+
+		Coord operator -(const Coord &_r) const
+		{			
+			return Coord(x - _r.x, y - _r.y);
+		}
+
+		Coord& operator +=(const Coord &_r)
 		{
-			MapCoord ret(x + right.x, y + right.y);
-			return ret;
+			x += _r.x;
+			y += _r.y;
+			return this;
+		}
+
+		Coord& operator -=(const Coord &_r)
+		{
+			x -= _r.x;
+			y -= _r.y;
+			return this;
+		}
+
+		template<typename Y>
+		Coord operator *(const Y _v)
+		{
+			return Coord(x * _v, y * _v);
+		}
+
+		T Len() const
+		{
+			return x*x + y*y;
+		}
+
+		Coord Norm() const
+		{
+			T invLen = 1.0 / Len();
+			return Coord(x * invLen, y * invLen);
 		}
 	};
+
+	typedef Coord<int> MapCoord; // used in Maps
+	typedef Coord<float> RealCoord; // used in Enti and the game
+
+	template<>
+	template<>
+	MapCoord::operator RealCoord() const;
+
+	template<>
+	template<>
+	RealCoord::operator MapCoord() const;
+	
 }
 
 #endif	/* _COORDSTRUCTS_H */

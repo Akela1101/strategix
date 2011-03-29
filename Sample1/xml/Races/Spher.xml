@@ -14,7 +14,7 @@
       <provides>
         <name>Spher_Worker</name>
       </provides>
-      <file>Spher_Base.mesh</file>
+      <mesh>Spher_Base.mesh</mesh>
       <scale>1.0</scale>
       <actions>
         <action>
@@ -37,7 +37,7 @@
       <provides>
         <name>Spher_Base</name>
       </provides>
-      <file>Spher_Worker.mesh</file>
+      <mesh>Spher_Worker.mesh</mesh>
       <scale>1.0</scale>
       <actions>
         <action>

@@ -8,7 +8,7 @@
 #ifndef _PLAYER_H
 #define	_PLAYER_H
 
-#include "GameStructs.h"
+#include "StrategixCommon.h"
 
 #include <list>
 
@@ -22,6 +22,7 @@ namespace Strategix
 	class TechTree;
 	class Enti;
 	class Mediator;
+	class MapLocal;
 
 	class Player
 	{
@@ -33,10 +34,13 @@ namespace Strategix
 		PlayerType playerType; // human, ai, net
 		const int playerNumber; // number of player on the map
 
-		map<string, ResType> resources;
+		// Resources resources;
+		
 		sh_p<TechTree> techTree; // local copy of race tree
 
 		list<sh_p<Enti> > entis;
+		
+		sh_p<MapLocal> map;
 
 	public:
 		Player(string name, PlayerType playerType, int playerNumber, string raceName);

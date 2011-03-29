@@ -8,34 +8,38 @@
 #ifndef _ENTIINFO_H
 #define	_ENTIINFO_H
 
-#include "GameStructs.h"
+#include "StrategixCommon.h"
 
 #include <map>
 #include <string>
+#include <vector>
+
+#include "Nya.hpp"
 
 
 namespace Strategix
 {
 	using namespace std;
 
+	struct FeatureInfo;
+
 	struct EntiInfo
 	{
 	public:
 		string name;
-		string kind;
-		map<string, ResType> resources;
-		Params params; // {HP, ...}
-		Names depends; // vector<string>
-		Names provides; // vector<string>
+		map<string, sh_p<FeatureInfo> > featureInfos;
 
-		string file; // file name with mesh|config|...(put here the file you need)
-		float scale; // Scale of mesh|pictures
-		map<string, Action> actions;
+		// Constant values
+		string kind;
+		vector<string> depends; 
+		vector<string> provides;
+		string meshName; 
+		float meshScale; // Scale of mesh
+		
 
 		// Recreate this as to initialize in constructor ? @#~
 
-		// Add here Entity variables, then add some strings in TechTreesBuilder*.Build(),
-		// than use it as KernelBase::GS().techTrees[race]->techMap[entity]->your_variable
+		// Derive this class in real Application
 
 	public:
 		// ????????????????????????

@@ -70,13 +70,14 @@ void TechTreesBuilderFromXml::BuildEntity(sh_p<TechTree> techTree, const pt::ptr
 	entityInfo->name = entityPropTree.get<string>("name");
 	entityInfo->kind = entityPropTree.get<string>("kind");
 
-	foreach( const pt::ptree::value_type &v, entityPropTree.get_child("resources") )
-	{
-		const pt::ptree &resLeaf = v.second; // gold or something else
-		entityInfo->resources[v.first] = resLeaf.get_value<ResType>();
-	}
+//	foreach( const pt::ptree::value_type &v, entityPropTree.get_child("resources") )
+//	{
+//		const pt::ptree &resLeaf = v.second; // gold or something else
+//		entityInfo->resources[v.first] = resLeaf.get_value<ResType>();
+//	}
+//
+//	entityInfo->params.hp = entityPropTree.get<HpType>("params.hp");
 
-	entityInfo->params.hp = entityPropTree.get<HpType>("params.hp");
 /*
 	foreach( const pt::ptree::value_type &v, entityPropTree.get_child("depends", pt::ptree()) ) // Empty if no depends
 	{
@@ -90,27 +91,27 @@ void TechTreesBuilderFromXml::BuildEntity(sh_p<TechTree> techTree, const pt::ptr
 		entityInfo->provides.push_back( provideLeaf.get_value<string>() );
 	}
 */
-	entityInfo->file = entityPropTree.get<string>("file");
-	entityInfo->scale = entityPropTree.get<float>("scale");
+	entityInfo->meshName = entityPropTree.get<string>("mesh");
+	entityInfo->meshScale = entityPropTree.get<float>("scale");
 
-	foreach( const pt::ptree::value_type &v, entityPropTree.get_child("actions", pt::ptree()) ) // Empty if no actions
-	{
-		const pt::ptree &actionLeaf = v.second; // action
-		const string &actionName = actionLeaf.get<string>("name");
-		Action &action = entityInfo->actions[actionName]; // add new action to Info
-		
-		action.name = actionName;
-		try
-		{
-			const pt::ptree &derevo = actionLeaf.get_child("features");
-
-			foreach( const pt::ptree::value_type &v, derevo ) // Empty if no features
-			{
-				const pt::ptree &featureLeaf = v.second;
-				action.features[v.first] = featureLeaf.get_value<FeatureType>();
-			}
-		}catch(pt::ptree_error){}
-	}
+//	foreach( const pt::ptree::value_type &v, entityPropTree.get_child("actions", pt::ptree()) ) // Empty if no actions
+//	{
+//		const pt::ptree &actionLeaf = v.second; // action
+//		const string &actionName = actionLeaf.get<string>("name");
+//		Action &action = entityInfo->actions[actionName]; // add new action to Info
+//
+//		action.name = actionName;
+//		try
+//		{
+//			const pt::ptree &derevo = actionLeaf.get_child("features");
+//
+//			foreach( const pt::ptree::value_type &v, derevo ) // Empty if no features
+//			{
+//				const pt::ptree &featureLeaf = v.second;
+//				action.features[v.first] = featureLeaf.get_value<FeatureType>();
+//			}
+//		}catch(pt::ptree_error){}
+//	}
 	
 	techTree->AddNode(entityInfo);
 

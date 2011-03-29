@@ -5,11 +5,12 @@
  * Created on 13 Февраль 2010 г., 23:19
  */
 
-#ifndef _KERNEL_H
-#define	_KERNEL_H
+#ifndef _KERNELBASE_H
+#define	_KERNELBASE_H
 
 #include "TechTree.h"
 #include "StrategixSingleton.h"
+#include "StrategixCommon.h"
 
 #include <string>
 #include <vector>
@@ -31,8 +32,9 @@ namespace Strategix
 
 		sh_p<vector<string> > GetMapNames();
 		sh_p<vector<string> > GetRaceNames();
+		const float GetTileSize() { return tileSize; }
 	};
 }
 
-#endif	/* _KERNEL_H */
+#endif	/* _KERNELBASE_H */
 

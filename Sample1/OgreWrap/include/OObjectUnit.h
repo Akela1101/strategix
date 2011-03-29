@@ -16,32 +16,33 @@
 #include <OgrePrerequisites.h>
 #include <OgreVector3.h>
 
+#include <map>
+#include <string>
+
+#include "Nya.hpp"
+
 
 namespace Sample1
 {
-	using namespace Strategix;
+	using namespace std;
 	using namespace Ogre;
+	using namespace Strategix;	
 
 	class OObjectUnit : public Strategix::Unit, public OObject
 	{
 	protected:
-		Real distance; // The distance the object has left to travel
-		Vector3 direction; // The direction the object is moving
-		Vector3 destination; // The destination the object is moving towards
+		AnimationState *animationState;
+		std::map<string, sh_p<AnimationState> > animationStates;
 
 	public:
 		OObjectUnit(Enti *enti);
 		virtual ~OObjectUnit();
 
-		virtual void OnTick(float time);
+		virtual void OnTick(const float seconds);
+		virtual void OnMoveStart();
+		virtual void OnMove(const RealCoord newCoord);
+		virtual void OnMoveStop();
 
-		void AddWayTo(Vector3 &pos); // Mouse pointer intersection with earth
-		void AddWayTo_Debug(Vector3 &pos);
-
-	protected:		
-		MapCoord GetMapCoord(const Vector3 &pos);
-		Vector3 GetDiscretePos(const MapCoord &mapCoord);
-		Vector3 GetDiscretePos(const Vector3 &pos);
 	};
 }
 

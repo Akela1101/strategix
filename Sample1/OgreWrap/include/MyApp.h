@@ -99,8 +99,8 @@ namespace Sample1
 		virtual void createResourceListener();
 		virtual void loadResources();
 		virtual void createScene();
-		virtual void destroyScene();
 		virtual void createFrameListener();
+		virtual void destroyScene();		
 
 		void AddTileToTerrainMesh(ManualObject &mo, const Vector2 &coord, const FloatRect &tex_rect, int &offset);
 		void CreateStaticTerrain();

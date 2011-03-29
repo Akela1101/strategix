@@ -19,11 +19,11 @@ namespace Sample1
 {
 	using namespace Ogre;
 
-	class LabelOObject;
+	class OObjectLabel;
 
 	class LabelsHolder
 	{
-		typedef std::vector<sh_p<LabelOObject> > LabelVector;
+		typedef std::vector<sh_p<OObjectLabel> > LabelVector;
 		LabelVector labelVector;
 
 	public:

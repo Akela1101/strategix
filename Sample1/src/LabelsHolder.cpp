@@ -5,7 +5,7 @@
  * Created on 13 Март 2011 г., 17:58
  */
 
-#include "LabelOObject.h"
+#include "OObjectLabel.h"
 #include "MyAppCommon.h"
 
 #include "Map.h"
@@ -55,8 +55,8 @@ void LabelsHolder::CreateLabels()
 //		{
 //			std::stringstream title;
 //			title << "   " << map(x, z).retard;
-//			sh_p<LabelOObject> labelUnit(new LabelOObject(
-//				labelsPointMeshName, title.str().c_str(), Strategix::MapCoord(x, z)));
+//			sh_p<OObjectLabel> labelUnit(new OObjectLabel(
+//				labelsPointMeshName, title.str().c_str(), MapCoord(x, z)));
 //
 //			labelUnit->SetColor(ColourValue(1.0, 0.4, 0.4, 1.0));
 //

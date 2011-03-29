@@ -11,7 +11,7 @@
 #include "Enti.h"
 #include "Player.h"
 #include "Kernel.h"
-#include "Map.h"
+#include "MapFull.h"
 #include "TechTree.h"
 #include "StrategixError.h"
 
@@ -69,6 +69,7 @@ void MediatorFrameListener::OnAddEnti(Enti *enti)
 bool MediatorFrameListener::frameRenderingQueued(const FrameEvent &event)
 {
 	kernel->Tick(event.timeSinceLastFrame); // Time transmitting to Strategix
+	return true;
 }
 
 }

@@ -34,15 +34,22 @@ OBJECTDIR=build/${CND_CONF}/${CND_PLATFORM}
 # Object Files
 OBJECTFILES= \
 	${OBJECTDIR}/src/TechTreesBuilderFromXml.o \
+	${OBJECTDIR}/src/MapLocal.o \
 	${OBJECTDIR}/src/Kernel.o \
 	${OBJECTDIR}/src/EntiInfo.o \
 	${OBJECTDIR}/src/Unit.o \
+	${OBJECTDIR}/src/MapFull.o \
 	${OBJECTDIR}/src/Player.o \
+	${OBJECTDIR}/src/FeatureMove.o \
 	${OBJECTDIR}/src/Map.o \
+	${OBJECTDIR}/src/MapsPath.o \
+	${OBJECTDIR}/src/MapsPathsFinder.o \
 	${OBJECTDIR}/src/TechTree.o \
 	${OBJECTDIR}/src/Log.o \
 	${OBJECTDIR}/src/Enti.o \
 	${OBJECTDIR}/src/KernelBase.o \
+	${OBJECTDIR}/src/Feature.o \
+	${OBJECTDIR}/src/CoordStructs.o \
 	${OBJECTDIR}/src/Mediator.o
 
 
@@ -77,6 +84,11 @@ ${OBJECTDIR}/src/TechTreesBuilderFromXml.o: src/TechTreesBuilderFromXml.cpp
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -Iinclude -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/TechTreesBuilderFromXml.o src/TechTreesBuilderFromXml.cpp
 
+${OBJECTDIR}/src/MapLocal.o: src/MapLocal.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -Iinclude -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/MapLocal.o src/MapLocal.cpp
+
 ${OBJECTDIR}/src/Kernel.o: src/Kernel.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
@@ -92,15 +104,35 @@ ${OBJECTDIR}/src/Unit.o: src/Unit.cpp
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -Iinclude -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Unit.o src/Unit.cpp
 
+${OBJECTDIR}/src/MapFull.o: src/MapFull.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -Iinclude -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/MapFull.o src/MapFull.cpp
+
 ${OBJECTDIR}/src/Player.o: src/Player.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -Iinclude -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Player.o src/Player.cpp
 
+${OBJECTDIR}/src/FeatureMove.o: src/FeatureMove.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -Iinclude -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/FeatureMove.o src/FeatureMove.cpp
+
 ${OBJECTDIR}/src/Map.o: src/Map.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -Iinclude -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Map.o src/Map.cpp
+
+${OBJECTDIR}/src/MapsPath.o: src/MapsPath.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -Iinclude -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/MapsPath.o src/MapsPath.cpp
+
+${OBJECTDIR}/src/MapsPathsFinder.o: src/MapsPathsFinder.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -Iinclude -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/MapsPathsFinder.o src/MapsPathsFinder.cpp
 
 ${OBJECTDIR}/src/TechTree.o: src/TechTree.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
@@ -121,6 +153,16 @@ ${OBJECTDIR}/src/KernelBase.o: src/KernelBase.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -Iinclude -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/KernelBase.o src/KernelBase.cpp
+
+${OBJECTDIR}/src/Feature.o: src/Feature.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -Iinclude -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Feature.o src/Feature.cpp
+
+${OBJECTDIR}/src/CoordStructs.o: src/CoordStructs.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -Iinclude -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/CoordStructs.o src/CoordStructs.cpp
 
 ${OBJECTDIR}/src/Mediator.o: src/Mediator.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

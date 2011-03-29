@@ -5,7 +5,7 @@
  * Created on 10 Январь 2011 г., 10:09
  */
 
-#include "Map.h"
+#include "MapFull.h"
 #include "Player.h"
 
 #include "Kernel.h"
@@ -13,9 +13,9 @@
 namespace Strategix
 {
 
-Kernel::Kernel(const string mapName)
+Kernel::Kernel(const string &mapName)
 {
-	fullMap.reset(new Map(mapName));
+	mapFull.reset(new MapFull(mapName));
 }
 
 void Kernel::AddPlayer(sh_p<Player> player)

@@ -15,13 +15,19 @@
       <itemPath>include/CoordStructs.h</itemPath>
       <itemPath>include/Enti.h</itemPath>
       <itemPath>include/EntiInfo.h</itemPath>
-      <itemPath>include/GameStructs.h</itemPath>
+      <itemPath>include/Feature.h</itemPath>
+      <itemPath>include/FeatureMove.h</itemPath>
       <itemPath>include/Kernel.h</itemPath>
       <itemPath>include/KernelBase.h</itemPath>
       <itemPath>include/Log.h</itemPath>
       <itemPath>include/Map.h</itemPath>
+      <itemPath>include/MapFull.h</itemPath>
+      <itemPath>include/MapLocal.h</itemPath>
+      <itemPath>include/MapsPath.h</itemPath>
+      <itemPath>include/MapsPathsFinder.h</itemPath>
       <itemPath>../common_include/Nya.hpp</itemPath>
       <itemPath>include/Player.h</itemPath>
+      <itemPath>include/StrategixCommon.h</itemPath>
       <itemPath>include/StrategixError.h</itemPath>
       <itemPath>include/StrategixSingleton.h</itemPath>
       <itemPath>include/TechTree.h</itemPath>
@@ -29,12 +35,19 @@
       <itemPath>include/TechTreesBuilderFromXml.h</itemPath>
     </logicalFolder>
     <logicalFolder name="src" displayName="src" projectFiles="true">
+      <itemPath>src/CoordStructs.cpp</itemPath>
       <itemPath>src/Enti.cpp</itemPath>
       <itemPath>src/EntiInfo.cpp</itemPath>
+      <itemPath>src/Feature.cpp</itemPath>
+      <itemPath>src/FeatureMove.cpp</itemPath>
       <itemPath>src/Kernel.cpp</itemPath>
       <itemPath>src/KernelBase.cpp</itemPath>
       <itemPath>src/Log.cpp</itemPath>
       <itemPath>src/Map.cpp</itemPath>
+      <itemPath>src/MapFull.cpp</itemPath>
+      <itemPath>src/MapLocal.cpp</itemPath>
+      <itemPath>src/MapsPath.cpp</itemPath>
+      <itemPath>src/MapsPathsFinder.cpp</itemPath>
       <itemPath>src/Player.cpp</itemPath>
       <itemPath>src/TechTree.cpp</itemPath>
       <itemPath>src/TechTreesBuilderFromXml.cpp</itemPath>

@@ -12,7 +12,8 @@
 #include "MyAppCommon.h"
 
 #include "Kernel.h"
-#include "Map.h"
+#include "KernelBase.h"
+#include "MapFull.h"
 
 #include <Ogre.h>
 
@@ -26,11 +27,10 @@ namespace Sample1
 {
 	using namespace Ogre;
 
-	// GLOBALS
-	const float tile_length = 10.0f; // Lenght of tile's side
+	// GLOBALS	
 	SceneManager *sceneManager; // link to Root::SceneManager	
 
-
+	
 //==============================================================================
 MyApp::MyApp(sh_p<Kernel> kernel)
 	:
@@ -215,12 +215,6 @@ void MyApp::createScene()
 	mRoot->addFrameListener(mediatorFrameListener.get());
 }
 
-void MyApp::destroyScene()
-{
-	mediatorFrameListener.reset();
-	frameListener.reset();
-}
-
 void MyApp::createFrameListener()
 {
 	frameListener.reset(new MyFrameListener(mWindow, mCamera));
@@ -228,21 +222,31 @@ void MyApp::createFrameListener()
 	mRoot->addFrameListener(frameListener.get());
 }
 
+void MyApp::destroyScene()
+{
+	// Must use reset, not removeFrameListener!
+	mediatorFrameListener.reset();
+	frameListener.reset();
+}
+
 // Adding tile to map in tile's coordinates coord{x,y}
 // with part of texture given from rectangle.
 // Also it shifts offset of point number.
 void MyApp::AddTileToTerrainMesh(ManualObject &mo, const Vector2 &coord, const FloatRect &tex_rect, int &offset)
 {
-	mo.position(coord.x * tile_length, 0, (coord.y + 1) * tile_length);
+	// @#~ Move it to something common !!!
+	const float tileSize = Strategix::KernelBase::GS().GetTileSize();
+
+	mo.position(coord.x * tileSize, 0, (coord.y + 1) * tileSize);
 	mo.textureCoord(tex_rect.left, tex_rect.top);
 
-	mo.position((coord.x + 1) * tile_length, 0, (coord.y + 1) * tile_length);
+	mo.position((coord.x + 1) * tileSize, 0, (coord.y + 1) * tileSize);
 	mo.textureCoord(tex_rect.right, tex_rect.top);
 
-	mo.position(coord.x * tile_length, 0, coord.y * tile_length);
+	mo.position(coord.x * tileSize, 0, coord.y * tileSize);
 	mo.textureCoord(tex_rect.left, tex_rect.bottom);
 
-	mo.position((coord.x + 1) * tile_length, 0, coord.y * tile_length);
+	mo.position((coord.x + 1) * tileSize, 0, coord.y * tileSize);
 	mo.textureCoord(tex_rect.right, tex_rect.bottom);
 
 	// Clockwise culling
@@ -255,15 +259,18 @@ void MyApp::AddTileToTerrainMesh(ManualObject &mo, const Vector2 &coord, const F
 
 void MyApp::CreateStaticTerrain()
 {
-	using Strategix::Map;
-	const Map &gameMap = kernel->GetMap();
+	using namespace Strategix;
+	
+	const float tileSize = KernelBase::GS().GetTileSize();
+	
+	const MapFull &mapFull = kernel->GetMap();
 
 	MapTexture map_texture("Maps/terrains.def"); // WTF ?
 
 	// @#~ Must be done with drawing on texture of one Rectangular mesh!!!
 	ManualObject mo("TerrainObject");
-	const int width = gameMap.GetWidth();
-	const int length = gameMap.GetLength();
+	const int width = mapFull.GetWidth();
+	const int length = mapFull.GetLength();
 
 	mo.begin(map_texture.name, RenderOperation::OT_TRIANGLE_LIST);
 
@@ -273,9 +280,9 @@ void MyApp::CreateStaticTerrain()
 		for( int x = 0; x < width; ++x )
 		{
 			// Getting terrain type (x, z)
-			short terrType = gameMap(x, z).terrType;
+			short terrType = mapFull(x, z).terrType;
 			// Getting it's name
-			const string &tex_name = Map::GetTerrain(terrType).name;
+			const string &tex_name = mapFull.GetTerrain(terrType).name;
 			// Getting picture's part rectangle
 			const FloatRect rc = map_texture.GetTexRect(tex_name);
 			// Adding to (x, z) square with this texture
@@ -288,9 +295,9 @@ void MyApp::CreateStaticTerrain()
 
 	StaticGeometry *sg = sceneManager->createStaticGeometry("TerrainArea");
 
-	const float map_width = width * tile_length;
-	const float map_length = length * tile_length;
-	const float map_max_hight = tile_length * 10; // so about
+	const float map_width = width * tileSize;
+	const float map_length = length * tileSize;
+	const float map_max_hight = tileSize * 10; // so about
 
 	sg->setRegionDimensions(Vector3(map_width, map_max_hight, map_length));
 	sg->setOrigin(Vector3(0, 0, 0));

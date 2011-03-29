@@ -31,6 +31,10 @@ Player::~Player()
 
 void Player::Tick(const float seconds)
 {
+	foreach(sh_p<Enti> enti, entis)
+	{
+		enti->Tick(seconds);
+	}
 }
 
 void Player::AddEnti(sh_p<Enti> enti)

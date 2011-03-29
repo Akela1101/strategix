@@ -20,6 +20,9 @@ namespace Sample1
 {
 	using namespace Ogre;
 
+	static const float minCameraHeight = 13.0;
+
+
 MyFrameListener::MyFrameListener(RenderWindow* mWindow, Camera* mCamera)
 	:
 	mWindow(mWindow),
@@ -28,8 +31,8 @@ MyFrameListener::MyFrameListener(RenderWindow* mWindow, Camera* mCamera)
 	mCurrentSpeed(0),
 	mStatsOn(true),
 	mNumScreenShots(0),
-	mMoveScale(0.0f),
-	mRotScale(0.0f),
+	mMoveScale(0.0),
+	mRotScale(0.0),
 	mTimeUntilNextToggle(0),
 	mFiltering(TFO_BILINEAR),
 	mAniso(1),
@@ -220,8 +223,8 @@ bool MyFrameListener::frameStarted(const FrameEvent &event)
 	static Vector3 lastCamPos;
 	if( lastCamPos != camPos )
 	{
-		if( camPos.y < tile_length )
-			camPos.y = tile_length;
+		if( camPos.y < minCameraHeight )
+			camPos.y = minCameraHeight;
 
 		mCamera->setPosition(camPos);
 		lastCamPos = camPos;

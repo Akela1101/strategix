@@ -19,6 +19,9 @@ namespace Strategix
 	using namespace boost;
 	namespace fs = boost::filesystem;
 
+	//
+	const float tileSize = 10.0; // Lenght of tile's side ( 10 meters )
+
 
 KernelBase::KernelBase()
 {

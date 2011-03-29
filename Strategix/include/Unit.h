@@ -8,19 +8,27 @@
 #ifndef _UNIT_H
 #define	_UNIT_H
 
+#include "CoordStructs.h"
+
+
 namespace Strategix
 {
 	class Enti;
 
 	class Unit
 	{
-		Enti *enti; // const ?
+	public:
+		Enti *enti;
 
 	public:
 		Unit(Enti *enti);
 		virtual ~Unit() = 0;
 
-		virtual void OnTick(float time) = 0;
+		// Callbacks do nothing by default!
+		virtual void OnTick(const float seconds) {}
+		virtual void OnMoveStart() {}
+		virtual void OnMove(const RealCoord newCoord) {}
+		virtual void OnMoveStop() {}
 
 	private:
 		Unit(const Unit &_c);

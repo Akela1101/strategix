@@ -43,7 +43,7 @@ const FloatRect MapTexture::GetTexRect(string terrName)
 	const short terr_pos = positions[terrName];
 	const short x = terr_pos % divs;
 	const short y = terr_pos / divs;
-	const float length = 1.0f / divs;
+	const float length = 1.0 / divs;
 
 	FloatRect rc(x * length, y * length, (x + 1) * length, (y + 1) * length);
 

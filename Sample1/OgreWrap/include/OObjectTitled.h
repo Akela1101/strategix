@@ -1,12 +1,12 @@
 /* 
- * File:   TitledOObject.h
+ * File:   OObjectTitled.h
  * Author: Akela1101
  *
  * Created on 18 Март 2011 г., 19:03
  */
 
-#ifndef _TITLEDOOBJECT_H
-#define	_TITLEDOOBJECT_H
+#ifndef _OOBJECTTITLED_H
+#define	_OOBJECTTITLED_H
 
 #include "OObject.h"
 //______
@@ -23,16 +23,16 @@ namespace Sample1
 
 	//class ObjectTitle;
 
-	class TitledOObject : public OObject
+	class OObjectTitled : public OObject
 	{
 	public:
 		sh_p<ObjectTitle> objectTitle;
 
 	public:
-		TitledOObject(const std::string &meshName, const std::string &title);
-		virtual ~TitledOObject();
+		OObjectTitled(const std::string &meshName, const std::string &title);
+		virtual ~OObjectTitled();
 	};
 }
 
-#endif	/* _TITLEDOOBJECT_H */
+#endif	/* _OOBJECTTITLED_H */
 

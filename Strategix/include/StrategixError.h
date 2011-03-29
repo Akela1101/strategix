@@ -24,19 +24,19 @@ namespace Strategix
 		const char *message;
 
 	public:
-		StrategixError(const char *_file, int _line, const char *_message) throw()
-		{
-			file = _file;
-			line = _line;
-			message = _message;
-		}
+		StrategixError(const char *file, int line, const char *message)
+			:
+			file(file),
+			line(line),
+			message(message)
+		{}
 
-		StrategixError(const char *_file, int _line, const string &_message) throw()
-		{
-			file = _file;
-			line = _line;
-			message = _message.c_str();
-		}
+		StrategixError(const char *file, int line, const string &message)
+			:
+			file(file),
+			line(line),
+			message(message.c_str())
+		{}
 
 		virtual ~StrategixError() throw() {}
 

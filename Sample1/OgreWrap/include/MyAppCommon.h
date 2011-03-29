@@ -8,6 +8,7 @@
 #ifndef _MYAPPCOMMON_H
 #define	_MYAPPCOMMON_H
 
+
 namespace Ogre
 {
 	class SceneManager;
@@ -22,7 +23,6 @@ namespace Sample1
 	};
 
 	extern Ogre::SceneManager *sceneManager;
-	extern const float tile_length; // Lenght of tile's side
 }
 
 #endif	/* _MYAPPCOMMON_H */
