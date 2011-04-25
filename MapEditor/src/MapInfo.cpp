@@ -102,7 +102,7 @@ bool MapInfo::SaveToFile(QString fileName) const
 	return true;
 }
 
-bool MapInfo::LoadFromFile(QString fileName)
+bool MapInfo::LoadFromFile(QString fileName) // @#~ Make errors more verbose !!!
 {
 	using namespace std;
 	ifstream fin(fileName.toLocal8Bit());
@@ -113,8 +113,8 @@ bool MapInfo::LoadFromFile(QString fileName)
 		return false;
 
 	fin.getline(cString, 100);
-	if( strcmp(cString, terrainsDefinitionFileName) )
-		return false;
+//	if( strcmp(cString, terrainsDefinitionFileName) )
+//		return false;
 
 	// Name
 	fin.getline(cString, 100);

@@ -23,7 +23,7 @@ namespace Strategix
 		template<typename Y>
 		operator Coord<Y>() const
 		{
-			return Coord<Y>(x, y); // Throw template error ???? how?
+			return Coord<Y>(x, y);
 		}
 
 		bool operator ==(const Coord &_r) const
@@ -84,11 +84,6 @@ namespace Strategix
 	template<>
 	template<>
 	MapCoord::operator RealCoord() const;
-
-	template<>
-	template<>
-	RealCoord::operator MapCoord() const;
-	
 }
 
 #endif	/* _COORDSTRUCTS_H */

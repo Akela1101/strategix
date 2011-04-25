@@ -1,0 +1,47 @@
+digraph G 
+{
+	rankdir = LR;
+
+	subgraph cluster2
+	{
+		color = blue;		
+		MapFull -> MapLocal [arrowhead = tee arrowtail = tee]
+	}
+
+	subgraph cluster3
+	{
+		color = yellow;		
+		Mediator -> Unit [arrowhead = dot]
+	}
+
+	subgraph cluster0
+	{
+		color = red;
+		Kernel -> Player [arrowhead = dot]
+		Player -> Enti [arrowhead = dot]
+		Enti -> Feature [arrowhead = dot]
+	}
+	
+	subgraph cluster1
+	{
+		color = green;		
+		KernelBase -> TechTree [arrowhead = dot]
+		TechTree -> EntiInfo [arrowhead = dot]
+		EntiInfo -> FeatureInfo [arrowhead = dot]
+	}
+	
+	Kernel -> MapFull
+	Kernel -> KernelBase [arrowhead = tee]
+	
+	Player -> Mediator
+	Player -> TechTree [arrowhead = tee]
+	Player -> MapLocal
+	
+	Enti -> Unit
+	Enti -> EntiInfo [arrowhead = tee]
+
+	Feature -> FeatureInfo [arrowhead = tee]
+	
+	{rank = same; Kernel; KernelBase; MapFull;}
+	{rank = same; Player; MapLocal; TechTree}
+}

@@ -31,7 +31,7 @@ namespace Strategix
 		MapLocal();		
 		virtual ~MapLocal();
 
-		sh_p<MapsPath> FindPath(const MapCoord from, const MapCoord till);		
+		sh_p<MapsPath> FindPath(const MapCoord from, const MapCoord till);
 
 	private:
 		MapLocal(const MapLocal &_c);

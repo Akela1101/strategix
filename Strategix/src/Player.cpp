@@ -21,7 +21,7 @@ Player::Player(string name, PlayerType playerType, int playerNumber, string race
 	name(name),
 	playerType(playerType),
 	playerNumber(playerNumber),
-	techTree(new TechTree(*KernelBase::GS().techTrees[raceName]))
+	techTree(new TechTree(KernelBase::GS().GetTechTree(raceName)))
 {	
 }
 

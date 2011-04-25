@@ -31,8 +31,8 @@ MapFull::MapFull(const string &name)
 	ifstream fin(fileName.c_str());
 
 	char cString[101];
-	fin.getline(cString, 100); // mapFileTopString
-	fin.getline(cString, 100); // terrainsDefinitionFileName
+	fin.getline(cString, 100); // top string
+	fin.getline(cString, 100); // terrains.def
 
 	// Name
 	fin.getline(cString, 100);
@@ -50,16 +50,14 @@ MapFull::MapFull(const string &name)
 			if( fin.good() )
 			{
 				Cell &cell = cells[j][i];
+				//cell.mc = MapCoord(i, j);
+
 				fin >> cell.terrType;
-
-				// ??????????????
-				// cell.mc = MapCoord(i, j);
-
 				cell.retard = terrains[cell.terrType].retard;
 			}
 			else
 			{
-				STRATEGIX_ERROR((string("Wrong map format in file: ") + fileName).c_str());
+				STRATEGIX_ERROR(string("Wrong map format in file: ") + fileName);
 			}
 		}
 	}
@@ -81,13 +79,6 @@ MapFull::MapFull(const string &name)
 
 MapFull::~MapFull()
 {
-}
-
-const string MapFull::GetFilePath(const string &name)
-{
-	string mapPath = "Maps/";
-	mapPath += name + ".map";
-	return mapPath;
 }
 
 bool MapFull::LoadTerrains()

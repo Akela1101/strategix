@@ -8,19 +8,19 @@
       <resources>
         <gold>10000</gold>
       </resources>
-      <params>
-        <hp>1000</hp>
-      </params>
       <provides>
         <name>Spher_Worker</name>
       </provides>
       <mesh>Spher_Base.mesh</mesh>
-      <scale>1.0</scale>
-      <actions>
-        <action>
-          <name>Idle</name>
-        </action>
-      </actions>
+      <scale>0.1</scale>
+      <features>
+        <health>
+          <hp>1000</hp>
+        </health>
+        <idle>
+          <animation>Idle</animation>
+        </idle>
+      </features>
     </entity>
     <entity>
       <name>Spher_Worker</name>
@@ -28,9 +28,6 @@
       <resources>
         <gold>500</gold>
       </resources>
-      <params>
-        <hp>50</hp>
-      </params>
       <depends>
         <name>Spher_Base</name>
       </depends>
@@ -38,18 +35,19 @@
         <name>Spher_Base</name>
       </provides>
       <mesh>Spher_Worker.mesh</mesh>
-      <scale>1.0</scale>
-      <actions>
-        <action>
-          <name>Idle</name>
-        </action>
-        <action>
-          <name>Move</name>
-          <features>
-            <speed>5</speed>
-          </features>
-        </action>
-      </actions>
+      <scale>0.06</scale>
+      <features>
+        <health>
+          <hp>50</hp>
+        </health>
+        <idle>
+          <animation>Idle</animation>
+        </idle>
+        <move>
+          <animation>Move</animation>
+          <speed>5</speed>
+        </move>
+      </features>
     </entity>
   </entities>
 </race>

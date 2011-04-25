@@ -33,10 +33,8 @@ OBJECTDIR=build/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/src/TechTreesBuilderFromXml.o \
 	${OBJECTDIR}/src/MapLocal.o \
 	${OBJECTDIR}/src/Kernel.o \
-	${OBJECTDIR}/src/EntiInfo.o \
 	${OBJECTDIR}/src/Unit.o \
 	${OBJECTDIR}/src/MapFull.o \
 	${OBJECTDIR}/src/Player.o \
@@ -79,11 +77,6 @@ dist/Release/GNU-Linux-x86/libstrategix.a: ${OBJECTFILES}
 	${AR} -rv ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libstrategix.a ${OBJECTFILES} 
 	$(RANLIB) dist/Release/GNU-Linux-x86/libstrategix.a
 
-${OBJECTDIR}/src/TechTreesBuilderFromXml.o: src/TechTreesBuilderFromXml.cpp 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} $@.d
-	$(COMPILE.cc) -O2 -Iinclude -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/TechTreesBuilderFromXml.o src/TechTreesBuilderFromXml.cpp
-
 ${OBJECTDIR}/src/MapLocal.o: src/MapLocal.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
@@ -93,11 +86,6 @@ ${OBJECTDIR}/src/Kernel.o: src/Kernel.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -Iinclude -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Kernel.o src/Kernel.cpp
-
-${OBJECTDIR}/src/EntiInfo.o: src/EntiInfo.cpp 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} $@.d
-	$(COMPILE.cc) -O2 -Iinclude -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/EntiInfo.o src/EntiInfo.cpp
 
 ${OBJECTDIR}/src/Unit.o: src/Unit.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

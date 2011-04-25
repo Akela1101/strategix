@@ -24,7 +24,7 @@ MyMouseListener::MyMouseListener(Camera* camera, RaySceneQuery *raySceneQuery)
 	camera(camera),
 	raySceneQuery(raySceneQuery),
 	camera_speed(0.4f),
-	camera_zoom_speed(0.05f),
+	camera_zoom_speed(0.01f),
 	currEntity(0),
 	lastEntity(0),
 	currMask(NON_MASK)

@@ -1,0 +1,39 @@
+digraph G 
+{
+	
+	Map -> Resources
+	Map -> Player [arrowhead = dot]
+	Player -> Buildings
+	Player -> Units 
+	Buildings -> Features
+	Units -> Features
+
+	Map [color = yellow]
+	Player [color = yellow]
+	Resources [color = yellow]
+	Buildings [color = red]
+	Units [color = green]
+	Features [color = blue]
+
+	subgraph cluster_B
+	{	
+		label = Buildings;
+		color = red;
+		"Main Building" -> "Resource Processing" -> "Unit Production" -> "Technology Research" -> "Protection Constructions" [arrowhead = none]
+	}
+	
+	subgraph cluster_U
+	{
+		label = Units;
+		color = green;		
+		Builders -> Getters -> "Military Units" -> Transport -> Support [arrowhead = none]
+	}
+
+	subgraph cluster_F
+	{
+		label = Features;
+		color = blue;		
+		Build -> Gain -> "Repair/Heal" -> Produce -> Invent -> Attack -> Defend [arrowhead = none]
+	}
+
+}

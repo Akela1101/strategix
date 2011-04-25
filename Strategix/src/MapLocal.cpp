@@ -14,7 +14,7 @@ namespace Strategix
 
 MapLocal::MapLocal()
 	:
-	pathsFinder(new MapsPathsFinder())
+	pathsFinder(new MapsPathsFinder(*this))
 {
 }
 

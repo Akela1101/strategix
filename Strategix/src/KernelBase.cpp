@@ -5,13 +5,13 @@
  * Created on 13 Февраль 2010 г., 23:19
  */
 
-#include "TechTreesBuilderFromXml.h"
+#include "TechTreesBuilder.h"
 #include "Log.h"
 
 #include <boost/filesystem.hpp>
 
-#include "Nya.hpp"
 #include "KernelBase.h"
+
 
 namespace Strategix
 {
@@ -19,19 +19,10 @@ namespace Strategix
 	using namespace boost;
 	namespace fs = boost::filesystem;
 
-	//
-	const float tileSize = 10.0; // Lenght of tile's side ( 10 meters )
 
-
-KernelBase::KernelBase()
-{
-	// Build Tech Trees
-	TechTreesBuilderFromXml ttBuilder;
-	ttBuilder.Build(&techTrees);	
-}
-
-KernelBase::~KernelBase()
-{
+void KernelBase::BuildTechTrees(sh_p<TechTreesBuilder> techTreesBuilder)
+{	
+	techTreesBuilder->Build(&techTrees);
 }
 
 // Checking directory with Maps

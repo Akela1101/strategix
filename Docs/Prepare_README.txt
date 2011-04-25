@@ -26,3 +26,8 @@ Linux to Windows from scratch:
 5. add ogre configs for windows: ogre.conf, plugins.conf
 6. reconfigure all the symbol links T__T
 7. add to .gitignore all unnecessary VC files and folders.
+
+#####################################
+Graphviz
+#####################################
+dot -T png Basics.dot -o Basics.dot.png

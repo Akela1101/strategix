@@ -10,13 +10,9 @@
 
 #include "TechTree.h"
 
-#include <map>
-
 namespace Strategix
 {
-	using namespace std;	
-
-	class TechTreesBuilder // Abstract
+	class TechTreesBuilder
 	{
 	public:
 		virtual ~TechTreesBuilder() {};

@@ -16,7 +16,7 @@ namespace Strategix
 {	
 	class Map
 	{
-	protected:
+	public:
 		struct Cell
 		{
 			short terrType;
@@ -27,23 +27,17 @@ namespace Strategix
 		string name;
 		int width, length;
 		Cell **cells; // [rows][columns] (i.e. [y][x])
-
+			
 	public:		
+		const string &GetName() const { return name; }
 		const int GetWidth() const { return width; }
 		const int GetLength() const { return length; }
+		const Cell &operator ()(const int x, const int y) const	{ return cells[y][x]; }
+		const Cell &operator ()(const MapCoord mc) const { return cells[mc.y][mc.x]; }
 
-		// ??????
-		Cell *getCell(const MapCoord &mc) const
+		bool IsCell(const MapCoord &mc) const
 		{
-			if( mc.x < 0 || mc.x >= width || mc.y < 0 || mc.y >= length )
-				return 0;
-			return &cells[mc.y][mc.x];
-		}
-
-	public:
-		const Cell &operator ()(const int x, const int y) const
-		{
-			return cells[y][x];
+			return ( mc.x < 0 || mc.x >= width || mc.y < 0 || mc.y >= length ) ? false : true;
 		}
 	};	
 }

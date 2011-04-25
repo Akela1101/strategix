@@ -34,6 +34,7 @@ OBJECTDIR=build/${CND_CONF}/${CND_PLATFORM}
 # Object Files
 OBJECTFILES= \
 	${OBJECTDIR}/src/Main.o \
+	${OBJECTDIR}/src/TechTreesBuilderFromXml.o \
 	${OBJECTDIR}/OgreWrap/src/MediatorFrameListener.o \
 	${OBJECTDIR}/OgreWrap/src/MyMouseListener.o \
 	${OBJECTDIR}/OgreWrap/src/MapTexture.o \
@@ -77,6 +78,11 @@ ${OBJECTDIR}/src/Main.o: src/Main.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -Iinclude -I../common_include -IOgreWrap/include -I../Strategix/include -I/usr/include/OGRE -I/usr/include/OIS -I/usr/include/CEGUI -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Main.o src/Main.cpp
+
+${OBJECTDIR}/src/TechTreesBuilderFromXml.o: src/TechTreesBuilderFromXml.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -Iinclude -I../common_include -IOgreWrap/include -I../Strategix/include -I/usr/include/OGRE -I/usr/include/OIS -I/usr/include/CEGUI -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/TechTreesBuilderFromXml.o src/TechTreesBuilderFromXml.cpp
 
 ${OBJECTDIR}/OgreWrap/src/MediatorFrameListener.o: OgreWrap/src/MediatorFrameListener.cpp 
 	${MKDIR} -p ${OBJECTDIR}/OgreWrap/src

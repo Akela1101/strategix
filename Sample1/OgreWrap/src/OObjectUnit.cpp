@@ -9,7 +9,7 @@
 #include "OObjectLabel.h"
 
 #include "Enti.h"
-#include "EntiInfo.h"
+#include "EntiInfoMesh.h"
 #include "Map.h"
 #include "Kernel.h"
 #include "StrategixError.h"
@@ -37,7 +37,7 @@ namespace Sample1
 OObjectUnit::OObjectUnit(Enti *enti)
 	:
 	Unit(enti),
-	OObject(enti->ei->meshName),
+	OObject(dynamic_cast<const EntiInfoMesh*>(enti->ei)->meshName),
 	animationState(0)
 {
 	// Check all animations for corresponding mesh
@@ -46,9 +46,11 @@ OObjectUnit::OObjectUnit(Enti *enti)
 	entity->setUserAny(Any(this)); // Link from Entity to itself
 	entity->setQueryFlags(MOV_MASK);
 	
-	const float scale = enti->ei->meshScale;
+	const float scale = dynamic_cast<const EntiInfoMesh*>(enti->ei)->meshScale;
 	node->setScale(scale, scale, scale);
 	node->setPosition(enti->coord.x, 0, enti->coord.y);
+
+	OnMoveStop();
 }
 
 OObjectUnit::~OObjectUnit()

@@ -39,18 +39,14 @@ TechTree &TechTree::operator =(const TechTree &_c)
 
 void TechTree::init(const TechTree &_c)
 {
-	this->raceName = raceName;
+	raceName = _c.raceName;
 	foreach(const TechMapType::value_type &pa, _c.techMap)
 	{
-		this->techMap[pa.first] = sh_p<EntiInfo>(new EntiInfo(*pa.second));
+		techMap[pa.first] = sh_p<EntiInfo>( pa.second->copy() ); // @#~ !!!!!!!!!!!!
 	}
 }
 
-TechTree::~TechTree()
-{
-}
-
-void TechTree::AddNode(const sh_p<EntiInfo> &entityInfo)
+void TechTree::AddNode(sh_p<EntiInfo> entityInfo)
 {
 	pair<string, sh_p<EntiInfo> > pairEl(entityInfo->name, entityInfo);
 	pair<TechMapType::iterator, bool> retPair = techMap.insert(pairEl);

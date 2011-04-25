@@ -20,7 +20,7 @@ namespace Sample1
 {
 	using namespace Ogre;
 
-	static const float minCameraHeight = 13.0;
+	static const float minCameraHeight = 1.0;
 
 
 MyFrameListener::MyFrameListener(RenderWindow* mWindow, Camera* mCamera)
@@ -37,7 +37,7 @@ MyFrameListener::MyFrameListener(RenderWindow* mWindow, Camera* mCamera)
 	mFiltering(TFO_BILINEAR),
 	mAniso(1),
 	mSceneDetailIndex(0),
-	mMoveSpeed(100),
+	mMoveSpeed(10),
 	mRotateSpeed(36),
 	mDebugOverlay(OverlayManager::getSingleton().getByName("Core/DebugOverlay")),
 	raySceneQuery(sceneManager->createRayQuery(Ray())),
@@ -256,9 +256,7 @@ bool MyFrameListener::frameRenderingQueued(const FrameEvent& evt)
 		if( mTimeUntilNextToggle >= 0 )
 			mTimeUntilNextToggle -= evt.timeSinceLastFrame;
 
-		// Move about 100 units per second
 		mMoveScale = mMoveSpeed * evt.timeSinceLastFrame;
-		// Take about 10 seconds for full rotation
 		mRotScale = mRotateSpeed * evt.timeSinceLastFrame;
 
 		mRotX = 0;

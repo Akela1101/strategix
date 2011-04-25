@@ -11,9 +11,12 @@
 #include "TechTreesBuilder.h"
 
 #include <boost/property_tree/ptree.hpp>
+#include "Nya.hpp"
 
-namespace Strategix
+
+namespace Sample1
 {
+	using namespace Strategix;
 	using namespace std;
 	namespace pt = boost::property_tree;
 

@@ -1,0 +1,16 @@
+digraph G 
+{
+	"Human or AI" -> Enti [label = Feature]
+	Enti -> Unit [label = OnFeature]
+	Enti -> MapLocal -> MapFull
+	Unit -> Graphics
+
+	Enti [color = red]
+	MapFull [color = blue]
+	MapLocal [color = blue]
+	Unit [color = yellow]
+	Graphics [color = yellow]
+
+	{rank = same; Enti; MapLocal; MapFull}
+	{rank = same; Unit; Graphics}
+}

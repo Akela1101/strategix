@@ -6,23 +6,17 @@
  */
 
 #include "CoordStructs.h"
+#include "KernelBase.h"
+
 
 namespace Strategix
 {
-	extern const float tileSize; // Lenght of tile's side (KernelBase.cpp)
 
 template<>
 template<>
 MapCoord::operator RealCoord() const
 {
-	return RealCoord((0.5 + x)*tileSize, (0.5 + y)*tileSize);
-}
-
-template<>
-template<>
-RealCoord::operator MapCoord() const
-{
-	return MapCoord(x/tileSize, y/tileSize);
+	return RealCoord(0.5 + x, 0.5 + y); // Center object in cell
 }
 
 }

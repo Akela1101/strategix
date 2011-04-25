@@ -34,9 +34,8 @@ namespace Strategix
 		TechTree(const TechTree &_c);
 		TechTree & operator =(const TechTree &_c);
 		inline void init(const TechTree &_c);
-		virtual ~TechTree();
 
-		void AddNode(const sh_p<EntiInfo> &shpEntiInfo);
+		void AddNode(sh_p<EntiInfo> entityInfo);
 
 	};
 

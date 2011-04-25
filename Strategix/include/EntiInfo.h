@@ -25,28 +25,15 @@ namespace Strategix
 
 	struct EntiInfo
 	{
-	public:
 		string name;
-		map<string, sh_p<FeatureInfo> > featureInfos;
-
-		// Constant values
-		string kind;
+		string kind; // @#~ maybe set inplace of string?
 		vector<string> depends; 
 		vector<string> provides;
-		string meshName; 
-		float meshScale; // Scale of mesh
-		
+		map<string, sh_p<FeatureInfo> > featureInfos;
 
-		// Recreate this as to initialize in constructor ? @#~
+		virtual ~EntiInfo() {}
 
-		// Derive this class in real Application
-
-	public:
-		// ????????????????????????
-//		EntiInfo();
-//		EntiInfo(const EntiInfo &_c);
-//		EntiInfo & operator =(const EntiInfo &_c);
-		virtual ~EntiInfo();
+		virtual EntiInfo *copy() { return new EntiInfo(*this); }
 	};
 }
 

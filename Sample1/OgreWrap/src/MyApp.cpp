@@ -234,24 +234,18 @@ void MyApp::destroyScene()
 // Also it shifts offset of point number.
 void MyApp::AddTileToTerrainMesh(ManualObject &mo, const Vector2 &coord, const FloatRect &tex_rect, int &offset)
 {
-	// @#~ Move it to something common !!!
-	const float tileSize = Strategix::KernelBase::GS().GetTileSize();
-
-	mo.position(coord.x * tileSize, 0, (coord.y + 1) * tileSize);
+	mo.position(coord.x, 0, coord.y + 1);
 	mo.textureCoord(tex_rect.left, tex_rect.top);
 
-	mo.position((coord.x + 1) * tileSize, 0, (coord.y + 1) * tileSize);
+	mo.position(coord.x + 1, 0, coord.y + 1);
 	mo.textureCoord(tex_rect.right, tex_rect.top);
 
-	mo.position(coord.x * tileSize, 0, coord.y * tileSize);
+	mo.position(coord.x , 0, coord.y);
 	mo.textureCoord(tex_rect.left, tex_rect.bottom);
 
-	mo.position((coord.x + 1) * tileSize, 0, coord.y * tileSize);
+	mo.position(coord.x + 1, 0, coord.y);
 	mo.textureCoord(tex_rect.right, tex_rect.bottom);
 
-	// Clockwise culling
-	//mo.triangle(offset, offset + 1, offset + 2);
-	//mo.triangle(offset + 3, offset + 2, offset + 1);
 	mo.quad(offset, offset + 1, offset + 3, offset + 2);
 
 	offset += 4;
@@ -261,18 +255,16 @@ void MyApp::CreateStaticTerrain()
 {
 	using namespace Strategix;
 	
-	const float tileSize = KernelBase::GS().GetTileSize();
-	
 	const MapFull &mapFull = kernel->GetMap();
 
-	MapTexture map_texture("Maps/terrains.def"); // WTF ?
+	MapTexture mapTexture("Maps/terrains.def"); // WTF ?
 
 	// @#~ Must be done with drawing on texture of one Rectangular mesh!!!
 	ManualObject mo("TerrainObject");
 	const int width = mapFull.GetWidth();
 	const int length = mapFull.GetLength();
 
-	mo.begin(map_texture.name, RenderOperation::OT_TRIANGLE_LIST);
+	mo.begin(mapTexture.name, RenderOperation::OT_TRIANGLE_LIST);
 
 	int offset = 0;
 	for( int z = 0; z < length; ++z )
@@ -284,7 +276,7 @@ void MyApp::CreateStaticTerrain()
 			// Getting it's name
 			const string &tex_name = mapFull.GetTerrain(terrType).name;
 			// Getting picture's part rectangle
-			const FloatRect rc = map_texture.GetTexRect(tex_name);
+			const FloatRect rc = mapTexture.GetTexRect(tex_name);
 			// Adding to (x, z) square with this texture
 			AddTileToTerrainMesh(mo, Vector2(x, z), rc, offset);
 		}
@@ -295,11 +287,10 @@ void MyApp::CreateStaticTerrain()
 
 	StaticGeometry *sg = sceneManager->createStaticGeometry("TerrainArea");
 
-	const float map_width = width * tileSize;
-	const float map_length = length * tileSize;
-	const float map_max_hight = tileSize * 10; // so about
+	const float realWidth = width;
+	const float realLength = length;
 
-	sg->setRegionDimensions(Vector3(map_width, map_max_hight, map_length));
+	sg->setRegionDimensions(Vector3(width, 10.0, length));
 	sg->setOrigin(Vector3(0, 0, 0));
 
 	sg->addEntity(terrainEntity, Vector3(0, 0, 0)); // From 0,0 to ZX ↓→
@@ -307,8 +298,8 @@ void MyApp::CreateStaticTerrain()
 	sg->build();
 
 	// Camera !!
-	mCamera->setPosition(map_width / 1.7, map_width / 4, map_length * 1.2);
-	mCamera->lookAt(map_width / 2, 0, 0);
+	mCamera->setPosition(realWidth * 0.5, realWidth / 4, realLength * 1.2);
+	mCamera->lookAt(realWidth * 0.5, 0, 0);
 }
 
 }

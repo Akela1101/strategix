@@ -16,6 +16,7 @@
       <itemPath>include/Enti.h</itemPath>
       <itemPath>include/EntiInfo.h</itemPath>
       <itemPath>include/Feature.h</itemPath>
+      <itemPath>include/FeatureInfo.h</itemPath>
       <itemPath>include/FeatureMove.h</itemPath>
       <itemPath>include/Kernel.h</itemPath>
       <itemPath>include/KernelBase.h</itemPath>
@@ -32,12 +33,10 @@
       <itemPath>include/StrategixSingleton.h</itemPath>
       <itemPath>include/TechTree.h</itemPath>
       <itemPath>include/TechTreesBuilder.h</itemPath>
-      <itemPath>include/TechTreesBuilderFromXml.h</itemPath>
     </logicalFolder>
     <logicalFolder name="src" displayName="src" projectFiles="true">
       <itemPath>src/CoordStructs.cpp</itemPath>
       <itemPath>src/Enti.cpp</itemPath>
-      <itemPath>src/EntiInfo.cpp</itemPath>
       <itemPath>src/Feature.cpp</itemPath>
       <itemPath>src/FeatureMove.cpp</itemPath>
       <itemPath>src/Kernel.cpp</itemPath>
@@ -50,7 +49,6 @@
       <itemPath>src/MapsPathsFinder.cpp</itemPath>
       <itemPath>src/Player.cpp</itemPath>
       <itemPath>src/TechTree.cpp</itemPath>
-      <itemPath>src/TechTreesBuilderFromXml.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"

@@ -29,28 +29,25 @@ namespace Strategix
 			Terrain(const Terrain &_c) : name(_c.name), retard(_c.retard) {}
 			Terrain(const string &name, const float retard) : name(name), retard(retard) {}
 		};
-		typedef map<short, Terrain> TerrainsType; // terrType -> Terrain
-
-	public:
-		const Terrain &GetTerrain(const short terrType) const { return terrains.find(terrType)->second; }
-
-		int nPlayers;
-		vector<MapCoord> initialPositions;
 
 	protected:
-		
-		TerrainsType terrains;
+		map<short, Terrain> terrains;
+		int nPlayers;
+		vector<MapCoord> initialPositions;
 
 	public:
 		MapFull(const string &name);
 		virtual ~MapFull();
+
+		const Terrain &GetTerrain(const short terrType) const { return terrains.find(terrType)->second; }
+		const MapCoord GetInitialPostion(int iPlayer) const { return initialPositions[iPlayer]; }
 
 	private:
 		MapFull(const MapFull &_c);
 		MapFull& operator =(const MapFull &_c);
 				
 		bool LoadTerrains();
-		const string GetFilePath(const string &name);
+		const string GetFilePath(const string &name) const { return (string)"Maps/" + name + ".map"; }
 	};
 }
 

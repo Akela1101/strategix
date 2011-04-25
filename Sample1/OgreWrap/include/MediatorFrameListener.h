@@ -34,7 +34,7 @@ namespace Sample1
 		sh_p<Kernel> kernel;
 
 	protected:
-		std::list<sh_p<OObjectUnit> > units;
+		std::list<sh_p<OObjectUnit> > units; // Move to Interface Class
 
 	public:
 		MediatorFrameListener(sh_p<Kernel> kernel);

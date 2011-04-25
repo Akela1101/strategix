@@ -16,8 +16,6 @@ namespace Strategix
 		AI,
 		NET
 	};
-
-	extern const float tileSize; // Lenght of tile's side (KernelBase.cpp)
 }
 
 #endif	/* _STRATEGIXCOMMON_H */

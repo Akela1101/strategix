@@ -48,12 +48,16 @@ MediatorFrameListener::MediatorFrameListener(sh_p<Kernel> kernel)
 			STRATEGIX_ERROR("There is no defined entity with kind=building_base");
 		}
 
-		// Getting Initial Position
-		MapCoord &mapCoord = kernel->GetMap().initialPositions[player->playerNumber];
+		// Getting Player's Initial Position
+		const MapCoord &mapCoord = kernel->GetMap().GetInitialPostion(player->playerNumber);
 
 		// Creating Base
-		player->AddEnti(sh_p<Enti>(new Enti(ei, mapCoord)));
+		sh_p<Enti> shpe(new Enti(ei, mapCoord));
+		player->AddEnti(shpe);
 	}
+	
+	// @#~
+	kernel->players[0]->AddEnti(sh_p<Enti>(new Enti(&*kernel->players[0]->techTree->techMap["Spher_Worker"], MapCoord(5, 6))));
 }
 
 MediatorFrameListener::~MediatorFrameListener()

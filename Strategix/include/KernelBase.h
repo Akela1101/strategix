@@ -10,10 +10,11 @@
 
 #include "TechTree.h"
 #include "StrategixSingleton.h"
-#include "StrategixCommon.h"
 
 #include <string>
 #include <vector>
+
+#include "Nya.hpp"
 
 
 namespace Strategix
@@ -21,18 +22,21 @@ namespace Strategix
 	using namespace std;
 	using namespace boost;
 
+	class TechTreesBuilder;
+
 	class KernelBase : public StrategixSingleton<KernelBase>
 	{
-	public:
+	private:
 		TechTreesType techTrees;
 
 	public:
-		KernelBase();
-		virtual ~KernelBase();
+		// U must call these functions before initialize Kernel!
+		void BuildTechTrees(sh_p<TechTreesBuilder> techTreesBuilder);
 
+		// GET
 		sh_p<vector<string> > GetMapNames();
 		sh_p<vector<string> > GetRaceNames();
-		const float GetTileSize() { return tileSize; }
+		const TechTree& GetTechTree(const string raceName) { return *techTrees[raceName]; }
 	};
 }
 

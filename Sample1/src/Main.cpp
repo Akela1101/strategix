@@ -10,6 +10,7 @@
 #include "Player.h"
 #include "Kernel.h"
 #include "KernelBase.h"
+#include "TechTreesBuilderFromXml.h"
 
 #include <OgreException.h>
 
@@ -89,26 +90,26 @@ int main(int argc, char *argv[])
 #endif
 	// Also change plugin folder respectively
 
-	// What is current path? Must be as in chdir.
+	// What is current path? ( Must be /Strategix/Sample1 )
 	cout << "Current dir: " << boost::filesystem::current_path() << endl;
 
-//	//
-//	cout << endl << "Maps: " << endl;
-//	sh_p<std::vector<std::string> > mapNames = KernelBase::GS().GetMapNames();
-//	foreach(std::string mapName, *mapNames)
-//	{
-//		cout << mapName << endl;
-//	}
-//
-//	//
-//	cout << endl << "Race names: " << endl;
-//	sh_p<std::vector<std::string> > raceNames = KernelBase::GS().GetRaceNames();
-//	foreach(std::string raceName, *raceNames)
-//	{
-//		cout << raceName << endl;
-//	}
+	KernelBase::GS().BuildTechTrees(sh_p<TechTreesBuilder>(new TechTreesBuilderFromXml));
 
-	//cout << endl << KernelBase::GS().techTrees["Spher"]->techMap["Spher_Worker"]->file << endl;
+	//
+	cout << endl << "Maps: " << endl;
+	sh_p<std::vector<std::string> > mapNames = KernelBase::GS().GetMapNames();
+	foreach(std::string mapName, *mapNames)
+	{
+		cout << mapName << endl;
+	}
+
+	//
+	cout << endl << "Race names: " << endl;
+	sh_p<std::vector<std::string> > raceNames = KernelBase::GS().GetRaceNames();
+	foreach(std::string raceName, *raceNames)
+	{
+		cout << raceName << endl;
+	}
 
 	// One Game
 	{
@@ -131,16 +132,16 @@ int main(int argc, char *argv[])
 			cerr << endl << e.what() << endl;
 		}
 		cout << endl << "Exit from Ogre. Start to destruct it." << endl;
+
+// Reenable autorepeat in KDE ! *WALL*
+#ifdef __linux__
+	cout << endl << "Setting keyboard autorepeat back ON." << endl << endl;
+	ret = std::system("xset r");
+#endif
 	}
 
 #if defined( __WIN32__ ) || defined( _WIN32 )
 	getch();
-#endif
-
-	// Reenable autorepeat in KDE ! *WALL*
-#if !defined( __WIN32__ ) && !defined( _WIN32 ) // __LINUX ?????
-	cout << endl << "Setting keyboard autorepeat back ON." << endl;
-	ret = std::system("xset r");
 #endif
 
 	return 0;

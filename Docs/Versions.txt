@@ -1,12 +1,11 @@
 Compiled on:
 
-C++ GNU 4.4.4
-Boost 1.42.0
-OGRE 1.7.1
-Qt 4.6.3
-
-DirectX 9.0c
-OpenGL ??? but it works everywhere!
-NetBeans 6.9
-VisualC 9.1
-Git *last*
+C++ GNU 4.4.4 <linux>
+Boost 1.42.0 (smart_ptr, ptree, filesystem, ...)
+Qt 4.6.3 (использован для Редактора Карт)
+OGRE 1.7.1 (графический движок, использующий:)
+	OpenGL 7.0 (windows, linux)
+	DirectX 9.0c (только windows)
+NetBeans 6.9 <linux> (основная среда)
+VisualC 9.1 (не использовать в дальнейшем в силу убогости mscc)
+Git *last v.* ( https://github.com/Akela1101/Strategix )

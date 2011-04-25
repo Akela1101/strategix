@@ -17,20 +17,20 @@ namespace Strategix
 {
 	class MapsPath
 	{
-		std::deque<MapCoord> way;
+		std::deque<MapCoord> path; // vector ???
 
 	public:
 		MapsPath();		
 		virtual ~MapsPath();
 
-		bool IsEmpty() { return way.empty(); }
+		bool IsEmpty() { return path.empty(); }
 		MapCoord PickFront()
 		{
-			MapCoord frontCoord = way.front();
-			way.pop_front();
+			MapCoord frontCoord = path.back();
+			path.pop_back();
 			return frontCoord;
 		}
-		void PutBack(const MapCoord mapCoord) { way.push_back(mapCoord); }
+		void PushFront(const MapCoord mapCoord) { path.push_back(mapCoord); }
 
 	private:
 		MapsPath(const MapsPath &_c);
