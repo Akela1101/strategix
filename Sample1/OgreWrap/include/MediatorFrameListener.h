@@ -28,6 +28,7 @@ namespace Sample1
 	using namespace Strategix;
 
 	class OObjectUnit;
+	class OObjectResource;
 
 	class MediatorFrameListener : public Strategix::Mediator, public FrameListener
 	{
@@ -35,10 +36,11 @@ namespace Sample1
 
 	protected:
 		std::list<sh_p<OObjectUnit> > units; // Move to Interface Class
+		std::list<sh_p<OObjectResource> > resources;
 
 	public:
 		MediatorFrameListener(sh_p<Kernel> kernel);
-		virtual ~MediatorFrameListener();
+		virtual ~MediatorFrameListener() {}
 		
 		virtual void OnAddEnti(Enti *enti);
 

@@ -10,6 +10,8 @@
 
 #include "CoordStructs.h"
 #include "StrategixError.h"
+#include "StrategixCommon.h"
+#include "Nya.hpp"
 
 
 namespace Strategix
@@ -17,10 +19,20 @@ namespace Strategix
 	class Map
 	{
 	public:
+		struct Resource
+		{
+			ResType resType;
+			float amount;
+
+			Resource(const ResType resType, const float amount)
+				: resType(resType), amount(amount) {}
+		};
+
 		struct Cell
 		{
-			short terrType;
-			float retard; // defines from terrain type	
+			int terrainType;
+			float retard; // defines from terrain type
+			sh_p<Resource> resource;
 		};
 
 	protected:

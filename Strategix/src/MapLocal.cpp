@@ -5,15 +5,18 @@
  * Created on 24 Март 2011 г., 14:02
  */
 
-#include "MapLocal.h"
+#include "MapFull.h"
 #include "MapsPathsFinder.h"
 
+#include "MapLocal.h"
 
 namespace Strategix
 {
 
-MapLocal::MapLocal()
+MapLocal::MapLocal(MapFull *mapFull)
 	:
+	Map(*static_cast<Map*>(mapFull)),
+	mapFull(mapFull),
 	pathsFinder(new MapsPathsFinder(*this))
 {
 }

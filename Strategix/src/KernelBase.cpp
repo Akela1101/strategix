@@ -35,7 +35,7 @@ sh_p<vector<string> > KernelBase::GetMapNames()
 	{
 		if( fs::is_regular_file(p) && fs::extension(p) == ".map" )
 		{
-			mapNames->push_back(p.stem());
+			mapNames->push_back(p.stem().string());
 		}
 	}
 	return mapNames;

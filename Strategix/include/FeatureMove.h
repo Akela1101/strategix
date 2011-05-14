@@ -15,18 +15,25 @@
 namespace Strategix
 {
 	class MapsPath;
+	class FeatureInfoMove;
 	
 	class FeatureMove : public Feature
 	{
+	protected:
+		const FeatureInfoMove *featureInfoMove; // Link to tree
+		sh_p<FeatureInfoMove> vFeatureInfoMove; // Variable copy
+
+	private:
 		float distance;
 		RealCoord direction, finish;
 		sh_p<MapsPath> mapsPath;
+		bool isMoving;
 
 	public:
-		FeatureMove();
-		virtual ~FeatureMove();
+		FeatureMove(const FeatureInfo *featureInfo, Enti *enti);
+		virtual ~FeatureMove() {}
 
-		virtual void Tick(const float seconds);
+		virtual bool Tick(const float seconds);
 
 		bool operator() (const RealCoord newCoord);
 			

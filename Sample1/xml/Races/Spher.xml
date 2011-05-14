@@ -1,10 +1,11 @@
 ﻿<?xml version='1.0' encoding='UTF-8'?>
 <!-- Technology Tree Definition --><!-- This document was created with Syntext Serna Free. -->
 <race>
+  <main_building>Spher_Base</main_building>
   <entities>
     <entity>
       <name>Spher_Base</name>
-      <kind>building_base</kind>
+      <kind>building</kind>
       <resources>
         <gold>10000</gold>
       </resources>
@@ -17,14 +18,11 @@
         <health>
           <hp>1000</hp>
         </health>
-        <idle>
-          <animation>Idle</animation>
-        </idle>
       </features>
     </entity>
     <entity>
       <name>Spher_Worker</name>
-      <kind>unit_worker</kind>
+      <kind>unit</kind>
       <resources>
         <gold>500</gold>
       </resources>
@@ -40,12 +38,8 @@
         <health>
           <hp>50</hp>
         </health>
-        <idle>
-          <animation>Idle</animation>
-        </idle>
         <move>
-          <animation>Move</animation>
-          <speed>5</speed>
+          <speed>3</speed>
         </move>
       </features>
     </entity>

@@ -9,8 +9,8 @@
 #define	_STRATEGIXERROR_H
 
 #include <exception>
-#include <sstream>
 #include <string>
+#include <sstream>
 
 
 namespace Strategix
@@ -21,7 +21,7 @@ namespace Strategix
 	{
 		const char *file;
 		int line;
-		const char *message;
+		const string message;
 
 	public:
 		StrategixError(const char *file, int line, const char *message)
@@ -31,20 +31,20 @@ namespace Strategix
 			message(message)
 		{}
 
-		StrategixError(const char *file, int line, const string &message)
+		StrategixError(const char *file, int line, const string message)
 			:
 			file(file),
 			line(line),
-			message(message.c_str())
+			message(message)
 		{}
 
 		virtual ~StrategixError() throw() {}
 
 		virtual const char* what() const throw()
 		{
-			stringstream ss;
-			ss << "Error  on line " << line  << " in file: " << file << " >> " << message << endl;
-			return ss.str().c_str();
+			stringstream ss; ss << line;
+			string s = string("Error on line ") + ss.str() + " in file: " + file + " >> " + message;
+			return s.c_str();
 		}
 	};
 

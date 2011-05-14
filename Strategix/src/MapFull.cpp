@@ -52,8 +52,8 @@ MapFull::MapFull(const string &name)
 				Cell &cell = cells[j][i];
 				//cell.mc = MapCoord(i, j);
 
-				fin >> cell.terrType;
-				cell.retard = terrains[cell.terrType].retard;
+				fin >> cell.terrainType;
+				cell.retard = terrains[cell.terrainType].retard;
 			}
 			else
 			{
@@ -63,16 +63,24 @@ MapFull::MapFull(const string &name)
 	}
 
 	// Initial Positions
-	fin >> nPlayers;
-
 	MapCoord mc;
-	for( int iPlayer = 0; iPlayer < nPlayers; ++iPlayer )
+
+	fin >> nPlayers;
+	for( int iPlayer = nPlayers; iPlayer; --iPlayer )
 	{
 		fin >> mc.x >> mc.y;
 		initialPositions.push_back(mc);
 	}
 
-	// Добавь чтение объектов же!
+	// Resources
+	int nResources, i, j, resType;
+
+	fin >> nResources;
+	for( int iRes = nResources; iRes; --iRes )
+	{
+		fin >> i >> j >> resType;
+		cells[j][i].resource.reset(new Resource((ResType)resType, 100000)); // @#~ Do it through MapEditor !!!
+	}
 
 	fin.close();
 }
@@ -97,7 +105,7 @@ bool MapFull::LoadTerrains()
 
 	string type;
 	float retard;
-	for( short n = 0; n < nTypes; ++n )
+	for( int n = 0; n < nTypes; ++n )
 	{
 		fdesc >> retard >> type;
 

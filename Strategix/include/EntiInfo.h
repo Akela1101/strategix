@@ -29,7 +29,9 @@ namespace Strategix
 		string kind; // @#~ maybe set inplace of string?
 		vector<string> depends; 
 		vector<string> provides;
-		map<string, sh_p<FeatureInfo> > featureInfos;
+		
+		typedef map<string, sh_p<FeatureInfo> > FeatureInfosType;
+		FeatureInfosType featureInfos;
 
 		virtual ~EntiInfo() {}
 

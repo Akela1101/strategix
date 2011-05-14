@@ -5,7 +5,11 @@
  * Created on 13 Январь 2011 г., 21:23
  */
 
+#include <OGRE/OgreEntity.h>
+#include <OGRE/OgreNode.h>
+
 #include "OObjectUnit.h"
+#include "OObjectResource.h"
 
 #include "EntiInfo.h"
 #include "Enti.h"
@@ -28,40 +32,40 @@ MediatorFrameListener::MediatorFrameListener(sh_p<Kernel> kernel)
 	:
 	kernel(kernel)
 {
+	MapFull &mapFull = kernel->GetMap();
+
+	// Base Buildings
 	foreach( sh_p<Player > &player, kernel->players )
 	{
 		// Assigning player's callback as this
 		player->mediator = this;
 
-		// Getting Base's name.
-		const EntiInfo *ei = 0;
-		foreach( const TechMapType::value_type &entPair, player->techTree->techMap )
+		// Getting Base Info
+		const string baseName = player->techTree->mainBuildingName;
+		sh_p<const EntiInfo> entityInfo = player->techTree->Node(baseName);
+		
+		// Getting Player's Initial Position
+		const MapCoord &mapCoord = mapFull.GetInitialPostion(player->playerNumber);
+
+		// Creating Enti
+		player->AddEnti(sh_p<Enti>(new Enti(entityInfo.get(), mapCoord)));
+	}
+
+	// Resources
+	for( int i = 0; i < mapFull.GetWidth(); ++i )
+	{
+		for( int j = 0; j < mapFull.GetLength(); ++j )
 		{
-			if( entPair.second->kind == "building_base" )
+			if( mapFull(i, j).resource )
 			{
-				ei = entPair.second.get();
-				break;
+				sh_p<OObjectResource> res(new OObjectResource("GoldenBrick.mesh", MapCoord(i, j)));
+				resources.push_back(res);
 			}
 		}
-		if( !ei )
-		{
-			STRATEGIX_ERROR("There is no defined entity with kind=building_base");
-		}
-
-		// Getting Player's Initial Position
-		const MapCoord &mapCoord = kernel->GetMap().GetInitialPostion(player->playerNumber);
-
-		// Creating Base
-		sh_p<Enti> shpe(new Enti(ei, mapCoord));
-		player->AddEnti(shpe);
 	}
-	
-	// @#~
-	kernel->players[0]->AddEnti(sh_p<Enti>(new Enti(&*kernel->players[0]->techTree->techMap["Spher_Worker"], MapCoord(5, 6))));
-}
 
-MediatorFrameListener::~MediatorFrameListener()
-{
+	// @#~
+	kernel->players[0]->AddEnti(sh_p<Enti>(new Enti(&*kernel->players[0]->techTree->Node("Spher_Worker"), MapCoord(5, 6))));
 }
 
 void MediatorFrameListener::OnAddEnti(Enti *enti)

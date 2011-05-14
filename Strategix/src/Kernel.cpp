@@ -6,6 +6,7 @@
  */
 
 #include "MapFull.h"
+#include "MapLocal.h"
 #include "Player.h"
 
 #include "Kernel.h"
@@ -20,6 +21,7 @@ Kernel::Kernel(const string &mapName)
 
 void Kernel::AddPlayer(sh_p<Player> player)
 {
+	player->map.reset(new MapLocal(mapFull.get()));
 	players.push_back(player);
 }
 

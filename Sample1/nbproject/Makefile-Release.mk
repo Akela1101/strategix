@@ -39,6 +39,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/OgreWrap/src/MyMouseListener.o \
 	${OBJECTDIR}/OgreWrap/src/MapTexture.o \
 	${OBJECTDIR}/src/LabelsHolder.o \
+	${OBJECTDIR}/OgreWrap/src/OObjectResource.o \
 	${OBJECTDIR}/OgreWrap/src/MyApp.o \
 	${OBJECTDIR}/OgreWrap/src/OObjectLabel.o \
 	${OBJECTDIR}/OgreWrap/src/OObjectTitled.o \
@@ -62,13 +63,13 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=-L/usr/lib -L/usr/lib/OGRE -lOgreMain -lOIS ../Strategix/dist/Release/GNU-Linux-x86/libstrategix.a -lCEGUIOpenGLRenderer -lboost_filesystem
+LDLIBSOPTIONS=-L/usr/lib -L/usr/lib/OGRE -lOgreMain -lOIS ../Strategix/dist/Debug/GNU-Linux-x86/libstrategix.a -lboost_filesystem
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
 	"${MAKE}"  -f nbproject/Makefile-Release.mk dist/Release/GNU-Linux-x86/sample1
 
-dist/Release/GNU-Linux-x86/sample1: ../Strategix/dist/Release/GNU-Linux-x86/libstrategix.a
+dist/Release/GNU-Linux-x86/sample1: ../Strategix/dist/Debug/GNU-Linux-x86/libstrategix.a
 
 dist/Release/GNU-Linux-x86/sample1: ${OBJECTFILES}
 	${MKDIR} -p dist/Release/GNU-Linux-x86
@@ -103,6 +104,11 @@ ${OBJECTDIR}/src/LabelsHolder.o: src/LabelsHolder.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -Iinclude -I../common_include -IOgreWrap/include -I../Strategix/include -I/usr/include/OGRE -I/usr/include/OIS -I/usr/include/CEGUI -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/LabelsHolder.o src/LabelsHolder.cpp
+
+${OBJECTDIR}/OgreWrap/src/OObjectResource.o: OgreWrap/src/OObjectResource.cpp 
+	${MKDIR} -p ${OBJECTDIR}/OgreWrap/src
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -Iinclude -I../common_include -IOgreWrap/include -I../Strategix/include -I/usr/include/OGRE -I/usr/include/OIS -I/usr/include/CEGUI -MMD -MP -MF $@.d -o ${OBJECTDIR}/OgreWrap/src/OObjectResource.o OgreWrap/src/OObjectResource.cpp
 
 ${OBJECTDIR}/OgreWrap/src/MyApp.o: OgreWrap/src/MyApp.cpp 
 	${MKDIR} -p ${OBJECTDIR}/OgreWrap/src
@@ -141,7 +147,7 @@ ${OBJECTDIR}/OgreWrap/src/ObjectTitle.o: OgreWrap/src/ObjectTitle.cpp
 
 # Subprojects
 .build-subprojects:
-	cd ../Strategix && ${MAKE}  -f Makefile CONF=Release
+	cd ../Strategix && ${MAKE}  -f Makefile CONF=Debug
 	cd ../Strategix && ${MAKE}  -f Makefile CONF=Release
 
 # Clean Targets
@@ -151,7 +157,7 @@ ${OBJECTDIR}/OgreWrap/src/ObjectTitle.o: OgreWrap/src/ObjectTitle.cpp
 
 # Subprojects
 .clean-subprojects:
-	cd ../Strategix && ${MAKE}  -f Makefile CONF=Release clean
+	cd ../Strategix && ${MAKE}  -f Makefile CONF=Debug clean
 	cd ../Strategix && ${MAKE}  -f Makefile CONF=Release clean
 
 # Enable dependency checking

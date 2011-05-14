@@ -31,7 +31,7 @@ namespace Strategix
 		};
 
 	protected:
-		map<short, Terrain> terrains;
+		map<int, Terrain> terrains;
 		int nPlayers;
 		vector<MapCoord> initialPositions;
 
@@ -39,7 +39,7 @@ namespace Strategix
 		MapFull(const string &name);
 		virtual ~MapFull();
 
-		const Terrain &GetTerrain(const short terrType) const { return terrains.find(terrType)->second; }
+		const Terrain &GetTerrain(const int terrainType) const { return terrains.find(terrainType)->second; }
 		const MapCoord GetInitialPostion(int iPlayer) const { return initialPositions[iPlayer]; }
 
 	private:

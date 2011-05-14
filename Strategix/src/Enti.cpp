@@ -17,11 +17,15 @@
 namespace Strategix
 {
 
-Enti::Enti(const EntiInfo *ei, const MapCoord &mapCoord)
+Enti::Enti(const EntiInfo *entityInfo, const MapCoord &mapCoord)
 	:
-	ei(ei),
+	entityInfo(entityInfo),
 	coord(mapCoord)
 {
+	foreach(const EntiInfo::FeatureInfosType::value_type &pa, entityInfo->featureInfos)
+	{
+		features[pa.first] = CreateFeature(pa.first, pa.second.get());
+	}
 }
 
 Enti::~Enti()
@@ -30,9 +34,13 @@ Enti::~Enti()
 
 void Enti::Tick(const float seconds)
 {
-	foreach(Feature* feature, tickFeatures)
+	for( list<Feature*>::iterator itFeature = tickFeatures.begin();
+			itFeature != tickFeatures.end(); ++itFeature )
 	{
-		feature->Tick(seconds);
+		if( !(*itFeature)->Tick(seconds) )
+		{
+			tickFeatures.erase(itFeature++); // removing from Tick queue
+		}
 	}
 	unit->OnTick(seconds);
 }
@@ -52,6 +60,19 @@ Feature& Enti::GetFeature(const string &name)
 	else
 	{
 		STRATEGIX_ERROR(string("There is no feature named: ") + name);
+	}
+}
+
+sh_p<Feature> Enti::CreateFeature(const string &name, const FeatureInfo *featureInfo)
+{
+	if( name == "move" )
+	{
+		return sh_p<FeatureMove>(new FeatureMove(featureInfo, this));
+	}
+	else
+	{
+		//STRATEGIX_ERROR(string("Unable to create feature named: ") + name);
+		return sh_p<Feature>();
 	}
 }
 

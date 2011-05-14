@@ -40,6 +40,8 @@ TechTree &TechTree::operator =(const TechTree &_c)
 void TechTree::init(const TechTree &_c)
 {
 	raceName = _c.raceName;
+	mainBuildingName = _c.mainBuildingName;
+	
 	foreach(const TechMapType::value_type &pa, _c.techMap)
 	{
 		techMap[pa.first] = sh_p<EntiInfo>( pa.second->copy() ); // @#~ !!!!!!!!!!!!

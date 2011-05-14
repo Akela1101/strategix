@@ -26,9 +26,9 @@ MapsPathsFinder::~MapsPathsFinder()
 
 sh_p<MapsPath> MapsPathsFinder::FindPath(const MapCoord from, const MapCoord till)
 {
-	sh_p<MapsPath> mapsPath;
+	sh_p<MapsPath> mapsPath(new MapsPath);
 
-	if( from.x == till.x && from.y == till.y )
+	if( from.x == till.x && from.y == till.y || !IsAccessible(till) )
 		return mapsPath;
 
 	static const MapCoord around[8] =
@@ -68,6 +68,7 @@ sh_p<MapsPath> MapsPathsFinder::FindPath(const MapCoord from, const MapCoord til
 			{
 				mapsPath->PushFront(cellPrice->mc);
 			}
+			mapsPath->PickFront(); // remove first
 			break;
 		}
 
@@ -83,7 +84,7 @@ sh_p<MapsPath> MapsPathsFinder::FindPath(const MapCoord from, const MapCoord til
 				sh_p<CellPrice> openedCell = GetByCoord(opened, checking_mc);
 				if( !openedCell.get() )
 				{
-					const int new_H = Distance(openedCell->mc, till);
+					const int new_H = Distance(checking_mc, till);
 					openedCell.reset(new CellPrice(checking_mc, current.get(), new_G, new_H));
 					opened.push_back(openedCell);
 				}
@@ -103,5 +104,53 @@ sh_p<MapsPath> MapsPathsFinder::FindPath(const MapCoord from, const MapCoord til
 
 	return mapsPath;
 }
+
+//void OObjectUnit::AddWayTo_Debug(Vector3 &pos)
+//{
+//	static MapCoord oldMapCoord = MapCoord(-1, -1);
+//	MapCoord newMapCoord = GetMapCoord(pos);
+//
+//	typedef std::deque< MapCoord> MapCoordDeque;
+//	static MapCoordDeque *saved_moveList;
+//
+//	// First time mouse click => Draw path
+//	if( oldMapCoord != newMapCoord )
+//	{
+//		oldMapCoord = newMapCoord;
+//
+//		typedef std::list< Map::Cell*> CellList;
+//		CellList *p_closed = 0;
+//
+//		// !!!!!!!!!!!!!!!
+//		// saved_moveList =  kernel->GetMap().FindPath_Debug(mapCoord, newMapCoord, p_closed);
+//
+//		//
+//		labelVector.clear();
+//		labelVector.reserve(p_closed->size());
+//
+//		for( CellList::iterator at = p_closed->begin(); at != p_closed->end(); ++at)
+//		{
+//			std::stringstream title;
+//			title << "\n" << (*at)->G << " + " << (*at)->H << "\n = " << (*at)->F ;
+//			sh_p<OObjectLabel> labelUnit(new OObjectLabel((*at)->mc, title.str().c_str()));
+//
+//			if( saved_moveList->end() != find(saved_moveList->begin(), saved_moveList->end(), (*at)->mc) )
+//				labelUnit->SetColor(ColourValue(1.0, 1.0, 1.0, 1.0));
+//			else
+//				labelUnit->SetColor(ColourValue(5.0, 0.0, 0.8, 1.0));
+//
+//			labelVector.push_back(labelUnit);
+//		}
+//
+//		delete p_closed;
+//	}
+//	else // Second time mouse click => Go
+//	{
+//		if( moveList != saved_moveList )
+//			delete moveList;
+//		moveList = saved_moveList;
+//	}
+//}
+
 
 }
