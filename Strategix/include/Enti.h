@@ -25,6 +25,7 @@ namespace Strategix
 	class Unit;
 	class Player;
 	class EntiInfo;
+	class FeatureInfo;
 	class Feature;
 	class FeatureMove;
 	
@@ -36,7 +37,7 @@ namespace Strategix
 	public:
 		Unit *unit;
 		Player *player; // Link to owner
-		const EntiInfo *ei; // Link to tree
+		const EntiInfo *entityInfo; // Link to tree
 
 		RealCoord coord;
 
@@ -47,7 +48,7 @@ namespace Strategix
 		list<Feature*> tickFeatures; // if they become too many, change to set<>
 
 	public:
-		Enti(const EntiInfo *ei, const MapCoord &mapCoord); // for RealCoord ???
+		Enti(const EntiInfo *entityInfo, const MapCoord &mapCoord); // for RealCoord ???
 		virtual ~Enti();
 
 		void SetCoord(const RealCoord newCoord);
@@ -60,6 +61,7 @@ namespace Strategix
 		Enti& operator =(const Enti &_c);
 
 		Feature& GetFeature(const string &name);
+		sh_p<Feature> CreateFeature(const string &name, const FeatureInfo *featureInfo);
 	};
 }
 #endif	/* _ENTI_H */

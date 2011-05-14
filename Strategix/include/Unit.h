@@ -8,8 +8,6 @@
 #ifndef _UNIT_H
 #define	_UNIT_H
 
-#include "CoordStructs.h"
-
 
 namespace Strategix
 {
@@ -27,7 +25,7 @@ namespace Strategix
 		// Callbacks do nothing by default!
 		virtual void OnTick(const float seconds) {}
 		virtual void OnMoveStart() {}
-		virtual void OnMove(const RealCoord newCoord) {}
+		virtual void OnMove() {}
 		virtual void OnMoveStop() {}
 
 	private:

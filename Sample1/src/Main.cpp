@@ -125,11 +125,11 @@ int main(int argc, char *argv[])
 		}
 		catch( Ogre::Exception& e )
 		{
-			cerr << endl << e.what() << endl;
+			cout << endl << e.what() << endl;
 		}
 		catch( std::exception &e )
 		{
-			cerr << endl << e.what() << endl;
+			cout << endl << e.what() << endl;
 		}
 		cout << endl << "Exit from Ogre. Start to destruct it." << endl;
 

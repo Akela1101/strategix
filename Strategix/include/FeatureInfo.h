@@ -10,21 +10,17 @@
 
 namespace Strategix
 {
-	struct FeatureInfo
+	struct FeatureInfo // Interface
 	{
 		virtual ~FeatureInfo() {}
-		virtual void abstract() = 0;
-	};
-
-	struct FeatureInfoIdle : FeatureInfo
-	{
-		virtual ~FeatureInfoIdle() {}
 	};
 
 	struct FeatureInfoMove : FeatureInfo
 	{
 		float speed;
 		//
+		//FeatureInfoMove(const FeatureInfoMove &_c) : speed(_c.speed) {}
+		FeatureInfoMove(const float speed) : speed(speed) {}
 		virtual ~FeatureInfoMove() {}
 	};
 
@@ -33,6 +29,8 @@ namespace Strategix
 		float hp;
 		float regenSpeed;
 		//
+		FeatureInfoHealth(const float hp, const float regenSpeed)
+			: hp(hp), regenSpeed(regenSpeed) {}
 		virtual ~FeatureInfoHealth() {}
 	};
 }

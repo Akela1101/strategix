@@ -11,17 +11,18 @@
 namespace Strategix
 {
 	class Enti;
+	class FeatureInfo;
 
 	class Feature
 	{
 	protected:
-		Enti *enti;
+		Enti *enti; // Link to enti
 		
 	public:
-		Feature();
+		Feature(Enti *enti) : enti(enti) {}
 		virtual ~Feature() = 0;
 
-		virtual void Tick(const float seconds) {}
+		virtual bool Tick(const float seconds) {}
 
 	private:
 		Feature(const Feature &_c);

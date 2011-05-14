@@ -6,6 +6,7 @@
  */
 
 #include "EntiInfoMesh.h"
+#include "FeatureInfo.h"
 #include "TechTree.h"
 #include "StrategixError.h"
 
@@ -46,7 +47,7 @@ void TechTreesBuilderFromXml::Build(TechTreesType *pTechTrees)
 				STRATEGIX_ERROR( string("Can't parse file: ") + p.string() );
 			}
 
-			BuildRace(p.stem(), propTree);
+			BuildRace(p.stem().string(), propTree.get_child("race"));
 		}
 	}
 }
@@ -55,7 +56,9 @@ void TechTreesBuilderFromXml::BuildRace(const string &raceName, const pt::ptree 
 {
 	sh_p<TechTree> techTree(new TechTree(raceName));
 
-	foreach( const pt::ptree::value_type &v, propTree.get_child("race.entities") )
+	techTree->mainBuildingName = propTree.get<string>("main_building");
+
+	foreach( const pt::ptree::value_type &v, propTree.get_child("entities") )
 	{
 		BuildEntity(techTree, v.second);
 	}
@@ -92,21 +95,16 @@ void TechTreesBuilderFromXml::BuildEntity(sh_p<TechTree> techTree, const pt::ptr
 	eim->meshName = entityPropTree.get<string>("mesh");
 	eim->meshScale = entityPropTree.get<float>("scale");
 
-	//
-	//eim->params.hp = entityPropTree.get<HpType>("params.hp");
-
 	foreach( const pt::ptree::value_type &v, entityPropTree.get_child("features", pt::ptree()) ) // Empty if no features
 	{
-		const pt::ptree &feature = v.second;
 		const string &featureName = v.first;
+		const pt::ptree &feature = v.second;
+		
 		try
 		{
-			if( featureName == "idle" )
+			if( featureName == "move" )
 			{
-				//dynamic_cast<FeatureInfoIdleMesh>(eim->featureInfos["idle"]);
-			}
-			else if( featureName == "move" )
-			{
+				eim->featureInfos[featureName].reset(new FeatureInfoMove(feature.get<float>("speed")));
 			}
 		}
 		catch(pt::ptree_error){}

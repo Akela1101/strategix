@@ -10,6 +10,7 @@
 #include "Player.h"
 #include "MapLocal.h"
 #include "MapsPath.h"
+#include "FeatureInfo.h"
 
 #include "FeatureMove.h"
 
@@ -17,41 +18,51 @@
 namespace Strategix
 {
 
-FeatureMove::FeatureMove()
-{
-}
-
-FeatureMove::~FeatureMove()
+FeatureMove::FeatureMove(const FeatureInfo *featureInfo, Enti *enti)
+	:
+	Feature(enti),
+	featureInfoMove(static_cast<const FeatureInfoMove*>(featureInfo)),
+	vFeatureInfoMove(sh_p<FeatureInfoMove>(new FeatureInfoMove(*featureInfoMove))),	
+	finish(enti->coord),
+	isMoving(false)
 {
 }
 
 bool FeatureMove::operator() (const RealCoord newCoord)
 {
+	distance = 0;
 	mapsPath = enti->player->map->FindPath(enti->coord, newCoord);
 
 	if( !mapsPath.get() )
 		return false;
 
-	enti->unit->OnMoveStart();
-	enti->tickFeatures.push_back(this); // adding to Tick queue
+	if( !isMoving )
+	{
+		isMoving = true;
+		
+		enti->unit->OnMoveStart();
+		enti->tickFeatures.push_back(this); // adding to Tick queue
+	}
 
 	return true;
 }
 
-void FeatureMove::Tick(const float seconds)
+bool FeatureMove::Tick(const float seconds)
 {
 	if( distance > 0 ) //Moving
 	{
-		const float moving = 30 * seconds; //speed * seconds;
+		const float moving = vFeatureInfoMove->speed * seconds;
 		distance = (distance > moving) ? (distance - moving) : 0;
-		enti->unit->OnMove(finish - direction * distance);
+		enti->coord = finish - direction * distance;
+		enti->unit->OnMove();
 	}
 	else
 	{
 		if( mapsPath->IsEmpty() ) // Stopping
 		{
 			enti->unit->OnMoveStop();
-			enti->tickFeatures.remove(this); // removing from Tick queue
+			isMoving = false;
+			return false;
 		}
 		else // Selecting next point
 		{
@@ -61,6 +72,7 @@ void FeatureMove::Tick(const float seconds)
 			distance = delta.Len();
 		}
 	}
+	return true;
 }
 
 }

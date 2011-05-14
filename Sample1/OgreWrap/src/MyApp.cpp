@@ -272,9 +272,9 @@ void MyApp::CreateStaticTerrain()
 		for( int x = 0; x < width; ++x )
 		{
 			// Getting terrain type (x, z)
-			short terrType = mapFull(x, z).terrType;
+			int terrainType = mapFull(x, z).terrainType;
 			// Getting it's name
-			const string &tex_name = mapFull.GetTerrain(terrType).name;
+			const string &tex_name = mapFull.GetTerrain(terrainType).name;
 			// Getting picture's part rectangle
 			const FloatRect rc = mapTexture.GetTexRect(tex_name);
 			// Adding to (x, z) square with this texture

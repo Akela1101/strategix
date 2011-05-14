@@ -11,7 +11,6 @@
 #include "OObject.h"
 
 #include "Unit.h"
-#include "CoordStructs.h"
 
 #include <OgrePrerequisites.h>
 #include <OgreVector3.h>
@@ -36,11 +35,11 @@ namespace Sample1
 
 	public:
 		OObjectUnit(Enti *enti);
-		virtual ~OObjectUnit();
+		virtual ~OObjectUnit() {}
 
 		virtual void OnTick(const float seconds);
 		virtual void OnMoveStart();
-		virtual void OnMove(const RealCoord newCoord);
+		virtual void OnMove();
 		virtual void OnMoveStop();
 
 	};

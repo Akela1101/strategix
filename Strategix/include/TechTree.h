@@ -8,6 +8,8 @@
 #ifndef _TECHTREE_H
 #define	_TECHTREE_H
 
+#include "StrategixError.h"
+
 #include <map>
 #include <string>
 
@@ -21,12 +23,14 @@ namespace Strategix
 
 	class EntiInfo;
 
-	typedef map<string, sh_p<EntiInfo> > TechMapType;
-
 	class TechTree
 	{
-	public:
-		string raceName;		
+	public: // Don't forget updating copy constuctor after changing member list!
+		string raceName;
+		string mainBuildingName;
+
+	private:
+		typedef map<string, sh_p<EntiInfo> > TechMapType;
 		TechMapType techMap;
 
 	public:
@@ -35,6 +39,13 @@ namespace Strategix
 		TechTree & operator =(const TechTree &_c);
 		inline void init(const TechTree &_c);
 
+		sh_p<EntiInfo> Node(const string name) const
+		{
+			TechMapType::const_iterator itEi = techMap.find(name);
+			if( itEi == techMap.end() )
+				STRATEGIX_ERROR(string("Wrong Enti name: ") + name);
+			return itEi->second;
+		}
 		void AddNode(sh_p<EntiInfo> entityInfo);
 
 	};

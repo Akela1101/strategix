@@ -13,6 +13,7 @@
 #include "Map.h"
 #include "Kernel.h"
 #include "StrategixError.h"
+#include "CoordStructs.h"
 
 #include <Ogre.h>
 
@@ -37,7 +38,7 @@ namespace Sample1
 OObjectUnit::OObjectUnit(Enti *enti)
 	:
 	Unit(enti),
-	OObject(dynamic_cast<const EntiInfoMesh*>(enti->ei)->meshName),
+	OObject(dynamic_cast<const EntiInfoMesh*>(enti->entityInfo)->meshName),
 	animationState(0)
 {
 	// Check all animations for corresponding mesh
@@ -46,15 +47,11 @@ OObjectUnit::OObjectUnit(Enti *enti)
 	entity->setUserAny(Any(this)); // Link from Entity to itself
 	entity->setQueryFlags(MOV_MASK);
 	
-	const float scale = dynamic_cast<const EntiInfoMesh*>(enti->ei)->meshScale;
+	const float scale = dynamic_cast<const EntiInfoMesh*>(enti->entityInfo)->meshScale;
 	node->setScale(scale, scale, scale);
 	node->setPosition(enti->coord.x, 0, enti->coord.y);
 
 	OnMoveStop();
-}
-
-OObjectUnit::~OObjectUnit()
-{	
 }
 
 void OObjectUnit::OnTick(const float seconds)
@@ -88,12 +85,16 @@ void OObjectUnit::OnMoveStart()
 	}
 }
 
-void OObjectUnit::OnMove(const RealCoord newCoord)
+void OObjectUnit::OnMove()
 {
+	const RealCoord &newCoord = enti->coord;
 	const Vector3 newPosition = Vector3(newCoord.x, 0, newCoord.y);
 	const Vector3 direction = newPosition - node->getPosition();
 
 	// Rotate
+	Radian rad = (node->getOrientation()*Vector3::UNIT_X).angleBetween(direction);
+	node->yaw(rad);
+/*
 	const Vector3 source = node->getOrientation() * Vector3::UNIT_X;
 	if( (1.0 + source.dotProduct(direction)) < 0.01 )
 	{
@@ -104,6 +105,7 @@ void OObjectUnit::OnMove(const RealCoord newCoord)
 		Quaternion quat = source.getRotationTo(direction);
 		node->rotate(quat);
 	}
+*/
 	// Move
 	node->setPosition(newPosition);
 }
@@ -125,52 +127,5 @@ void OObjectUnit::OnMoveStop()
 		cout << endl << "Warning: No default Idle action" << endl;
 	}
 }
-
-//void OObjectUnit::AddWayTo_Debug(Vector3 &pos)
-//{
-//	static MapCoord oldMapCoord = MapCoord(-1, -1);
-//	MapCoord newMapCoord = GetMapCoord(pos);
-//
-//	typedef std::deque< MapCoord> MapCoordDeque;
-//	static MapCoordDeque *saved_moveList;
-//
-//	// First time mouse click => Draw path
-//	if( oldMapCoord != newMapCoord )
-//	{
-//		oldMapCoord = newMapCoord;
-//
-//		typedef std::list< Map::Cell*> CellList;
-//		CellList *p_closed = 0;
-//
-//		// !!!!!!!!!!!!!!!
-//		// saved_moveList =  kernel->GetMap().FindPath_Debug(mapCoord, newMapCoord, p_closed);
-//
-//		//
-//		labelVector.clear();
-//		labelVector.reserve(p_closed->size());
-//
-//		for( CellList::iterator at = p_closed->begin(); at != p_closed->end(); ++at)
-//		{
-//			std::stringstream title;
-//			title << "\n" << (*at)->G << " + " << (*at)->H << "\n = " << (*at)->F ;
-//			sh_p<OObjectLabel> labelUnit(new OObjectLabel((*at)->mc, title.str().c_str()));
-//
-//			if( saved_moveList->end() != find(saved_moveList->begin(), saved_moveList->end(), (*at)->mc) )
-//				labelUnit->SetColor(ColourValue(1.0, 1.0, 1.0, 1.0));
-//			else
-//				labelUnit->SetColor(ColourValue(5.0, 0.0, 0.8, 1.0));
-//
-//			labelVector.push_back(labelUnit);
-//		}
-//
-//		delete p_closed;
-//	}
-//	else // Second time mouse click => Go
-//	{
-//		if( moveList != saved_moveList )
-//			delete moveList;
-//		moveList = saved_moveList;
-//	}
-//}
 
 }

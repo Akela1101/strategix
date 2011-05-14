@@ -28,7 +28,7 @@ namespace Strategix
 		sh_p<MapsPathsFinder> pathsFinder;
 		
 	public:
-		MapLocal();		
+		MapLocal(MapFull *mapFull);
 		virtual ~MapLocal();
 
 		sh_p<MapsPath> FindPath(const MapCoord from, const MapCoord till);

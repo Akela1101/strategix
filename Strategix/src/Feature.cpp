@@ -11,10 +11,6 @@
 namespace Strategix
 {
 
-Feature::Feature()
-{
-}
-
 Feature::~Feature()
 {
 }

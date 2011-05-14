@@ -16,6 +16,11 @@ namespace Strategix
 		AI,
 		NET
 	};
+
+	enum ResType
+	{
+		GOLD
+	};
 }
 
 #endif	/* _STRATEGIXCOMMON_H */
