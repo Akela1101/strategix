@@ -1,54 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configurationDescriptor version="69">
   <logicalFolder name="root" displayName="root" projectFiles="true">
-    <logicalFolder name="f1" displayName="CallBack" projectFiles="true">
-      <logicalFolder name="f1" displayName="include" projectFiles="true">
-        <itemPath>include/Mediator.h</itemPath>
-        <itemPath>include/Unit.h</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f2" displayName="src" projectFiles="true">
-        <itemPath>src/Mediator.cpp</itemPath>
-        <itemPath>src/Unit.cpp</itemPath>
-      </logicalFolder>
-    </logicalFolder>
-    <logicalFolder name="include" displayName="include" projectFiles="true">
-      <itemPath>include/CoordStructs.h</itemPath>
-      <itemPath>include/Enti.h</itemPath>
-      <itemPath>include/EntiInfo.h</itemPath>
-      <itemPath>include/Feature.h</itemPath>
-      <itemPath>include/FeatureInfo.h</itemPath>
-      <itemPath>include/FeatureMove.h</itemPath>
-      <itemPath>include/Kernel.h</itemPath>
-      <itemPath>include/KernelBase.h</itemPath>
-      <itemPath>include/Log.h</itemPath>
-      <itemPath>include/Map.h</itemPath>
-      <itemPath>include/MapFull.h</itemPath>
-      <itemPath>include/MapLocal.h</itemPath>
-      <itemPath>include/MapsPath.h</itemPath>
-      <itemPath>include/MapsPathsFinder.h</itemPath>
-      <itemPath>../common_include/Nya.hpp</itemPath>
-      <itemPath>include/Player.h</itemPath>
-      <itemPath>include/StrategixCommon.h</itemPath>
-      <itemPath>include/StrategixError.h</itemPath>
-      <itemPath>include/StrategixSingleton.h</itemPath>
-      <itemPath>include/TechTree.h</itemPath>
-      <itemPath>include/TechTreesBuilder.h</itemPath>
-    </logicalFolder>
     <logicalFolder name="src" displayName="src" projectFiles="true">
       <itemPath>src/CoordStructs.cpp</itemPath>
+      <itemPath>src/CoordStructs.h</itemPath>
       <itemPath>src/Enti.cpp</itemPath>
+      <itemPath>src/Enti.h</itemPath>
+      <itemPath>src/EntiInfo.h</itemPath>
       <itemPath>src/Feature.cpp</itemPath>
+      <itemPath>src/Feature.h</itemPath>
+      <itemPath>src/FeatureInfo.h</itemPath>
       <itemPath>src/FeatureMove.cpp</itemPath>
+      <itemPath>src/FeatureMove.h</itemPath>
       <itemPath>src/Kernel.cpp</itemPath>
+      <itemPath>src/Kernel.h</itemPath>
       <itemPath>src/KernelBase.cpp</itemPath>
+      <itemPath>src/KernelBase.h</itemPath>
       <itemPath>src/Log.cpp</itemPath>
+      <itemPath>src/Log.h</itemPath>
       <itemPath>src/Map.cpp</itemPath>
+      <itemPath>src/Map.h</itemPath>
       <itemPath>src/MapFull.cpp</itemPath>
+      <itemPath>src/MapFull.h</itemPath>
       <itemPath>src/MapLocal.cpp</itemPath>
+      <itemPath>src/MapLocal.h</itemPath>
       <itemPath>src/MapsPath.cpp</itemPath>
+      <itemPath>src/MapsPath.h</itemPath>
       <itemPath>src/MapsPathsFinder.cpp</itemPath>
+      <itemPath>src/MapsPathsFinder.h</itemPath>
+      <itemPath>src/Mediator.cpp</itemPath>
+      <itemPath>src/Mediator.h</itemPath>
       <itemPath>src/Player.cpp</itemPath>
+      <itemPath>src/Player.h</itemPath>
+      <itemPath>src/StrategixCommon.h</itemPath>
+      <itemPath>src/StrategixError.h</itemPath>
+      <itemPath>src/StrategixSingleton.h</itemPath>
       <itemPath>src/TechTree.cpp</itemPath>
+      <itemPath>src/TechTree.h</itemPath>
+      <itemPath>src/TechTreesBuilder.h</itemPath>
+      <itemPath>src/Unit.cpp</itemPath>
+      <itemPath>src/Unit.h</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"
@@ -63,7 +54,6 @@
     </logicalFolder>
   </logicalFolder>
   <sourceRootList>
-    <Elem>include</Elem>
     <Elem>src</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
@@ -77,7 +67,7 @@
       <compileType>
         <ccTool>
           <incDir>
-            <pElem>include</pElem>
+            <pElem>src</pElem>
             <pElem>../common_include</pElem>
           </incDir>
         </ccTool>
@@ -98,7 +88,7 @@
         <ccTool>
           <developmentMode>5</developmentMode>
           <incDir>
-            <pElem>include</pElem>
+            <pElem>src</pElem>
             <pElem>../common_include</pElem>
           </incDir>
         </ccTool>

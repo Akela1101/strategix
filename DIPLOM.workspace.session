@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Session Name="C:\Users\Nya\Projects\DIPLOM\DIPLOM.workspace">
+  <int Value="0" Name="m_selectedTab"/>
+  <wxString Value="C:\Users\Nya\Projects\DIPLOM\DIPLOM.workspace" Name="m_workspaceName"/>
+  <TabInfoArray Name="TabInfoArray">
+    <TabInfo>
+      <wxString Value="C:\Users\Nya\Projects\DIPLOM\Sample1\OgreWrap\src\MyFrameListener.cpp" Name="FileName"/>
+      <int Value="65" Name="FirstVisibleLine"/>
+      <int Value="73" Name="CurrentLine"/>
+      <wxArrayString Name="Bookmarks"/>
+    </TabInfo>
+  </TabInfoArray>
+  <SerializedObject Name="m_breakpoints">
+    <long Value="0" Name="Count"/>
+  </SerializedObject>
+</Session>

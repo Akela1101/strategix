@@ -5,6 +5,9 @@
 * Created on 14 Февраль 2010 г., 0:58
 */
 
+#include "MyGUI.h"
+#include "MyGUI_OgrePlatform.h"
+
 #include "MyFrameListener.h"
 #include "MapTexture.h"
 #include "MediatorFrameListener.h"
@@ -210,16 +213,19 @@ void MyApp::createScene()
 
 	CreateStaticTerrain();
 
+	// MyGUI
+	mPlatform.reset(new MyGUI::OgrePlatform());
+	mPlatform->initialise(mWindow, sceneManager);
+	mGUI.reset(MyGUI::Gui());
+	mGUI->initialise();
+	mGUI->setVisiblePointer(false);
+
+	MyGUI::StaticText *txt = mGUI->createWidget<MyGUI::StaticText>("StaticText", 10, 10, 300, 26, MyGUI::Align::Default, "Main");
+	txt->setCaption(string("#FFFFFFGold: #FFFFFF") + goldAmount.string());
+
 	// Class, keeping all the gameplay!
 	mediatorFrameListener.reset(new MediatorFrameListener(kernel));
 	mRoot->addFrameListener(mediatorFrameListener.get());
-}
-
-void MyApp::createFrameListener()
-{
-	frameListener.reset(new MyFrameListener(mWindow, mCamera));
-	frameListener->showDebugOverlay(true);
-	mRoot->addFrameListener(frameListener.get());
 }
 
 void MyApp::destroyScene()
@@ -227,6 +233,19 @@ void MyApp::destroyScene()
 	// Must use reset, not removeFrameListener!
 	mediatorFrameListener.reset();
 	frameListener.reset();
+
+	// MyGUI
+	mGUI->shutdown();
+	mGUI.reset();
+	mPlatform->shutdown();
+	mPlatform.reset();
+}
+
+void MyApp::createFrameListener()
+{
+	frameListener.reset(new MyFrameListener(mWindow, mCamera));
+	frameListener->showDebugOverlay(true);
+	mRoot->addFrameListener(frameListener.get());
 }
 
 // Adding tile to map in tile's coordinates coord{x,y}

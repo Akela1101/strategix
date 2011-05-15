@@ -13,9 +13,7 @@
                 <make-dep-project>../Strategix</make-dep-project>
             </make-dep-projects>
             <sourceRootList>
-                <sourceRootElem>include</sourceRootElem>
                 <sourceRootElem>src</sourceRootElem>
-                <sourceRootElem>OgreWrap/include</sourceRootElem>
                 <sourceRootElem>OgreWrap/src</sourceRootElem>
             </sourceRootList>
             <confList>
