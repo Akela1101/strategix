@@ -5,8 +5,8 @@
  * Created on 13 Январь 2011 г., 21:23
  */
 
-#include <OGRE/OgreEntity.h>
-#include <OGRE/OgreNode.h>
+#include <OgreEntity.h>
+#include <OgreNode.h>
 
 #include "OObjectUnit.h"
 #include "OObjectResource.h"
