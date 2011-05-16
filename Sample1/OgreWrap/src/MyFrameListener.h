@@ -59,8 +59,7 @@ namespace Sample1
 		OIS::Keyboard* mKeyboard;
 		OIS::JoyStick* mJoy;
 
-		//
-		RaySceneQuery *raySceneQuery;
+		//		
 		sh_p<MyMouseListener> mouseListener;
 		sh_p<LabelsHolder> labelsHolder;
 

@@ -51,16 +51,14 @@ namespace Strategix
 		Enti(const EntiInfo *entityInfo, const MapCoord &mapCoord); // for RealCoord ???
 		virtual ~Enti();
 
-		void SetCoord(const RealCoord newCoord);
-
 		void Tick(const float seconds);
-		FeatureMove& Move();
+		bool Move(const RealCoord newCoord);
 
 	private:
 		Enti(const Enti &_c);
 		Enti& operator =(const Enti &_c);
 
-		Feature& GetFeature(const string &name);
+		Feature* GetFeature(const string &name);
 		sh_p<Feature> CreateFeature(const string &name, const FeatureInfo *featureInfo);
 	};
 }

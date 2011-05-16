@@ -20,22 +20,25 @@ namespace Sample1
 
 	class MyMouseListener : public OIS::MouseListener
 	{
-		Camera* camera;
-		RaySceneQuery *raySceneQuery;
+		Camera* camera;		
 		float camera_speed, camera_zoom_speed;
 		Entity *currEntity, *lastEntity;
 		QueryFlags currMask;
 
+		mutable RaySceneQuery *raySceneQuery;
+
 	public:
-		MyMouseListener(Camera* camera, RaySceneQuery *raySceneQuery);
-		virtual ~MyMouseListener() {}
+		MyMouseListener(Camera* camera);
+		virtual ~MyMouseListener();
 
-		bool mouseMoved(const OIS::MouseEvent &mouse_event);
-		bool mousePressed(const OIS::MouseEvent &mouse_event, OIS::MouseButtonID id);
-		bool mouseReleased(const OIS::MouseEvent &mouse_event, OIS::MouseButtonID id);
-
+		virtual bool mouseMoved(const OIS::MouseEvent &mouse_event);
+		virtual bool mousePressed(const OIS::MouseEvent &mouse_event, OIS::MouseButtonID id);
+		virtual bool mouseReleased(const OIS::MouseEvent&, OIS::MouseButtonID) { return true; }
+		
 	private:
-		inline Ray GetMouseRay(const OIS::MouseEvent &mouse_event) const;
+		Ray GetMouseRay(const OIS::MouseEvent &mouse_event) const;
+		const Vector3 GetTerrainCoord(const OIS::MouseEvent &mouse_event) const;
+		Entity *SelectEntity(const OIS::MouseEvent &mouse_event, QueryFlags *newMask = 0) const;
 
 	};
 }

@@ -8,6 +8,7 @@
 #include <Ogre.h>
 
 #include "OObjectResource.h"
+#include "MyAppCommon.h"
 
 
 namespace Sample1
@@ -17,6 +18,8 @@ OObjectResource::OObjectResource(const std::string &meshName, const RealCoord &c
 	:
 	OObject(meshName)
 {
+	entity->setQueryFlags(RES_MASK); // Mask for mouse selection
+
 	node->setPosition(coord.x, 0, coord.y);
 }
 

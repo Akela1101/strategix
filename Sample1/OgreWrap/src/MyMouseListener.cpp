@@ -19,71 +19,48 @@ namespace Sample1
 {
 	using namespace Ogre;
 
-MyMouseListener::MyMouseListener(Camera* camera, RaySceneQuery *raySceneQuery)
+MyMouseListener::MyMouseListener(Camera* camera)
 	:
 	camera(camera),
-	raySceneQuery(raySceneQuery),
+	raySceneQuery(sceneManager->createRayQuery(Ray())),
 	camera_speed(0.4f),
 	camera_zoom_speed(0.01f),
 	currEntity(0),
 	lastEntity(0),
-	currMask(NON_MASK)
+	currMask(NO_MASK)
 {
-//  ### for CEGUI 7.1
-//	// CEGUI setup
-//	CEGUI::OgreRenderer::bootstrapSystem();
-//
-//	// Mouse
-//	CEGUI::SchemeManager::getSingleton().create((CEGUI::utf8*)"TaharezLook.scheme");
-//	CEGUI::MouseCursor::getSingleton().setImage("TaharezLook", "MouseArrow");
-//	CEGUI::System::getSingleton().setMouseMoveScaling(4);	
+}
+
+MyMouseListener::~MyMouseListener()
+{
+	sceneManager->destroyQuery(raySceneQuery);
 }
 
 bool MyMouseListener::mouseMoved(const OIS::MouseEvent &mouse_event)
 {	
-	// Update CEGUI with the mouse motion
-	//CEGUI::System::getSingleton().injectMousePosition(mouse_event.state.X.abs, mouse_event.state.Y.abs);
-
 	camera->moveRelative(Vector3(0, 0, -camera_zoom_speed * mouse_event.state.Z.rel));
 
 	if( mouse_event.state.buttonDown(OIS::MB_Middle) )
 	{
-		// We don't want to yaw in strategy.
-		// comment next line later !!
+		// @#~ We don't want to yaw in strategy.
+		// So comment next line later !!!
 		camera->yaw(Degree(-mouse_event.state.X.rel * camera_speed));
-
 		camera->pitch(Degree(-mouse_event.state.Y.rel * camera_speed));
 	}
-
 	return true;
 }
 
 bool MyMouseListener::mousePressed(const OIS::MouseEvent &mouse_event, OIS::MouseButtonID id)
 {
-	if( id == OIS::MB_Left ) // Selection
+	// Select
+	if( id == OIS::MB_Left ) 
 	{
-		//CEGUI::Point mousePos = CEGUI::MouseCursor::getSingleton().getPosition();
-
-		// Try to select one object
-		Ray mouseRay = GetMouseRay(mouse_event);
-		raySceneQuery->setRay(mouseRay);
-		raySceneQuery->setSortByDistance(true);
-		RaySceneQueryResult &result = raySceneQuery->execute();
-
-		currEntity = 0;
-		foreach( RaySceneQueryResultEntry entry, result )
+		currEntity = SelectEntity(mouse_event, &currMask);
+		if( currEntity )
 		{
-			// If movable and from OObjectUnit
-			if( entry.movable && entry.movable->getQueryFlags() & MOV_MASK )
-			{
-				// Select the nearest
-				currEntity = dynamic_cast<Entity*>(entry.movable);
-				currEntity->getParentSceneNode()->showBoundingBox(true);
-				currMask = MOV_MASK;
-				break;
-			}
+			currEntity->getParentSceneNode()->showBoundingBox(true);
 		}
-
+		
 		if( lastEntity != currEntity )
 		{
 			// Deselect
@@ -94,38 +71,59 @@ bool MyMouseListener::mousePressed(const OIS::MouseEvent &mouse_event, OIS::Mous
 			lastEntity = currEntity;
 		}
 	}
-	else if( id == OIS::MB_Right )  // Move currently selected Entity.
+	// Move selected Entity
+	else if( id == OIS::MB_Right )  
 	{
-		if( currEntity && currMask & MOV_MASK)
-		{
-			// Interset camera-mouse ray with plane XZ.
-			Plane terrainPlane(Vector3(0, 1, 0), 0); // XZ
-
-			Ray mouseRay = GetMouseRay(mouse_event);
-			Real dist = mouseRay.intersects(terrainPlane).second;
-			Vector3 intersectPoint = mouseRay.getPoint(dist);
-
+		if( currEntity && (currMask == UNIT_MASK) )
+		{			
+			const Vector3 &terrainCoord = GetTerrainCoord(mouse_event);
 			OObjectUnit *oObjectUnit = any_cast<OObjectUnit*>(currEntity->getUserAny());
-			oObjectUnit->enti->Move()(RealCoord(intersectPoint.x, intersectPoint.z));
+			oObjectUnit->enti->Move(RealCoord(terrainCoord.x, terrainCoord.z));
 		}
 	}
-
-	return true;
-}
-
-bool MyMouseListener::mouseReleased(const OIS::MouseEvent &mouse_event, OIS::MouseButtonID id)
-{
 	return true;
 }
 
 Ray MyMouseListener::GetMouseRay(const OIS::MouseEvent &mouse_event) const
 {
-	const int d_x = mouse_event.state.X.abs;
-	const int d_y = mouse_event.state.Y.abs;
+	const float d_x = mouse_event.state.X.abs;
+	const float d_y = mouse_event.state.Y.abs;
+	const float width = mouse_event.state.width;
+	const float height = mouse_event.state.height;
 
-	return camera->getCameraToViewportRay(
-			(float)d_x / mouse_event.state.width,
-			(float)d_y / mouse_event.state.height);
+	return camera->getCameraToViewportRay(d_x / width, d_y / height);
+}
+
+const Vector3 MyMouseListener::GetTerrainCoord(const OIS::MouseEvent &mouse_event) const
+{
+	// Interset camera-mouse ray with plane XZ
+	static Plane terrainPlane(Vector3(0, 1, 0), 0); // XZ
+
+	Ray mouseRay = GetMouseRay(mouse_event);
+	Real dist = mouseRay.intersects(terrainPlane).second;
+
+	return mouseRay.getPoint(dist);
+}
+
+Entity *MyMouseListener::SelectEntity(const OIS::MouseEvent &mouse_event, QueryFlags *newMask) const
+{
+	// Try to select one object
+	Ray mouseRay = GetMouseRay(mouse_event);
+	raySceneQuery->setRay(mouseRay);
+	raySceneQuery->setSortByDistance(true);
+	RaySceneQueryResult &result = raySceneQuery->execute();
+	
+	foreach( RaySceneQueryResultEntry entry, result )
+	{
+		// If movable and not a terrain
+		QueryFlags mask = (QueryFlags)entry.movable->getQueryFlags();
+		if( entry.movable && mask )
+		{
+			*newMask = mask;
+			return dynamic_cast<Entity*>(entry.movable);
+		}
+	}
+	return 0;
 }
 
 }

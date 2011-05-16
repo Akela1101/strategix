@@ -57,6 +57,7 @@ namespace Strategix
 namespace MyGUI
 {
 	class Gui;
+	class OgrePlatform;
 }
 
 namespace Sample1
@@ -84,6 +85,8 @@ namespace Sample1
 		String mResourcePath;
 		String mConfigPath;
 
+		bool isConfigure;
+
 		sh_p<MyGUI::Gui> mGUI;
 		sh_p<MyGUI::OgrePlatform> mPlatform;
 
@@ -95,7 +98,7 @@ namespace Sample1
 	public:
 		MyApp(sh_p<Kernel> kernel);
 		virtual ~MyApp();
-		virtual void go();
+		virtual void go(const bool isConfigure);
 
 	private:
 		virtual bool setup();
@@ -107,7 +110,7 @@ namespace Sample1
 		virtual void createResourceListener();
 		virtual void loadResources();
 		virtual void createScene();
-		virtual void createFrameListener();
+		//virtual void createFrameListener();
 		virtual void destroyScene();		
 
 		void AddTileToTerrainMesh(ManualObject &mo, const Vector2 &coord, const FloatRect &tex_rect, int &offset);

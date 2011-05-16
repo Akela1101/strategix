@@ -44,8 +44,8 @@ OBJECTFILES= \
 	${OBJECTDIR}/OgreWrap/src/OObjectLabel.o \
 	${OBJECTDIR}/OgreWrap/src/OObjectTitled.o \
 	${OBJECTDIR}/OgreWrap/src/MyFrameListener.o \
-	${OBJECTDIR}/OgreWrap/src/OObject.o \
 	${OBJECTDIR}/OgreWrap/src/OObjectUnit.o \
+	${OBJECTDIR}/OgreWrap/src/OObject.o \
 	${OBJECTDIR}/OgreWrap/src/ObjectTitle.o
 
 
@@ -130,15 +130,15 @@ ${OBJECTDIR}/OgreWrap/src/MyFrameListener.o: OgreWrap/src/MyFrameListener.cpp
 	${RM} $@.d
 	$(COMPILE.cc) -g -Isrc -IOgreWrap/src -I../Strategix/src -I../common_include -I/usr/include/OGRE -I/usr/include/OIS -I/usr/local/include/MYGUI -MMD -MP -MF $@.d -o ${OBJECTDIR}/OgreWrap/src/MyFrameListener.o OgreWrap/src/MyFrameListener.cpp
 
-${OBJECTDIR}/OgreWrap/src/OObject.o: OgreWrap/src/OObject.cpp 
-	${MKDIR} -p ${OBJECTDIR}/OgreWrap/src
-	${RM} $@.d
-	$(COMPILE.cc) -g -Isrc -IOgreWrap/src -I../Strategix/src -I../common_include -I/usr/include/OGRE -I/usr/include/OIS -I/usr/local/include/MYGUI -MMD -MP -MF $@.d -o ${OBJECTDIR}/OgreWrap/src/OObject.o OgreWrap/src/OObject.cpp
-
 ${OBJECTDIR}/OgreWrap/src/OObjectUnit.o: OgreWrap/src/OObjectUnit.cpp 
 	${MKDIR} -p ${OBJECTDIR}/OgreWrap/src
 	${RM} $@.d
 	$(COMPILE.cc) -g -Isrc -IOgreWrap/src -I../Strategix/src -I../common_include -I/usr/include/OGRE -I/usr/include/OIS -I/usr/local/include/MYGUI -MMD -MP -MF $@.d -o ${OBJECTDIR}/OgreWrap/src/OObjectUnit.o OgreWrap/src/OObjectUnit.cpp
+
+${OBJECTDIR}/OgreWrap/src/OObject.o: OgreWrap/src/OObject.cpp 
+	${MKDIR} -p ${OBJECTDIR}/OgreWrap/src
+	${RM} $@.d
+	$(COMPILE.cc) -g -Isrc -IOgreWrap/src -I../Strategix/src -I../common_include -I/usr/include/OGRE -I/usr/include/OIS -I/usr/local/include/MYGUI -MMD -MP -MF $@.d -o ${OBJECTDIR}/OgreWrap/src/OObject.o OgreWrap/src/OObject.cpp
 
 ${OBJECTDIR}/OgreWrap/src/ObjectTitle.o: OgreWrap/src/ObjectTitle.cpp 
 	${MKDIR} -p ${OBJECTDIR}/OgreWrap/src

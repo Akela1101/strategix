@@ -57,8 +57,10 @@ MyApp::~MyApp()
 #endif
 }
 
-void MyApp::go()
+void MyApp::go(const bool isConfigure)
 {
+	this->isConfigure = isConfigure;
+
 	if( !setup() )
 		return;
 
@@ -99,8 +101,17 @@ bool MyApp::setup()
 
 	setupResources();
 
-	if( !configure() )
-		return false;
+	if( isConfigure )
+	{
+		if( !configure() )
+			return false;
+	}
+	else
+	{
+		mRoot->restoreConfig();
+	}
+
+	mWindow = mRoot->initialise(true);
 
 	chooseSceneManager();
 	createCamera();
@@ -114,8 +125,6 @@ bool MyApp::setup()
 	loadResources();
 
 	createScene();
-
-	createFrameListener();
 
 	return true;
 }
@@ -158,13 +167,9 @@ bool MyApp::configure()
 	{
 		// If returned true, user clicked OK so initialise
 		// Here we choose to let the system create a default rendering window by passing 'true'
-		mWindow = mRoot->initialise(true);
 		return true;
 	}
-	else
-	{
-		return false;
-	}
+	return false;
 }
 
 void MyApp::chooseSceneManager()
@@ -216,12 +221,17 @@ void MyApp::createScene()
 	// MyGUI
 	mPlatform.reset(new MyGUI::OgrePlatform());
 	mPlatform->initialise(mWindow, sceneManager);
-	mGUI.reset(MyGUI::Gui());
+	mGUI.reset(new MyGUI::Gui());
 	mGUI->initialise();
 	mGUI->setVisiblePointer(false);
 
 	MyGUI::StaticText *txt = mGUI->createWidget<MyGUI::StaticText>("StaticText", 10, 10, 300, 26, MyGUI::Align::Default, "Main");
-	txt->setCaption(string("#FFFFFFGold: #FFFFFF") + goldAmount.string());
+	txt->setCaption(string("#FFFFFFGold: #FFFFFF") + "99999");
+
+	// Main FrameListener
+	frameListener.reset(new MyFrameListener(mWindow, mCamera));
+	frameListener->showDebugOverlay(true);
+	mRoot->addFrameListener(frameListener.get());
 
 	// Class, keeping all the gameplay!
 	mediatorFrameListener.reset(new MediatorFrameListener(kernel));
@@ -230,7 +240,7 @@ void MyApp::createScene()
 
 void MyApp::destroyScene()
 {
-	// Must use reset, not removeFrameListener!
+	// Use reset, not removeFrameListener!
 	mediatorFrameListener.reset();
 	frameListener.reset();
 
@@ -239,13 +249,6 @@ void MyApp::destroyScene()
 	mGUI.reset();
 	mPlatform->shutdown();
 	mPlatform.reset();
-}
-
-void MyApp::createFrameListener()
-{
-	frameListener.reset(new MyFrameListener(mWindow, mCamera));
-	frameListener->showDebugOverlay(true);
-	mRoot->addFrameListener(frameListener.get());
 }
 
 // Adding tile to map in tile's coordinates coord{x,y}

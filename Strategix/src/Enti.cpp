@@ -45,22 +45,15 @@ void Enti::Tick(const float seconds)
 	unit->OnTick(seconds);
 }
 
-FeatureMove& Enti::Move()
-{
-	return dynamic_cast<FeatureMove&>(GetFeature("move"));
-}
-
-Feature& Enti::GetFeature(const string &name)
+Feature* Enti::GetFeature(const string &name)
 {
 	FeaturesType::iterator feature = features.find(name);
 	if( feature != features.end() )
 	{
-		return *feature->second;
+		return feature->second.get();
 	}
-	else
-	{
-		STRATEGIX_ERROR(string("There is no feature named: ") + name);
-	}
+	cout << string("There is no feature named: ") + name << endl; // DEBUG @#~
+	return 0;
 }
 
 sh_p<Feature> Enti::CreateFeature(const string &name, const FeatureInfo *featureInfo)
@@ -71,9 +64,21 @@ sh_p<Feature> Enti::CreateFeature(const string &name, const FeatureInfo *feature
 	}
 	else
 	{
+		// @#~ !!!!!!!!!!!
 		//STRATEGIX_ERROR(string("Unable to create feature named: ") + name);
 		return sh_p<Feature>();
 	}
+}
+
+bool Enti::Move(const RealCoord newCoord)
+{
+	FeatureMove* featureMove = dynamic_cast<FeatureMove*>(GetFeature("move"));
+	if( featureMove )
+	{
+		featureMove->Move(newCoord);
+		return true;
+	}
+	return false;
 }
 
 }

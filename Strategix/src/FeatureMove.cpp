@@ -28,25 +28,6 @@ FeatureMove::FeatureMove(const FeatureInfo *featureInfo, Enti *enti)
 {
 }
 
-bool FeatureMove::operator() (const RealCoord newCoord)
-{
-	distance = 0;
-	mapsPath = enti->player->map->FindPath(enti->coord, newCoord);
-
-	if( !mapsPath.get() )
-		return false;
-
-	if( !isMoving )
-	{
-		isMoving = true;
-		
-		enti->unit->OnMoveStart();
-		enti->tickFeatures.push_back(this); // adding to Tick queue
-	}
-
-	return true;
-}
-
 bool FeatureMove::Tick(const float seconds)
 {
 	if( distance > 0 ) //Moving
@@ -72,6 +53,25 @@ bool FeatureMove::Tick(const float seconds)
 			distance = delta.Len();
 		}
 	}
+	return true;
+}
+
+bool FeatureMove::Move(const RealCoord newCoord)
+{
+	distance = 0;
+	mapsPath = enti->player->map->FindPath(enti->coord, newCoord);
+
+	if( !mapsPath.get() )
+		return false;
+
+	if( !isMoving )
+	{
+		isMoving = true;
+
+		enti->unit->OnMoveStart();
+		enti->tickFeatures.push_back(this); // adding to Tick queue
+	}
+
 	return true;
 }
 

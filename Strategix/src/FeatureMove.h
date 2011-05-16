@@ -35,7 +35,7 @@ namespace Strategix
 
 		virtual bool Tick(const float seconds);
 
-		bool operator() (const RealCoord newCoord);
+		bool Move(const RealCoord newCoord);
 			
 
 	private:

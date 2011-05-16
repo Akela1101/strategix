@@ -121,7 +121,7 @@ int main(int argc, char *argv[])
 		MyApp myApp(kernel);
 		try
 		{
-			myApp.go();
+			myApp.go(false);
 		}
 		catch( Ogre::Exception& e )
 		{
@@ -132,13 +132,13 @@ int main(int argc, char *argv[])
 			cout << endl << e.what() << endl;
 		}
 		cout << endl << "Exit from Ogre. Start to destruct it." << endl;
+	}
 
 // Reenable autorepeat in KDE ! *WALL*
 #ifdef __linux__
 	cout << endl << "Setting keyboard autorepeat back ON." << endl << endl;
-	ret = std::system("xset r");
+	int ret = std::system("xset r");
 #endif
-	}
 
 #if defined( __WIN32__ ) || defined( _WIN32 )
 	getch();

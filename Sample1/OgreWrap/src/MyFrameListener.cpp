@@ -7,7 +7,6 @@
 
 #include "MyMouseListener.h"
 #include "LabelsHolder.h"
-#include "MyAppCommon.h"
 
 #include "OgreStringConverter.h"
 
@@ -39,9 +38,8 @@ MyFrameListener::MyFrameListener(RenderWindow* mWindow, Camera* mCamera)
 	mSceneDetailIndex(0),
 	mMoveSpeed(10),
 	mRotateSpeed(36),
-	mDebugOverlay(OverlayManager::getSingleton().getByName("Core/DebugOverlay")),
-	raySceneQuery(sceneManager->createRayQuery(Ray())),
-	mouseListener(new MyMouseListener(mCamera, raySceneQuery)),
+	mDebugOverlay(OverlayManager::getSingleton().getByName("Core/DebugOverlay")),	
+	mouseListener(new MyMouseListener(mCamera)),
 	labelsHolder(new LabelsHolder())
 {
 	LogManager::getSingletonPtr()->logMessage("*** Initializing OIS ***");
@@ -99,8 +97,6 @@ MyFrameListener::~MyFrameListener()
 	//Remove ourself as a Window listener
 	WindowEventUtilities::removeWindowEventListener(mWindow, this);
 	windowClosed(mWindow);
-
-	sceneManager->destroyQuery(raySceneQuery);
 }
 
 bool MyFrameListener::processUnbufferedKeyInput(const FrameEvent& evt)
