@@ -11,7 +11,7 @@
 
 namespace Strategix
 {
-	template<typename T>
+	template<typename T, typename Y>
 	struct Coord
 	{
 		T x, y;
@@ -20,10 +20,9 @@ namespace Strategix
 		Coord(const Coord &_c) : x(_c.x), y(_c.y) {}
 		Coord(const T x, const T y) : x(x), y(y) {}
 
-		template<typename Y>
-		operator Coord<Y>() const
+		operator Coord<Y, T>() const
 		{
-			return Coord<Y>(x, y);
+			return Coord<Y, T>(x, y);
 		}
 
 		bool operator ==(const Coord &_r) const
@@ -78,12 +77,14 @@ namespace Strategix
 		}
 	};
 
-	typedef Coord<int> MapCoord; // used in Maps
-	typedef Coord<float> RealCoord; // used in Enti and the game
+	typedef Coord<int, float> MapCoord; // used in Maps
+	typedef Coord<float, int> RealCoord; // used in Enti and everywhere
 
 	template<>
-	template<>
-	MapCoord::operator RealCoord() const;
+	MapCoord::operator RealCoord() const
+	{
+		return RealCoord(0.5 + x, 0.5 + y); // Center object in cell
+	}
 }
 
 #endif	/* _COORDSTRUCTS_H */

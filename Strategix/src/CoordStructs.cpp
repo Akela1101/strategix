@@ -6,17 +6,11 @@
  */
 
 #include "CoordStructs.h"
-#include "KernelBase.h"
 
 
 namespace Strategix
 {
 
-template<>
-template<>
-MapCoord::operator RealCoord() const
-{
-	return RealCoord(0.5 + x, 0.5 + y); // Center object in cell
-}
+
 
 }

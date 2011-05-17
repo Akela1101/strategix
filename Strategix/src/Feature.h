@@ -22,7 +22,7 @@ namespace Strategix
 		Feature(Enti *enti) : enti(enti) {}
 		virtual ~Feature() = 0;
 
-		virtual bool Tick(const float seconds) {}
+		virtual bool Tick(const float seconds) = 0;
 
 	private:
 		Feature(const Feature &_c);

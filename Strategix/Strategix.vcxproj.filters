@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="src\CoordStructs.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Unit.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Enti.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Feature.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FeatureMove.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Kernel.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\KernelBase.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Log.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Map.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MapFull.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MapLocal.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MapsPath.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MapsPathsFinder.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Mediator.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Player.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TechTree.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\CoordStructs.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Enti.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\EntiInfo.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Feature.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FeatureInfo.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FeatureMove.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Kernel.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\KernelBase.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Log.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Map.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MapFull.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MapLocal.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MapsPath.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MapsPathsFinder.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Mediator.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Player.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\StrategixCommon.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\StrategixError.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\StrategixSingleton.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TechTree.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TechTreesBuilder.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Unit.h">
+      <Filter>src</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{05a3e075-34ab-45f1-9af2-6799ad6629eb}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
