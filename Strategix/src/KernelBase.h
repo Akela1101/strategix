@@ -9,9 +9,12 @@
 #define	_KERNELBASE_H
 
 #include "TechTree.h"
+#include "ResourceInfo.h"
 #include "StrategixSingleton.h"
+#include "StrategixCommon.h"
 
 #include <string>
+#include <map>
 #include <vector>
 
 #include "Nya.hpp"
@@ -24,19 +27,26 @@ namespace Strategix
 
 	class TechTreesBuilder;
 
+	typedef std::map<std::string, sh_p<ResourceInfo> > ResourceInfos;
+
 	class KernelBase : public StrategixSingleton<KernelBase>
 	{
 	private:
 		TechTreesType techTrees;
+		
+		ResourceInfos resourceInfos;
 
 	public:
-		// U must call these functions before initialize Kernel!
+		// These functions are called before initialize Kernel!
+		void Configure(const string configFileName);
 		void BuildTechTrees(sh_p<TechTreesBuilder> techTreesBuilder);
-
+		
 		// GET
 		sh_p<vector<string> > GetMapNames();
 		sh_p<vector<string> > GetRaceNames();
 		const TechTree& GetTechTree(const string raceName) { return *techTrees[raceName]; }
+		const ResourceInfo& GetResourceInfo(const string resourceName) { return *resourceInfos[resourceName]; }
+		const ResourceInfos& GetResourceInfos() { return resourceInfos; }
 	};
 }
 

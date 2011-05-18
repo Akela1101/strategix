@@ -73,23 +73,26 @@ void TechTreesBuilderFromXml::BuildEntity(sh_p<TechTree> techTree, const pt::ptr
 	eim->name = entityPropTree.get<string>("name");
 	eim->kind = entityPropTree.get<string>("kind");
 
-/*
+
 	foreach( const pt::ptree::value_type &v, entityPropTree.get_child("resources") )
 	{
-		const pt::ptree &resLeaf = v.second; // gold or something else
-		eim->resources[v.first] = resLeaf.get_value<ResType>();
-	}
+		const string &resName = v.first; // gold or something else
+		// @#~ Check if such resName is defined in config
 
+		const pt::ptree &res = v.second; 
+		eim->resources(resName) = res.get_value<ResType>();
+	}
+/*
 	foreach( const pt::ptree::value_type &v, entityPropTree.get_child("depends", pt::ptree()) ) // Empty if no depends
 	{
-		const pt::ptree &dependLeaf = v.second; // name
-		eim->depends.push_back( dependLeaf.get_value<string>() );
+		const pt::ptree &depend = v.second; // name
+		eim->depends.push_back( depend.get_value<string>() );
 	}
 
 	foreach( const pt::ptree::value_type &v, entityPropTree.get_child("provides", pt::ptree()) ) // Empty if no provides
 	{
-		const pt::ptree &provideLeaf = v.second; // name
-		eim->provides.push_back( provideLeaf.get_value<string>() );
+		const pt::ptree &provide = v.second; // name
+		eim->provides.push_back( provide.get_value<string>() );
 	}
 */
 	eim->meshName = entityPropTree.get<string>("mesh");
@@ -104,7 +107,16 @@ void TechTreesBuilderFromXml::BuildEntity(sh_p<TechTree> techTree, const pt::ptr
 		{
 			if( featureName == "move" )
 			{
-				eim->featureInfos[featureName].reset(new FeatureInfoMove(feature.get<float>("speed")));
+				const float speed = feature.get<float>("speed");
+				eim->featureInfos[featureName].reset(new FeatureInfoMove(speed));
+			}
+			else if( featureName == "collect" )
+			{
+				const float speed = feature.get<ResType>("speed");
+				const float radius = feature.get<float>("radius");
+				const float capacity = feature.get_child("capacity").get<ResType>("gold");
+				// @#~ Only gold !!!! So change it to Resources.
+				eim->featureInfos[featureName].reset(new FeatureInfoCollect(speed, radius, capacity));
 			}
 		}
 		catch(pt::ptree_error){}

@@ -22,10 +22,10 @@ namespace Sample1
 	static const float minCameraHeight = 1.0;
 
 
-MyFrameListener::MyFrameListener(RenderWindow* mWindow, Camera* mCamera)
+MyFrameListener::MyFrameListener(RenderWindow* window, Camera* camera)
 	:
-	mWindow(mWindow),
-	mCamera(mCamera),
+	window(window),
+	camera(camera),
 	mTranslateVector(Vector3::ZERO),
 	mCurrentSpeed(0),
 	mStatsOn(true),
@@ -39,7 +39,7 @@ MyFrameListener::MyFrameListener(RenderWindow* mWindow, Camera* mCamera)
 	mMoveSpeed(10),
 	mRotateSpeed(36),
 	mDebugOverlay(OverlayManager::getSingleton().getByName("Core/DebugOverlay")),	
-	mouseListener(new MyMouseListener(mCamera)),
+	mouseListener(new MyMouseListener(camera)),
 	labelsHolder(new LabelsHolder())
 {
 	LogManager::getSingletonPtr()->logMessage("*** Initializing OIS ***");
@@ -47,7 +47,7 @@ MyFrameListener::MyFrameListener(RenderWindow* mWindow, Camera* mCamera)
 	size_t windowHnd = 0;
 	std::ostringstream windowHndStr;
 
-	mWindow->getCustomAttribute("WINDOW", &windowHnd);
+	window->getCustomAttribute("WINDOW", &windowHnd);
 	windowHndStr << windowHnd;
 	pl.insert(std::make_pair(std::string("WINDOW"), windowHndStr.str()));
 #if defined OIS_WIN32_PLATFORM
@@ -77,12 +77,12 @@ MyFrameListener::MyFrameListener(RenderWindow* mWindow, Camera* mCamera)
 	}
 
 	//Set initial mouse clipping size
-	windowResized(mWindow);
+	windowResized(window);
 
 	showDebugOverlay(true);
 
 	//Register as a Window listener
-	WindowEventUtilities::addWindowEventListener(mWindow, this);
+	WindowEventUtilities::addWindowEventListener(window, this);
 
 	mMouse->setEventCallback(mouseListener.get());
 
@@ -95,8 +95,8 @@ MyFrameListener::MyFrameListener(RenderWindow* mWindow, Camera* mCamera)
 MyFrameListener::~MyFrameListener()
 {
 	//Remove ourself as a Window listener
-	WindowEventUtilities::removeWindowEventListener(mWindow, this);
-	windowClosed(mWindow);
+	WindowEventUtilities::removeWindowEventListener(window, this);
+	windowClosed(window);
 }
 
 bool MyFrameListener::processUnbufferedKeyInput(const FrameEvent& evt)
@@ -163,7 +163,7 @@ bool MyFrameListener::processUnbufferedKeyInput(const FrameEvent& evt)
 	{
 		StringStream ss;
 		ss << "screenshot_" << ++mNumScreenShots << ".png";
-		mWindow->writeContentsToFile(ss.str());
+		window->writeContentsToFile(ss.str());
 		mTimeUntilNextToggle = 0.5;
 		mDebugText = "Saved: " + ss.str();
 	}
@@ -173,11 +173,11 @@ bool MyFrameListener::processUnbufferedKeyInput(const FrameEvent& evt)
 		mSceneDetailIndex = (mSceneDetailIndex + 1) % 3;
 		switch( mSceneDetailIndex )
 		{
-			case 0: mCamera->setPolygonMode(PM_SOLID);
+			case 0: camera->setPolygonMode(PM_SOLID);
 				break;
-			case 1: mCamera->setPolygonMode(PM_WIREFRAME);
+			case 1: camera->setPolygonMode(PM_WIREFRAME);
 				break;
-			case 2: mCamera->setPolygonMode(PM_POINTS);
+			case 2: camera->setPolygonMode(PM_POINTS);
 				break;
 		}
 		mTimeUntilNextToggle = 0.5;
@@ -195,8 +195,8 @@ bool MyFrameListener::processUnbufferedKeyInput(const FrameEvent& evt)
 
 	// Print camera details
 	if( displayCameraDetails )
-		mDebugText = "P: " + StringConverter::toString(mCamera->getDerivedPosition()) +
-		" " + "O: " + StringConverter::toString(mCamera->getDerivedOrientation());
+		mDebugText = "P: " + StringConverter::toString(camera->getDerivedPosition()) +
+		" " + "O: " + StringConverter::toString(camera->getDerivedOrientation());
 
 	// @#~
 	if( mKeyboard->isKeyDown(OIS::KC_1) && mTimeUntilNextToggle <= 0 )
@@ -213,16 +213,16 @@ bool MyFrameListener::processUnbufferedKeyInput(const FrameEvent& evt)
 
 bool MyFrameListener::frameStarted(const FrameEvent &event)
 {
-	Vector3 camPos = mCamera->getPosition();
+	Vector3 camPos = camera->getPosition();
 
-	// Set mCamera positon over the terrain
+	// Set camera positon over the terrain
 	static Vector3 lastCamPos;
 	if( lastCamPos != camPos )
 	{
 		if( camPos.y < minCameraHeight )
 			camPos.y = minCameraHeight;
 
-		mCamera->setPosition(camPos);
+		camera->setPosition(camPos);
 		lastCamPos = camPos;
 	}
 
@@ -232,7 +232,7 @@ bool MyFrameListener::frameStarted(const FrameEvent &event)
 bool MyFrameListener::frameRenderingQueued(const FrameEvent& evt)
 {
 
-	if( mWindow->isClosed() ) return false;
+	if( window->isClosed() ) return false;
 
 	mSpeedLimit = mMoveScale * evt.timeSinceLastFrame;
 
@@ -316,7 +316,7 @@ void MyFrameListener::updateStats()
 		OverlayElement* guiBest = OverlayManager::getSingleton().getOverlayElement("Core/BestFps");
 		OverlayElement* guiWorst = OverlayManager::getSingleton().getOverlayElement("Core/WorstFps");
 
-		const RenderTarget::FrameStats& stats = mWindow->getStatistics();
+		const RenderTarget::FrameStats& stats = window->getStatistics();
 		guiAvg->setCaption(avgFps + StringConverter::toString(stats.avgFPS));
 		guiCurr->setCaption(currFps + StringConverter::toString(stats.lastFPS));
 		guiBest->setCaption(bestFps + StringConverter::toString(stats.bestFPS)
@@ -355,7 +355,7 @@ void MyFrameListener::windowResized(RenderWindow* rw)
 void MyFrameListener::windowClosed(RenderWindow* rw)
 {
 	//Only close for window that created OIS (the main window in these demos)
-	if( rw == mWindow )
+	if( rw == window )
 	{
 		if( mInputManager )
 		{
@@ -371,8 +371,8 @@ void MyFrameListener::windowClosed(RenderWindow* rw)
 
 void MyFrameListener::moveCamera()
 {
-	//mCamera->moveRelative(mTranslateVector);
-	mCamera->move(mTranslateVector);
+	//camera->moveRelative(mTranslateVector);
+	camera->move(mTranslateVector);
 }
 
 void MyFrameListener::showDebugOverlay(bool show)

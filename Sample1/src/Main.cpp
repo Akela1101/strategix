@@ -93,6 +93,8 @@ int main(int argc, char *argv[])
 	// What is current path? ( Must be /Strategix/Sample1 )
 	cout << "Current dir: " << boost::filesystem::current_path() << endl;
 
+	KernelBase::GS().Configure("xml/strategix_config.xml");
+
 	KernelBase::GS().BuildTechTrees(sh_p<TechTreesBuilder>(new TechTreesBuilderFromXml));
 
 	//
@@ -137,7 +139,7 @@ int main(int argc, char *argv[])
 // Reenable autorepeat in KDE ! *WALL*
 #ifdef __linux__
 	cout << endl << "Setting keyboard autorepeat back ON." << endl << endl;
-	int ret = std::system("xset r");
+	ret = std::system("xset r");
 #endif
 
 #if defined( __WIN32__ ) || defined( _WIN32 )

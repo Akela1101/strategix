@@ -10,7 +10,8 @@
 
 #include "StrategixCommon.h"
 
-#include <list>
+#include <map>
+#include <string>
 
 #include "Nya.hpp"
 
@@ -30,24 +31,24 @@ namespace Strategix
 		Mediator *mediator; // Callback class
 
 		//
-		string name; // Name gived by user.
+		string name; // Name given by user.
 		PlayerType playerType; // human, ai, net
 		const int playerNumber; // number of player on the map
-
-		// Resources resources;
+		Resources resources;
 		
-		sh_p<TechTree> techTree; // local copy of race tree
+		sh_p<TechTree> techTree; // local COPY of race tree
+		sh_p<MapLocal> mapLocal;
 
-		list<sh_p<Enti> > entis;
-		
-		sh_p<MapLocal> map;
+		typedef	map<string, sh_p<Enti> > EntisType;
+		EntisType entis;
 
 	public:
 		Player(string name, PlayerType playerType, int playerNumber, string raceName);
-		virtual ~Player();
+		virtual ~Player() {}
 
 		void Tick(const float seconds);
 		void AddEnti(sh_p<Enti> enti);
+		bool AddResources(const Resources deltaResources);
 
 	private:
 		Player(const Player& orig);

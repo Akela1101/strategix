@@ -39,8 +39,15 @@
           <hp>50</hp>
         </health>
         <move>
-          <speed>3</speed>
+          <speed>3.0</speed>
         </move>
+        <collect>
+          <speed>50</speed>
+          <radius>0.5</radius>
+          <capacity>
+            <gold>200</gold>
+          </capacity>
+        </collect>
       </features>
     </entity>
   </entities>

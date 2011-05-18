@@ -8,6 +8,8 @@
 #include "TechTreesBuilder.h"
 #include "Log.h"
 
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/xml_parser.hpp>
 #include <boost/filesystem.hpp>
 
 #include "KernelBase.h"
@@ -17,8 +19,21 @@ namespace Strategix
 {
 	using namespace std;
 	using namespace boost;
+	namespace pt = boost::property_tree;
 	namespace fs = boost::filesystem;
 
+void KernelBase::Configure(const string configFileName)
+{
+	pt::ptree propTree;
+	pt::read_xml(configFileName, propTree);
+
+	int i = 0;
+	foreach( const pt::ptree::value_type &v, propTree.get_child("resource_types") )
+	{
+		const string meshName = v.second.get<string>("mesh");
+		resourceInfos[v.first].reset(new ResourceInfo(v.first, meshName, i++));
+	}
+}
 
 void KernelBase::BuildTechTrees(sh_p<TechTreesBuilder> techTreesBuilder)
 {	

@@ -71,7 +71,7 @@ namespace Sample1
 	class MyApp
 	{
 	protected:
-		Root *mRoot;
+		Root *root;
 		sh_p<MyFrameListener> frameListener;
 		sh_p<MediatorFrameListener> mediatorFrameListener;
 		sh_p<Kernel> kernel;
@@ -80,15 +80,14 @@ namespace Sample1
 		StaticPluginLoader mStaticPluginLoader;
 	#endif
 
-		Camera* mCamera;		
-		RenderWindow* mWindow;
-		String mResourcePath;
-		String mConfigPath;
+		Camera* camera;		
+		RenderWindow* window;
+		String ogreConfigPath;
 
 		bool isConfigure;
 
-		sh_p<MyGUI::Gui> mGUI;
-		sh_p<MyGUI::OgrePlatform> mPlatform;
+		sh_p<MyGUI::Gui> myGUI;
+		sh_p<MyGUI::OgrePlatform> myGUI_Platform;
 
 	#ifdef USE_RTSHADER_SYSTEM
 		RTShader::ShaderGenerator*					mShaderGenerator;			// The Shader generator instance.
@@ -110,7 +109,6 @@ namespace Sample1
 		virtual void createResourceListener();
 		virtual void loadResources();
 		virtual void createScene();
-		//virtual void createFrameListener();
 		virtual void destroyScene();		
 
 		void AddTileToTerrainMesh(ManualObject &mo, const Vector2 &coord, const FloatRect &tex_rect, int &offset);

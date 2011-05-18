@@ -17,11 +17,10 @@ namespace Strategix
 		NET
 	};
 
-	enum ResType
-	{
-		GOLD
-	};
+	typedef float ResType;
 }
+
+#include "Resources.h"
 
 #endif	/* _STRATEGIXCOMMON_H */
 

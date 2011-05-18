@@ -38,6 +38,8 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/Unit.o \
 	${OBJECTDIR}/src/MapFull.o \
 	${OBJECTDIR}/src/Player.o \
+	${OBJECTDIR}/src/Resources.o \
+	${OBJECTDIR}/src/FeatureCollect.o \
 	${OBJECTDIR}/src/FeatureMove.o \
 	${OBJECTDIR}/src/MapsPathsFinder.o \
 	${OBJECTDIR}/src/Map.o \
@@ -101,6 +103,16 @@ ${OBJECTDIR}/src/Player.o: src/Player.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -Isrc -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Player.o src/Player.cpp
+
+${OBJECTDIR}/src/Resources.o: src/Resources.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -Isrc -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Resources.o src/Resources.cpp
+
+${OBJECTDIR}/src/FeatureCollect.o: src/FeatureCollect.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -Isrc -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/FeatureCollect.o src/FeatureCollect.cpp
 
 ${OBJECTDIR}/src/FeatureMove.o: src/FeatureMove.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

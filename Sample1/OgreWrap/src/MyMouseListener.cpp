@@ -14,6 +14,7 @@
 
 #include "Nya.hpp"
 #include "MyMouseListener.h"
+#include "OObjectResource.h"
 
 namespace Sample1
 {
@@ -56,7 +57,7 @@ bool MyMouseListener::mousePressed(const OIS::MouseEvent &mouse_event, OIS::Mous
 	if( id == OIS::MB_Left ) 
 	{
 		currEntity = SelectEntity(mouse_event, &currMask);
-		if( currEntity )
+		if( currEntity ) // Zero if nothing selected
 		{
 			currEntity->getParentSceneNode()->showBoundingBox(true);
 		}
@@ -75,10 +76,23 @@ bool MyMouseListener::mousePressed(const OIS::MouseEvent &mouse_event, OIS::Mous
 	else if( id == OIS::MB_Right )  
 	{
 		if( currEntity && (currMask == UNIT_MASK) )
-		{			
-			const Vector3 &terrainCoord = GetTerrainCoord(mouse_event);
+		{
 			OObjectUnit *oObjectUnit = any_cast<OObjectUnit*>(currEntity->getUserAny());
-			oObjectUnit->enti->Move(RealCoord(terrainCoord.x, terrainCoord.z));
+
+			// Going for resource
+			QueryFlags mask;
+			Entity *entity = SelectEntity(mouse_event, &mask);
+			if( entity && (mask == RES_MASK) )
+			{
+				OObjectResource *oObjectResource = any_cast<OObjectResource*>(entity->getUserAny());
+				oObjectUnit->enti->Collect(oObjectResource->mapResource);
+			}
+			// Going to place
+			else
+			{
+				const Vector3 &terrainCoord = GetTerrainCoord(mouse_event);
+				oObjectUnit->enti->Move(RealCoord(terrainCoord.x, terrainCoord.z));
+			}
 		}
 	}
 	return true;

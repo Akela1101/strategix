@@ -28,8 +28,8 @@ namespace Sample1
 	class MyFrameListener : public FrameListener, public WindowEventListener
 	{
 	protected:
-		RenderWindow* mWindow;
-		Camera* mCamera;
+		RenderWindow* window;
+		Camera* camera;
 
 		// Camera
 		Vector3 mTranslateVector;
@@ -64,7 +64,7 @@ namespace Sample1
 		sh_p<LabelsHolder> labelsHolder;
 
 	public:
-		MyFrameListener(RenderWindow* mWindow, Camera* mCamera);
+		MyFrameListener(RenderWindow* window, Camera* camera);
 		virtual ~MyFrameListener();
 
 		virtual bool processUnbufferedKeyInput(const FrameEvent& evt);

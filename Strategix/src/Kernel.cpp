@@ -21,8 +21,14 @@ Kernel::Kernel(const string &mapName)
 
 void Kernel::AddPlayer(sh_p<Player> player)
 {
-	player->map.reset(new MapLocal(mapFull.get()));
+	player->mapLocal.reset(new MapLocal(mapFull.get()));
 	players.push_back(player);
+}
+
+// Check for kernel consistence, run initial functions
+void Kernel::Start()
+{
+	players[0]->AddResources(Resources());
 }
 
 void Kernel::Tick(const float seconds)

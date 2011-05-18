@@ -9,9 +9,12 @@
       <itemPath>src/EntiInfo.h</itemPath>
       <itemPath>src/Feature.cpp</itemPath>
       <itemPath>src/Feature.h</itemPath>
+      <itemPath>src/FeatureCollect.cpp</itemPath>
+      <itemPath>src/FeatureCollect.h</itemPath>
       <itemPath>src/FeatureInfo.h</itemPath>
       <itemPath>src/FeatureMove.cpp</itemPath>
       <itemPath>src/FeatureMove.h</itemPath>
+      <itemPath>src/Interfaces.h</itemPath>
       <itemPath>src/Kernel.cpp</itemPath>
       <itemPath>src/Kernel.h</itemPath>
       <itemPath>src/KernelBase.cpp</itemPath>
@@ -24,6 +27,7 @@
       <itemPath>src/MapFull.h</itemPath>
       <itemPath>src/MapLocal.cpp</itemPath>
       <itemPath>src/MapLocal.h</itemPath>
+      <itemPath>src/MapResource.h</itemPath>
       <itemPath>src/MapsPath.cpp</itemPath>
       <itemPath>src/MapsPath.h</itemPath>
       <itemPath>src/MapsPathsFinder.cpp</itemPath>
@@ -32,6 +36,9 @@
       <itemPath>src/Mediator.h</itemPath>
       <itemPath>src/Player.cpp</itemPath>
       <itemPath>src/Player.h</itemPath>
+      <itemPath>src/ResourceInfo.h</itemPath>
+      <itemPath>src/Resources.cpp</itemPath>
+      <itemPath>src/Resources.h</itemPath>
       <itemPath>src/StrategixCommon.h</itemPath>
       <itemPath>src/StrategixError.h</itemPath>
       <itemPath>src/StrategixSingleton.h</itemPath>
