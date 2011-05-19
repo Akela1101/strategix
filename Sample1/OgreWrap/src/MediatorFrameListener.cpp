@@ -75,7 +75,8 @@ MediatorFrameListener::MediatorFrameListener(sh_p<Kernel> kernel, sh_p<MyGUI::Gu
 	}
 
 	// @#~
-	kernel->players[0]->AddEnti(sh_p<Enti>(new Enti(&*kernel->players[0]->techTree->Node("Spher_Worker"), MapCoord(5, 6))));
+	kernel->players[0]->AddEnti(sh_p<Enti>(new Enti(&*kernel->players[0]->techTree->Node("Spher_Worker"), MapCoord(4, 16))));
+	kernel->players[0]->AddEnti(sh_p<Enti>(new Enti(&*kernel->players[0]->techTree->Node("Spher_Worker"), MapCoord(6, 17))));
 }
 
 bool MediatorFrameListener::frameRenderingQueued(const FrameEvent &event)

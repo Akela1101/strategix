@@ -91,11 +91,12 @@ bool MapInfo::SaveToFile(QString fileName) const
 	}
 	fout << endl;
 
-	// Objects
+	// Resources
 	fout << objectPositions.size() << endl;
 	foreach(PPI pa, objectPositions)
 	{
-		fout << pa.first.x() << " " << pa.first.y() << " " << pa.second << endl;
+		fout << pa.first.x() << " " << pa.first.y() << " " 
+				<< "gold" << " " << 100000 << endl; // @#~!!!!!!!!
 	}
 
 	fout.close();
@@ -138,8 +139,8 @@ bool MapInfo::LoadFromFile(QString fileName) // @#~ Make errors more verbose !!!
 		}
 	}
 
-	int size, row, col;
 	// Player initial positions
+	int size, row, col;
 	fin >> size;
 	for( int i = 0; i < size; ++i )
 	{
@@ -147,12 +148,14 @@ bool MapInfo::LoadFromFile(QString fileName) // @#~ Make errors more verbose !!!
 		tiles[row][col].object = objInfos[0];
 	}
 
-	// Objects
+	// Resources
+	string name;
+	int amount;
 	fin >> size;
 	for( int i = 0; i < size; ++i )
 	{
-		fin >> col >> row >> id;
-		tiles[row][col].object = objInfos[id];
+		fin >> col >> row >> name >> amount;// @#~!!!!!!!!
+		tiles[row][col].object = objInfos[1];
 	}
 
 	fin.close();

@@ -1,5 +1,5 @@
 Strategix Map v.0.1
-Maps/terrains.def
+terrains.def
 First Conflict
 
 25 20
@@ -25,9 +25,13 @@ First Conflict
 5 6 7 8 0 0 0 0 0 0 1 2 3 4 5 6 7 8 9 10 11 12 0 0 1 
 
 2
-2 3
+5 15
 21 17
 
-2
-5 0 gold 100000
-22 0 gold 100000
+6
+1 16 gold 100000
+1 17 gold 100000
+2 18 gold 100000
+6 18 gold 100000
+3 19 gold 100000
+5 19 gold 100000
