@@ -34,11 +34,15 @@ Enti::Enti(const EntiInfo *entityInfo, const MapCoord &mapCoord)
 void Enti::Tick(const float seconds)
 {
 	for( list<Feature*>::iterator itFeature = tickFeatures.begin();
-			itFeature != tickFeatures.end(); ++itFeature )
+			itFeature != tickFeatures.end(); )
 	{
 		if( !(*itFeature)->Tick(seconds) )
 		{
 			tickFeatures.erase(itFeature++); // removing from Tick queue
+		}
+		else
+		{
+			++itFeature;
 		}
 	}
 	unit->OnTick(seconds);
@@ -70,11 +74,11 @@ Enti* Enti::FindCollector()
 {
 	// @#~ too simple
 	// @#~ Check if there is path to Collector and also select nearest
-	// @#~ Check out the case when there are no collectors
+	// @#~ Check out the case when there are no collectors or more than one !!!
 
 
 	const string collectorName = player->techTree->mainBuildingName;
-	return player->entis[collectorName].get();
+	return player->entis.find(collectorName)->second.get();
 }
 
 Feature* Enti::GetFeature(const string &name)

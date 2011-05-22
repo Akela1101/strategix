@@ -37,7 +37,7 @@ void Player::Tick(const float seconds)
 
 void Player::AddEnti(sh_p<Enti> enti)
 {
-	entis[enti->entityInfo->name] = enti;
+	entis.insert(EntisType::value_type(enti->entityInfo->name, enti));
 	enti->player = this;
 	if( mediator )
 		mediator->OnAddEnti(enti.get());

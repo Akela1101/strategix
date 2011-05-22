@@ -39,7 +39,7 @@ namespace Strategix
 		sh_p<TechTree> techTree; // local COPY of race tree
 		sh_p<MapLocal> mapLocal;
 
-		typedef	map<string, sh_p<Enti> > EntisType;
+		typedef	multimap<string, sh_p<Enti> > EntisType;
 		EntisType entis;
 
 	public:

@@ -1,16 +1,20 @@
 digraph G 
 {
-	"Human or AI" -> Enti [label = Feature]
-	Enti -> Unit [label = OnFeature]
-	Enti -> MapLocal -> MapFull
-	Unit -> Graphics
+	"Human or AI" -> Enti 
+	Enti -> FeatureCollect [label = Collect] 
+	FeatureCollect -> Unit [label = OnCollect]
+	FeatureCollect -> FeatureMove [label = OnCollect]	
+	FeatureMove -> Unit [label = OnMove]
+	FeatureMove -> MapLocal
+	Unit -> OGRE
 
 	Enti [color = red]
-	MapFull [color = blue]
 	MapLocal [color = blue]
+	FeatureCollect [color = green]
+	FeatureMove [color = green]
 	Unit [color = yellow]
-	Graphics [color = yellow]
+	OGRE [color = yellow]
 
-	{rank = same; Enti; MapLocal; MapFull}
-	{rank = same; Unit; Graphics}
+	{rank = same; FeatureMove; MapLocal}
+	{rank = same; Unit; OGRE}
 }

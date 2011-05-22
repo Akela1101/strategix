@@ -48,7 +48,7 @@ namespace Strategix
 		typedef map<string, sh_p<Feature> > FeaturesType;
 		FeaturesType features;
 
-		list<Feature*> tickFeatures; // if they become too many, change to set<>
+		list<Feature*> tickFeatures; 
 
 	public:
 		Enti(const EntiInfo *entityInfo, const MapCoord &mapCoord); // @#~ for RealCoord ???

@@ -1,39 +1,39 @@
 digraph G 
 {
 	
-	Map -> Resources
-	Map -> Player [arrowhead = dot]
-	Player -> Buildings
-	Player -> Units 
-	Buildings -> Features
-	Units -> Features
+	Карта -> Ресурсы
+	Карта -> Игрок [arrowhead = dot]
+	Игрок -> Строения
+	Игрок -> Юниты 
+	Строения -> Действия
+	Юниты -> Действия
 
-	Map [color = yellow]
-	Player [color = yellow]
-	Resources [color = yellow]
-	Buildings [color = red]
-	Units [color = green]
-	Features [color = blue]
+	Карта [color = yellow]
+	Игрок [color = yellow]
+	Ресурсы [color = yellow]
+	Строения [color = red]
+	Юниты [color = green]
+	Действия [color = blue]
 
 	subgraph cluster_B
 	{	
-		label = Buildings;
+		label = Строения;
 		color = red;
-		"Main Building" -> "Resource Processing" -> "Unit Production" -> "Technology Research" -> "Protection Constructions" [arrowhead = none]
+		"Главное Здание" -> "Обработка ресурсов" -> "Производство Юнитов" -> "Исследование Технологий" -> "Защитные Сооружения" [arrowhead = none]
 	}
 	
 	subgraph cluster_U
 	{
-		label = Units;
+		label = Юниты;
 		color = green;		
-		Builders -> Getters -> "Military Units" -> Transport -> Support [arrowhead = none]
+		Строитель -> Сборщик -> Военный -> Поддержка -> Транспорт [arrowhead = none]
 	}
 
 	subgraph cluster_F
 	{
-		label = Features;
+		label = Действия;
 		color = blue;		
-		Build -> Gain -> "Repair/Heal" -> Produce -> Invent -> Attack -> Defend [arrowhead = none]
+		Строить -> "Чинить/Лечить" -> Нанимать -> Атаковать -> Исследовать [arrowhead = none]
 	}
 
 }
