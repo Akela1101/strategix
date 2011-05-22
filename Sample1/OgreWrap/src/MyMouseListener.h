@@ -27,16 +27,17 @@ namespace Sample1
 		QueryFlags currMask;
 
 	public:
-		MyMouseListener(Camera* camera, RaySceneQuery *raySceneQuery);
-		virtual ~MyMouseListener() {}
+		MyMouseListener(Camera* camera);
+		virtual ~MyMouseListener();
 
 		bool mouseMoved(const OIS::MouseEvent &mouse_event);
 		bool mousePressed(const OIS::MouseEvent &mouse_event, OIS::MouseButtonID id);
 		bool mouseReleased(const OIS::MouseEvent &mouse_event, OIS::MouseButtonID id);
 
 	private:
-		inline Ray GetMouseRay(const OIS::MouseEvent &mouse_event) const;
-
+		Ray GetMouseRay(const OIS::MouseEvent &mouse_event) const;
+		const Vector3 GetTerrainCoord(const OIS::MouseEvent &mouse_event) const;
+		Entity *SelectEntity(const OIS::MouseEvent &mouse_event, QueryFlags *newMask) const;
 	};
 }
 

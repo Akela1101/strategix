@@ -15,7 +15,7 @@
 namespace Sample1
 {
 
-OObject::OObject(const std::string &meshName)
+OObject::OObject(const std::string meshName)
 {	
 	entity = sceneManager->createEntity(meshName);	
 	node = sceneManager->getRootSceneNode()->createChildSceneNode();

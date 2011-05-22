@@ -8,16 +8,29 @@
 #ifndef _OOBJECTRESOURCE_H
 #define	_OOBJECTRESOURCE_H
 
+#include "MapResource.h"
+
+#include "MyAppCommon.h"
+
+#include <Ogre.h>
+
+// ======================
+
 #include "OObject.h"
 
-#include "CoordStructs.h"
-#include "Map.h"
+#include <string>
 
+#include "Nya.hpp"
 
+/*
+namespace Strategix
+{
+	class MapResource;
+}
+*/
 namespace Sample1
 {
 	using namespace std;
-	using namespace Ogre;
 	using namespace Strategix;
 
 	class OObjectResource : public OObject
@@ -26,9 +39,18 @@ namespace Sample1
 		sh_p<MapResource> mapResource;
 
 	public:
-		OObjectResource(const std::string &meshName, sh_p<MapResource> mapResource);
-		virtual ~OObjectResource() {}
+		OObjectResource(const string meshName, sh_p<MapResource> mapResource)
+			:
+			OObject(meshName),
+			mapResource(mapResource)
+		{
+			entity->setUserAny(Any(this)); // Link from Entity
+			entity->setQueryFlags(RES_MASK); // Mask for mouse selection
 
+			RealCoord resourceCoord = mapResource->mapCoord; // convert to float
+			node->setPosition(resourceCoord.x, 0, resourceCoord.y);
+		}
+		virtual ~OObjectResource() {}
 	};
 }
 

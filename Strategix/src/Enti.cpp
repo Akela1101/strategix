@@ -88,7 +88,7 @@ Feature* Enti::GetFeature(const string &name)
 	{
 		return feature->second.get();
 	}
-	cout << string("There is no feature named: ") + name << endl; // DEBUG @#~
+	STRATEGIX_ERROR(string("There is no feature named: ") + name);
 	return 0;
 }
 

@@ -98,6 +98,11 @@ bool MyMouseListener::mousePressed(const OIS::MouseEvent &mouse_event, OIS::Mous
 	return true;
 }
 
+bool MyMouseListener::mouseReleased(const OIS::MouseEvent &mouse_event, OIS::MouseButtonID id)
+{
+	return true;
+}
+
 Ray MyMouseListener::GetMouseRay(const OIS::MouseEvent &mouse_event) const
 {
 	const float d_x = mouse_event.state.X.abs;

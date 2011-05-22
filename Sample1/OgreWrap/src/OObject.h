@@ -24,7 +24,7 @@ namespace Sample1
 		Entity *entity;
 
 	public:
-		OObject(const std::string &meshName);
+		OObject(const std::string meshName);
 		virtual ~OObject();
 	};
 }

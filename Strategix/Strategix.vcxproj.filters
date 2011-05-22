@@ -49,6 +49,12 @@
     <ClCompile Include="src\TechTree.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\FeatureCollect.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Resources.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\CoordStructs.h">
@@ -115,6 +121,21 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Unit.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FeatureCollect.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Interfaces.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MapResource.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ResourceInfo.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Resources.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

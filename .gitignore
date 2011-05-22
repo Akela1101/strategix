@@ -8,3 +8,8 @@ build/
 dist/
 Debug/
 Release/
+
+*.opensdf
+*.sdf
+*.suo
+ipch/
