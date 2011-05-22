@@ -15,6 +15,9 @@
 #include "KernelBase.h"
 #include "MapFull.h"
 
+#include "MyGUI.h"
+#include "MyGUI_OgrePlatform.h"
+
 #include <Ogre.h>
 
 #include <string>
@@ -34,8 +37,7 @@ namespace Sample1
 //==============================================================================
 MyApp::MyApp(sh_p<Kernel> kernel)
 	:
-	mResourcePath("OgreWrap/"),
-	mConfigPath("OgreWrap/"),
+	ogreConfigPath("OgreWrap/"),
 	kernel(kernel)
 {
 #ifdef USE_RTSHADER_SYSTEM
@@ -46,20 +48,22 @@ MyApp::MyApp(sh_p<Kernel> kernel)
 
 MyApp::~MyApp()
 {
-	if( mRoot )
-		OGRE_DELETE mRoot;
+	if( root )
+		OGRE_DELETE root;
 
 #ifdef OGRE_STATIC_LIB
 	mStaticPluginLoader.unload();
 #endif
 }
 
-void MyApp::go()
+void MyApp::go(const bool isConfigure)
 {
+	this->isConfigure = isConfigure;
+
 	if( !setup() )
 		return;
 
-	mRoot->startRendering();
+	root->startRendering();
 
 	destroyScene();
 }
@@ -71,24 +75,24 @@ bool MyApp::setup()
 #ifndef OGRE_STATIC_LIB
 	#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 	#ifdef _DEBUG
-		pluginsPath = mResourcePath + "plugins_Windows_d.cfg";
+		pluginsPath = ogreConfigPath + "plugins_Windows_d.cfg";
 	#else
-		pluginsPath = mResourcePath + "plugins_Windows.cfg";
+		pluginsPath = ogreConfigPath + "plugins_Windows.cfg";
 	#endif
 	#else
-		pluginsPath = mResourcePath + "plugins_Linux.cfg";
+		pluginsPath = ogreConfigPath + "plugins_Linux.cfg";
 	#endif
 #endif
 
 #ifndef OGRE_STATIC_LIB
 	#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-		configPath = mConfigPath + "ogre_Windows.cfg";
+		configPath = ogreConfigPath + "ogre_Windows.cfg";
 	#else
-		configPath = mConfigPath + "ogre_Linux.cfg";
+		configPath = ogreConfigPath + "ogre_Linux.cfg";
 	#endif
 #endif
 
-	mRoot = OGRE_NEW Root(pluginsPath, configPath, mResourcePath + "Ogre.log");
+	root = OGRE_NEW Root(pluginsPath, configPath, ogreConfigPath + "Ogre.log");
 
 #ifdef OGRE_STATIC_LIB
 	mStaticPluginLoader.load();
@@ -96,8 +100,17 @@ bool MyApp::setup()
 
 	setupResources();
 
-	if( !configure() )
-		return false;
+	if( isConfigure )
+	{
+		if( !configure() )
+			return false;
+	}
+	else
+	{
+		root->restoreConfig();
+	}
+
+	window = root->initialise(true);
 
 	chooseSceneManager();
 	createCamera();
@@ -112,8 +125,6 @@ bool MyApp::setup()
 
 	createScene();
 
-	createFrameListener();
-
 	return true;
 }
 
@@ -122,7 +133,7 @@ void MyApp::setupResources()
 {
 	// Load resource paths from config file
 	ConfigFile cf;
-	cf.load(mResourcePath + "resources.cfg");
+	cf.load(ogreConfigPath + "resources.cfg");
 
 	// Go through all sections & settings in the file
 	ConfigFile::SectionIterator seci = cf.getSectionIterator();
@@ -137,10 +148,7 @@ void MyApp::setupResources()
 		{
 			typeName = i->first;
 			archName = i->second;
-
-			ResourceGroupManager::getSingleton().addResourceLocation(
-					archName, typeName, secName);
-
+			ResourceGroupManager::getSingleton().addResourceLocation(archName, typeName, secName);
 		}
 	}
 }
@@ -149,42 +157,34 @@ void MyApp::setupResources()
 bool MyApp::configure()
 {
 	// Show the configuration dialog and initialise the system
-	// You can skip this and use root.restoreConfig() to load configuration
-	// settings if you were sure there are valid ones saved in ogre.cfg
-	if( mRoot->showConfigDialog() )
+	if( root->showConfigDialog() )
 	{
-		// If returned true, user clicked OK so initialise
-		// Here we choose to let the system create a default rendering window by passing 'true'
-		mWindow = mRoot->initialise(true);
 		return true;
 	}
-	else
-	{
-		return false;
-	}
+	return false;
 }
 
 void MyApp::chooseSceneManager()
 {
-	sceneManager = mRoot->createSceneManager(ST_GENERIC, "MyInstance");
+	sceneManager = root->createSceneManager(ST_GENERIC, "MyInstance");
 	// ST_EXTERIOR_CLOSE was when terrain used.
 }
 
 void MyApp::createCamera()
 {
 	// Create the camera
-	mCamera = sceneManager->createCamera("Camera");
-	mCamera->setNearClipDistance(5);
+	camera = sceneManager->createCamera("Camera");
+	camera->setNearClipDistance(0.5);
 }
 
 void MyApp::createViewports()
 {
 	// Create one viewport, entire window
-	Viewport* vp = mWindow->addViewport(mCamera);
+	Viewport* vp = window->addViewport(camera);
 	vp->setBackgroundColour(ColourValue(0, 0, 0));
 
 	// Alter the camera aspect ratio to match the viewport
-	mCamera->setAspectRatio(Real(vp->getActualWidth()) / Real(vp->getActualHeight()));
+	camera->setAspectRatio(Real(vp->getActualWidth()) / Real(vp->getActualHeight()));
 }
 
 // Optional override method where you can create resource listeners (e.g. for loading screens)
@@ -210,23 +210,37 @@ void MyApp::createScene()
 
 	CreateStaticTerrain();
 
-	// Class, keeping all the gameplay!
-	mediatorFrameListener.reset(new MediatorFrameListener(kernel));
-	mRoot->addFrameListener(mediatorFrameListener.get());
-}
+	// MyGUI
+	myGUI_Platform.reset(new MyGUI::OgrePlatform());
+	myGUI_Platform->initialise(window, sceneManager);
+	myGUI.reset(new MyGUI::Gui());
+	myGUI->initialise();
+	myGUI->setVisiblePointer(false);
 
-void MyApp::createFrameListener()
-{
-	frameListener.reset(new MyFrameListener(mWindow, mCamera));
+	// Main FrameListener
+	frameListener.reset(new MyFrameListener(window, camera));
 	frameListener->showDebugOverlay(true);
-	mRoot->addFrameListener(frameListener.get());
+	root->addFrameListener(frameListener.get());
+
+	// Mediator between Kernel & Ogre
+	mediatorFrameListener.reset(new MediatorFrameListener(kernel, myGUI));
+	root->addFrameListener(mediatorFrameListener.get());
+
+	// Start
+	kernel->Start();
 }
 
 void MyApp::destroyScene()
 {
-	// Must use reset, not removeFrameListener!
+	// Use reset, not removeFrameListener!
 	mediatorFrameListener.reset();
 	frameListener.reset();
+
+	// MyGUI
+	myGUI->shutdown();
+	myGUI.reset();
+	myGUI_Platform->shutdown();
+	myGUI_Platform.reset();
 }
 
 // Adding tile to map in tile's coordinates coord{x,y}
@@ -272,7 +286,7 @@ void MyApp::CreateStaticTerrain()
 		for( int x = 0; x < width; ++x )
 		{
 			// Getting terrain type (x, z)
-			int terrainType = mapFull(x, z).terrainType;
+			int terrainType = mapFull.GetCell(x, z).terrainType;
 			// Getting it's name
 			const string &tex_name = mapFull.GetTerrain(terrainType).name;
 			// Getting picture's part rectangle
@@ -298,8 +312,8 @@ void MyApp::CreateStaticTerrain()
 	sg->build();
 
 	// Camera !!
-	mCamera->setPosition(realWidth * 0.5, realWidth / 4, realLength * 1.2);
-	mCamera->lookAt(realWidth * 0.5, 0, 0);
+	camera->setPosition(realWidth * 0.5, realWidth / 4, realLength * 1.2);
+	camera->lookAt(realWidth * 0.5, 0, 0);
 }
 
 }

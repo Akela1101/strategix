@@ -11,6 +11,7 @@
 #include "TechTree.h"
 
 #include "Player.h"
+#include "EntiInfo.h"
 
 
 namespace Strategix
@@ -18,6 +19,7 @@ namespace Strategix
 
 Player::Player(string name, PlayerType playerType, int playerNumber, string raceName)
 	:
+	mediator(0),
 	name(name),
 	playerType(playerType),
 	playerNumber(playerNumber),
@@ -25,23 +27,32 @@ Player::Player(string name, PlayerType playerType, int playerNumber, string race
 {	
 }
 
-Player::~Player()
-{
-}
-
 void Player::Tick(const float seconds)
 {
-	foreach(sh_p<Enti> enti, entis)
+	foreach(const EntisType::value_type &pa, entis)
 	{
-		enti->Tick(seconds);
+		pa.second->Tick(seconds);
 	}
 }
 
 void Player::AddEnti(sh_p<Enti> enti)
 {
-	entis.push_back(enti);
+	entis.insert(EntisType::value_type(enti->entityInfo->name, enti));
 	enti->player = this;
-	mediator->OnAddEnti(enti.get());
+	if( mediator )
+		mediator->OnAddEnti(enti.get());
+}
+
+bool Player::AddResources(const Resources deltaResources)
+{
+	if( resources.isNegative() )
+		return false;
+
+	resources += deltaResources;
+	if( mediator )
+		mediator->OnChangeResources(resources);
+
+	return true;
 }
 
 }

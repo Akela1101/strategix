@@ -10,6 +10,7 @@
 
 #include "StrategixCommon.h"
 #include "CoordStructs.h"
+#include "Interfaces.h"
 
 #include <map>
 #include <list>
@@ -28,11 +29,13 @@ namespace Strategix
 	class FeatureInfo;
 	class Feature;
 	class FeatureMove;
+	class MapResource;
 	
 	class Enti
 	{
 		friend class Feature;
 		friend class FeatureMove;
+		friend class FeatureCollect;
 
 	public:
 		Unit *unit;
@@ -45,22 +48,23 @@ namespace Strategix
 		typedef map<string, sh_p<Feature> > FeaturesType;
 		FeaturesType features;
 
-		list<Feature*> tickFeatures; // if they become too many, change to set<>
+		list<Feature*> tickFeatures; 
 
 	public:
-		Enti(const EntiInfo *entityInfo, const MapCoord &mapCoord); // for RealCoord ???
-		virtual ~Enti();
-
-		void SetCoord(const RealCoord newCoord);
+		Enti(const EntiInfo *entityInfo, const MapCoord &mapCoord); // @#~ for RealCoord ???
+		virtual ~Enti() {}
 
 		void Tick(const float seconds);
-		FeatureMove& Move();
+		bool Move(const RealCoord newCoord, IMove *iMove = 0);
+		bool Collect(sh_p<MapResource> mapResource);
+
+		Enti* FindCollector();
 
 	private:
 		Enti(const Enti &_c);
 		Enti& operator =(const Enti &_c);
 
-		Feature& GetFeature(const string &name);
+		Feature* GetFeature(const string &name);
 		sh_p<Feature> CreateFeature(const string &name, const FeatureInfo *featureInfo);
 	};
 }

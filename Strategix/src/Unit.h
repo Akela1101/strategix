@@ -8,25 +8,21 @@
 #ifndef _UNIT_H
 #define	_UNIT_H
 
+#include "Interfaces.h"
+
 
 namespace Strategix
 {
 	class Enti;
 
-	class Unit
+	class Unit : public ITick, public IMove, public ICollect
 	{
 	public:
 		Enti *enti;
 
 	public:
 		Unit(Enti *enti);
-		virtual ~Unit() = 0;
-
-		// Callbacks do nothing by default!
-		virtual void OnTick(const float seconds) {}
-		virtual void OnMoveStart() {}
-		virtual void OnMove() {}
-		virtual void OnMoveStop() {}
+		virtual ~Unit() = 0;		
 
 	private:
 		Unit(const Unit &_c);

@@ -18,8 +18,9 @@ namespace Sample1
 {
 	enum QueryFlags
 	{
-		NON_MASK = 0, // For nothing
-		MOV_MASK = 1 << 0  // For created inside moving manager
+		NO_MASK = 0, // For nothing
+		UNIT_MASK = 1 << 0,  // Units
+		RES_MASK = 2 << 1, // Resources
 	};
 
 	extern Ogre::SceneManager *sceneManager;

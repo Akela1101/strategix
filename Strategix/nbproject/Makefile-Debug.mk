@@ -38,10 +38,12 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/Unit.o \
 	${OBJECTDIR}/src/MapFull.o \
 	${OBJECTDIR}/src/Player.o \
+	${OBJECTDIR}/src/Resources.o \
+	${OBJECTDIR}/src/FeatureCollect.o \
 	${OBJECTDIR}/src/FeatureMove.o \
+	${OBJECTDIR}/src/MapsPathsFinder.o \
 	${OBJECTDIR}/src/Map.o \
 	${OBJECTDIR}/src/MapsPath.o \
-	${OBJECTDIR}/src/MapsPathsFinder.o \
 	${OBJECTDIR}/src/TechTree.o \
 	${OBJECTDIR}/src/Log.o \
 	${OBJECTDIR}/src/Enti.o \
@@ -80,82 +82,92 @@ dist/Debug/GNU-Linux-x86/libstrategix.a: ${OBJECTFILES}
 ${OBJECTDIR}/src/MapLocal.o: src/MapLocal.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Iinclude -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/MapLocal.o src/MapLocal.cpp
+	$(COMPILE.cc) -g -Isrc -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/MapLocal.o src/MapLocal.cpp
 
 ${OBJECTDIR}/src/Kernel.o: src/Kernel.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Iinclude -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Kernel.o src/Kernel.cpp
+	$(COMPILE.cc) -g -Isrc -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Kernel.o src/Kernel.cpp
 
 ${OBJECTDIR}/src/Unit.o: src/Unit.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Iinclude -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Unit.o src/Unit.cpp
+	$(COMPILE.cc) -g -Isrc -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Unit.o src/Unit.cpp
 
 ${OBJECTDIR}/src/MapFull.o: src/MapFull.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Iinclude -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/MapFull.o src/MapFull.cpp
+	$(COMPILE.cc) -g -Isrc -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/MapFull.o src/MapFull.cpp
 
 ${OBJECTDIR}/src/Player.o: src/Player.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Iinclude -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Player.o src/Player.cpp
+	$(COMPILE.cc) -g -Isrc -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Player.o src/Player.cpp
+
+${OBJECTDIR}/src/Resources.o: src/Resources.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -g -Isrc -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Resources.o src/Resources.cpp
+
+${OBJECTDIR}/src/FeatureCollect.o: src/FeatureCollect.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -g -Isrc -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/FeatureCollect.o src/FeatureCollect.cpp
 
 ${OBJECTDIR}/src/FeatureMove.o: src/FeatureMove.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Iinclude -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/FeatureMove.o src/FeatureMove.cpp
-
-${OBJECTDIR}/src/Map.o: src/Map.cpp 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} $@.d
-	$(COMPILE.cc) -g -Iinclude -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Map.o src/Map.cpp
-
-${OBJECTDIR}/src/MapsPath.o: src/MapsPath.cpp 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} $@.d
-	$(COMPILE.cc) -g -Iinclude -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/MapsPath.o src/MapsPath.cpp
+	$(COMPILE.cc) -g -Isrc -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/FeatureMove.o src/FeatureMove.cpp
 
 ${OBJECTDIR}/src/MapsPathsFinder.o: src/MapsPathsFinder.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Iinclude -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/MapsPathsFinder.o src/MapsPathsFinder.cpp
+	$(COMPILE.cc) -g -Isrc -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/MapsPathsFinder.o src/MapsPathsFinder.cpp
+
+${OBJECTDIR}/src/Map.o: src/Map.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -g -Isrc -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Map.o src/Map.cpp
+
+${OBJECTDIR}/src/MapsPath.o: src/MapsPath.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -g -Isrc -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/MapsPath.o src/MapsPath.cpp
 
 ${OBJECTDIR}/src/TechTree.o: src/TechTree.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Iinclude -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/TechTree.o src/TechTree.cpp
+	$(COMPILE.cc) -g -Isrc -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/TechTree.o src/TechTree.cpp
 
 ${OBJECTDIR}/src/Log.o: src/Log.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Iinclude -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Log.o src/Log.cpp
+	$(COMPILE.cc) -g -Isrc -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Log.o src/Log.cpp
 
 ${OBJECTDIR}/src/Enti.o: src/Enti.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Iinclude -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Enti.o src/Enti.cpp
+	$(COMPILE.cc) -g -Isrc -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Enti.o src/Enti.cpp
 
 ${OBJECTDIR}/src/KernelBase.o: src/KernelBase.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Iinclude -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/KernelBase.o src/KernelBase.cpp
+	$(COMPILE.cc) -g -Isrc -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/KernelBase.o src/KernelBase.cpp
 
 ${OBJECTDIR}/src/Feature.o: src/Feature.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Iinclude -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Feature.o src/Feature.cpp
+	$(COMPILE.cc) -g -Isrc -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Feature.o src/Feature.cpp
 
 ${OBJECTDIR}/src/CoordStructs.o: src/CoordStructs.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Iinclude -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/CoordStructs.o src/CoordStructs.cpp
+	$(COMPILE.cc) -g -Isrc -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/CoordStructs.o src/CoordStructs.cpp
 
 ${OBJECTDIR}/src/Mediator.o: src/Mediator.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Iinclude -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Mediator.o src/Mediator.cpp
+	$(COMPILE.cc) -g -Isrc -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Mediator.o src/Mediator.cpp
 
 # Subprojects
 .build-subprojects:

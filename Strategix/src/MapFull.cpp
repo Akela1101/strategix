@@ -6,6 +6,9 @@
  */
 
 #include "Log.h"
+#include "StrategixError.h"
+#include "StrategixCommon.h"
+#include "MapResource.h"
 
 #include <fstream>
 #include <iostream>
@@ -73,13 +76,15 @@ MapFull::MapFull(const string &name)
 	}
 
 	// Resources
-	int nResources, i, j, resType;
+	int nResources, i, j;
+	string resourceName;
+	ResType initialAmount;
 
 	fin >> nResources;
 	for( int iRes = nResources; iRes; --iRes )
 	{
-		fin >> i >> j >> resType;
-		cells[j][i].resource.reset(new Resource((ResType)resType, 100000)); // @#~ Do it through MapEditor !!!
+		fin >> i >> j >> resourceName >> initialAmount;
+		cells[j][i].mapResource.reset(new MapResource(resourceName, MapCoord(i, j), initialAmount));
 	}
 
 	fin.close();

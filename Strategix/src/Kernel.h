@@ -29,6 +29,8 @@ namespace Strategix
 	public:		
 		Kernel(const string &mapName);
 		void AddPlayer(sh_p<Player> player);
+
+		void Start();
 		void Tick(const float seconds);
 
 		inline MapFull &GetMap() { return *mapFull; }

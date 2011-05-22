@@ -1,47 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configurationDescriptor version="69">
   <logicalFolder name="root" displayName="root" projectFiles="true">
-    <logicalFolder name="f1" displayName="Extern" projectFiles="true">
+    <logicalFolder name="f1" displayName="OgreWrap" projectFiles="true">
+      <itemPath>OgreWrap/src/MapTexture.cpp</itemPath>
+      <itemPath>OgreWrap/src/MapTexture.h</itemPath>
+      <itemPath>OgreWrap/src/MediatorFrameListener.cpp</itemPath>
+      <itemPath>OgreWrap/src/MediatorFrameListener.h</itemPath>
+      <itemPath>OgreWrap/src/MyApp.cpp</itemPath>
+      <itemPath>OgreWrap/src/MyApp.h</itemPath>
+      <itemPath>OgreWrap/src/MyAppCommon.h</itemPath>
+      <itemPath>OgreWrap/src/MyFrameListener.cpp</itemPath>
+      <itemPath>OgreWrap/src/MyFrameListener.h</itemPath>
+      <itemPath>OgreWrap/src/MyMouseListener.cpp</itemPath>
+      <itemPath>OgreWrap/src/MyMouseListener.h</itemPath>
+      <itemPath>OgreWrap/src/OObject.cpp</itemPath>
+      <itemPath>OgreWrap/src/OObject.h</itemPath>
+      <itemPath>OgreWrap/src/OObjectLabel.cpp</itemPath>
+      <itemPath>OgreWrap/src/OObjectLabel.h</itemPath>
+      <itemPath>OgreWrap/src/OObjectResource.cpp</itemPath>
+      <itemPath>OgreWrap/src/OObjectResource.h</itemPath>
+      <itemPath>OgreWrap/src/OObjectTitled.cpp</itemPath>
+      <itemPath>OgreWrap/src/OObjectTitled.h</itemPath>
+      <itemPath>OgreWrap/src/OObjectUnit.cpp</itemPath>
+      <itemPath>OgreWrap/src/OObjectUnit.h</itemPath>
       <itemPath>OgreWrap/src/ObjectTitle.cpp</itemPath>
-      <itemPath>OgreWrap/include/ObjectTitle.h</itemPath>
+      <itemPath>OgreWrap/src/ObjectTitle.h</itemPath>
     </logicalFolder>
-    <logicalFolder name="f3" displayName="KernelWrap" projectFiles="true">
-      <logicalFolder name="f1" displayName="include" projectFiles="true">
-        <itemPath>include/EntiInfoMesh.h</itemPath>
-        <itemPath>include/TechTreesBuilderFromXml.h</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f2" displayName="src" projectFiles="true">
-        <itemPath>src/TechTreesBuilderFromXml.cpp</itemPath>
-      </logicalFolder>
-    </logicalFolder>
-    <logicalFolder name="f2" displayName="OgreWrap" projectFiles="true">
-      <logicalFolder name="f1" displayName="include" projectFiles="true">
-        <itemPath>include/LabelsHolder.h</itemPath>
-        <itemPath>OgreWrap/include/MapTexture.h</itemPath>
-        <itemPath>OgreWrap/include/MediatorFrameListener.h</itemPath>
-        <itemPath>OgreWrap/include/MyApp.h</itemPath>
-        <itemPath>OgreWrap/include/MyAppCommon.h</itemPath>
-        <itemPath>OgreWrap/include/MyFrameListener.h</itemPath>
-        <itemPath>OgreWrap/include/MyMouseListener.h</itemPath>
-        <itemPath>OgreWrap/include/OObject.h</itemPath>
-        <itemPath>OgreWrap/include/OObjectLabel.h</itemPath>
-        <itemPath>OgreWrap/include/OObjectResource.h</itemPath>
-        <itemPath>OgreWrap/include/OObjectTitled.h</itemPath>
-        <itemPath>OgreWrap/include/OObjectUnit.h</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f2" displayName="src" projectFiles="true">
-        <itemPath>src/LabelsHolder.cpp</itemPath>
-        <itemPath>OgreWrap/src/MapTexture.cpp</itemPath>
-        <itemPath>OgreWrap/src/MediatorFrameListener.cpp</itemPath>
-        <itemPath>OgreWrap/src/MyApp.cpp</itemPath>
-        <itemPath>OgreWrap/src/MyFrameListener.cpp</itemPath>
-        <itemPath>OgreWrap/src/MyMouseListener.cpp</itemPath>
-        <itemPath>OgreWrap/src/OObject.cpp</itemPath>
-        <itemPath>OgreWrap/src/OObjectLabel.cpp</itemPath>
-        <itemPath>OgreWrap/src/OObjectResource.cpp</itemPath>
-        <itemPath>OgreWrap/src/OObjectTitled.cpp</itemPath>
-        <itemPath>OgreWrap/src/OObjectUnit.cpp</itemPath>
-      </logicalFolder>
+    <logicalFolder name="src" displayName="src" projectFiles="true">
+      <itemPath>src/EntiInfoMesh.h</itemPath>
+      <itemPath>src/LabelsHolder.cpp</itemPath>
+      <itemPath>src/LabelsHolder.h</itemPath>
+      <itemPath>src/Main.cpp</itemPath>
+      <itemPath>src/TechTreesBuilderFromXml.cpp</itemPath>
+      <itemPath>src/TechTreesBuilderFromXml.h</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"
@@ -54,12 +45,9 @@
                    kind="IMPORTANT_FILES_FOLDER">
       <itemPath>Makefile</itemPath>
     </logicalFolder>
-    <itemPath>src/Main.cpp</itemPath>
   </logicalFolder>
   <sourceRootList>
-    <Elem>include</Elem>
     <Elem>src</Elem>
-    <Elem>OgreWrap/include</Elem>
     <Elem>OgreWrap/src</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
@@ -73,19 +61,21 @@
       <compileType>
         <ccTool>
           <incDir>
-            <pElem>include</pElem>
+            <pElem>src</pElem>
+            <pElem>OgreWrap/src</pElem>
+            <pElem>../Strategix/src</pElem>
             <pElem>../common_include</pElem>
-            <pElem>OgreWrap/include</pElem>
-            <pElem>../Strategix/include</pElem>
             <pElem>/usr/include/OGRE</pElem>
             <pElem>/usr/include/OIS</pElem>
-            <pElem>/usr/include/CEGUI</pElem>
+            <pElem>/usr/local/include/MYGUI</pElem>
           </incDir>
         </ccTool>
         <linkerTool>
           <linkerAddLib>
+            <pElem>.</pElem>
             <pElem>/usr/lib</pElem>
             <pElem>/usr/lib/OGRE</pElem>
+            <pElem>/usr/local/lib</pElem>
           </linkerAddLib>
           <linkerLibItems>
             <linkerLibLibItem>OgreMain</linkerLibLibItem>
@@ -103,6 +93,8 @@
               </makeArtifact>
             </linkerLibProjectItem>
             <linkerLibLibItem>boost_filesystem</linkerLibLibItem>
+            <linkerLibLibItem>MyGUI.OgrePlatform</linkerLibLibItem>
+            <linkerLibLibItem>MyGUIEngine</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
         <requiredProjects>
@@ -132,13 +124,13 @@
         <ccTool>
           <developmentMode>5</developmentMode>
           <incDir>
-            <pElem>include</pElem>
+            <pElem>src</pElem>
+            <pElem>OgreWrap/src</pElem>
+            <pElem>../Strategix/src</pElem>
             <pElem>../common_include</pElem>
-            <pElem>OgreWrap/include</pElem>
-            <pElem>../Strategix/include</pElem>
             <pElem>/usr/include/OGRE</pElem>
             <pElem>/usr/include/OIS</pElem>
-            <pElem>/usr/include/CEGUI</pElem>
+            <pElem>/usr/local/include/MYGUI</pElem>
           </incDir>
         </ccTool>
         <fortranCompilerTool>
@@ -149,8 +141,10 @@
         </asmTool>
         <linkerTool>
           <linkerAddLib>
+            <pElem>.</pElem>
             <pElem>/usr/lib</pElem>
             <pElem>/usr/lib/OGRE</pElem>
+            <pElem>/usr/local/lib</pElem>
           </linkerAddLib>
           <linkerLibItems>
             <linkerLibLibItem>OgreMain</linkerLibLibItem>
@@ -168,6 +162,8 @@
               </makeArtifact>
             </linkerLibProjectItem>
             <linkerLibLibItem>boost_filesystem</linkerLibLibItem>
+            <linkerLibLibItem>MyGUI.OgrePlatform</linkerLibLibItem>
+            <linkerLibLibItem>MyGUIEngine</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
         <requiredProjects>

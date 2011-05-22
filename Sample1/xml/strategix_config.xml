@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<resource_types>
+  <gold>
+    <mesh>GoldenBrick.mesh</mesh>
+  </gold>
+</resource_types>

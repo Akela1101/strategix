@@ -8,8 +8,13 @@
 #ifndef _FEATUREINFO_H
 #define	_FEATUREINFO_H
 
+#include "StrategixCommon.h"
+
+
 namespace Strategix
 {
+	// Global feature properties
+
 	struct FeatureInfo // Interface
 	{
 		virtual ~FeatureInfo() {}
@@ -18,10 +23,20 @@ namespace Strategix
 	struct FeatureInfoMove : FeatureInfo
 	{
 		float speed;
-		//
-		//FeatureInfoMove(const FeatureInfoMove &_c) : speed(_c.speed) {}
+
 		FeatureInfoMove(const float speed) : speed(speed) {}
 		virtual ~FeatureInfoMove() {}
+	};
+
+	struct FeatureInfoCollect : FeatureInfo
+	{
+		ResType speed; // Res/sec
+		float radius; // radius Enti is able to collect from
+		ResType capacity;
+
+		FeatureInfoCollect(const float speed, const float radius, const float capacity)
+			: speed(speed), radius(radius), capacity(capacity) {}
+		virtual ~FeatureInfoCollect() {}
 	};
 
 	struct FeatureInfoHealth : FeatureInfo

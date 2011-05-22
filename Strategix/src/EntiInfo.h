@@ -27,6 +27,7 @@ namespace Strategix
 	{
 		string name;
 		string kind; // @#~ maybe set inplace of string?
+		Resources resources;
 		vector<string> depends; 
 		vector<string> provides;
 		

@@ -39,7 +39,7 @@ namespace Strategix
 
 	public:
 		MapsPathsFinder(const Map &map);
-		virtual ~MapsPathsFinder();
+		virtual ~MapsPathsFinder() {}
 
 		sh_p<MapsPath> FindPath(const MapCoord from, const MapCoord till);
 
@@ -58,7 +58,7 @@ namespace Strategix
 		}
 		bool IsAccessible(const MapCoord &mc) const
 		{
-			return map(mc).retard > 0;
+			return map.GetCell(mc).retard > 0;
 		}
 		int Distance(const MapCoord &a, const MapCoord &b) const
 		{

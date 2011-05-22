@@ -93,6 +93,8 @@ int main(int argc, char *argv[])
 	// What is current path? ( Must be /Strategix/Sample1 )
 	cout << "Current dir: " << boost::filesystem::current_path() << endl;
 
+	KernelBase::GS().Configure("xml/strategix_config.xml");
+
 	KernelBase::GS().BuildTechTrees(sh_p<TechTreesBuilder>(new TechTreesBuilderFromXml));
 
 	//
@@ -121,7 +123,7 @@ int main(int argc, char *argv[])
 		MyApp myApp(kernel);
 		try
 		{
-			myApp.go();
+			myApp.go(false);
 		}
 		catch( Ogre::Exception& e )
 		{
@@ -132,13 +134,13 @@ int main(int argc, char *argv[])
 			cout << endl << e.what() << endl;
 		}
 		cout << endl << "Exit from Ogre. Start to destruct it." << endl;
+	}
 
 // Reenable autorepeat in KDE ! *WALL*
 #ifdef __linux__
 	cout << endl << "Setting keyboard autorepeat back ON." << endl << endl;
 	ret = std::system("xset r");
 #endif
-	}
 
 #if defined( __WIN32__ ) || defined( _WIN32 )
 	getch();

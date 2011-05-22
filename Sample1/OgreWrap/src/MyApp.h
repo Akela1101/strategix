@@ -54,6 +54,12 @@ namespace Strategix
 	class Kernel;
 }
 
+namespace MyGUI
+{
+	class Gui;
+	class OgrePlatform;
+}
+
 namespace Sample1
 {
 	using namespace Ogre;
@@ -65,7 +71,7 @@ namespace Sample1
 	class MyApp
 	{
 	protected:
-		Root *mRoot;
+		Root *root;
 		sh_p<MyFrameListener> frameListener;
 		sh_p<MediatorFrameListener> mediatorFrameListener;
 		sh_p<Kernel> kernel;
@@ -74,10 +80,14 @@ namespace Sample1
 		StaticPluginLoader mStaticPluginLoader;
 	#endif
 
-		Camera* mCamera;		
-		RenderWindow* mWindow;
-		String mResourcePath;
-		String mConfigPath;
+		Camera* camera;		
+		RenderWindow* window;
+		String ogreConfigPath;
+
+		bool isConfigure;
+
+		sh_p<MyGUI::Gui> myGUI;
+		sh_p<MyGUI::OgrePlatform> myGUI_Platform;
 
 	#ifdef USE_RTSHADER_SYSTEM
 		RTShader::ShaderGenerator*					mShaderGenerator;			// The Shader generator instance.
@@ -87,7 +97,7 @@ namespace Sample1
 	public:
 		MyApp(sh_p<Kernel> kernel);
 		virtual ~MyApp();
-		virtual void go();
+		virtual void go(const bool isConfigure);
 
 	private:
 		virtual bool setup();
@@ -99,11 +109,11 @@ namespace Sample1
 		virtual void createResourceListener();
 		virtual void loadResources();
 		virtual void createScene();
-		virtual void createFrameListener();
 		virtual void destroyScene();		
 
 		void AddTileToTerrainMesh(ManualObject &mo, const Vector2 &coord, const FloatRect &tex_rect, int &offset);
 		void CreateStaticTerrain();
+		void CreateMyGUI();
 	};
 }
 

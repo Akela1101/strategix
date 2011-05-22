@@ -22,25 +22,25 @@ FeatureMove::FeatureMove(const FeatureInfo *featureInfo, Enti *enti)
 	:
 	Feature(enti),
 	featureInfoMove(static_cast<const FeatureInfoMove*>(featureInfo)),
-	vFeatureInfoMove(sh_p<FeatureInfoMove>(new FeatureInfoMove(*featureInfoMove))),	
+	speed(featureInfoMove->speed),
 	finish(enti->coord),
 	isMoving(false)
 {
 }
 
-bool FeatureMove::operator() (const RealCoord newCoord)
+bool FeatureMove::Move(const RealCoord newCoord, IMove *iMove)
 {
+	this->iMove = iMove;
 	distance = 0;
-	mapsPath = enti->player->map->FindPath(enti->coord, newCoord);
+	mapsPath = enti->player->mapLocal->FindPath(enti->coord, newCoord);
 
-	if( !mapsPath.get() )
+	if( !mapsPath )
 		return false;
 
 	if( !isMoving )
 	{
-		isMoving = true;
-		
-		enti->unit->OnMoveStart();
+		isMoving = true;		
+		iMove->OnMoveStart();
 		enti->tickFeatures.push_back(this); // adding to Tick queue
 	}
 
@@ -49,19 +49,19 @@ bool FeatureMove::operator() (const RealCoord newCoord)
 
 bool FeatureMove::Tick(const float seconds)
 {
-	if( distance > 0 ) //Moving
+	if( distance > 0 ) // Moving
 	{
-		const float moving = vFeatureInfoMove->speed * seconds;
-		distance = (distance > moving) ? (distance - moving) : 0;
+		const float moving = seconds * speed;
+		distance = ( distance > moving ) ? (distance - moving) : 0;
 		enti->coord = finish - direction * distance;
-		enti->unit->OnMove();
+		iMove->OnMove();
 	}
 	else
 	{
 		if( mapsPath->IsEmpty() ) // Stopping
 		{
-			enti->unit->OnMoveStop();
 			isMoving = false;
+			iMove->OnMoveStop();			
 			return false;
 		}
 		else // Selecting next point

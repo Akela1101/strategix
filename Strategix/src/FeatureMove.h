@@ -10,6 +10,7 @@
 
 #include "Feature.h"
 #include "CoordStructs.h"
+#include "Interfaces.h"
 
 
 namespace Strategix
@@ -21,22 +22,23 @@ namespace Strategix
 	{
 	protected:
 		const FeatureInfoMove *featureInfoMove; // Link to tree
-		sh_p<FeatureInfoMove> vFeatureInfoMove; // Variable copy
+		float speed;
+		
+		bool isMoving;
 
 	private:
 		float distance;
 		RealCoord direction, finish;
-		sh_p<MapsPath> mapsPath;
-		bool isMoving;
+		sh_p<MapsPath> mapsPath;		
+
+		IMove *iMove; // Additional callback
 
 	public:
 		FeatureMove(const FeatureInfo *featureInfo, Enti *enti);
 		virtual ~FeatureMove() {}
-
-		virtual bool Tick(const float seconds);
-
-		bool operator() (const RealCoord newCoord);
-			
+		
+		bool Move(const RealCoord newCoord, IMove *iMove);
+		bool Tick(const float seconds);
 
 	private:
 		FeatureMove(const FeatureMove &_c);

@@ -11,6 +11,7 @@
 #include "OObject.h"
 
 #include "Unit.h"
+#include "Interfaces.h"
 
 #include <OgrePrerequisites.h>
 #include <OgreVector3.h>
@@ -27,7 +28,7 @@ namespace Sample1
 	using namespace Ogre;
 	using namespace Strategix;	
 
-	class OObjectUnit : public Strategix::Unit, public OObject
+	class OObjectUnit : public OObject, public Unit
 	{
 	protected:
 		AnimationState *animationState;
@@ -41,7 +42,6 @@ namespace Sample1
 		virtual void OnMoveStart();
 		virtual void OnMove();
 		virtual void OnMoveStop();
-
 	};
 }
 

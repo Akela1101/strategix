@@ -9,9 +9,12 @@
 #include "Player.h"
 #include "EntiInfo.h"
 #include "FeatureMove.h"
+#include "FeatureCollect.h"
 #include "StrategixError.h"
 
 #include "Enti.h"
+#include "Map.h"
+#include "TechTree.h"
 
 
 namespace Strategix
@@ -28,39 +31,65 @@ Enti::Enti(const EntiInfo *entityInfo, const MapCoord &mapCoord)
 	}
 }
 
-Enti::~Enti()
-{
-}
-
 void Enti::Tick(const float seconds)
 {
 	for( list<Feature*>::iterator itFeature = tickFeatures.begin();
-			itFeature != tickFeatures.end(); ++itFeature )
+			itFeature != tickFeatures.end(); )
 	{
 		if( !(*itFeature)->Tick(seconds) )
 		{
 			tickFeatures.erase(itFeature++); // removing from Tick queue
 		}
+		else
+		{
+			++itFeature;
+		}
 	}
 	unit->OnTick(seconds);
 }
 
-FeatureMove& Enti::Move()
+bool Enti::Move(const RealCoord newCoord, IMove *iMove)
 {
-	return dynamic_cast<FeatureMove&>(GetFeature("move"));
+	FeatureMove* featureMove = dynamic_cast<FeatureMove*>(GetFeature("move"));
+	if( featureMove )
+	{
+		featureMove->Move(newCoord, iMove ? iMove : unit); // if Zero, send this->unit
+		return true;
+	}
+	return false;
 }
 
-Feature& Enti::GetFeature(const string &name)
+bool Enti::Collect(sh_p<MapResource> mapResource)
+{
+	FeatureCollect* featureCollect = dynamic_cast<FeatureCollect*>(GetFeature("collect"));
+	if( featureCollect )
+	{
+		featureCollect->Collect(mapResource);
+		return true;
+	}	
+	return false;
+}
+
+Enti* Enti::FindCollector()
+{
+	// @#~ too simple
+	// @#~ Check if there is path to Collector and also select nearest
+	// @#~ Check out the case when there are no collectors or more than one !!!
+
+
+	const string collectorName = player->techTree->mainBuildingName;
+	return player->entis.find(collectorName)->second.get();
+}
+
+Feature* Enti::GetFeature(const string &name)
 {
 	FeaturesType::iterator feature = features.find(name);
 	if( feature != features.end() )
 	{
-		return *feature->second;
+		return feature->second.get();
 	}
-	else
-	{
-		STRATEGIX_ERROR(string("There is no feature named: ") + name);
-	}
+	cout << string("There is no feature named: ") + name << endl; // DEBUG @#~
+	return 0;
 }
 
 sh_p<Feature> Enti::CreateFeature(const string &name, const FeatureInfo *featureInfo)
@@ -69,8 +98,13 @@ sh_p<Feature> Enti::CreateFeature(const string &name, const FeatureInfo *feature
 	{
 		return sh_p<FeatureMove>(new FeatureMove(featureInfo, this));
 	}
+	else if( name == "collect" )
+	{
+		return sh_p<FeatureCollect>(new FeatureCollect(featureInfo, this));
+	}
 	else
 	{
+		// @#~ !!!!!!!!!!!
 		//STRATEGIX_ERROR(string("Unable to create feature named: ") + name);
 		return sh_p<Feature>();
 	}

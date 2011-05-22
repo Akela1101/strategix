@@ -9,6 +9,7 @@
 #define	_MEDIATORFRAMELISTENER_H
 
 #include "Mediator.h"
+#include "StrategixCommon.h"
 
 #include <OgreFrameListener.h>
 
@@ -22,6 +23,12 @@ namespace Strategix
 	class Kernel;
 }
 
+namespace MyGUI
+{
+	class Gui;
+	class StaticText;
+}
+
 namespace Sample1
 {
 	using namespace std;
@@ -33,18 +40,21 @@ namespace Sample1
 	class MediatorFrameListener : public Strategix::Mediator, public FrameListener
 	{
 		sh_p<Kernel> kernel;
+		sh_p<MyGUI::Gui> myGUI;
+		MyGUI::StaticText *resourcesText;
 
 	protected:
 		std::list<sh_p<OObjectUnit> > units; // Move to Interface Class
 		std::list<sh_p<OObjectResource> > resources;
 
 	public:
-		MediatorFrameListener(sh_p<Kernel> kernel);
+		MediatorFrameListener(sh_p<Kernel> kernel, sh_p<MyGUI::Gui> myGUI);
 		virtual ~MediatorFrameListener() {}
-		
-		virtual void OnAddEnti(Enti *enti);
 
 		virtual bool frameRenderingQueued(const FrameEvent &event);
+
+		virtual void OnAddEnti(Enti *enti);
+		virtual void OnChangeResources(const Resources &newResources);
 	};
 }
 

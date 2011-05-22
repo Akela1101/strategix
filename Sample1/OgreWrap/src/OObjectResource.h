@@ -22,11 +22,11 @@ namespace Sample1
 
 	class OObjectResource : public OObject
 	{
-	protected:
-		sh_p<Map::Resource> resource;
+	public:
+		sh_p<MapResource> mapResource;
 
 	public:
-		OObjectResource(const std::string &meshName, const RealCoord &coord);
+		OObjectResource(const std::string &meshName, sh_p<MapResource> mapResource);
 		virtual ~OObjectResource() {}
 
 	};

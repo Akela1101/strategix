@@ -20,15 +20,17 @@ MapsPathsFinder::MapsPathsFinder(const Map &map)
 {
 }
 
-MapsPathsFinder::~MapsPathsFinder()
-{
-}
-
 sh_p<MapsPath> MapsPathsFinder::FindPath(const MapCoord from, const MapCoord till)
 {
-	sh_p<MapsPath> mapsPath(new MapsPath);
+	// Cannot be achieved
+	if( !IsAccessible(till) )
+	{
+		return sh_p<MapsPath>(); // Zero
+	}
 
-	if( from.x == till.x && from.y == till.y || !IsAccessible(till) )
+	// Already on place
+	sh_p<MapsPath> mapsPath(new MapsPath);
+	if( from.x == till.x && from.y == till.y )
 		return mapsPath;
 
 	static const MapCoord around[8] =
@@ -79,7 +81,7 @@ sh_p<MapsPath> MapsPathsFinder::FindPath(const MapCoord from, const MapCoord til
 			if( map.IsCell(checking_mc) && !GetByCoord(closed, checking_mc).get() && IsAccessible(checking_mc) )
 			{
 				// map(current->mc) @#~
-				Price new_G = current->G + ((i % 2) ? 10 : 14) * map(current->mc).retard; // sqrt(2)*10, 10
+				Price new_G = current->G + ((i % 2) ? 10 : 14) * map.GetCell(current->mc).retard; // sqrt(2)*10, 10
 
 				sh_p<CellPrice> openedCell = GetByCoord(opened, checking_mc);
 				if( !openedCell.get() )

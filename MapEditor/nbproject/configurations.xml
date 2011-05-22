@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configurationDescriptor version="69">
   <logicalFolder name="root" displayName="root" projectFiles="true">
-    <logicalFolder name="include" displayName="include" projectFiles="true">
-      <itemPath>include/MapArea.h</itemPath>
-      <itemPath>include/MapInfo.h</itemPath>
-      <itemPath>../common_include/Nya.hpp</itemPath>
-    </logicalFolder>
     <logicalFolder name="qtforms" displayName="qtforms" projectFiles="true">
       <itemPath>qtforms/DialogNew.cpp</itemPath>
       <itemPath>qtforms/DialogNew.h</itemPath>
@@ -18,7 +13,10 @@
     </logicalFolder>
     <logicalFolder name="src" displayName="src" projectFiles="true">
       <itemPath>src/MapArea.cpp</itemPath>
+      <itemPath>src/MapArea.h</itemPath>
       <itemPath>src/MapInfo.cpp</itemPath>
+      <itemPath>src/MapInfo.h</itemPath>
+      <itemPath>../common_include/Nya.hpp</itemPath>
       <itemPath>src/main.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
@@ -55,7 +53,7 @@
       <compileType>
         <ccTool>
           <incDir>
-            <pElem>include</pElem>
+            <pElem>src</pElem>
             <pElem>qtforms</pElem>
             <pElem>../common_include</pElem>
           </incDir>
@@ -82,7 +80,7 @@
         <ccTool>
           <developmentMode>5</developmentMode>
           <incDir>
-            <pElem>include</pElem>
+            <pElem>src</pElem>
             <pElem>qtforms</pElem>
             <pElem>../common_include</pElem>
           </incDir>

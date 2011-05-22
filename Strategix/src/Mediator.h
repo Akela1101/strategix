@@ -12,6 +12,7 @@
 namespace Strategix
 {
 	class Enti;
+	class Resources;
 
 	class Mediator
 	{
@@ -20,6 +21,7 @@ namespace Strategix
 		virtual ~Mediator() = 0;
 		
 		virtual void OnAddEnti(Enti *enti) = 0;
+		virtual void OnChangeResources(const Resources &newResources) = 0;
 
 	private:
 		Mediator(const Mediator &_c);

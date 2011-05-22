@@ -41,11 +41,8 @@ OObjectUnit::OObjectUnit(Enti *enti)
 	OObject(dynamic_cast<const EntiInfoMesh*>(enti->entityInfo)->meshName),
 	animationState(0)
 {
-	// Check all animations for corresponding mesh
-
-	//
-	entity->setUserAny(Any(this)); // Link from Entity to itself
-	entity->setQueryFlags(MOV_MASK);
+	entity->setUserAny(Any(this)); // Link from Entity
+	entity->setQueryFlags(UNIT_MASK); // Mask for mouse selection
 	
 	const float scale = dynamic_cast<const EntiInfoMesh*>(enti->entityInfo)->meshScale;
 	node->setScale(scale, scale, scale);
