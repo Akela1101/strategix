@@ -59,10 +59,9 @@ namespace Strategix
 			return this;
 		}
 
-		template<typename Y>
-		Coord operator *(const Y _v)
+		Coord operator *(const float _v)
 		{
-			return Coord(x * _v, y * _v);
+			return Coord(_v * x, _v * y);
 		}
 
 		T Len() const
@@ -80,11 +79,17 @@ namespace Strategix
 	typedef Coord<int, float> MapCoord; // used in Maps
 	typedef Coord<float, int> RealCoord; // used in Enti and everywhere
 
+#ifdef MSCC
 	template<>
 	MapCoord::operator RealCoord() const
 	{
 		return RealCoord(0.5 + x, 0.5 + y); // Center object in cell
 	}
+#else // GCC
+	template<>
+	MapCoord::operator RealCoord() const;
+#endif
+
 }
 
 #endif	/* _COORDSTRUCTS_H */
