@@ -19,27 +19,32 @@ namespace Strategix
 {
 	class FeatureInfoCollect;
 
-	class FeatureCollect : public Feature, public IMove
+	class FeatureCollect : public Feature, public ICommand
 	{
 	protected:
 		const FeatureInfoCollect *featureInfoCollect; // Link to tree
 		const ResType capacity; // always = featureInfoCollect->capacity
 		
 	private:		
-		float load; // Amount of resource Enti is holding, load must be float to avoid loses
+		float load; // amount of resource Enti is holding, load must be float to avoid loses
 		w_p<MapResource> mapResource; // target
 		Enti *collector; // where to take resources to
+
+		bool isMovingToCollector;
 
 	public:
 		FeatureCollect(const FeatureInfo *featureInfo, Enti *enti);
 		virtual ~FeatureCollect() {}
 		
 		bool Collect(sh_p<MapResource> mapResource);
-		bool Tick(const float seconds);
+		virtual bool Tick(const float seconds);
+		virtual void Stop();
 
-		virtual void OnMoveStart();
-		virtual void OnMove();
-		virtual void OnMoveStop();
+		virtual void OnComplete(bool isComplete);
+
+	protected:
+		Enti* FindCollector(); // resource collector
+		void MoveToCollector(); // going back to base(or other collector)
 			
 	private:
 		FeatureCollect(const FeatureCollect &_c);

@@ -8,9 +8,6 @@
 #include "Unit.h"
 #include "Player.h"
 #include "EntiInfo.h"
-#include "FeatureMove.h"
-#include "FeatureCollect.h"
-#include "StrategixError.h"
 
 #include "Enti.h"
 #include "Map.h"
@@ -20,93 +17,72 @@
 namespace Strategix
 {
 
-Enti::Enti(const EntiInfo *entityInfo, const MapCoord &mapCoord)
+Enti::Enti(const EntiInfo *entityInfo, const RealCoord &coord)
 	:
 	entityInfo(entityInfo),
-	coord(mapCoord)
+	coord(coord),
+	tickFeature(0),
+	isLastFeature(true)
 {
 	foreach(const EntiInfo::FeatureInfosType::value_type &pa, entityInfo->featureInfos)
 	{
-		features[pa.first] = CreateFeature(pa.first, pa.second.get());
+		AddFeature(pa.first, pa.second.get());
 	}
+}
+
+void Enti::AddFeature(const string &name, const FeatureInfo *featureInfo)
+{
+	if( name == "move" )
+	{
+		features[typeid(FeatureMove).name()].reset(new FeatureMove(featureInfo, this));
+	}
+	else if( name == "collect" )
+	{
+		features[typeid(FeatureCollect).name()].reset(new FeatureCollect(featureInfo, this));
+	}
+	// else ?
 }
 
 void Enti::Tick(const float seconds)
 {
-	for( list<Feature*>::iterator itFeature = tickFeatures.begin();
-			itFeature != tickFeatures.end(); )
+	for( list<Feature*>::iterator itFeature = passiveTickFeatures.begin();
+			itFeature != passiveTickFeatures.end(); )
 	{
 		if( !(*itFeature)->Tick(seconds) )
 		{
-			tickFeatures.erase(itFeature++); // removing from Tick queue
+			passiveTickFeatures.erase(itFeature++); // removing from Tick queue
 		}
 		else
 		{
 			++itFeature;
 		}
 	}
+	if( tickFeature )
+	{		
+		if( !tickFeature->Tick(seconds) )
+		{
+			if( isLastFeature )
+				tickFeature = 0;
+			else
+				isLastFeature = true;
+		}
+	}
 	unit->OnTick(seconds);
 }
 
-bool Enti::Move(const RealCoord newCoord, IMove *iMove)
+void Enti::AssignTickFeature(Feature *feature, bool isPassive)
 {
-	FeatureMove* featureMove = dynamic_cast<FeatureMove*>(GetFeature("move"));
-	if( featureMove )
+	if( isPassive )
 	{
-		featureMove->Move(newCoord, iMove ? iMove : unit); // if Zero, send this->unit
-		return true;
-	}
-	return false;
-}
-
-bool Enti::Collect(sh_p<MapResource> mapResource)
-{
-	FeatureCollect* featureCollect = dynamic_cast<FeatureCollect*>(GetFeature("collect"));
-	if( featureCollect )
-	{
-		featureCollect->Collect(mapResource);
-		return true;
-	}	
-	return false;
-}
-
-Enti* Enti::FindCollector()
-{
-	// @#~ too simple
-	// @#~ Check if there is path to Collector and also select nearest
-	// @#~ Check out the case when there are no collectors or more than one !!!
-
-
-	const string collectorName = player->techTree->mainBuildingName;
-	return player->entis.find(collectorName)->second.get();
-}
-
-Feature* Enti::GetFeature(const string &name)
-{
-	FeaturesType::iterator feature = features.find(name);
-	if( feature != features.end() )
-	{
-		return feature->second.get();
-	}
-	STRATEGIX_ERROR(string("There is no feature named: ") + name);
-	return 0;
-}
-
-sh_p<Feature> Enti::CreateFeature(const string &name, const FeatureInfo *featureInfo)
-{
-	if( name == "move" )
-	{
-		return sh_p<FeatureMove>(new FeatureMove(featureInfo, this));
-	}
-	else if( name == "collect" )
-	{
-		return sh_p<FeatureCollect>(new FeatureCollect(featureInfo, this));
+		passiveTickFeatures.push_back(feature);
 	}
 	else
 	{
-		// @#~ !!!!!!!!!!!
-		//STRATEGIX_ERROR(string("Unable to create feature named: ") + name);
-		return sh_p<Feature>();
+		if( tickFeature )
+			tickFeature->Stop();
+
+		tickFeature = feature;
+		isLastFeature = false; // do not remove tickFeature
 	}
 }
 

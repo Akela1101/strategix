@@ -1,11 +1,13 @@
-Compiled on:
+GNU C++ 4.5.2
+NetBeans 6.9 <linux>
+Visual C++ 10.0 
+CodeLite 2.10 + MinGW 
 
-C++ GNU 4.4.4 <linux>
-Boost 1.42.0 (smart_ptr, ptree, filesystem, ...)
-Qt 4.6.3 (использован для Редактора Карт)
-OGRE 1.7.1 (графический движок, использующий:)
-	OpenGL 7.0 (windows, linux)
-	DirectX 9.0c (только windows)
-NetBeans 6.9 <linux> (основная среда)
-VisualC 9.1 (не использовать в дальнейшем в силу убогости mscc)
-Git *last v.* ( https://github.com/Akela1101/Strategix )
+Boost 1.46.0 
+Qt 4.6.3 
+OGRE 1.7.1 
+	OpenGL 7.0 
+	DirectX 9.0c
+	MyGUI 3.0
+
+Blender 2.49 <linux> 

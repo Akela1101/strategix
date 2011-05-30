@@ -43,12 +43,15 @@ MediatorFrameListener::MediatorFrameListener(sh_p<Kernel> kernel, sh_p<MyGUI::Gu
 
 	MapFull &mapFull = kernel->GetMap();
 
+	// Do next stuff inside Kernel::Start() !!!!!!!!!!!!
+	// but set mediator here.
+
 	// Players' initialization
 	foreach( sh_p<Player > &player, kernel->players )
 	{
 		// Assigning Human's callback as this
 		//if( player->playerType == HUMAN )
-			player->mediator = this;
+			player->mediator = this;		
 
 		// Getting Base Info
 		const string baseName = player->techTree->mainBuildingName;

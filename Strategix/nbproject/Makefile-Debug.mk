@@ -39,18 +39,14 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/MapFull.o \
 	${OBJECTDIR}/src/Player.o \
 	${OBJECTDIR}/src/Resources.o \
-	${OBJECTDIR}/src/FeatureCollect.o \
 	${OBJECTDIR}/src/FeatureMove.o \
+	${OBJECTDIR}/src/FeatureCollect.o \
 	${OBJECTDIR}/src/MapsPathsFinder.o \
-	${OBJECTDIR}/src/Map.o \
-	${OBJECTDIR}/src/MapsPath.o \
 	${OBJECTDIR}/src/TechTree.o \
 	${OBJECTDIR}/src/Log.o \
 	${OBJECTDIR}/src/Enti.o \
 	${OBJECTDIR}/src/KernelBase.o \
-	${OBJECTDIR}/src/Feature.o \
-	${OBJECTDIR}/src/CoordStructs.o \
-	${OBJECTDIR}/src/Mediator.o
+	${OBJECTDIR}/src/CoordStructs.o
 
 
 # C Compiler Flags
@@ -109,30 +105,20 @@ ${OBJECTDIR}/src/Resources.o: src/Resources.cpp
 	${RM} $@.d
 	$(COMPILE.cc) -g -Isrc -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Resources.o src/Resources.cpp
 
-${OBJECTDIR}/src/FeatureCollect.o: src/FeatureCollect.cpp 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} $@.d
-	$(COMPILE.cc) -g -Isrc -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/FeatureCollect.o src/FeatureCollect.cpp
-
 ${OBJECTDIR}/src/FeatureMove.o: src/FeatureMove.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.cc) -g -Isrc -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/FeatureMove.o src/FeatureMove.cpp
 
+${OBJECTDIR}/src/FeatureCollect.o: src/FeatureCollect.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -g -Isrc -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/FeatureCollect.o src/FeatureCollect.cpp
+
 ${OBJECTDIR}/src/MapsPathsFinder.o: src/MapsPathsFinder.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.cc) -g -Isrc -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/MapsPathsFinder.o src/MapsPathsFinder.cpp
-
-${OBJECTDIR}/src/Map.o: src/Map.cpp 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} $@.d
-	$(COMPILE.cc) -g -Isrc -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Map.o src/Map.cpp
-
-${OBJECTDIR}/src/MapsPath.o: src/MapsPath.cpp 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} $@.d
-	$(COMPILE.cc) -g -Isrc -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/MapsPath.o src/MapsPath.cpp
 
 ${OBJECTDIR}/src/TechTree.o: src/TechTree.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
@@ -154,20 +140,10 @@ ${OBJECTDIR}/src/KernelBase.o: src/KernelBase.cpp
 	${RM} $@.d
 	$(COMPILE.cc) -g -Isrc -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/KernelBase.o src/KernelBase.cpp
 
-${OBJECTDIR}/src/Feature.o: src/Feature.cpp 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} $@.d
-	$(COMPILE.cc) -g -Isrc -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Feature.o src/Feature.cpp
-
 ${OBJECTDIR}/src/CoordStructs.o: src/CoordStructs.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.cc) -g -Isrc -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/CoordStructs.o src/CoordStructs.cpp
-
-${OBJECTDIR}/src/Mediator.o: src/Mediator.cpp 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} $@.d
-	$(COMPILE.cc) -g -Isrc -I../common_include -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Mediator.o src/Mediator.cpp
 
 # Subprojects
 .build-subprojects:

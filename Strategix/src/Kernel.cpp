@@ -11,6 +11,7 @@
 
 #include "Kernel.h"
 
+
 namespace Strategix
 {
 
@@ -25,9 +26,12 @@ void Kernel::AddPlayer(sh_p<Player> player)
 	players.push_back(player);
 }
 
-// Check for kernel consistence, run initial functions
 void Kernel::Start()
 {
+	// @#~ Check for kernel consistence, run initial functions
+
+	// @#~ Read Map and initialize Bases!!!!!!!!!
+	
 	players[0]->AddResources(Resources());
 }
 

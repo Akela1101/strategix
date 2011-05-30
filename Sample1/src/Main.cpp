@@ -94,10 +94,8 @@ int main(int argc, char *argv[])
 	cout << "Current dir: " << boost::filesystem::current_path() << endl;
 
 	KernelBase::GS().Configure("xml/strategix_config.xml");
-
 	KernelBase::GS().BuildTechTrees(sh_p<TechTreesBuilder>(new TechTreesBuilderFromXml));
 
-	//
 	cout << endl << "Maps: " << endl;
 	sh_p<std::vector<std::string> > mapNames = KernelBase::GS().GetMapNames();
 	foreach(std::string mapName, *mapNames)
@@ -105,7 +103,6 @@ int main(int argc, char *argv[])
 		cout << mapName << endl;
 	}
 
-	//
 	cout << endl << "Race names: " << endl;
 	sh_p<std::vector<std::string> > raceNames = KernelBase::GS().GetRaceNames();
 	foreach(std::string raceName, *raceNames)

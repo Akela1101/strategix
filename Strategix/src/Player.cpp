@@ -17,7 +17,8 @@
 namespace Strategix
 {
 
-Player::Player(string name, PlayerType playerType, int playerNumber, string raceName)
+Player::Player(const string name, const PlayerType playerType,
+				const int playerNumber, const string raceName)
 	:
 	mediator(0),
 	name(name),

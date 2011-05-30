@@ -6,15 +6,17 @@
  */
 
 #include "OObjectUnit.h"
+#include "OObjectResource.h"
 
 #include "Enti.h"
 #include "FeatureMove.h"
+#include "FeatureCollect.h"
 
 #include <Ogre.h>
 
 #include "Nya.hpp"
 #include "MyMouseListener.h"
-#include "OObjectResource.h"
+
 
 namespace Sample1
 {
@@ -85,13 +87,13 @@ bool MyMouseListener::mousePressed(const OIS::MouseEvent &mouse_event, OIS::Mous
 			if( entity && (mask == RES_MASK) )
 			{
 				OObjectResource *oObjectResource = any_cast<OObjectResource*>(entity->getUserAny());
-				oObjectUnit->enti->Collect(oObjectResource->mapResource);
+				oObjectUnit->enti->Do<FeatureCollect>()->Collect(oObjectResource->mapResource);
 			}
 			// Going to place
 			else
 			{
 				const Vector3 &terrainCoord = GetTerrainCoord(mouse_event);
-				oObjectUnit->enti->Move(RealCoord(terrainCoord.x, terrainCoord.z));
+				oObjectUnit->enti->Do<FeatureMove>()->Move(RealCoord(terrainCoord.x, terrainCoord.z));
 			}
 		}
 	}

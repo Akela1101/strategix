@@ -1,12 +1,13 @@
-"Top String" (string)
-"Terrains definition file name" (string)
-"Map Name"
+"Stragegix Map"
+[string version]
+[string def_file]
+[string map_name]
 
-"width" "height" (int int)
-""contents"" (int)[][]
+[int width] [int height]
+( [int terrain] )[][]
 
-"Number of players" (int)
-""initial positions"" (int int)[]
+[int number_of_players]
+( [int x] [int y] )[]
 
-"Number of objects" (int)
-""Objects""(int int object)[]
+[int number_of_resources]
+( [int x] [int y] [string resource_name] [float amount] )[]

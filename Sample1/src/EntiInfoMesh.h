@@ -22,7 +22,20 @@ namespace Sample1
 		string meshName;
 		float meshScale;
 
-		virtual EntiInfoMesh *copy() { return new EntiInfoMesh(*this); }
+		virtual EntiInfoMesh* copy() const
+		{
+			EntiInfoMesh *copy = new EntiInfoMesh();
+			copy->init(*this);
+			return copy;
+		}
+
+	protected:
+		void init(const EntiInfoMesh &_c)
+		{
+			EntiInfo::init(_c);
+			meshName = _c.meshName;
+			meshScale = _c.meshScale;
+		}
 	};
 }
 

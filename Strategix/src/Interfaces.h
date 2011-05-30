@@ -10,7 +10,12 @@
 
 namespace Strategix
 {
-	// Callbacks do nothing by default!
+	// Callbacks:
+
+	struct ICommand
+	{
+		virtual void OnComplete(bool isComplete) = 0;
+	};
 
 	struct ITick
 	{

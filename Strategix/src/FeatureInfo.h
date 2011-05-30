@@ -15,9 +15,15 @@ namespace Strategix
 {
 	// Global feature properties
 
-	struct FeatureInfo // Interface
+	struct FeatureInfo
 	{
+		FeatureInfo() {}
 		virtual ~FeatureInfo() {}
+		virtual FeatureInfo* copy() = 0;
+
+	private:
+		FeatureInfo(const FeatureInfo &_c);
+		FeatureInfo& operator =(const FeatureInfo &_c);
 	};
 
 	struct FeatureInfoMove : FeatureInfo
@@ -26,6 +32,7 @@ namespace Strategix
 
 		FeatureInfoMove(const float speed) : speed(speed) {}
 		virtual ~FeatureInfoMove() {}
+		virtual FeatureInfoMove* copy() { return new FeatureInfoMove(speed); }
 	};
 
 	struct FeatureInfoCollect : FeatureInfo
@@ -37,6 +44,7 @@ namespace Strategix
 		FeatureInfoCollect(const float speed, const float radius, const float capacity)
 			: speed(speed), radius(radius), capacity(capacity) {}
 		virtual ~FeatureInfoCollect() {}
+		virtual FeatureInfoCollect* copy() { return new FeatureInfoCollect(speed, radius, capacity); }
 	};
 
 	struct FeatureInfoHealth : FeatureInfo
@@ -47,6 +55,7 @@ namespace Strategix
 		FeatureInfoHealth(const float hp, const float regenSpeed)
 			: hp(hp), regenSpeed(regenSpeed) {}
 		virtual ~FeatureInfoHealth() {}
+		virtual FeatureInfoHealth* copy() { return new FeatureInfoHealth(hp, regenSpeed); }
 	};
 }
 

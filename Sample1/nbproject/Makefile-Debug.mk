@@ -38,7 +38,6 @@ OBJECTFILES= \
 	${OBJECTDIR}/OgreWrap/src/MediatorFrameListener.o \
 	${OBJECTDIR}/OgreWrap/src/MyMouseListener.o \
 	${OBJECTDIR}/OgreWrap/src/MapTexture.o \
-	${OBJECTDIR}/src/LabelsHolder.o \
 	${OBJECTDIR}/OgreWrap/src/OObjectResource.o \
 	${OBJECTDIR}/OgreWrap/src/MyApp.o \
 	${OBJECTDIR}/OgreWrap/src/OObjectLabel.o \
@@ -46,6 +45,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/OgreWrap/src/MyFrameListener.o \
 	${OBJECTDIR}/OgreWrap/src/OObjectUnit.o \
 	${OBJECTDIR}/OgreWrap/src/OObject.o \
+	${OBJECTDIR}/OgreWrap/src/LabelsHolder.o \
 	${OBJECTDIR}/OgreWrap/src/ObjectTitle.o
 
 
@@ -100,11 +100,6 @@ ${OBJECTDIR}/OgreWrap/src/MapTexture.o: OgreWrap/src/MapTexture.cpp
 	${RM} $@.d
 	$(COMPILE.cc) -g -Isrc -IOgreWrap/src -I../Strategix/src -I../common_include -I/usr/include/OGRE -I/usr/include/OIS -I/usr/local/include/MYGUI -MMD -MP -MF $@.d -o ${OBJECTDIR}/OgreWrap/src/MapTexture.o OgreWrap/src/MapTexture.cpp
 
-${OBJECTDIR}/src/LabelsHolder.o: src/LabelsHolder.cpp 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} $@.d
-	$(COMPILE.cc) -g -Isrc -IOgreWrap/src -I../Strategix/src -I../common_include -I/usr/include/OGRE -I/usr/include/OIS -I/usr/local/include/MYGUI -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/LabelsHolder.o src/LabelsHolder.cpp
-
 ${OBJECTDIR}/OgreWrap/src/OObjectResource.o: OgreWrap/src/OObjectResource.cpp 
 	${MKDIR} -p ${OBJECTDIR}/OgreWrap/src
 	${RM} $@.d
@@ -139,6 +134,11 @@ ${OBJECTDIR}/OgreWrap/src/OObject.o: OgreWrap/src/OObject.cpp
 	${MKDIR} -p ${OBJECTDIR}/OgreWrap/src
 	${RM} $@.d
 	$(COMPILE.cc) -g -Isrc -IOgreWrap/src -I../Strategix/src -I../common_include -I/usr/include/OGRE -I/usr/include/OIS -I/usr/local/include/MYGUI -MMD -MP -MF $@.d -o ${OBJECTDIR}/OgreWrap/src/OObject.o OgreWrap/src/OObject.cpp
+
+${OBJECTDIR}/OgreWrap/src/LabelsHolder.o: OgreWrap/src/LabelsHolder.cpp 
+	${MKDIR} -p ${OBJECTDIR}/OgreWrap/src
+	${RM} $@.d
+	$(COMPILE.cc) -g -Isrc -IOgreWrap/src -I../Strategix/src -I../common_include -I/usr/include/OGRE -I/usr/include/OIS -I/usr/local/include/MYGUI -MMD -MP -MF $@.d -o ${OBJECTDIR}/OgreWrap/src/LabelsHolder.o OgreWrap/src/LabelsHolder.cpp
 
 ${OBJECTDIR}/OgreWrap/src/ObjectTitle.o: OgreWrap/src/ObjectTitle.cpp 
 	${MKDIR} -p ${OBJECTDIR}/OgreWrap/src

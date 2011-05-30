@@ -37,6 +37,8 @@ void MapArea::SetPs(MainForm *mainForm, QScrollArea *scrollArea)
 
 void MapArea::paintEvent(QPaintEvent *event)
 {
+	Q_UNUSED(event);
+
 	if( !mapInfo )
 		return;
 
@@ -165,6 +167,8 @@ void MapArea::mousePressEvent(QMouseEvent *event)
 
 void MapArea::mouseReleaseEvent(QMouseEvent *event)
 {
+	Q_UNUSED(event);
+
 	this->releaseMouse();
 }
 

@@ -173,6 +173,8 @@ void MainForm::HelpAbout()
 
 void MainForm::CurrentItemChanged(QListWidgetItem *current, QListWidgetItem *previous)
 {
+	Q_UNUSED(previous);
+
 	currentItem = current;
 	if(currentItem)
 		this->statusBar()->showMessage(currentItem->text());

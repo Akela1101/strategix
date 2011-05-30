@@ -1,0 +1,1 @@
+dot -T png *.dot -o *.dot.png 

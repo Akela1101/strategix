@@ -12,6 +12,8 @@
 #include "CoordStructs.h"
 #include "Interfaces.h"
 
+#include "Nya.hpp"
+
 
 namespace Strategix
 {
@@ -29,16 +31,17 @@ namespace Strategix
 	private:
 		float distance;
 		RealCoord direction, finish;
-		sh_p<MapsPath> mapsPath;		
+		sh_p<MapsPath> mapsPath;
 
-		IMove *iMove; // Additional callback
+		ICommand *iCommand; // someone who started moving
 
 	public:
 		FeatureMove(const FeatureInfo *featureInfo, Enti *enti);
 		virtual ~FeatureMove() {}
 		
-		bool Move(const RealCoord newCoord, IMove *iMove);
-		bool Tick(const float seconds);
+		bool Move(const RealCoord newCoord, ICommand *iCommand = 0);
+		virtual bool Tick(const float seconds);
+		virtual void Stop();
 
 	private:
 		FeatureMove(const FeatureMove &_c);

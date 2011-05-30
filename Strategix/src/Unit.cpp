@@ -19,7 +19,6 @@ Unit::Unit(Enti *enti) : enti(enti)
 }
 
 Unit::~Unit()
-{
-}
+{}
 
 }

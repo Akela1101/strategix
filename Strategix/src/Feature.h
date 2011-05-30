@@ -20,9 +20,10 @@ namespace Strategix
 		
 	public:
 		Feature(Enti *enti) : enti(enti) {}
-		virtual ~Feature() = 0;
+		virtual ~Feature() {}
 
-		virtual bool Tick(const float seconds) = 0;
+		virtual bool Tick(const float seconds) = 0; // stop tick, if false.
+		virtual void Stop() = 0;
 
 	private:
 		Feature(const Feature &_c);

@@ -5,13 +5,14 @@
  * Created on 18 Май 2011 г., 14:48
  */
 
-
-#include "FeatureInfo.h"
 #include "Enti.h"
 #include "Unit.h"
 #include "Player.h"
+#include "TechTree.h"
 #include "MapResource.h"
 #include "MapLocal.h"
+#include "FeatureInfo.h"
+#include "FeatureMove.h"
 
 #include "FeatureCollect.h"
 
@@ -22,21 +23,21 @@ namespace Strategix
 FeatureCollect::FeatureCollect(const FeatureInfo *featureInfo, Enti *enti)
 	:
 	Feature(enti),
-	featureInfoCollect(static_cast<const FeatureInfoCollect*>(featureInfo)),
+	featureInfoCollect(dynamic_cast<const FeatureInfoCollect*>(featureInfo)),
 	capacity(featureInfoCollect->capacity),
 	load(0),
-	collector(0)
+	collector(0),
+	isMovingToCollector(false)
 {
 }
 
 bool FeatureCollect::Collect(sh_p<MapResource> mapResource)
 {
-	if( load >= capacity ) // @#~ Add other conditions
+	// Try move and set callback on this
+	if( !enti->Do<FeatureMove>()->Move(mapResource->mapCoord, this) )
 		return false;
 
-	// Try move and set callback on this
-	if( !enti->Move(mapResource->mapCoord, this) )
-		return false;
+	isMovingToCollector = false;
 
 	// Setting target resource
 	this->mapResource = mapResource;
@@ -55,69 +56,59 @@ bool FeatureCollect::Tick(const float seconds)
 			piece = shMapResource->amount;
 		}
 
-		// Кусок влезает
+		// piece fits
 		if( load + piece < capacity )
 		{
-			// Ресурс закончился
+			// resource is over
 			if( piece == shMapResource->amount )
 			{
 				shMapResource->amount = 0;
 				// remove resource from Map
 				MapCoord mapCoord = shMapResource->mapCoord;
 				enti->player->mapLocal->GetCell(mapCoord).mapResource.reset();
-			}
-			// Ресурс ещё есть
-			else
+			}			
+			else // resource remained
 			{
 				shMapResource->amount -= piece;
 			}			
 			load += piece;
-		}
-		// Кусок не влезает
-		else
+		}		
+		else // piece does not fit
 		{
-			// Суём то, что влезает
+			// , so load all we can
 			shMapResource->amount -= capacity - load;
 			load = capacity;
 		}
 		enti->unit->OnCollect();
 	}
-	else
+	else // full load or no more resources
 	{
-		enti->unit->OnCollectStop();
-
-		// Going back to base(or collector)
-		if( !collector || !enti->Move(collector->coord, this) )
-		{
-			collector = enti->FindCollector();
-			enti->Move(collector->coord, this); // @#~ go till building radius !!!
-		}
+		Stop();
+		MoveToCollector();
 		return false;
 	}
 	return true;
 }
 
-void FeatureCollect::OnMoveStart()
+// Moving Complete
+void FeatureCollect::OnComplete(bool isComplete)
 {
-	enti->unit->OnMoveStart();
-}
-
-void FeatureCollect::OnMove()
-{
-	enti->unit->OnMove();
-}
-
-void FeatureCollect::OnMoveStop()
-{
-	if( load == 0 )
+	if( !isComplete )
+		return;
+	
+	if( !isMovingToCollector ) // moving to resource complete
 	{
-		// @#~ Check if Enti is near resourse
-		enti->unit->OnMoveStop();
-		enti->unit->OnCollectStart();
-		enti->tickFeatures.push_back(this); // adding to Tick queue
-	}
-	// Near the collector, so unload
-	else
+		if( load < capacity )
+		{
+			enti->unit->OnCollectStart();
+			enti->AssignTickFeature(this);
+		}
+		else
+		{
+			MoveToCollector();
+		}
+	}	
+	else // near the collector, so unload
 	{
 		enti->unit->OnBringStop();
 		enti->player->AddResources(Resources(0, load));
@@ -129,6 +120,33 @@ void FeatureCollect::OnMoveStop()
 			Collect(sh_p<MapResource>(mapResource));
 		}
 	}
+}
+
+Enti* FeatureCollect::FindCollector()
+{
+	// @#~ too simple
+	// @#~ Check if there is path to Collector and also select nearest
+	// @#~ Check out the case when there are no collectors or more than one !!!
+
+	const string collectorName = enti->player->techTree->mainBuildingName;
+	return enti->player->entis.find(collectorName)->second.get();
+}
+
+void FeatureCollect::MoveToCollector()
+{
+	if( !collector )
+	{
+		collector = FindCollector(); // @#~ check if 0.
+	}
+	if( enti->Do<FeatureMove>()->Move(collector->coord, this) )
+	{
+		isMovingToCollector = true;
+	}
+}
+
+void FeatureCollect::Stop()
+{
+	enti->unit->OnCollectStop();
 }
 
 }

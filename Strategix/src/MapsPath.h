@@ -20,9 +20,6 @@ namespace Strategix
 		std::deque<MapCoord> path; // vector ???
 
 	public:
-		MapsPath();		
-		virtual ~MapsPath();
-
 		bool IsEmpty() { return path.empty(); }
 		MapCoord PickFront()
 		{

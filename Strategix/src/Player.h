@@ -30,7 +30,6 @@ namespace Strategix
 	public:
 		Mediator *mediator; // Callback class
 
-		//
 		string name; // Name given by user.
 		PlayerType playerType; // human, ai, net
 		const int playerNumber; // number of player on the map
@@ -43,16 +42,16 @@ namespace Strategix
 		EntisType entis;
 
 	public:
-		Player(string name, PlayerType playerType, int playerNumber, string raceName);
-		virtual ~Player() {}
-
+		Player(const string name, const PlayerType playerType,
+				const int playerNumber, const string raceName);
+		
 		void Tick(const float seconds);
 		void AddEnti(sh_p<Enti> enti);
 		bool AddResources(const Resources deltaResources);
 
 	private:
 		Player(const Player& orig);
-
+		Player& operator =(const Player &_c);
 	};
 }
 

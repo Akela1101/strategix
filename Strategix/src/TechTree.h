@@ -25,7 +25,7 @@ namespace Strategix
 
 	class TechTree
 	{
-	public: // Don't forget updating copy constuctor after changing member list!
+	public:
 		string raceName;
 		string mainBuildingName;
 
@@ -38,7 +38,9 @@ namespace Strategix
 		TechTree(const TechTree &_c);
 		TechTree & operator =(const TechTree &_c);
 		inline void init(const TechTree &_c);
+		// Don't forget updating copy constuctor after changing member list!
 
+		void AddNode(sh_p<EntiInfo> entityInfo);
 		sh_p<EntiInfo> Node(const string name) const
 		{
 			TechMapType::const_iterator itEi = techMap.find(name);
@@ -46,8 +48,6 @@ namespace Strategix
 				STRATEGIX_ERROR(string("Wrong Enti name: ") + name);
 			return itEi->second;
 		}
-		void AddNode(sh_p<EntiInfo> entityInfo);
-
 	};
 
 	typedef map<string, sh_p<TechTree> > TechTreesType;

@@ -2,6 +2,8 @@
 <configurationDescriptor version="69">
   <logicalFolder name="root" displayName="root" projectFiles="true">
     <logicalFolder name="f1" displayName="OgreWrap" projectFiles="true">
+      <itemPath>OgreWrap/src/LabelsHolder.cpp</itemPath>
+      <itemPath>OgreWrap/src/LabelsHolder.h</itemPath>
       <itemPath>OgreWrap/src/MapTexture.cpp</itemPath>
       <itemPath>OgreWrap/src/MapTexture.h</itemPath>
       <itemPath>OgreWrap/src/MediatorFrameListener.cpp</itemPath>
@@ -28,8 +30,6 @@
     </logicalFolder>
     <logicalFolder name="src" displayName="src" projectFiles="true">
       <itemPath>src/EntiInfoMesh.h</itemPath>
-      <itemPath>src/LabelsHolder.cpp</itemPath>
-      <itemPath>src/LabelsHolder.h</itemPath>
       <itemPath>src/Main.cpp</itemPath>
       <itemPath>src/TechTreesBuilderFromXml.cpp</itemPath>
       <itemPath>src/TechTreesBuilderFromXml.h</itemPath>

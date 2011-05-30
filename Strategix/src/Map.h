@@ -10,6 +10,8 @@
 
 #include "CoordStructs.h"
 
+#include <list>
+
 #include "Nya.hpp"
 
 
@@ -18,6 +20,7 @@ namespace Strategix
 	using namespace std;
 
 	class MapResource;
+	class Enti;
 
 	class Map
 	{
@@ -27,6 +30,7 @@ namespace Strategix
 			int terrainType;
 			float retard; // defines from terrain type
 			mutable sh_p<MapResource> mapResource;
+			mutable list<Enti*> entis;
 		};
 
 	protected:

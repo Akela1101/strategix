@@ -44,7 +44,7 @@ void TechTree::init(const TechTree &_c)
 	
 	foreach(const TechMapType::value_type &pa, _c.techMap)
 	{
-		techMap[pa.first] = sh_p<EntiInfo>( pa.second->copy() ); // @#~ !!!!!!!!!!!!
+		techMap[pa.first].reset(pa.second->copy());
 	}
 }
 

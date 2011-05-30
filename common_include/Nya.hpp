@@ -11,6 +11,12 @@
 #define	_NYA_HPP
 
 #include <boost/foreach.hpp>
+#ifdef foreach
+#undef foreach
+#endif
+#ifdef rforeach
+#undef rforeach
+#endif
 #define foreach         BOOST_FOREACH
 #define rforeach        BOOST_REVERSE_FOREACH
 

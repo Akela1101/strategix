@@ -37,7 +37,7 @@ namespace Sample1
 	class OObjectUnit;
 	class OObjectResource;
 
-	class MediatorFrameListener : public Strategix::Mediator, public FrameListener
+	class MediatorFrameListener : public Mediator, public FrameListener
 	{
 		sh_p<Kernel> kernel;
 		sh_p<MyGUI::Gui> myGUI;

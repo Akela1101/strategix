@@ -7,7 +7,6 @@
       <itemPath>src/Enti.cpp</itemPath>
       <itemPath>src/Enti.h</itemPath>
       <itemPath>src/EntiInfo.h</itemPath>
-      <itemPath>src/Feature.cpp</itemPath>
       <itemPath>src/Feature.h</itemPath>
       <itemPath>src/FeatureCollect.cpp</itemPath>
       <itemPath>src/FeatureCollect.h</itemPath>
@@ -21,18 +20,15 @@
       <itemPath>src/KernelBase.h</itemPath>
       <itemPath>src/Log.cpp</itemPath>
       <itemPath>src/Log.h</itemPath>
-      <itemPath>src/Map.cpp</itemPath>
       <itemPath>src/Map.h</itemPath>
       <itemPath>src/MapFull.cpp</itemPath>
       <itemPath>src/MapFull.h</itemPath>
       <itemPath>src/MapLocal.cpp</itemPath>
       <itemPath>src/MapLocal.h</itemPath>
       <itemPath>src/MapResource.h</itemPath>
-      <itemPath>src/MapsPath.cpp</itemPath>
       <itemPath>src/MapsPath.h</itemPath>
       <itemPath>src/MapsPathsFinder.cpp</itemPath>
       <itemPath>src/MapsPathsFinder.h</itemPath>
-      <itemPath>src/Mediator.cpp</itemPath>
       <itemPath>src/Mediator.h</itemPath>
       <itemPath>src/Player.cpp</itemPath>
       <itemPath>src/Player.h</itemPath>

@@ -31,7 +31,7 @@ namespace Strategix
 			Price F, G, H;
 
 			CellPrice(MapCoord mc, CellPrice *parent, Price G, Price H)
-				: mc(mc), parent(parent), F(G + H), G(G), H(H) {} // F == G + H !!!
+				: mc(mc), parent(parent), F(G + H), G(G), H(H) {} 
 		};
 
 	public:
@@ -41,7 +41,7 @@ namespace Strategix
 		MapsPathsFinder(const Map &map);
 		virtual ~MapsPathsFinder() {}
 
-		sh_p<MapsPath> FindPath(const MapCoord from, const MapCoord till);
+		virtual sh_p<MapsPath> FindPath(const MapCoord from, const MapCoord till);
 
 	private:
 		MapsPathsFinder(const MapsPathsFinder &_c);

@@ -27,7 +27,6 @@ namespace Strategix
 	private:
 		Unit(const Unit &_c);
 		Unit & operator =(const Unit &_c);
-
 	};
 }
 

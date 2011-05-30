@@ -9,12 +9,16 @@
 #define	_ENTI_H
 
 #include "StrategixCommon.h"
+#include "StrategixError.h"
 #include "CoordStructs.h"
 #include "Interfaces.h"
+#include "FeatureMove.h"
+#include "FeatureCollect.h"
 
 #include <map>
 #include <list>
 #include <string>
+#include <typeinfo>
 
 #include "Nya.hpp"
 
@@ -28,44 +32,48 @@ namespace Strategix
 	class EntiInfo;
 	class FeatureInfo;
 	class Feature;
-	class FeatureMove;
-	class MapResource;
 	
 	class Enti
 	{
-		friend class Feature;
-		friend class FeatureMove;
-		friend class FeatureCollect;
-
 	public:
-		Unit *unit;
+		Unit *unit; // Link to unit
 		Player *player; // Link to owner
 		const EntiInfo *entityInfo; // Link to tree
+		RealCoord coord; // real coordinate
 
-		RealCoord coord;
-
-	private:
+	private:		
 		typedef map<string, sh_p<Feature> > FeaturesType;
-		FeaturesType features;
+		FeaturesType features; // map[typeid.name]
 
-		list<Feature*> tickFeatures; 
+		Feature* tickFeature; // current active feature getting Tick
+		list<Feature*> passiveTickFeatures; // features not interfering with tickFeature
+		/* ex.: regeneration, taking damage, etc. */
+
+		bool isLastFeature; // check if there is no new tickFeature before remove it
 
 	public:
-		Enti(const EntiInfo *entityInfo, const MapCoord &mapCoord); // @#~ for RealCoord ???
-		virtual ~Enti() {}
-
+		Enti(const EntiInfo *entityInfo, const RealCoord &coord);
+		
 		void Tick(const float seconds);
-		bool Move(const RealCoord newCoord, IMove *iMove = 0);
-		bool Collect(sh_p<MapResource> mapResource);
+		void AssignTickFeature(Feature *feature, bool isPassive = false);
 
-		Enti* FindCollector();
+		template<typename F> F* Do() // get feature with type F
+		{
+			const string featureName = typeid(F).name();
+			FeaturesType::iterator iFeature = features.find(featureName);
+			if( iFeature != features.end() )
+			{
+				return dynamic_cast<F*>(iFeature->second.get());
+			}
+			STRATEGIX_ERROR(string("There is no feature named: ") + featureName);
+			return 0;
+		}
 
 	private:
 		Enti(const Enti &_c);
 		Enti& operator =(const Enti &_c);
 
-		Feature* GetFeature(const string &name);
-		sh_p<Feature> CreateFeature(const string &name, const FeatureInfo *featureInfo);
+		void AddFeature(const string &name, const FeatureInfo *featureInfo);
 	};
 }
 #endif	/* _ENTI_H */

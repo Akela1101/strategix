@@ -24,7 +24,7 @@ namespace Strategix
 	{
 	public:
 		sh_p<MapFull> mapFull;
-		vector<sh_p<Player> > players;
+		vector<sh_p<Player> > players; // @#~ map better...
 
 	public:		
 		Kernel(const string &mapName);

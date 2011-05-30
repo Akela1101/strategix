@@ -1,0 +1,31 @@
+#####################################
+   Linux
+#####################################
+1. git clone ssh://git@github.com:Akela1101/Strategix.git
+2. Install all necessary libraries. (see Versions.txt)
+2. Setup pathes in projects
+3. Check ogre configs in Sample1/OgreWrap
+
+
+#####################################
+   Windows
+#####################################
+1. Install VC10.0, openssh, git\"git for VS"
+2. git clone ssh://git@github.com:Akela1101/Strategix.git
+3. Install directX, OGRE, boost, compile boost
+# boost dependencies for Strategix and Ogre must be the same.
+4. Setup pathes in projects and windows(OGRE_HOME, BOOST_ROOT, etc...)
+5. Check ogre configs in Sample1/OgreWrap
+
+
+#####################################
+   Blender model creation
+#####################################
+1. Use Blender 2.49 !!!!!!!!!!!!!!!!!!
+2. Set center of object at the bottom - on the ground in Edit Mode.
+3. Apply Scale/Rotation to ObData for all objects, including armature, before animation creating !!!!!
+4. Use only armature animations with only "Vertex Groups" and apply it for all vertexes !!!!!
+5. Apply all Modifiers manually before export.
+6. In OGRE Meshes Exporter: use "Game Engine Materials", and don't use "Apply Modifiers" !!!
+
+*** It seems that export is based only on the mesh's information ( Blender - Edit Mode ) ***
