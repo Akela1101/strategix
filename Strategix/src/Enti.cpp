@@ -5,7 +5,7 @@
  * Created on 4 Февраль 2011 г., 18:41
  */
 
-#include "Unit.h"
+#include "EntiSlot.h"
 #include "Player.h"
 #include "EntiInfo.h"
 
@@ -67,7 +67,7 @@ void Enti::Tick(const float seconds)
 				isLastFeature = true;
 		}
 	}
-	unit->OnTick(seconds);
+	entiSlot->OnTick(seconds);
 }
 
 void Enti::AssignTickFeature(Feature *feature, bool isPassive)

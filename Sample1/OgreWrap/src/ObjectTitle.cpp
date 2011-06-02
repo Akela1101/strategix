@@ -6,7 +6,6 @@
 
 #include <Ogre.h>
 #include <OgreFontManager.h>
-
 #include <sstream>
 #include <string>
 

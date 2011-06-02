@@ -6,7 +6,7 @@
  */
 
 #include "Enti.h"
-#include "Unit.h"
+#include "EntiSlot.h"
 #include "Player.h"
 #include "TechTree.h"
 #include "MapResource.h"
@@ -79,7 +79,7 @@ bool FeatureCollect::Tick(const float seconds)
 			shMapResource->amount -= capacity - load;
 			load = capacity;
 		}
-		enti->unit->OnCollect();
+		enti->entiSlot->OnCollect();
 	}
 	else // full load or no more resources
 	{
@@ -100,7 +100,7 @@ void FeatureCollect::OnComplete(bool isComplete)
 	{
 		if( load < capacity )
 		{
-			enti->unit->OnCollectStart();
+			enti->entiSlot->OnCollectStart();
 			enti->AssignTickFeature(this);
 		}
 		else
@@ -110,7 +110,7 @@ void FeatureCollect::OnComplete(bool isComplete)
 	}	
 	else // near the collector, so unload
 	{
-		enti->unit->OnBringStop();
+		enti->entiSlot->OnBringStop();
 		enti->player->AddResources(Resources(0, load));
 		load = 0;
 
@@ -146,7 +146,7 @@ void FeatureCollect::MoveToCollector()
 
 void FeatureCollect::Stop()
 {
-	enti->unit->OnCollectStop();
+	enti->entiSlot->OnCollectStop();
 }
 
 }

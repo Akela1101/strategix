@@ -5,7 +5,7 @@
  * Created on 23 Март 2011 г., 16:48
  */
 
-#include "Unit.h"
+#include "EntiSlot.h"
 #include "Enti.h"
 #include "Player.h"
 #include "MapLocal.h"
@@ -40,7 +40,7 @@ bool FeatureMove::Move(const RealCoord newCoord, ICommand *iCommand)
 	if( !isMoving )
 	{
 		isMoving = true;		
-		enti->unit->OnMoveStart();
+		enti->entiSlot->OnMoveStart();
 		enti->AssignTickFeature(this); // adding to Tick queue
 	}
 
@@ -54,7 +54,7 @@ bool FeatureMove::Tick(const float seconds)
 		const float moving = seconds * speed;
 		distance = ( distance > moving ) ? (distance - moving) : 0;
 		enti->coord = finish - direction * distance;
-		enti->unit->OnMove();
+		enti->entiSlot->OnMove();
 	}
 	else
 	{
@@ -82,7 +82,7 @@ void FeatureMove::Stop()
 	if( isMoving )
 	{
 		isMoving = false;
-		enti->unit->OnMoveStop();
+		enti->entiSlot->OnMoveStop();
 	}
 }
 

@@ -8,8 +8,7 @@
 #include "MyMouseListener.h"
 #include "LabelsHolder.h"
 
-#include "OgreStringConverter.h"
-
+#include <OgreStringConverter.h>
 #include <sstream>
 
 #include "MyFrameListener.h"

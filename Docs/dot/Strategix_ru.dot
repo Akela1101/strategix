@@ -1,0 +1,65 @@
+digraph G 
+{
+	rankdir = LR;
+	size="800,600";
+
+	MapFull [label = "MapFull \n(Полная Карта)", width = 2.5, height = 1, fixedsize=true]
+	MapLocal [label = "MapLocal \n(Локальная Карта)", width = 2.5, height = 1, fixedsize=true]
+	PlayerSlot [label = "PlayerSlot \n(Приёмник Игрока)", width = 2.5, height = 1, fixedsize=true]
+	EntiSlot [label = "EntiSlot \n(Приёмник Сущности)", width = 2.5, height = 1, fixedsize=true]
+	Kernel [label = "Kernel \n(Ядро)", width = 2.5, height = 1, fixedsize=true]
+	Player [label = "Player \n(Игрок)", width = 2.5, height = 1, fixedsize=true]
+	Enti [label = "Enti \n(Сущность)", width = 2.5, height = 1, fixedsize=true]
+	Feature [label = "Feature \n(Действие)", width = 2.5, height = 1, fixedsize=true]
+	KernelBase [label = "KernelBase \n(База)", width = 2.5, height = 1, fixedsize=true]
+	TechTree [label = "TechTree \n(Дерево Технологий)", width = 2.5, height = 1, fixedsize=true]
+	EntiInfo [label = "EntiInfo \n(Информация Сущности)", width = 2.5, height = 1, fixedsize=true]
+	FeatureInfo [label = "FeatureInfo \n(Информация Действия)", width = 2.5, height = 1, fixedsize=true]
+
+	subgraph cluster2
+	{
+		label = "[3. Карты]"
+		color = blue;		
+		MapFull -> MapLocal [arrowhead = none]
+	}
+
+	subgraph cluster3
+	{
+		label = "[4. Приёмники]"
+		color = yellow;		
+		PlayerSlot -> EntiSlot [arrowhead = dot]
+	}
+
+	subgraph cluster0
+	{
+		label = "[2. Ядро]"
+		color = red;
+		Kernel -> Player [arrowhead = dot]
+		Player -> Enti [arrowhead = dot]
+		Enti -> Feature [arrowhead = dot]
+	}
+	
+	subgraph cluster1
+	{
+		label = "[1. База]"
+		color = green;		
+		KernelBase -> TechTree [arrowhead = dot]
+		TechTree -> EntiInfo [arrowhead = dot]
+		EntiInfo -> FeatureInfo [arrowhead = dot]
+	}
+	
+	Kernel -> MapFull [arrowhead = dot]
+	Kernel -> KernelBase [arrowhead = none]
+	
+	Player -> PlayerSlot
+	Player -> TechTree [arrowhead = none]
+	Player -> MapLocal [arrowhead = dot]
+	
+	Enti -> EntiSlot
+	Enti -> EntiInfo [arrowhead = none]
+
+	Feature -> FeatureInfo [arrowhead = none]
+	
+	{rank = same; Kernel; KernelBase; MapFull;}
+	{rank = same; Player; MapLocal; TechTree}
+}

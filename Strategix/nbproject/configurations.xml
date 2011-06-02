@@ -7,6 +7,8 @@
       <itemPath>src/Enti.cpp</itemPath>
       <itemPath>src/Enti.h</itemPath>
       <itemPath>src/EntiInfo.h</itemPath>
+      <itemPath>src/EntiSlot.cpp</itemPath>
+      <itemPath>src/EntiSlot.h</itemPath>
       <itemPath>src/Feature.h</itemPath>
       <itemPath>src/FeatureCollect.cpp</itemPath>
       <itemPath>src/FeatureCollect.h</itemPath>
@@ -18,8 +20,6 @@
       <itemPath>src/Kernel.h</itemPath>
       <itemPath>src/KernelBase.cpp</itemPath>
       <itemPath>src/KernelBase.h</itemPath>
-      <itemPath>src/Log.cpp</itemPath>
-      <itemPath>src/Log.h</itemPath>
       <itemPath>src/Map.h</itemPath>
       <itemPath>src/MapFull.cpp</itemPath>
       <itemPath>src/MapFull.h</itemPath>
@@ -29,20 +29,21 @@
       <itemPath>src/MapsPath.h</itemPath>
       <itemPath>src/MapsPathsFinder.cpp</itemPath>
       <itemPath>src/MapsPathsFinder.h</itemPath>
-      <itemPath>src/Mediator.h</itemPath>
       <itemPath>src/Player.cpp</itemPath>
       <itemPath>src/Player.h</itemPath>
+      <itemPath>src/PlayerSlot.h</itemPath>
       <itemPath>src/ResourceInfo.h</itemPath>
       <itemPath>src/Resources.cpp</itemPath>
       <itemPath>src/Resources.h</itemPath>
       <itemPath>src/StrategixCommon.h</itemPath>
       <itemPath>src/StrategixError.h</itemPath>
+      <itemPath>src/StrategixLog.cpp</itemPath>
+      <itemPath>src/StrategixLog.h</itemPath>
       <itemPath>src/StrategixSingleton.h</itemPath>
+      <itemPath>src/Strategix_Forward.h</itemPath>
       <itemPath>src/TechTree.cpp</itemPath>
       <itemPath>src/TechTree.h</itemPath>
       <itemPath>src/TechTreesBuilder.h</itemPath>
-      <itemPath>src/Unit.cpp</itemPath>
-      <itemPath>src/Unit.h</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"
@@ -71,7 +72,7 @@
         <ccTool>
           <incDir>
             <pElem>src</pElem>
-            <pElem>../common_include</pElem>
+            <pElem>../include_common</pElem>
           </incDir>
         </ccTool>
         <archiverTool>
@@ -92,7 +93,7 @@
           <developmentMode>5</developmentMode>
           <incDir>
             <pElem>src</pElem>
-            <pElem>../common_include</pElem>
+            <pElem>../include_common</pElem>
           </incDir>
         </ccTool>
         <fortranCompilerTool>

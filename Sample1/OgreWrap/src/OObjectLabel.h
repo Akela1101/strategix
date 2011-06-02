@@ -9,7 +9,8 @@
 #define	_OOBJECTLABEL_H
 
 #include "OObjectTitled.h"
-#include "CoordStructs.h"
+
+#include <Strategix.h>
 
 
 namespace Sample1

@@ -6,7 +6,6 @@
  */
 
 #include "MyAppCommon.h"
-#include "StrategixCommon.h"
 
 #include <Ogre.h>
 

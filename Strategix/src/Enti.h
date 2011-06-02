@@ -8,10 +8,6 @@
 #ifndef _ENTI_H
 #define	_ENTI_H
 
-#include "StrategixCommon.h"
-#include "StrategixError.h"
-#include "CoordStructs.h"
-#include "Interfaces.h"
 #include "FeatureMove.h"
 #include "FeatureCollect.h"
 
@@ -20,23 +16,17 @@
 #include <string>
 #include <typeinfo>
 
-#include "Nya.hpp"
+#include "Strategix_Forward.h"
 
 
 namespace Strategix
 {
 	using namespace std;
-
-	class Unit;
-	class Player;
-	class EntiInfo;
-	class FeatureInfo;
-	class Feature;
 	
 	class Enti
 	{
 	public:
-		Unit *unit; // Link to unit
+		EntiSlot *entiSlot; // Link to entiSlot
 		Player *player; // Link to owner
 		const EntiInfo *entityInfo; // Link to tree
 		RealCoord coord; // real coordinate

@@ -1,25 +1,21 @@
 /* 
- * File:   OObjectUnit.h
+ * File:   OObjectEntiSlot.h
  * Author: Akela1101
  *
  * Created on 18 Март 2011 г., 15:58
  */
 
-#ifndef _OOBJECTUNIT_H
-#define	_OOBJECTUNIT_H
+#ifndef _OOBJECTENTISLOT_H
+#define	_OOBJECTENTISLOT_H
 
 #include "OObject.h"
 
-#include "Unit.h"
-#include "Interfaces.h"
-
-#include <OgrePrerequisites.h>
-#include <OgreVector3.h>
-
+#include <EntiSlot.h>
+#include <Ogre.h>
 #include <map>
 #include <string>
 
-#include "Nya.hpp"
+#include "Sample1_Forward.h"
 
 
 namespace Sample1
@@ -28,15 +24,15 @@ namespace Sample1
 	using namespace Ogre;
 	using namespace Strategix;	
 
-	class OObjectUnit : public OObject, public Unit
+	class OObjectEntiSlot : public OObject, public EntiSlot
 	{
 	protected:
 		AnimationState *animationState;
 		std::map<string, sh_p<AnimationState> > animationStates;
 
 	public:
-		OObjectUnit(Enti *enti);
-		virtual ~OObjectUnit() {}
+		OObjectEntiSlot(Enti *enti);
+		virtual ~OObjectEntiSlot() {}
 
 		virtual void OnTick(const float seconds);
 		virtual void OnMoveStart();
@@ -45,5 +41,5 @@ namespace Sample1
 	};
 }
 
-#endif	/* _OOBJECTUNIT_H */
+#endif	/* _OOBJECTENTISLOT_H */
 

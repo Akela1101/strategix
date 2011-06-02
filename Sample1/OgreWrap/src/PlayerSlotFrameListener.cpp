@@ -1,32 +1,17 @@
 /* 
- * File:   MediatorFrameListener.cpp
+ * File:   PlayerSlotFrameListener.cpp
  * Author: Akela1101
  * 
  * Created on 13 Январь 2011 г., 21:23
  */
 
-#include "OObjectUnit.h"
+#include "OObjectEntiSlot.h"
 #include "OObjectResource.h"
 
-#include "EntiInfo.h"
-#include "Enti.h"
-#include "Player.h"
-#include "Kernel.h"
-#include "KernelBase.h"
-#include "MapFull.h"
-#include "MapResource.h"
-#include "TechTree.h"
-#include "StrategixError.h"
-
-#include "MyGUI.h"
-
-#include <OgreEntity.h>
-#include <OgreNode.h>
-
+#include <Strategix.h>
 #include <sstream>
 
-#include "MediatorFrameListener.h"
-#include "Nya.hpp"
+#include "PlayerSlotFrameListener.h"
 
 
 namespace Sample1
@@ -34,7 +19,7 @@ namespace Sample1
 	using namespace std;
 	using namespace Strategix;
 
-MediatorFrameListener::MediatorFrameListener(sh_p<Kernel> kernel, sh_p<MyGUI::Gui> myGUI)
+PlayerSlotFrameListener::PlayerSlotFrameListener(sh_p<Kernel> kernel, sh_p<MyGUI::Gui> myGUI)
 	:
 	kernel(kernel),
 	myGUI(myGUI)
@@ -84,20 +69,20 @@ MediatorFrameListener::MediatorFrameListener(sh_p<Kernel> kernel, sh_p<MyGUI::Gu
 	kernel->players[0]->AddEnti(sh_p<Enti>(new Enti(&*kernel->players[0]->techTree->Node("Spher_Worker"), MapCoord(4, 15))));
 }
 
-bool MediatorFrameListener::frameRenderingQueued(const FrameEvent &event)
+bool PlayerSlotFrameListener::frameRenderingQueued(const FrameEvent &event)
 {
 	kernel->Tick(event.timeSinceLastFrame); // Time transmitting to Strategix
 	return true;
 }
 
 
-void MediatorFrameListener::OnAddEnti(Enti *enti)
+void PlayerSlotFrameListener::OnAddEnti(Enti *enti)
 {
-	sh_p<OObjectUnit> unit(new OObjectUnit(enti));
-	units.push_back(unit);
+	sh_p<OObjectEntiSlot> entiSlot(new OObjectEntiSlot(enti));
+	entiSlots.push_back(entiSlot);
 }
 
-void MediatorFrameListener::OnChangeResources(const Resources &newResources)
+void PlayerSlotFrameListener::OnChangeResources(const Resources &newResources)
 {
 	string resourceCaption = "#FFFFFF";
 	foreach( const ResourceInfos::value_type pa, KernelBase::GS().GetResourceInfos() )

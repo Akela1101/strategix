@@ -8,18 +8,15 @@
 #ifndef _LABELSHOLDER_H
 #define	_LABELSHOLDER_H
 
-#include <OgrePrerequisites.h>
-
+#include <Ogre.h>
 #include <vector>
 
-#include "Nya.hpp"
+#include "Sample1_Forward.h"
 
 
 namespace Sample1
 {
 	using namespace Ogre;
-
-	class OObjectLabel;
 
 	class LabelsHolder
 	{
@@ -28,7 +25,7 @@ namespace Sample1
 
 	public:
 		LabelsHolder();
-		virtual ~LabelsHolder();
+		virtual ~LabelsHolder() {}
 
 		void CreateLabels();
 		void ShowLabels(bool isShow);

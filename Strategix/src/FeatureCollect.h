@@ -12,13 +12,11 @@
 #include "Interfaces.h"
 #include "Map.h"
 
-#include "Nya.hpp"
+#include "Strategix_Forward.h"
 
 
 namespace Strategix
 {
-	class FeatureInfoCollect;
-
 	class FeatureCollect : public Feature, public ICommand
 	{
 	protected:

@@ -8,26 +8,15 @@
 #ifndef _OOBJECTRESOURCE_H
 #define	_OOBJECTRESOURCE_H
 
-#include "MapResource.h"
-
-#include "MyAppCommon.h"
-
-#include <Ogre.h>
-
-// ======================
-
 #include "OObject.h"
 
+#include <MapResource.h>
+#include <Ogre.h>
 #include <string>
 
-#include "Nya.hpp"
+#include "Sample1_Forward.h"
 
-/*
-namespace Strategix
-{
-	class MapResource;
-}
-*/
+
 namespace Sample1
 {
 	using namespace std;

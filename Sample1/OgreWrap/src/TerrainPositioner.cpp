@@ -1,5 +1,5 @@
 /* 
- * File:   MapTexture.cpp
+ * File:   TerrainPositioner.cpp
  * Author: Akela1101
  * 
  * Created on 4 Апрель 2010 г., 13:53
@@ -7,7 +7,7 @@
 
 #include <fstream>
 
-#include "MapTexture.h"
+#include "TerrainPositioner.h"
 
 
 namespace Sample1
@@ -15,7 +15,7 @@ namespace Sample1
 	using namespace Ogre;
 	using namespace std;
 
-MapTexture::MapTexture(const char fileName[])
+TerrainPositioner::TerrainPositioner(const char fileName[])
 {
 	// Зачем названия текстур читать ?!
 	ifstream fin(fileName);
@@ -37,7 +37,7 @@ MapTexture::MapTexture(const char fileName[])
 	fin.close();
 }
 
-const FloatRect MapTexture::GetTexRect(string terrName)
+const FloatRect TerrainPositioner::GetTexRect(string terrName)
 {
 	// Getting position from name
 	const short terr_pos = positions[terrName];

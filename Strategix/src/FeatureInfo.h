@@ -8,7 +8,7 @@
 #ifndef _FEATUREINFO_H
 #define	_FEATUREINFO_H
 
-#include "StrategixCommon.h"
+#include "Strategix_Forward.h"
 
 
 namespace Strategix

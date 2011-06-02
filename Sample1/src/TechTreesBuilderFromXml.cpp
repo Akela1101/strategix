@@ -6,10 +6,8 @@
  */
 
 #include "EntiInfoMesh.h"
-#include "FeatureInfo.h"
-#include "TechTree.h"
-#include "StrategixError.h"
 
+#include <Strategix.h>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/xml_parser.hpp>
 #include <boost/filesystem.hpp>

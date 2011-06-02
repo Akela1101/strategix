@@ -8,18 +8,13 @@
 #ifndef _MAPSPATHSFINDER_H
 #define	_MAPSPATHSFINDER_H
 
-#include "CoordStructs.h"
-
 #include <list>
 
-#include "Nya.hpp"
+#include "Strategix_Forward.h"
 
 
 namespace Strategix
 {
-	class Map;
-	class MapsPath;
-
 	class MapsPathsFinder
 	{
 		typedef int Price;

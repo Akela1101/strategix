@@ -5,16 +5,12 @@
  * Created on 15 Апрель 2010 г., 16:51
  */
 
-#include "OObjectUnit.h"
+#include "OObjectEntiSlot.h"
 #include "OObjectResource.h"
 
-#include "Enti.h"
-#include "FeatureMove.h"
-#include "FeatureCollect.h"
-
+#include <Strategix.h>
 #include <Ogre.h>
 
-#include "Nya.hpp"
 #include "MyMouseListener.h"
 
 
@@ -31,8 +27,7 @@ MyMouseListener::MyMouseListener(Camera* camera)
 	currEntity(0),
 	lastEntity(0),
 	currMask(NO_MASK)
-{
-}
+{}
 
 MyMouseListener::~MyMouseListener()
 {
@@ -58,7 +53,7 @@ bool MyMouseListener::mousePressed(const OIS::MouseEvent &mouse_event, OIS::Mous
 	// Select
 	if( id == OIS::MB_Left ) 
 	{
-		currEntity = SelectEntity(mouse_event, &currMask);
+		currEntity = SelectEntity(mouse_event, currMask);
 		if( currEntity ) // Zero if nothing selected
 		{
 			currEntity->getParentSceneNode()->showBoundingBox(true);
@@ -77,23 +72,23 @@ bool MyMouseListener::mousePressed(const OIS::MouseEvent &mouse_event, OIS::Mous
 	// Move selected Entity
 	else if( id == OIS::MB_Right )  
 	{
-		if( currEntity && (currMask == UNIT_MASK) )
+		if( currEntity && (currMask == ENTI_MASK) )
 		{
-			OObjectUnit *oObjectUnit = any_cast<OObjectUnit*>(currEntity->getUserAny());
+			OObjectEntiSlot *oObjectEntiSlot = any_cast<OObjectEntiSlot*>(currEntity->getUserAny());
 
 			// Going for resource
 			QueryFlags mask;
-			Entity *entity = SelectEntity(mouse_event, &mask);
+			Entity *entity = SelectEntity(mouse_event, mask);
 			if( entity && (mask == RES_MASK) )
 			{
 				OObjectResource *oObjectResource = any_cast<OObjectResource*>(entity->getUserAny());
-				oObjectUnit->enti->Do<FeatureCollect>()->Collect(oObjectResource->mapResource);
+				oObjectEntiSlot->enti->Do<FeatureCollect>()->Collect(oObjectResource->mapResource);
 			}
 			// Going to place
 			else
 			{
 				const Vector3 &terrainCoord = GetTerrainCoord(mouse_event);
-				oObjectUnit->enti->Do<FeatureMove>()->Move(RealCoord(terrainCoord.x, terrainCoord.z));
+				oObjectEntiSlot->enti->Do<FeatureMove>()->Move(RealCoord(terrainCoord.x, terrainCoord.z));
 			}
 		}
 	}
@@ -126,7 +121,7 @@ const Vector3 MyMouseListener::GetTerrainCoord(const OIS::MouseEvent &mouse_even
 	return mouseRay.getPoint(dist);
 }
 
-Entity *MyMouseListener::SelectEntity(const OIS::MouseEvent &mouse_event, QueryFlags *newMask) const
+Entity *MyMouseListener::SelectEntity(const OIS::MouseEvent &mouse_event, QueryFlags &newMask) const
 {
 	// Try to select one object
 	Ray mouseRay = GetMouseRay(mouse_event);
@@ -138,10 +133,11 @@ Entity *MyMouseListener::SelectEntity(const OIS::MouseEvent &mouse_event, QueryF
 	{
 		// If movable and not a terrain
 		QueryFlags mask = (QueryFlags)entry.movable->getQueryFlags();
-		if( entry.movable && mask )
+		MovableObject *movable = entry.movable;
+		if( movable && mask && currEntity != movable )
 		{
-			*newMask = mask;
-			return dynamic_cast<Entity*>(entry.movable);
+			newMask = mask;
+			return static_cast<Entity*>(movable);
 		}
 	}
 	return 0;

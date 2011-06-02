@@ -10,8 +10,6 @@
 
 namespace Strategix
 {
-	// Callbacks:
-
 	struct ICommand
 	{
 		virtual void OnComplete(bool isComplete) = 0;

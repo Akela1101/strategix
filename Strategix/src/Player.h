@@ -8,27 +8,20 @@
 #ifndef _PLAYER_H
 #define	_PLAYER_H
 
-#include "StrategixCommon.h"
-
 #include <map>
 #include <string>
 
-#include "Nya.hpp"
+#include "Strategix_Forward.h"
 
 
 namespace Strategix
 {
 	using namespace std;
 
-	class TechTree;
-	class Enti;
-	class Mediator;
-	class MapLocal;
-
 	class Player
 	{
 	public:
-		Mediator *mediator; // Callback class
+		PlayerSlot *mediator; // Callback class
 
 		string name; // Name given by user.
 		PlayerType playerType; // human, ai, net

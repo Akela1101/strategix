@@ -6,17 +6,13 @@
  */
 
 #include "MyApp.h"
-
-#include "Player.h"
-#include "Kernel.h"
-#include "KernelBase.h"
 #include "TechTreesBuilderFromXml.h"
 
+#include <Strategix.h>
 #include <OgreException.h>
-
 #include <boost/filesystem.hpp>
 
-#include "Nya.hpp"
+#include "Sample1_Forward.h"
 
 
 using namespace Strategix;

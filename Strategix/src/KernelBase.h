@@ -8,24 +8,21 @@
 #ifndef _KERNELBASE_H
 #define	_KERNELBASE_H
 
+#include "StrategixSingleton.h"
 #include "TechTree.h"
 #include "ResourceInfo.h"
-#include "StrategixSingleton.h"
-#include "StrategixCommon.h"
 
 #include <string>
 #include <map>
 #include <vector>
 
-#include "Nya.hpp"
+#include "Strategix_Forward.h"
 
 
 namespace Strategix
 {
 	using namespace std;
 	using namespace boost;
-
-	class TechTreesBuilder;
 
 	typedef std::map<std::string, sh_p<ResourceInfo> > ResourceInfos;
 

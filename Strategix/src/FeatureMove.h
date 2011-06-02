@@ -9,17 +9,13 @@
 #define	_FEATUREMOVE_H
 
 #include "Feature.h"
-#include "CoordStructs.h"
 #include "Interfaces.h"
 
-#include "Nya.hpp"
+#include "Strategix_Forward.h"
 
 
 namespace Strategix
-{
-	class MapsPath;
-	class FeatureInfoMove;
-	
+{	
 	class FeatureMove : public Feature
 	{
 	protected:

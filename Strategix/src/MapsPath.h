@@ -8,9 +8,9 @@
 #ifndef _MAPSPATH_H
 #define	_MAPSPATH_H
 
-#include "CoordStructs.h"
-
 #include <deque>
+
+#include "Strategix_Forward.h"
 
 
 namespace Strategix
@@ -20,6 +20,7 @@ namespace Strategix
 		std::deque<MapCoord> path; // vector ???
 
 	public:
+		MapsPath() {}
 		bool IsEmpty() { return path.empty(); }
 		MapCoord PickFront()
 		{

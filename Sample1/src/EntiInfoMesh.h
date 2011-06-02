@@ -8,7 +8,7 @@
 #ifndef _ENTIINFOMESH_H
 #define	_ENTIINFOMESH_H
 
-#include "EntiInfo.h"
+#include <EntiInfo.h>
 
 #include <string>
 

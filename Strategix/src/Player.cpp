@@ -5,7 +5,7 @@
  * Created on 14 Февраль 2010 г., 17:56
  */
 
-#include "Mediator.h"
+#include "PlayerSlot.h"
 #include "KernelBase.h"
 #include "Enti.h"
 #include "TechTree.h"

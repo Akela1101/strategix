@@ -1,0 +1,56 @@
+digraph G 
+{
+	rankdir = LR;
+
+	compound = true;
+
+	subgraph cluster0
+	{
+		label = "[Player]"
+		color = red;
+
+		subgraph cluster1
+		{
+			label = "[TechTree]"
+			color = green;
+			EntiInfos -> FeatureInfos [arrowhead = dot]
+			{rank = same; FeatureInfos; EntiInfos; }
+		}
+		subgraph cluster2
+		{
+			label = "[MapLocal]"
+			color = blue;		
+			"Entis*"
+			"Resources*"
+		}
+		Entis -> Features [arrowhead = dot]
+		{rank = same; Features; Entis; }
+
+		EntiInfos -> Entis [arrowhead = none]
+		Features -> FeatureInfos [arrowhead = none]
+	}
+
+	subgraph cluster3
+	{
+		label = "[PlayerSlot]"
+		color = green;		
+		EntiSlots
+		"Resources**"
+	}
+
+	subgraph cluster4
+	{
+		label = "[MapFull]"
+		color = blue;		
+		"Entis**"
+		Resources
+	}
+
+	Resources -> "Resources*" [arrowhead = none, style = dotted]
+	"Resources*" -> "Resources**" [arrowhead = none, style = dotted]
+	Entis -> "Entis*" [arrowhead = none, style = dotted]
+	"Entis*" -> "Entis**" [arrowhead = none, style = dotted]
+		
+	Entis -> EntiSlots [lhead=cluster3, ltail=cluster0]
+
+}

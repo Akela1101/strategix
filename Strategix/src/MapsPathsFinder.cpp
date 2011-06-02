@@ -107,7 +107,7 @@ sh_p<MapsPath> MapsPathsFinder::FindPath(const MapCoord from, const MapCoord til
 	return mapsPath;
 }
 
-//void OObjectUnit::AddWayTo_Debug(Vector3 &pos)
+//void OObjectEntiSlot::AddWayTo_Debug(Vector3 &pos)
 //{
 //	static MapCoord oldMapCoord = MapCoord(-1, -1);
 //	MapCoord newMapCoord = GetMapCoord(pos);
@@ -134,14 +134,14 @@ sh_p<MapsPath> MapsPathsFinder::FindPath(const MapCoord from, const MapCoord til
 //		{
 //			std::stringstream title;
 //			title << "\n" << (*at)->G << " + " << (*at)->H << "\n = " << (*at)->F ;
-//			sh_p<OObjectLabel> labelUnit(new OObjectLabel((*at)->mc, title.str().c_str()));
+//			sh_p<OObjectLabel> labelEntiSlot(new OObjectLabel((*at)->mc, title.str().c_str()));
 //
 //			if( saved_moveList->end() != find(saved_moveList->begin(), saved_moveList->end(), (*at)->mc) )
-//				labelUnit->SetColor(ColourValue(1.0, 1.0, 1.0, 1.0));
+//				labelEntiSlot->SetColor(ColourValue(1.0, 1.0, 1.0, 1.0));
 //			else
-//				labelUnit->SetColor(ColourValue(5.0, 0.0, 0.8, 1.0));
+//				labelEntiSlot->SetColor(ColourValue(5.0, 0.0, 0.8, 1.0));
 //
-//			labelVector.push_back(labelUnit);
+//			labelVector.push_back(labelEntiSlot);
 //		}
 //
 //		delete p_closed;

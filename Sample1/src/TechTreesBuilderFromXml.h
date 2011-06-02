@@ -8,10 +8,9 @@
 #ifndef _TECHTREEBUILDERFROMXML_H
 #define	_TECHTREEBUILDERFROMXML_H
 
-#include "TechTreesBuilder.h"
+#include <TechTreesBuilder.h>
 
 #include <boost/property_tree/ptree.hpp>
-#include "Nya.hpp"
 
 
 namespace Sample1

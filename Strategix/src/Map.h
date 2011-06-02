@@ -8,19 +8,14 @@
 #ifndef _MAP_H
 #define	_MAP_H
 
-#include "CoordStructs.h"
-
 #include <list>
 
-#include "Nya.hpp"
+#include "Strategix_Forward.h"
 
 
 namespace Strategix
 {
 	using namespace std;
-
-	class MapResource;
-	class Enti;
 
 	class Map
 	{

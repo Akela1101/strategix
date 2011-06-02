@@ -8,22 +8,20 @@
 #ifndef _MYFRAMELISTENER_H
 #define	_MYFRAMELISTENER_H
 
-#include "Ogre.h"
+#include <Ogre.h>
 //Use this define to signify OIS will be used as a DLL
 //(so that dll import/export macros are in effect)
 #define OIS_DYNAMIC_LIB
 #include <OIS.h>
 
-#include "Nya.hpp"
+#include "Sample1_Forward.h"
 
 
 namespace Sample1
 {
 	using namespace Ogre;
 	using namespace std;
-
-	class MyMouseListener;
-	class LabelsHolder;
+	
 
 	class MyFrameListener : public FrameListener, public WindowEventListener
 	{

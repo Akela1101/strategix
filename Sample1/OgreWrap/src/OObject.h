@@ -8,7 +8,7 @@
 #ifndef _OOBJECT_H
 #define	_OOBJECT_H
 
-#include <OgrePrerequisites.h>
+#include <Ogre.h>
 
 #include <string>
 

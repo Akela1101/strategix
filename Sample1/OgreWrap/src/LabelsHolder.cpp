@@ -6,11 +6,8 @@
  */
 
 #include "OObjectLabel.h"
-#include "MyAppCommon.h"
 
-#include "Map.h"
-#include "Kernel.h"
-
+#include <Strategix.h>
 #include <Ogre.h>
 
 #include "LabelsHolder.h"
@@ -36,10 +33,6 @@ LabelsHolder::LabelsHolder()
 	}
 }
 
-LabelsHolder::~LabelsHolder()
-{
-}
-
 // Labels on every cell of Map, showing retard of terrain.
 void LabelsHolder::CreateLabels()
 {
@@ -55,12 +48,12 @@ void LabelsHolder::CreateLabels()
 //		{
 //			std::stringstream title;
 //			title << "   " << map(x, z).retard;
-//			sh_p<OObjectLabel> labelUnit(new OObjectLabel(
+//			sh_p<OObjectLabel> labelEntiSlot(new OObjectLabel(
 //				labelsPointMeshName, title.str().c_str(), MapCoord(x, z)));
 //
-//			labelUnit->SetColor(ColourValue(1.0, 0.4, 0.4, 1.0));
+//			labelEntiSlot->SetColor(ColourValue(1.0, 0.4, 0.4, 1.0));
 //
-//			labelVector.push_back(labelUnit);
+//			labelVector.push_back(labelEntiSlot);
 //		}
 //	}
 }
@@ -69,7 +62,7 @@ void LabelsHolder::ShowLabels(bool isShow)
 {
 	for( LabelVector::iterator it = labelVector.begin(); it != labelVector.end(); ++it )
 	{
-		(*it)->objectTitle->show(isShow);
+		(*it)->Show(isShow);
 	}
 }
 

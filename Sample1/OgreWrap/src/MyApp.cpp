@@ -5,25 +5,17 @@
 * Created on 14 Февраль 2010 г., 0:58
 */
 
-#include "MyFrameListener.h"
-#include "MapTexture.h"
-#include "MediatorFrameListener.h"
-#include "OObjectUnit.h"
 #include "MyAppCommon.h"
+#include "TerrainPositioner.h"
+#include "MyFrameListener.h"
+#include "PlayerSlotFrameListener.h"
+#include "OObjectEntiSlot.h"
 
-#include "Kernel.h"
-#include "KernelBase.h"
-#include "MapFull.h"
-
-#include "MyGUI.h"
-#include "MyGUI_OgrePlatform.h"
-
+#include <Strategix.h>
 #include <Ogre.h>
-
 #include <string>
 
 #include "MyApp.h"
-#include "Nya.hpp"
 
 
 namespace Sample1
@@ -223,7 +215,7 @@ void MyApp::createScene()
 	root->addFrameListener(frameListener.get());
 
 	// Mediator between Kernel & Ogre
-	mediatorFrameListener.reset(new MediatorFrameListener(kernel, myGUI));
+	mediatorFrameListener.reset(new PlayerSlotFrameListener(kernel, myGUI));
 	root->addFrameListener(mediatorFrameListener.get());
 
 	// Start
@@ -271,14 +263,14 @@ void MyApp::CreateStaticTerrain()
 	
 	const MapFull &mapFull = kernel->GetMap();
 
-	MapTexture mapTexture("Maps/terrains.def"); // WTF ?
+	TerrainPositioner terrainPositioner("Maps/terrains.def"); // WTF ?
 
 	// @#~ Must be done with drawing on texture of one Rectangular mesh!!!
 	ManualObject mo("TerrainObject");
 	const int width = mapFull.GetWidth();
 	const int length = mapFull.GetLength();
 
-	mo.begin(mapTexture.name, RenderOperation::OT_TRIANGLE_LIST);
+	mo.begin(terrainPositioner.name, RenderOperation::OT_TRIANGLE_LIST);
 
 	int offset = 0;
 	for( int z = 0; z < length; ++z )
@@ -290,7 +282,7 @@ void MyApp::CreateStaticTerrain()
 			// Getting it's name
 			const string &tex_name = mapFull.GetTerrain(terrainType).name;
 			// Getting picture's part rectangle
-			const FloatRect rc = mapTexture.GetTexRect(tex_name);
+			const FloatRect rc = terrainPositioner.GetTexRect(tex_name);
 			// Adding to (x, z) square with this texture
 			AddTileToTerrainMesh(mo, Vector2(x, z), rc, offset);
 		}

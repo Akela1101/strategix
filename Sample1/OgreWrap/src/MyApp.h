@@ -8,10 +8,13 @@
 #ifndef _MYAPP_H
 #define	_MYAPP_H
 
-#include <OgrePrerequisites.h>
+#include <Ogre.h>
 #include <OgreCommon.h>
+#include <MyGUI.h>
+#include <MyGUI_OgrePlatform.h>
 
-#include "Nya.hpp"
+#include <Strategix_Forward.h>
+#include "Sample1_Forward.h"
 
 
 // Static plugins declaration section
@@ -49,31 +52,17 @@
 #endif
 
 
-namespace Strategix
-{
-	class Kernel;
-}
-
-namespace MyGUI
-{
-	class Gui;
-	class OgrePlatform;
-}
-
 namespace Sample1
 {
 	using namespace Ogre;
 	using namespace Strategix;
-
-	class MyFrameListener;
-	class MediatorFrameListener;
 
 	class MyApp
 	{
 	protected:
 		Root *root;
 		sh_p<MyFrameListener> frameListener;
-		sh_p<MediatorFrameListener> mediatorFrameListener;
+		sh_p<PlayerSlotFrameListener> mediatorFrameListener;
 		sh_p<Kernel> kernel;
 
 	#ifdef OGRE_STATIC_LIB

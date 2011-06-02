@@ -7,7 +7,7 @@
 
 #include <fstream>
 
-#include "Log.h"
+#include "StrategixLog.h"
 
 namespace Strategix
 {

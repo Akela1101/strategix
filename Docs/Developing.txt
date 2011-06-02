@@ -1,0 +1,13 @@
+****************
+
+Полная спецификация шаблона аналогична реализации обычной функции.
+Поэтому не может быть в .h файле!!! (в GCC. в MSCC может)
+
+Ogre Bug:
+Не делать каждый объект наследником FrameListener! Ибо глюки с удалением в v.<=7.1 по крайней мере. Лучше один FrameListener на все объекты.
+	// removeFrameListener must be earier than destructor on one frame
+	// elsewise there will be try to render deleted object!!!
+	// Solution is to add this object to deletion list, called after one frame.
+	// Or to hit on the head someone from OGRE developers :)
+
+**************** 

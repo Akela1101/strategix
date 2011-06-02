@@ -9,28 +9,24 @@
 #define	_OOBJECTTITLED_H
 
 #include "OObject.h"
-//______
 #include "ObjectTitle.h"
 
-#include <OgrePrerequisites.h>
-
-#include "Nya.hpp"
+#include "Sample1_Forward.h"
 
 
 namespace Sample1
 {
-	using namespace Ogre;
-
-	//class ObjectTitle;
-
 	class OObjectTitled : public OObject
 	{
-	public:
 		sh_p<ObjectTitle> objectTitle;
 
 	public:
-		OObjectTitled(const std::string &meshName, const std::string &title);
-		virtual ~OObjectTitled();
+		OObjectTitled(const std::string &meshName, const std::string &title)
+			: OObject(meshName), objectTitle(new ObjectTitle(entity, title, "Calibri")) {}
+		virtual ~OObjectTitled() {}
+
+		void Update() { objectTitle->update(); }
+		void Show(bool isShow) { objectTitle->show(isShow); }
 	};
 }
 

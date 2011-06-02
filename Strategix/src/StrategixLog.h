@@ -1,14 +1,15 @@
 /* 
- * File:   Log.h
+ * File:   StrategixLog.h
  * Author: Akela1101
  *
  * Created on 23 Апрель 2010 г., 23:25
  */
 
-#ifndef _STRAXLOG_H
-#define	_STRAXLOG_H
+#ifndef _STRATEGIXLOG_H
+#define	_STRATEGIXLOG_H
 
 #include "StrategixSingleton.h"
+
 
 namespace Strategix
 {
@@ -20,5 +21,5 @@ namespace Strategix
 	};
 }
 
-#endif	/* _STRAXLOG_H */
+#endif	/* _STRATEGIXLOG_H */
 

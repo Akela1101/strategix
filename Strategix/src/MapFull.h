@@ -14,6 +14,9 @@
 #include <string>
 #include <map>
 
+#include "Strategix_Forward.h"
+
+
 namespace Strategix
 {
 	using namespace std;

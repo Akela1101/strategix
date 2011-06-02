@@ -8,10 +8,10 @@
 #ifndef _MYMOUSELISTENER_H
 #define	_MYMOUSELISTENER_H
 
-#include "MyAppCommon.h"
-
-#include <OgrePrerequisites.h>
+#include <Ogre.h>
 #include <OIS.h>
+
+#include "Sample1_Forward.h"
 
 
 namespace Sample1
@@ -37,7 +37,7 @@ namespace Sample1
 	private:
 		Ray GetMouseRay(const OIS::MouseEvent &mouse_event) const;
 		const Vector3 GetTerrainCoord(const OIS::MouseEvent &mouse_event) const;
-		Entity *SelectEntity(const OIS::MouseEvent &mouse_event, QueryFlags *newMask) const;
+		Entity *SelectEntity(const OIS::MouseEvent &mouse_event, QueryFlags &newMask) const;
 	};
 }
 

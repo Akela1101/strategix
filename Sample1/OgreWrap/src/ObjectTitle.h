@@ -1,13 +1,11 @@
 
-// by some good guy who I don't really know...
+// by some good guy
 
 
 #ifndef _OBJECTTITLE_H
 #define	_OBJECTTITLE_H
 
-#include <OgrePrerequisites.h>
-#include <OgreVector2.h>
-#include <OgreColourValue.h>
+#include <Ogre.h>
 
 
 namespace Sample1

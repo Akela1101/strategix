@@ -10,15 +10,12 @@
 
 #include <vector>
 
-#include "Nya.hpp"
+#include "Strategix_Forward.h"
 
 
 namespace Strategix
 {
 	using namespace std;
-
-	class MapFull;
-	class Player;
 	
 	class Kernel
 	{

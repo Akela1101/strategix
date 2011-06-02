@@ -8,20 +8,16 @@
 #ifndef _TECHTREE_H
 #define	_TECHTREE_H
 
-#include "StrategixError.h"
-
 #include <map>
 #include <string>
 
-#include "Nya.hpp"
+#include "Strategix_Forward.h"
 
 
 namespace Strategix
 {
 	using namespace std;
 	using namespace boost;
-
-	class EntiInfo;
 
 	class TechTree
 	{

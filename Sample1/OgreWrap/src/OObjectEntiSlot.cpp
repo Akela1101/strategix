@@ -1,5 +1,5 @@
 /* 
- * File:   OObjectUnit.cpp
+ * File:   OObjectEntiSlot.cpp
  * Author: Akela1101
  * 
  * Created on 18 Март 2011 г., 15:58
@@ -7,21 +7,13 @@
 
 #include "MyAppCommon.h"
 #include "OObjectLabel.h"
-
-#include "Enti.h"
 #include "EntiInfoMesh.h"
-#include "Map.h"
-#include "Kernel.h"
-#include "StrategixError.h"
-#include "CoordStructs.h"
 
-#include <Ogre.h>
-
+#include <Strategix.h>
 #include <vector>
 #include <sstream>
 
-#include "Nya.hpp"
-#include "OObjectUnit.h"
+#include "OObjectEntiSlot.h"
 
 
 namespace Sample1
@@ -35,14 +27,14 @@ namespace Sample1
 		static LabelVector labelVector;
 		//
 
-OObjectUnit::OObjectUnit(Enti *enti)
+OObjectEntiSlot::OObjectEntiSlot(Enti *enti)
 	:
-	Unit(enti),
+	EntiSlot(enti),
 	OObject(dynamic_cast<const EntiInfoMesh*>(enti->entityInfo)->meshName),
 	animationState(0)
 {
 	entity->setUserAny(Any(this)); // Link from Entity
-	entity->setQueryFlags(UNIT_MASK); // Mask for mouse selection
+	entity->setQueryFlags(ENTI_MASK); // Mask for mouse selection
 	
 	const float scale = dynamic_cast<const EntiInfoMesh*>(enti->entityInfo)->meshScale;
 	node->setScale(scale, scale, scale);
@@ -51,11 +43,11 @@ OObjectUnit::OObjectUnit(Enti *enti)
 	OnMoveStop();
 }
 
-void OObjectUnit::OnTick(const float seconds)
+void OObjectEntiSlot::OnTick(const float seconds)
 {
-	foreach( sh_p<OObjectLabel> labelUnit, labelVector )
+	foreach( sh_p<OObjectLabel> labelEntiSlot, labelVector )
 	{
-		labelUnit->objectTitle->update();
+		labelEntiSlot->Update();
 	}
 
 	if( animationState )
@@ -64,7 +56,7 @@ void OObjectUnit::OnTick(const float seconds)
 	}
 }
 
-void OObjectUnit::OnMoveStart()
+void OObjectEntiSlot::OnMoveStart()
 {
 	try
 	{
@@ -82,7 +74,7 @@ void OObjectUnit::OnMoveStart()
 	}
 }
 
-void OObjectUnit::OnMove()
+void OObjectEntiSlot::OnMove()
 {
 	const RealCoord &newCoord = enti->coord;
 	const Vector3 newPosition = Vector3(newCoord.x, 0, newCoord.y);
@@ -107,7 +99,7 @@ void OObjectUnit::OnMove()
 	node->setPosition(newPosition);
 }
 
-void OObjectUnit::OnMoveStop()
+void OObjectEntiSlot::OnMoveStop()
 {
 	try
 	{

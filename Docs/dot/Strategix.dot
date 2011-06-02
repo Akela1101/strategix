@@ -4,18 +4,21 @@ digraph G
 
 	subgraph cluster2
 	{
+		label = "[3. Maps]"
 		color = blue;		
-		MapFull -> MapLocal [arrowhead = tee arrowtail = tee]
+		MapFull -> MapLocal [arrowhead = none]
 	}
 
 	subgraph cluster3
 	{
+		label = "[4. Mediators]"
 		color = yellow;		
-		Mediator -> Unit [arrowhead = dot]
+		PlayerSlot -> EntiSlot [arrowhead = dot]
 	}
 
 	subgraph cluster0
 	{
+		label = "[2. Kernel]"
 		color = red;
 		Kernel -> Player [arrowhead = dot]
 		Player -> Enti [arrowhead = dot]
@@ -24,23 +27,24 @@ digraph G
 	
 	subgraph cluster1
 	{
+		label = "[1. Base]"
 		color = green;		
 		KernelBase -> TechTree [arrowhead = dot]
 		TechTree -> EntiInfo [arrowhead = dot]
 		EntiInfo -> FeatureInfo [arrowhead = dot]
 	}
 	
-	Kernel -> MapFull
-	Kernel -> KernelBase [arrowhead = tee]
+	Kernel -> MapFull [arrowhead = dot]
+	Kernel -> KernelBase [arrowhead = none]
 	
-	Player -> Mediator
-	Player -> TechTree [arrowhead = tee]
-	Player -> MapLocal
+	Player -> PlayerSlot
+	Player -> TechTree [arrowhead = none]
+	Player -> MapLocal [arrowhead = dot]
 	
-	Enti -> Unit
-	Enti -> EntiInfo [arrowhead = tee]
+	Enti -> EntiSlot
+	Enti -> EntiInfo [arrowhead = none]
 
-	Feature -> FeatureInfo [arrowhead = tee]
+	Feature -> FeatureInfo [arrowhead = none]
 	
 	{rank = same; Kernel; KernelBase; MapFull;}
 	{rank = same; Player; MapLocal; TechTree}

@@ -8,14 +8,13 @@
 #ifndef _ENTIINFO_H
 #define	_ENTIINFO_H
 
-#include "StrategixCommon.h"
 #include "FeatureInfo.h"
 
 #include <map>
 #include <string>
 #include <vector>
 
-#include "Nya.hpp"
+#include "Strategix_Forward.h"
 
 
 namespace Strategix
@@ -25,7 +24,7 @@ namespace Strategix
 	struct EntiInfo
 	{
 		string name;
-		string kind; // building or unit
+		string kind; // building or entiSlot
 		Resources resources;
 		vector<string> depends; 
 		vector<string> provides;

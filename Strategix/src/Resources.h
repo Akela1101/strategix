@@ -8,8 +8,6 @@
 #ifndef _RESOURCES_H
 #define	_RESOURCES_H
 
-#include "StrategixCommon.h"
-
 #include <vector>
 #include <string>
 #include <algorithm>
@@ -18,6 +16,8 @@
 namespace Strategix
 {
 	using namespace std;
+
+	typedef float ResType;
 
 	class Resources
 	{

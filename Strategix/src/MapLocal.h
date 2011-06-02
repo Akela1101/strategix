@@ -9,18 +9,13 @@
 #define	_MAPLOCAL_H
 
 #include "Map.h"
-#include "CoordStructs.h"
 
-#include "Nya.hpp"
+#include "Strategix_Forward.h"
 
 
 namespace Strategix
 {
 	using namespace std;
-
-	class MapFull;
-	class MapsPath;
-	class MapsPathsFinder;
 
 	class MapLocal : public Map
 	{

@@ -5,9 +5,6 @@
  * Created on 24 Март 2011 г., 14:02
  */
 
-#include "Log.h"
-#include "StrategixError.h"
-#include "StrategixCommon.h"
 #include "MapResource.h"
 
 #include <fstream>

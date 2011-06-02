@@ -8,11 +8,11 @@
 #ifndef _FEATURE_H
 #define	_FEATURE_H
 
+#include "Strategix_Forward.h"
+
+
 namespace Strategix
 {
-	class Enti;
-	class FeatureInfo;
-
 	class Feature
 	{
 	protected:

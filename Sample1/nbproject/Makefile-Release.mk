@@ -35,17 +35,15 @@ OBJECTDIR=build/${CND_CONF}/${CND_PLATFORM}
 OBJECTFILES= \
 	${OBJECTDIR}/src/TechTreesBuilderFromXml.o \
 	${OBJECTDIR}/src/Main.o \
-	${OBJECTDIR}/OgreWrap/src/MediatorFrameListener.o \
 	${OBJECTDIR}/OgreWrap/src/MyMouseListener.o \
-	${OBJECTDIR}/OgreWrap/src/MapTexture.o \
-	${OBJECTDIR}/OgreWrap/src/OObjectResource.o \
+	${OBJECTDIR}/OgreWrap/src/PlayerSlotFrameListener.o \
 	${OBJECTDIR}/OgreWrap/src/MyApp.o \
 	${OBJECTDIR}/OgreWrap/src/OObjectLabel.o \
-	${OBJECTDIR}/OgreWrap/src/OObjectTitled.o \
 	${OBJECTDIR}/OgreWrap/src/MyFrameListener.o \
-	${OBJECTDIR}/OgreWrap/src/OObjectUnit.o \
+	${OBJECTDIR}/OgreWrap/src/TerrainPositioner.o \
 	${OBJECTDIR}/OgreWrap/src/OObject.o \
 	${OBJECTDIR}/OgreWrap/src/LabelsHolder.o \
+	${OBJECTDIR}/OgreWrap/src/OObjectEntiSlot.o \
 	${OBJECTDIR}/OgreWrap/src/ObjectTitle.o
 
 
@@ -78,72 +76,62 @@ dist/Release/GNU-Linux-x86/sample1: ${OBJECTFILES}
 ${OBJECTDIR}/src/TechTreesBuilderFromXml.o: src/TechTreesBuilderFromXml.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -O2 -Isrc -IOgreWrap/src -I../Strategix/src -I../common_include -I/usr/include/OGRE -I/usr/include/OIS -I/usr/local/include/MYGUI -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/TechTreesBuilderFromXml.o src/TechTreesBuilderFromXml.cpp
+	$(COMPILE.cc) -O2 -Isrc -IOgreWrap/src -I../Strategix/src -I../include_common -I/usr/include/OGRE -I/usr/include/OIS -I/usr/local/include/MYGUI -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/TechTreesBuilderFromXml.o src/TechTreesBuilderFromXml.cpp
 
 ${OBJECTDIR}/src/Main.o: src/Main.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -O2 -Isrc -IOgreWrap/src -I../Strategix/src -I../common_include -I/usr/include/OGRE -I/usr/include/OIS -I/usr/local/include/MYGUI -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Main.o src/Main.cpp
-
-${OBJECTDIR}/OgreWrap/src/MediatorFrameListener.o: OgreWrap/src/MediatorFrameListener.cpp 
-	${MKDIR} -p ${OBJECTDIR}/OgreWrap/src
-	${RM} $@.d
-	$(COMPILE.cc) -O2 -Isrc -IOgreWrap/src -I../Strategix/src -I../common_include -I/usr/include/OGRE -I/usr/include/OIS -I/usr/local/include/MYGUI -MMD -MP -MF $@.d -o ${OBJECTDIR}/OgreWrap/src/MediatorFrameListener.o OgreWrap/src/MediatorFrameListener.cpp
+	$(COMPILE.cc) -O2 -Isrc -IOgreWrap/src -I../Strategix/src -I../include_common -I/usr/include/OGRE -I/usr/include/OIS -I/usr/local/include/MYGUI -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Main.o src/Main.cpp
 
 ${OBJECTDIR}/OgreWrap/src/MyMouseListener.o: OgreWrap/src/MyMouseListener.cpp 
 	${MKDIR} -p ${OBJECTDIR}/OgreWrap/src
 	${RM} $@.d
-	$(COMPILE.cc) -O2 -Isrc -IOgreWrap/src -I../Strategix/src -I../common_include -I/usr/include/OGRE -I/usr/include/OIS -I/usr/local/include/MYGUI -MMD -MP -MF $@.d -o ${OBJECTDIR}/OgreWrap/src/MyMouseListener.o OgreWrap/src/MyMouseListener.cpp
+	$(COMPILE.cc) -O2 -Isrc -IOgreWrap/src -I../Strategix/src -I../include_common -I/usr/include/OGRE -I/usr/include/OIS -I/usr/local/include/MYGUI -MMD -MP -MF $@.d -o ${OBJECTDIR}/OgreWrap/src/MyMouseListener.o OgreWrap/src/MyMouseListener.cpp
 
-${OBJECTDIR}/OgreWrap/src/MapTexture.o: OgreWrap/src/MapTexture.cpp 
+${OBJECTDIR}/OgreWrap/src/PlayerSlotFrameListener.o: OgreWrap/src/PlayerSlotFrameListener.cpp 
 	${MKDIR} -p ${OBJECTDIR}/OgreWrap/src
 	${RM} $@.d
-	$(COMPILE.cc) -O2 -Isrc -IOgreWrap/src -I../Strategix/src -I../common_include -I/usr/include/OGRE -I/usr/include/OIS -I/usr/local/include/MYGUI -MMD -MP -MF $@.d -o ${OBJECTDIR}/OgreWrap/src/MapTexture.o OgreWrap/src/MapTexture.cpp
-
-${OBJECTDIR}/OgreWrap/src/OObjectResource.o: OgreWrap/src/OObjectResource.cpp 
-	${MKDIR} -p ${OBJECTDIR}/OgreWrap/src
-	${RM} $@.d
-	$(COMPILE.cc) -O2 -Isrc -IOgreWrap/src -I../Strategix/src -I../common_include -I/usr/include/OGRE -I/usr/include/OIS -I/usr/local/include/MYGUI -MMD -MP -MF $@.d -o ${OBJECTDIR}/OgreWrap/src/OObjectResource.o OgreWrap/src/OObjectResource.cpp
+	$(COMPILE.cc) -O2 -Isrc -IOgreWrap/src -I../Strategix/src -I../include_common -I/usr/include/OGRE -I/usr/include/OIS -I/usr/local/include/MYGUI -MMD -MP -MF $@.d -o ${OBJECTDIR}/OgreWrap/src/PlayerSlotFrameListener.o OgreWrap/src/PlayerSlotFrameListener.cpp
 
 ${OBJECTDIR}/OgreWrap/src/MyApp.o: OgreWrap/src/MyApp.cpp 
 	${MKDIR} -p ${OBJECTDIR}/OgreWrap/src
 	${RM} $@.d
-	$(COMPILE.cc) -O2 -Isrc -IOgreWrap/src -I../Strategix/src -I../common_include -I/usr/include/OGRE -I/usr/include/OIS -I/usr/local/include/MYGUI -MMD -MP -MF $@.d -o ${OBJECTDIR}/OgreWrap/src/MyApp.o OgreWrap/src/MyApp.cpp
+	$(COMPILE.cc) -O2 -Isrc -IOgreWrap/src -I../Strategix/src -I../include_common -I/usr/include/OGRE -I/usr/include/OIS -I/usr/local/include/MYGUI -MMD -MP -MF $@.d -o ${OBJECTDIR}/OgreWrap/src/MyApp.o OgreWrap/src/MyApp.cpp
 
 ${OBJECTDIR}/OgreWrap/src/OObjectLabel.o: OgreWrap/src/OObjectLabel.cpp 
 	${MKDIR} -p ${OBJECTDIR}/OgreWrap/src
 	${RM} $@.d
-	$(COMPILE.cc) -O2 -Isrc -IOgreWrap/src -I../Strategix/src -I../common_include -I/usr/include/OGRE -I/usr/include/OIS -I/usr/local/include/MYGUI -MMD -MP -MF $@.d -o ${OBJECTDIR}/OgreWrap/src/OObjectLabel.o OgreWrap/src/OObjectLabel.cpp
-
-${OBJECTDIR}/OgreWrap/src/OObjectTitled.o: OgreWrap/src/OObjectTitled.cpp 
-	${MKDIR} -p ${OBJECTDIR}/OgreWrap/src
-	${RM} $@.d
-	$(COMPILE.cc) -O2 -Isrc -IOgreWrap/src -I../Strategix/src -I../common_include -I/usr/include/OGRE -I/usr/include/OIS -I/usr/local/include/MYGUI -MMD -MP -MF $@.d -o ${OBJECTDIR}/OgreWrap/src/OObjectTitled.o OgreWrap/src/OObjectTitled.cpp
+	$(COMPILE.cc) -O2 -Isrc -IOgreWrap/src -I../Strategix/src -I../include_common -I/usr/include/OGRE -I/usr/include/OIS -I/usr/local/include/MYGUI -MMD -MP -MF $@.d -o ${OBJECTDIR}/OgreWrap/src/OObjectLabel.o OgreWrap/src/OObjectLabel.cpp
 
 ${OBJECTDIR}/OgreWrap/src/MyFrameListener.o: OgreWrap/src/MyFrameListener.cpp 
 	${MKDIR} -p ${OBJECTDIR}/OgreWrap/src
 	${RM} $@.d
-	$(COMPILE.cc) -O2 -Isrc -IOgreWrap/src -I../Strategix/src -I../common_include -I/usr/include/OGRE -I/usr/include/OIS -I/usr/local/include/MYGUI -MMD -MP -MF $@.d -o ${OBJECTDIR}/OgreWrap/src/MyFrameListener.o OgreWrap/src/MyFrameListener.cpp
+	$(COMPILE.cc) -O2 -Isrc -IOgreWrap/src -I../Strategix/src -I../include_common -I/usr/include/OGRE -I/usr/include/OIS -I/usr/local/include/MYGUI -MMD -MP -MF $@.d -o ${OBJECTDIR}/OgreWrap/src/MyFrameListener.o OgreWrap/src/MyFrameListener.cpp
 
-${OBJECTDIR}/OgreWrap/src/OObjectUnit.o: OgreWrap/src/OObjectUnit.cpp 
+${OBJECTDIR}/OgreWrap/src/TerrainPositioner.o: OgreWrap/src/TerrainPositioner.cpp 
 	${MKDIR} -p ${OBJECTDIR}/OgreWrap/src
 	${RM} $@.d
-	$(COMPILE.cc) -O2 -Isrc -IOgreWrap/src -I../Strategix/src -I../common_include -I/usr/include/OGRE -I/usr/include/OIS -I/usr/local/include/MYGUI -MMD -MP -MF $@.d -o ${OBJECTDIR}/OgreWrap/src/OObjectUnit.o OgreWrap/src/OObjectUnit.cpp
+	$(COMPILE.cc) -O2 -Isrc -IOgreWrap/src -I../Strategix/src -I../include_common -I/usr/include/OGRE -I/usr/include/OIS -I/usr/local/include/MYGUI -MMD -MP -MF $@.d -o ${OBJECTDIR}/OgreWrap/src/TerrainPositioner.o OgreWrap/src/TerrainPositioner.cpp
 
 ${OBJECTDIR}/OgreWrap/src/OObject.o: OgreWrap/src/OObject.cpp 
 	${MKDIR} -p ${OBJECTDIR}/OgreWrap/src
 	${RM} $@.d
-	$(COMPILE.cc) -O2 -Isrc -IOgreWrap/src -I../Strategix/src -I../common_include -I/usr/include/OGRE -I/usr/include/OIS -I/usr/local/include/MYGUI -MMD -MP -MF $@.d -o ${OBJECTDIR}/OgreWrap/src/OObject.o OgreWrap/src/OObject.cpp
+	$(COMPILE.cc) -O2 -Isrc -IOgreWrap/src -I../Strategix/src -I../include_common -I/usr/include/OGRE -I/usr/include/OIS -I/usr/local/include/MYGUI -MMD -MP -MF $@.d -o ${OBJECTDIR}/OgreWrap/src/OObject.o OgreWrap/src/OObject.cpp
 
 ${OBJECTDIR}/OgreWrap/src/LabelsHolder.o: OgreWrap/src/LabelsHolder.cpp 
 	${MKDIR} -p ${OBJECTDIR}/OgreWrap/src
 	${RM} $@.d
-	$(COMPILE.cc) -O2 -Isrc -IOgreWrap/src -I../Strategix/src -I../common_include -I/usr/include/OGRE -I/usr/include/OIS -I/usr/local/include/MYGUI -MMD -MP -MF $@.d -o ${OBJECTDIR}/OgreWrap/src/LabelsHolder.o OgreWrap/src/LabelsHolder.cpp
+	$(COMPILE.cc) -O2 -Isrc -IOgreWrap/src -I../Strategix/src -I../include_common -I/usr/include/OGRE -I/usr/include/OIS -I/usr/local/include/MYGUI -MMD -MP -MF $@.d -o ${OBJECTDIR}/OgreWrap/src/LabelsHolder.o OgreWrap/src/LabelsHolder.cpp
+
+${OBJECTDIR}/OgreWrap/src/OObjectEntiSlot.o: OgreWrap/src/OObjectEntiSlot.cpp 
+	${MKDIR} -p ${OBJECTDIR}/OgreWrap/src
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -Isrc -IOgreWrap/src -I../Strategix/src -I../include_common -I/usr/include/OGRE -I/usr/include/OIS -I/usr/local/include/MYGUI -MMD -MP -MF $@.d -o ${OBJECTDIR}/OgreWrap/src/OObjectEntiSlot.o OgreWrap/src/OObjectEntiSlot.cpp
 
 ${OBJECTDIR}/OgreWrap/src/ObjectTitle.o: OgreWrap/src/ObjectTitle.cpp 
 	${MKDIR} -p ${OBJECTDIR}/OgreWrap/src
 	${RM} $@.d
-	$(COMPILE.cc) -O2 -Isrc -IOgreWrap/src -I../Strategix/src -I../common_include -I/usr/include/OGRE -I/usr/include/OIS -I/usr/local/include/MYGUI -MMD -MP -MF $@.d -o ${OBJECTDIR}/OgreWrap/src/ObjectTitle.o OgreWrap/src/ObjectTitle.cpp
+	$(COMPILE.cc) -O2 -Isrc -IOgreWrap/src -I../Strategix/src -I../include_common -I/usr/include/OGRE -I/usr/include/OIS -I/usr/local/include/MYGUI -MMD -MP -MF $@.d -o ${OBJECTDIR}/OgreWrap/src/ObjectTitle.o OgreWrap/src/ObjectTitle.cpp
 
 # Subprojects
 .build-subprojects:

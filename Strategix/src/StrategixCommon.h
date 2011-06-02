@@ -15,12 +15,8 @@ namespace Strategix
 		HUMAN,
 		AI,
 		NET
-	};
-
-	typedef float ResType;
+	};	
 }
-
-#include "Resources.h"
 
 #endif	/* _STRATEGIXCOMMON_H */
 

@@ -8,9 +8,9 @@
 #ifndef _MAPRESOURCE_H
 #define	_MAPRESOURCE_H
 
-#include "CoordStructs.h"
-
 #include <string>
+
+#include "Strategix_Forward.h"
 
 
 namespace Strategix
