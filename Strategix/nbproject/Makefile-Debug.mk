@@ -44,7 +44,9 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/FeatureCollect.o \
 	${OBJECTDIR}/src/MapsPathsFinder.o \
 	${OBJECTDIR}/src/TechTree.o \
+	${OBJECTDIR}/src/FeatureAttack.o \
 	${OBJECTDIR}/src/Enti.o \
+	${OBJECTDIR}/src/FeatureHealth.o \
 	${OBJECTDIR}/src/KernelBase.o \
 	${OBJECTDIR}/src/CoordStructs.o
 
@@ -130,10 +132,20 @@ ${OBJECTDIR}/src/TechTree.o: src/TechTree.cpp
 	${RM} $@.d
 	$(COMPILE.cc) -g -Isrc -I../include_common -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/TechTree.o src/TechTree.cpp
 
+${OBJECTDIR}/src/FeatureAttack.o: src/FeatureAttack.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -g -Isrc -I../include_common -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/FeatureAttack.o src/FeatureAttack.cpp
+
 ${OBJECTDIR}/src/Enti.o: src/Enti.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.cc) -g -Isrc -I../include_common -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Enti.o src/Enti.cpp
+
+${OBJECTDIR}/src/FeatureHealth.o: src/FeatureHealth.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -g -Isrc -I../include_common -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/FeatureHealth.o src/FeatureHealth.cpp
 
 ${OBJECTDIR}/src/KernelBase.o: src/KernelBase.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

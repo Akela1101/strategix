@@ -20,6 +20,7 @@ namespace Strategix
 		virtual ~PlayerSlot() {}
 		
 		virtual void OnAddEnti(Enti *enti) = 0;
+		virtual void OnAddMapResource(sh_p<MapResource> mapResource) = 0;
 		virtual void OnChangeResources(const Resources &newResources) = 0;
 
 	private:

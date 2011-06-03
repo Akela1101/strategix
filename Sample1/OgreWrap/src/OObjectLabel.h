@@ -10,7 +10,7 @@
 
 #include "OObjectTitled.h"
 
-#include <Strategix.h>
+#include <Strategix_Forward.h>
 
 
 namespace Sample1
@@ -23,7 +23,7 @@ namespace Sample1
 
 	public:
 		OObjectLabel(const std::string &meshName, const std::string &title, MapCoord mapCoord);
-		virtual ~OObjectLabel();		
+		virtual ~OObjectLabel() {}
 	};
 }
 

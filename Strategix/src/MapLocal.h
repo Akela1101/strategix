@@ -19,13 +19,16 @@ namespace Strategix
 
 	class MapLocal : public Map
 	{
+		Player *player; // owner
 		MapFull *mapFull; // For pushing synchronizing calls
+		MapCoord initialPosition;
 		sh_p<MapsPathsFinder> pathsFinder;
-		
-	public:
-		MapLocal(MapFull *mapFull);
-		virtual ~MapLocal();
 
+	public:
+		MapLocal(Player *player, MapFull *mapFull);
+		virtual ~MapLocal() {}
+
+		const MapCoord GetInitialPostion() const { return initialPosition; }
 		sh_p<MapsPath> FindPath(const MapCoord from, const MapCoord till);
 
 	private:

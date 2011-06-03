@@ -62,7 +62,7 @@ namespace Sample1
 	protected:
 		Root *root;
 		sh_p<MyFrameListener> frameListener;
-		sh_p<PlayerSlotFrameListener> mediatorFrameListener;
+		sh_p<PlayerSlotFrameListener> playerSlotFrameListener;
 		sh_p<Kernel> kernel;
 
 	#ifdef OGRE_STATIC_LIB

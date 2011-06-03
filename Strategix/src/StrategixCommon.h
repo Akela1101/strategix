@@ -15,7 +15,9 @@ namespace Strategix
 		HUMAN,
 		AI,
 		NET
-	};	
+	};
+
+	typedef float HpType;
 }
 
 #endif	/* _STRATEGIXCOMMON_H */

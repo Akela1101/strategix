@@ -17,6 +17,7 @@
       <features>
         <health>
           <hp>1000</hp>
+          <regenSpeed>1.0</regenSpeed>
         </health>
       </features>
     </entity>
@@ -35,9 +36,6 @@
       <mesh>Spher_Worker.mesh</mesh>
       <scale>0.06</scale>
       <features>
-        <health>
-          <hp>50</hp>
-        </health>
         <move>
           <speed>3.0</speed>
         </move>
@@ -48,6 +46,14 @@
             <gold>200</gold>
           </capacity>
         </collect>
+        <health>
+          <hp>50</hp>
+          <regenSpeed>0.1</regenSpeed>
+        </health>
+        <attack>
+          <damage>20</damage>
+          <speed>1.0</speed>
+        </attack>
       </features>
     </entity>
   </entities>

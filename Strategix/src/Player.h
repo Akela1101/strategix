@@ -10,8 +10,10 @@
 
 #include <map>
 #include <string>
+#include <set>
 
 #include "Strategix_Forward.h"
+#include "MapResource.h"
 
 
 namespace Strategix
@@ -20,8 +22,10 @@ namespace Strategix
 
 	class Player
 	{
+		friend class FeatureCollect; // @#~ temporary
+
 	public:
-		PlayerSlot *mediator; // Callback class
+		PlayerSlot *playerSlot; // Callback class
 
 		string name; // Name given by user.
 		PlayerType playerType; // human, ai, net
@@ -31,15 +35,20 @@ namespace Strategix
 		sh_p<TechTree> techTree; // local COPY of race tree
 		sh_p<MapLocal> mapLocal;
 
+	private:
 		typedef	multimap<string, sh_p<Enti> > EntisType;
-		EntisType entis;
+		EntisType entis; // owned enties
+
+		set<MapResource*> mapResources; // known map resources
 
 	public:
 		Player(const string name, const PlayerType playerType,
 				const int playerNumber, const string raceName);
-		
+
+		void Start();
 		void Tick(const float seconds);
 		void AddEnti(sh_p<Enti> enti);
+		void AddMapResource(sh_p<MapResource> mapResource);
 		bool AddResources(const Resources deltaResources);
 
 	private:

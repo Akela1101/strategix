@@ -5,13 +5,13 @@
  * Created on 4 Февраль 2011 г., 18:41
  */
 
-#include "EntiSlot.h"
-#include "Player.h"
 #include "EntiInfo.h"
+#include "EntiSlot.h"
+#include "Map.h"
+#include "Player.h"
+#include "TechTree.h"
 
 #include "Enti.h"
-#include "Map.h"
-#include "TechTree.h"
 
 
 namespace Strategix
@@ -39,6 +39,14 @@ void Enti::AddFeature(const string &name, const FeatureInfo *featureInfo)
 	else if( name == "collect" )
 	{
 		features[typeid(FeatureCollect).name()].reset(new FeatureCollect(featureInfo, this));
+	}
+	else if( name == "health" )
+	{
+		features[typeid(FeatureHealth).name()].reset(new FeatureHealth(featureInfo, this));
+	}
+	else if( name == "attack" )
+	{
+		features[typeid(FeatureAttack).name()].reset(new FeatureAttack(featureInfo, this));
 	}
 	// else ?
 }

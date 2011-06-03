@@ -41,6 +41,7 @@ namespace Sample1
 		virtual bool frameRenderingQueued(const FrameEvent &event);
 
 		virtual void OnAddEnti(Enti *enti);
+		virtual void OnAddMapResource(sh_p<MapResource> mapResource);
 		virtual void OnChangeResources(const Resources &newResources);
 	};
 }

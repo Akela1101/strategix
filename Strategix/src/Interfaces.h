@@ -34,6 +34,18 @@ namespace Strategix
 		virtual void OnCollectStop() {}
 		virtual void OnBringStop() {}
 	};
+
+	struct IHealth
+	{
+		virtual void OnHpChange() {}
+	};
+
+	struct IAttack
+	{
+		virtual void OnAttackStart() {}
+		virtual void OnAttack() {}
+		virtual void OnAttackStop() {}
+	};
 }
 
 #endif	/* _INTERFACES_H */

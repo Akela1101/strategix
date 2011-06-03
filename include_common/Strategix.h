@@ -13,6 +13,8 @@
 #include "FeatureInfo.h"
 #include "FeatureMove.h"
 #include "FeatureCollect.h"
+#include "FeatureHealth.h"
+#include "FeatureAttack.h"
 #include "Kernel.h"
 #include "KernelBase.h"
 #include "Map.h"

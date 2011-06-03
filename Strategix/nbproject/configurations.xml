@@ -10,8 +10,12 @@
       <itemPath>src/EntiSlot.cpp</itemPath>
       <itemPath>src/EntiSlot.h</itemPath>
       <itemPath>src/Feature.h</itemPath>
+      <itemPath>src/FeatureAttack.cpp</itemPath>
+      <itemPath>src/FeatureAttack.h</itemPath>
       <itemPath>src/FeatureCollect.cpp</itemPath>
       <itemPath>src/FeatureCollect.h</itemPath>
+      <itemPath>src/FeatureHealth.cpp</itemPath>
+      <itemPath>src/FeatureHealth.h</itemPath>
       <itemPath>src/FeatureInfo.h</itemPath>
       <itemPath>src/FeatureMove.cpp</itemPath>
       <itemPath>src/FeatureMove.h</itemPath>

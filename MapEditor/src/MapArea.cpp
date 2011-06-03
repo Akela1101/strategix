@@ -25,10 +25,6 @@ MapArea::MapArea(QWidget *parent) : QWidget(parent)
 	isHighlight = false;
 }
 
-MapArea::~MapArea()
-{
-}
-
 void MapArea::SetPs(MainForm *mainForm, QScrollArea *scrollArea)	
 {
 	this->mainForm = mainForm;

@@ -55,7 +55,7 @@
           <incDir>
             <pElem>src</pElem>
             <pElem>qtforms</pElem>
-            <pElem>../common_include</pElem>
+            <pElem>../include_common</pElem>
           </incDir>
         </ccTool>
       </compileType>
@@ -82,7 +82,7 @@
           <incDir>
             <pElem>src</pElem>
             <pElem>qtforms</pElem>
-            <pElem>../common_include</pElem>
+            <pElem>../include_common</pElem>
           </incDir>
         </ccTool>
         <fortranCompilerTool>

@@ -7,23 +7,21 @@
 
 #include "MapFull.h"
 #include "MapsPathsFinder.h"
+#include "Player.h"
 
 #include "MapLocal.h"
 
 namespace Strategix
 {
 
-MapLocal::MapLocal(MapFull *mapFull)
+MapLocal::MapLocal(Player *player, MapFull *mapFull)
 	:
+	player(player),
 	Map(*static_cast<Map*>(mapFull)),
 	mapFull(mapFull),
+	initialPosition(mapFull->GetInitialPostion(player->playerNumber)),
 	pathsFinder(new MapsPathsFinder(*this))
-{
-}
-
-MapLocal::~MapLocal()
-{
-}
+{}
 
 sh_p<MapsPath> MapLocal::FindPath(const MapCoord from, const MapCoord till)
 {

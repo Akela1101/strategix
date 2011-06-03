@@ -52,7 +52,6 @@ public:
 public:
 	MapInfo(const std::string &name, const int width, const int height);
 	MapInfo(const QString &fileName);
-	virtual ~MapInfo();
 		
 	bool SaveToFile(QString fileName) const;
 	bool LoadFromFile(QString fileName);

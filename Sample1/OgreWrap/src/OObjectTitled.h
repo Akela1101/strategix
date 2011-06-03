@@ -16,17 +16,17 @@
 
 namespace Sample1
 {
+	using namespace std;
+
 	class OObjectTitled : public OObject
 	{
+	protected:
 		sh_p<ObjectTitle> objectTitle;
 
 	public:
-		OObjectTitled(const std::string &meshName, const std::string &title)
+		OObjectTitled(const string &meshName, const string title = "")
 			: OObject(meshName), objectTitle(new ObjectTitle(entity, title, "Calibri")) {}
 		virtual ~OObjectTitled() {}
-
-		void Update() { objectTitle->update(); }
-		void Show(bool isShow) { objectTitle->show(isShow); }
 	};
 }
 

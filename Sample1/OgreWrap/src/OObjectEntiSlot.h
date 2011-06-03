@@ -8,7 +8,7 @@
 #ifndef _OOBJECTENTISLOT_H
 #define	_OOBJECTENTISLOT_H
 
-#include "OObject.h"
+#include "OObjectTitled.h"
 
 #include <EntiSlot.h>
 #include <Ogre.h>
@@ -20,11 +20,10 @@
 
 namespace Sample1
 {
-	using namespace std;
 	using namespace Ogre;
 	using namespace Strategix;	
 
-	class OObjectEntiSlot : public OObject, public EntiSlot
+	class OObjectEntiSlot : public OObjectTitled, public EntiSlot
 	{
 	protected:
 		AnimationState *animationState;
@@ -38,6 +37,7 @@ namespace Sample1
 		virtual void OnMoveStart();
 		virtual void OnMove();
 		virtual void OnMoveStop();
+		virtual void OnHpChange();
 	};
 }
 

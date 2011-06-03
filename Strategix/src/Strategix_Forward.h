@@ -27,6 +27,8 @@ namespace Strategix
 	class FeatureInfo;
 	class FeatureInfoCollect;
 	class FeatureInfoMove;
+	class FeatureInfoHealth;
+	class FeatureInfoAttack;
 	class Kernel;
 	class Map;
 	class MapFull;

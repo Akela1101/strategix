@@ -10,7 +10,7 @@
 
 #include "OObject.h"
 
-#include <MapResource.h>
+#include <Strategix.h>
 #include <Ogre.h>
 #include <string>
 
@@ -28,9 +28,9 @@ namespace Sample1
 		sh_p<MapResource> mapResource;
 
 	public:
-		OObjectResource(const string meshName, sh_p<MapResource> mapResource)
+		OObjectResource(sh_p<MapResource> mapResource)
 			:
-			OObject(meshName),
+			OObject(KernelBase::GS().GetResourceInfo(mapResource->name).meshName),
 			mapResource(mapResource)
 		{
 			entity->setUserAny(Any(this)); // Link from Entity

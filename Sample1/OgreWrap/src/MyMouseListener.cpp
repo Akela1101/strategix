@@ -75,17 +75,20 @@ bool MyMouseListener::mousePressed(const OIS::MouseEvent &mouse_event, OIS::Mous
 		if( currEntity && (currMask == ENTI_MASK) )
 		{
 			OObjectEntiSlot *oObjectEntiSlot = any_cast<OObjectEntiSlot*>(currEntity->getUserAny());
-
-			// Going for resource
+			
 			QueryFlags mask;
 			Entity *entity = SelectEntity(mouse_event, mask);
-			if( entity && (mask == RES_MASK) )
+			if( entity && (mask == RES_MASK) ) // Going for resource
 			{
 				OObjectResource *oObjectResource = any_cast<OObjectResource*>(entity->getUserAny());
 				oObjectEntiSlot->enti->Do<FeatureCollect>()->Collect(oObjectResource->mapResource);
 			}
-			// Going to place
-			else
+			else if( entity && (mask == ENTI_MASK) )
+			{
+				OObjectEntiSlot *oObjectTarget = any_cast<OObjectEntiSlot*>(entity->getUserAny());
+				oObjectEntiSlot->enti->Do<FeatureAttack>()->Attack(oObjectTarget->enti);
+			}
+			else // Going to place
 			{
 				const Vector3 &terrainCoord = GetTerrainCoord(mouse_event);
 				oObjectEntiSlot->enti->Do<FeatureMove>()->Move(RealCoord(terrainCoord.x, terrainCoord.z));

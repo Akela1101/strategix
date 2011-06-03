@@ -60,10 +60,12 @@ void LabelsHolder::CreateLabels()
 
 void LabelsHolder::ShowLabels(bool isShow)
 {
+/*
 	for( LabelVector::iterator it = labelVector.begin(); it != labelVector.end(); ++it )
 	{
-		(*it)->Show(isShow);
+		(*it)->objectTitle->show(isShow);
 	}
+ */
 }
 
 }

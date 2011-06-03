@@ -49,13 +49,24 @@ namespace Strategix
 
 	struct FeatureInfoHealth : FeatureInfo
 	{
-		float hp;
+		HpType hp;
 		float regenSpeed;
-		//
-		FeatureInfoHealth(const float hp, const float regenSpeed)
+		
+		FeatureInfoHealth(const HpType hp, const float regenSpeed)
 			: hp(hp), regenSpeed(regenSpeed) {}
 		virtual ~FeatureInfoHealth() {}
 		virtual FeatureInfoHealth* copy() { return new FeatureInfoHealth(hp, regenSpeed); }
+	};
+
+	struct FeatureInfoAttack : FeatureInfo
+	{
+		HpType damage;
+		float speed; // Hit/sec
+
+		FeatureInfoAttack(const HpType damage, const float speed)
+			: damage(damage), speed(speed) {}
+		virtual ~FeatureInfoAttack() {}
+		virtual FeatureInfoAttack* copy() { return new FeatureInfoAttack(damage, speed); }
 	};
 }
 

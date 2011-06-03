@@ -5,13 +5,14 @@
  * Created on 14 Февраль 2010 г., 17:56
  */
 
-#include "PlayerSlot.h"
-#include "KernelBase.h"
 #include "Enti.h"
+#include "EntiInfo.h"
+#include "KernelBase.h"
+#include "MapLocal.h"
+#include "PlayerSlot.h"
 #include "TechTree.h"
 
 #include "Player.h"
-#include "EntiInfo.h"
 
 
 namespace Strategix
@@ -20,12 +21,33 @@ namespace Strategix
 Player::Player(const string name, const PlayerType playerType,
 				const int playerNumber, const string raceName)
 	:
-	mediator(0),
+	playerSlot(0),
 	name(name),
 	playerType(playerType),
 	playerNumber(playerNumber),
 	techTree(new TechTree(KernelBase::GS().GetTechTree(raceName)))
-{	
+{}
+
+void Player::Start()
+{
+	// Creating Base
+	const string baseName = techTree->mainBuildingName;
+	sh_p<const EntiInfo> entityInfo = techTree->Node(baseName);
+	AddEnti(sh_p<Enti>(new Enti(entityInfo.get(), mapLocal->GetInitialPostion())));
+
+	// @#~ there's still no warfog, so inform each player about resource
+	// Resources
+	for( int i = 0; i < mapLocal->GetWidth(); ++i )
+	{
+		for( int j = 0; j < mapLocal->GetLength(); ++j )
+		{
+			sh_p<MapResource> mapResource = mapLocal->GetCell(i, j).mapResource;
+			if( mapResource )
+			{
+				AddMapResource(mapResource);
+			}
+		}
+	}
 }
 
 void Player::Tick(const float seconds)
@@ -40,8 +62,15 @@ void Player::AddEnti(sh_p<Enti> enti)
 {
 	entis.insert(EntisType::value_type(enti->entityInfo->name, enti));
 	enti->player = this;
-	if( mediator )
-		mediator->OnAddEnti(enti.get());
+	if( playerSlot )
+		playerSlot->OnAddEnti(enti.get());
+}
+
+void Player::AddMapResource(sh_p<MapResource> mapResource)
+{
+	mapResources.insert(mapResource.get());
+	if( playerSlot )
+		playerSlot->OnAddMapResource(mapResource);
 }
 
 bool Player::AddResources(const Resources deltaResources)
@@ -50,8 +79,8 @@ bool Player::AddResources(const Resources deltaResources)
 		return false;
 
 	resources += deltaResources;
-	if( mediator )
-		mediator->OnChangeResources(resources);
+	if( playerSlot )
+		playerSlot->OnChangeResources(resources);
 
 	return true;
 }

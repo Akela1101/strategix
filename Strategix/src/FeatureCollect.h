@@ -21,9 +21,9 @@ namespace Strategix
 	{
 	protected:
 		const FeatureInfoCollect *featureInfoCollect; // Link to tree
-		const ResType capacity; // always = featureInfoCollect->capacity
+		const ResType &capacity; // == featureInfoCollect->capacity
 		
-	private:		
+	private:
 		float load; // amount of resource Enti is holding, load must be float to avoid loses
 		w_p<MapResource> mapResource; // target
 		Enti *collector; // where to take resources to
@@ -38,7 +38,7 @@ namespace Strategix
 		virtual bool Tick(const float seconds);
 		virtual void Stop();
 
-		virtual void OnComplete(bool isComplete);
+		virtual void OnComplete(bool isComplete); // Moving Complete
 
 	protected:
 		Enti* FindCollector(); // resource collector

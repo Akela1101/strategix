@@ -7,6 +7,7 @@
 
 #include "MyAppCommon.h"
 
+#include <Strategix.h>
 #include <Ogre.h>
 
 #include "OObjectLabel.h"
@@ -28,10 +29,6 @@ OObjectLabel::OObjectLabel(const std::string &meshName, const std::string &title
 	const RealCoord realCoord = mapCoord;
 	node->setPosition(realCoord.x, heightOfLabel, realCoord.y);
 	node->setVisible(false);
-}
-
-OObjectLabel::~OObjectLabel()
-{
 }
 
 }

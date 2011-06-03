@@ -37,10 +37,6 @@ MapInfo::MapInfo(const QString &fileName)
 		QMessageBox::critical(0, "Unable to open file!", "May be wrong file format or version...");
 }
 
-MapInfo::~MapInfo()
-{
-}
-
 bool MapInfo::SaveToFile(QString fileName) const
 {
 	using namespace std;

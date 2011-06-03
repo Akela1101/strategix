@@ -15,7 +15,8 @@
 
 namespace Strategix
 {
-	class EntiSlot : public ITick, public IMove, public ICollect
+	class EntiSlot : public ITick, public IMove, public ICollect, 
+			public IHealth, public IAttack
 	{
 	public:
 		Enti *enti;

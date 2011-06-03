@@ -30,7 +30,7 @@ namespace Sample1
 OObjectEntiSlot::OObjectEntiSlot(Enti *enti)
 	:
 	EntiSlot(enti),
-	OObject(dynamic_cast<const EntiInfoMesh*>(enti->entityInfo)->meshName),
+	OObjectTitled(dynamic_cast<const EntiInfoMesh*>(enti->entityInfo)->meshName),
 	animationState(0)
 {
 	entity->setUserAny(Any(this)); // Link from Entity
@@ -41,23 +41,26 @@ OObjectEntiSlot::OObjectEntiSlot(Enti *enti)
 	node->setPosition(enti->coord.x, 0, enti->coord.y);
 
 	OnMoveStop();
+	OnHpChange();
 }
 
 void OObjectEntiSlot::OnTick(const float seconds)
 {
-	foreach( sh_p<OObjectLabel> labelEntiSlot, labelVector )
-	{
-		labelEntiSlot->Update();
-	}
-
 	if( animationState )
 	{
 		animationState->addTime(seconds);
 	}
+	objectTitle->update();
+/*
+	foreach( sh_p<OObjectLabel> labelEntiSlot, labelVector )
+	{
+		labelEntiSlot->Update();
+	}
+*/
 }
 
 void OObjectEntiSlot::OnMoveStart()
-{
+{	
 	try
 	{
 		AnimationState *newAnimationState = entity->getAnimationState("Move");
@@ -115,6 +118,14 @@ void OObjectEntiSlot::OnMoveStop()
 	{
 		cout << endl << "Warning: No default Idle action" << endl;
 	}
+}
+
+void OObjectEntiSlot::OnHpChange()
+{
+	HpType hp = enti->Do<FeatureHealth>()->GetHp();
+	std::stringstream ss;
+	ss << "HP=" << hp;
+	objectTitle->setTitle(ss.str());
 }
 
 }

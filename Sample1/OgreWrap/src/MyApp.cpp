@@ -215,8 +215,8 @@ void MyApp::createScene()
 	root->addFrameListener(frameListener.get());
 
 	// Mediator between Kernel & Ogre
-	mediatorFrameListener.reset(new PlayerSlotFrameListener(kernel, myGUI));
-	root->addFrameListener(mediatorFrameListener.get());
+	playerSlotFrameListener.reset(new PlayerSlotFrameListener(kernel, myGUI));
+	root->addFrameListener(playerSlotFrameListener.get());
 
 	// Start
 	kernel->Start();
@@ -225,7 +225,7 @@ void MyApp::createScene()
 void MyApp::destroyScene()
 {
 	// Use reset, not removeFrameListener!
-	mediatorFrameListener.reset();
+	playerSlotFrameListener.reset();
 	frameListener.reset();
 
 	// MyGUI

@@ -88,8 +88,8 @@ MainForm::MainForm()
 	}
 
 	// 2. Resources. Mada hitotsu shika nai kedo ^^
-	pixmap.load("Images/res0.png");
-	AddToListWidget(1, "Red sphere", pixmap,
+	pixmap.load("Images/gold.png");
+	AddToListWidget(1, "Gold", pixmap,
 			&MapInfo::objInfos, widget.resourceListWidget);
 	
 

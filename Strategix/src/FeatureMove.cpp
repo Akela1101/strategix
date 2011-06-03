@@ -5,12 +5,12 @@
  * Created on 23 Март 2011 г., 16:48
  */
 
-#include "EntiSlot.h"
 #include "Enti.h"
-#include "Player.h"
+#include "EntiSlot.h"
+#include "FeatureInfo.h"
 #include "MapLocal.h"
 #include "MapsPath.h"
-#include "FeatureInfo.h"
+#include "Player.h"
 
 #include "FeatureMove.h"
 
@@ -25,8 +25,7 @@ FeatureMove::FeatureMove(const FeatureInfo *featureInfo, Enti *enti)
 	speed(featureInfoMove->speed),
 	finish(enti->coord),
 	isMoving(false)
-{
-}
+{}
 
 bool FeatureMove::Move(const RealCoord newCoord, ICommand *iCommand)
 {

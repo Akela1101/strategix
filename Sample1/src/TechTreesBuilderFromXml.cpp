@@ -116,6 +116,18 @@ void TechTreesBuilderFromXml::BuildEntity(sh_p<TechTree> techTree, const pt::ptr
 				// @#~ Only gold !!!! So change it to Resources.
 				eim->featureInfos[featureName].reset(new FeatureInfoCollect(speed, radius, capacity));
 			}
+			else if( featureName == "health" )
+			{
+				const float hp = feature.get<HpType>("hp");
+				const float regenSpeed = feature.get<float>("regenSpeed");
+				eim->featureInfos[featureName].reset(new FeatureInfoHealth(hp, regenSpeed));
+			}
+			else if( featureName == "attack" )
+			{
+				const float damage = feature.get<HpType>("damage");
+				const float speed = feature.get<float>("speed");
+				eim->featureInfos[featureName].reset(new FeatureInfoAttack(damage, speed));
+			}
 		}
 		catch(pt::ptree_error){}
 	}

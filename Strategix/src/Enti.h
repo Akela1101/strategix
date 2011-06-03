@@ -10,6 +10,8 @@
 
 #include "FeatureMove.h"
 #include "FeatureCollect.h"
+#include "FeatureHealth.h"
+#include "FeatureAttack.h"
 
 #include <map>
 #include <list>

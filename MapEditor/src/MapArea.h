@@ -37,7 +37,7 @@ private:
 
 public:
 	MapArea(QWidget *parent = 0);
-	virtual ~MapArea();
+	virtual ~MapArea() {}
 
 	void SetPs(MainForm *mainForm, QScrollArea *scrollArea);
 	void SetMap(sh_p<MapInfo> mapInfo);

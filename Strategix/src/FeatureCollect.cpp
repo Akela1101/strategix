@@ -33,7 +33,7 @@ FeatureCollect::FeatureCollect(const FeatureInfo *featureInfo, Enti *enti)
 
 bool FeatureCollect::Collect(sh_p<MapResource> mapResource)
 {
-	// Try move and set callback on this
+	// Try move and set OnComplete for this
 	if( !enti->Do<FeatureMove>()->Move(mapResource->mapCoord, this) )
 		return false;
 
@@ -90,7 +90,11 @@ bool FeatureCollect::Tick(const float seconds)
 	return true;
 }
 
-// Moving Complete
+void FeatureCollect::Stop()
+{
+	enti->entiSlot->OnCollectStop();
+}
+
 void FeatureCollect::OnComplete(bool isComplete)
 {
 	if( !isComplete )
@@ -142,11 +146,6 @@ void FeatureCollect::MoveToCollector()
 	{
 		isMovingToCollector = true;
 	}
-}
-
-void FeatureCollect::Stop()
-{
-	enti->entiSlot->OnCollectStop();
 }
 
 }
