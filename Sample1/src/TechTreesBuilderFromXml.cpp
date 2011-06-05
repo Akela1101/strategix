@@ -71,6 +71,8 @@ void TechTreesBuilderFromXml::BuildEntity(sh_p<TechTree> techTree, const pt::ptr
 	eim->name = entityPropTree.get<string>("name");
 	eim->kind = entityPropTree.get<string>("kind");
 
+	eim->meshName = entityPropTree.get<string>("mesh");
+	eim->meshScale = entityPropTree.get<float>("scale");
 
 	foreach( const pt::ptree::value_type &v, entityPropTree.get_child("resources") )
 	{
@@ -92,9 +94,7 @@ void TechTreesBuilderFromXml::BuildEntity(sh_p<TechTree> techTree, const pt::ptr
 		const pt::ptree &provide = v.second; // name
 		eim->provides.push_back( provide.get_value<string>() );
 	}
-*/
-	eim->meshName = entityPropTree.get<string>("mesh");
-	eim->meshScale = entityPropTree.get<float>("scale");
+*/	
 
 	foreach( const pt::ptree::value_type &v, entityPropTree.get_child("features", pt::ptree()) ) // Empty if no features
 	{

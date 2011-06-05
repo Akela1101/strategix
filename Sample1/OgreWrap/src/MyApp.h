@@ -10,7 +10,6 @@
 
 #include <Ogre.h>
 #include <OgreCommon.h>
-#include <MyGUI.h>
 #include <MyGUI_OgrePlatform.h>
 
 #include <Strategix_Forward.h>
@@ -62,8 +61,9 @@ namespace Sample1
 	protected:
 		Root *root;
 		sh_p<MyFrameListener> frameListener;
-		sh_p<PlayerSlotFrameListener> playerSlotFrameListener;
+		sh_p<FrameListenerKernelSlot> frameListenerKernelSlot;		
 		sh_p<Kernel> kernel;
+		sh_p<MyGUI::OgrePlatform> myGUI_Platform;
 
 	#ifdef OGRE_STATIC_LIB
 		StaticPluginLoader mStaticPluginLoader;
@@ -73,10 +73,7 @@ namespace Sample1
 		RenderWindow* window;
 		String ogreConfigPath;
 
-		bool isConfigure;
-
-		sh_p<MyGUI::Gui> myGUI;
-		sh_p<MyGUI::OgrePlatform> myGUI_Platform;
+		bool isConfigure;		
 
 	#ifdef USE_RTSHADER_SYSTEM
 		RTShader::ShaderGenerator*					mShaderGenerator;			// The Shader generator instance.

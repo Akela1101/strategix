@@ -23,7 +23,7 @@ namespace Strategix
 	struct IMove
 	{
 		virtual void OnMoveStart() {}
-		virtual void OnMove() {}
+		virtual void OnMove() = 0;
 		virtual void OnMoveStop() {}
 	};
 

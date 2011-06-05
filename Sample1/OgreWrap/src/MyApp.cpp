@@ -5,11 +5,11 @@
 * Created on 14 Февраль 2010 г., 0:58
 */
 
+#include "FrameListenerKernelSlot.h"
 #include "MyAppCommon.h"
-#include "TerrainPositioner.h"
 #include "MyFrameListener.h"
-#include "PlayerSlotFrameListener.h"
 #include "OObjectEntiSlot.h"
+#include "TerrainPositioner.h"
 
 #include <Strategix.h>
 #include <Ogre.h>
@@ -194,20 +194,19 @@ void MyApp::loadResources()
 
 void MyApp::createScene()
 {
-	sceneManager->setAmbientLight(ColourValue(1, 1, 1));
-	sceneManager->setSkyBox(true, "SpaceSkyBox");
+	// MyGUI_Platform
+	myGUI_Platform.reset(new MyGUI::OgrePlatform());
+	myGUI_Platform->initialise(window, sceneManager);
 
 	// very important to precise this string before any Entity definition.
 	MovableObject::setDefaultQueryFlags(0);
 
-	CreateStaticTerrain();
+	// Sky
+	sceneManager->setAmbientLight(ColourValue(1, 1, 1));
+	sceneManager->setSkyBox(true, "SpaceSkyBox");
 
-	// MyGUI
-	myGUI_Platform.reset(new MyGUI::OgrePlatform());
-	myGUI_Platform->initialise(window, sceneManager);
-	myGUI.reset(new MyGUI::Gui());
-	myGUI->initialise();
-	myGUI->setVisiblePointer(false);
+	// Terrain
+	CreateStaticTerrain();
 
 	// Main FrameListener
 	frameListener.reset(new MyFrameListener(window, camera));
@@ -215,8 +214,8 @@ void MyApp::createScene()
 	root->addFrameListener(frameListener.get());
 
 	// Mediator between Kernel & Ogre
-	playerSlotFrameListener.reset(new PlayerSlotFrameListener(kernel, myGUI));
-	root->addFrameListener(playerSlotFrameListener.get());
+	frameListenerKernelSlot.reset(new FrameListenerKernelSlot(kernel));
+	root->addFrameListener(frameListenerKernelSlot.get());
 
 	// Start
 	kernel->Start();
@@ -224,13 +223,11 @@ void MyApp::createScene()
 
 void MyApp::destroyScene()
 {
-	// Use reset, not removeFrameListener!
-	playerSlotFrameListener.reset();
+	// Use reset, not removeFrameListener!!!
+	frameListenerKernelSlot.reset();
 	frameListener.reset();
 
-	// MyGUI
-	myGUI->shutdown();
-	myGUI.reset();
+	// MyGUI_Platform (last)
 	myGUI_Platform->shutdown();
 	myGUI_Platform.reset();
 }

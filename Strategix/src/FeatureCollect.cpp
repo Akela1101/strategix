@@ -28,8 +28,7 @@ FeatureCollect::FeatureCollect(const FeatureInfo *featureInfo, Enti *enti)
 	load(0),
 	collector(0),
 	isMovingToCollector(false)
-{
-}
+{}
 
 bool FeatureCollect::Collect(sh_p<MapResource> mapResource)
 {

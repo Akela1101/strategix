@@ -2,6 +2,10 @@
 <configurationDescriptor version="69">
   <logicalFolder name="root" displayName="root" projectFiles="true">
     <logicalFolder name="f1" displayName="OgreWrap" projectFiles="true">
+      <itemPath>src/FrameListenerKernelSlot.cpp</itemPath>
+      <itemPath>src/FrameListenerKernelSlot.h</itemPath>
+      <itemPath>OgreWrap/src/HumanPlayerSlot.cpp</itemPath>
+      <itemPath>OgreWrap/src/HumanPlayerSlot.h</itemPath>
       <itemPath>OgreWrap/src/LabelsHolder.cpp</itemPath>
       <itemPath>OgreWrap/src/LabelsHolder.h</itemPath>
       <itemPath>OgreWrap/src/MyApp.cpp</itemPath>
@@ -21,8 +25,6 @@
       <itemPath>OgreWrap/src/OObjectTitled.h</itemPath>
       <itemPath>OgreWrap/src/ObjectTitle.cpp</itemPath>
       <itemPath>OgreWrap/src/ObjectTitle.h</itemPath>
-      <itemPath>OgreWrap/src/PlayerSlotFrameListener.cpp</itemPath>
-      <itemPath>OgreWrap/src/PlayerSlotFrameListener.h</itemPath>
       <itemPath>OgreWrap/src/TerrainPositioner.cpp</itemPath>
       <itemPath>OgreWrap/src/TerrainPositioner.h</itemPath>
     </logicalFolder>

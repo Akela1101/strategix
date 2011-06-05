@@ -78,17 +78,21 @@ bool MyMouseListener::mousePressed(const OIS::MouseEvent &mouse_event, OIS::Mous
 			
 			QueryFlags mask;
 			Entity *entity = SelectEntity(mouse_event, mask);
-			if( entity && (mask == RES_MASK) ) // Going for resource
+			if( entity && (mask == RES_MASK) ) // Collect
 			{
-				OObjectResource *oObjectResource = any_cast<OObjectResource*>(entity->getUserAny());
-				oObjectEntiSlot->enti->Do<FeatureCollect>()->Collect(oObjectResource->mapResource);
+				OObjectResource *oObjectResource
+					= any_cast<OObjectResource*>(entity->getUserAny());
+				oObjectEntiSlot->enti->
+					Do<FeatureCollect>()->Collect(oObjectResource->mapResource);
 			}
-			else if( entity && (mask == ENTI_MASK) )
+			else if( entity && (mask == ENTI_MASK) ) // Attack
 			{
-				OObjectEntiSlot *oObjectTarget = any_cast<OObjectEntiSlot*>(entity->getUserAny());
-				oObjectEntiSlot->enti->Do<FeatureAttack>()->Attack(oObjectTarget->enti);
+				OObjectEntiSlot *oObjectTarget
+					= any_cast<OObjectEntiSlot*>(entity->getUserAny());
+				oObjectEntiSlot->enti->
+					Do<FeatureAttack>()->Attack(oObjectTarget->enti);
 			}
-			else // Going to place
+			else // Move
 			{
 				const Vector3 &terrainCoord = GetTerrainCoord(mouse_event);
 				oObjectEntiSlot->enti->Do<FeatureMove>()->Move(RealCoord(terrainCoord.x, terrainCoord.z));

@@ -15,6 +15,7 @@
 
 namespace Sample1
 {
+	class FrameListenerKernelSlot;
 	class LabelsHolder;
 	class MyFrameListener;
 	class MyMouseListener;
@@ -22,7 +23,7 @@ namespace Sample1
 	class OObjectEntiSlot;
 	class OObjectLabel;
 	class OObjectResource;
-	class PlayerSlotFrameListener;
+	class HumanPlayerSlot;
 }
 
 #endif	/* _SAMPLE1_FORWARD_H */
