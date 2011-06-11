@@ -57,7 +57,7 @@ MapFull::MapFull(const string &name)
 			}
 			else
 			{
-				STRATEGIX_ERROR(string("Wrong map format in file: ") + fileName);
+				STRATEGIX_ERROR("Wrong map format in file: " + fileName);
 			}
 		}
 	}

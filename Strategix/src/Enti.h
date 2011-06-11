@@ -57,7 +57,7 @@ namespace Strategix
 			{
 				return dynamic_cast<F*>(iFeature->second.get());
 			}
-			STRATEGIX_ERROR(string("There is no feature named: ") + featureName);
+			STRATEGIX_ERROR("There is no feature named: " + featureName);
 			return 0;
 		}
 

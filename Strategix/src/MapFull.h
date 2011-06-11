@@ -51,7 +51,7 @@ namespace Strategix
 		MapFull& operator =(const MapFull &_c);
 				
 		bool LoadTerrains();
-		const string GetFilePath(const string &name) const { return string("Maps/") + name + ".map"; }
+		const string GetFilePath(const string &name) const { return "Maps/" + name + ".map"; }
 	};
 }
 

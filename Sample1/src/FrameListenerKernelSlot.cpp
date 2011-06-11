@@ -25,7 +25,9 @@ FrameListenerKernelSlot::FrameListenerKernelSlot(sh_p<Kernel> kernel)
 	foreach( sh_p<Player > &player, kernel->players )
 	{
 		// Assigning Human's callback as this
-		if( player->playerType == HUMAN )
+
+		// @#~ don't uncomment till there will've been slot for all players, including AI
+		//if( player->playerType == HUMAN )
 			player->playerSlot = humanPlayerSlot.get();		
 	}
 }

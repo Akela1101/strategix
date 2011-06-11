@@ -42,7 +42,7 @@ void TechTreesBuilderFromXml::Build(TechTreesType *pTechTrees)
 			}
 			catch( const pt::xml_parser_error & )
 			{
-				STRATEGIX_ERROR( string("Can't parse file: ") + p.string() );
+				STRATEGIX_ERROR( "Can't parse file: " + p.string() );
 			}
 
 			BuildRace(p.stem().string(), propTree.get_child("race"));

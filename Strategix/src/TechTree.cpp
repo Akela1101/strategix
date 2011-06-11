@@ -20,8 +20,7 @@ namespace Strategix
 TechTree::TechTree(const string &raceName)
 	:
 	raceName(raceName)
-{
-}
+{}
 
 TechTree::TechTree(const TechTree &_c)
 {
@@ -53,7 +52,7 @@ void TechTree::AddNode(sh_p<EntiInfo> entityInfo)
 	pair<string, sh_p<EntiInfo> > pairEl(entityInfo->name, entityInfo);
 	pair<TechMapType::iterator, bool> retPair = techMap.insert(pairEl);
 	if( retPair.second == false )
-		STRATEGIX_ERROR( string("More than one EntiInfo with name: ") + entityInfo->name );
+		STRATEGIX_ERROR("More than one EntiInfo with name: " + entityInfo->name);
 }
 
 }

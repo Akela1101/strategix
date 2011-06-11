@@ -43,7 +43,7 @@ namespace Strategix
 		virtual const char* what() const throw()
 		{
 			stringstream ss; ss << line;
-			string s = string("Error on line ") + ss.str() + " in file: " + file + " >> " + message;
+			string s = "Error on line " + ss.str() + " in file: " + file + " >> " + message;
 			return s.c_str();
 		}
 	};

@@ -17,8 +17,7 @@ namespace Strategix
 MapsPathsFinder::MapsPathsFinder(const Map &map)
 	:
 	map(map)
-{
-}
+{}
 
 sh_p<MapsPath> MapsPathsFinder::FindPath(const MapCoord from, const MapCoord till)
 {
