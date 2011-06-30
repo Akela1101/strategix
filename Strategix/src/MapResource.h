@@ -8,6 +8,8 @@
 #ifndef _MAPRESOURCE_H
 #define	_MAPRESOURCE_H
 
+#include "KernelBase.h"
+
 #include <string>
 
 #include "Strategix_Forward.h"
@@ -19,12 +21,13 @@ namespace Strategix
 	
 	struct MapResource
 	{
-		const string name;
+		const ResourceInfo &resourceInfo;
 		const MapCoord mapCoord;
 		float amount;
 
 		MapResource(const string name, const MapCoord mapCoord, const float amount)
-			: name(name), mapCoord(mapCoord), amount(amount) {}
+			: resourceInfo(KernelBase::GS().GetResourceInfo(name)), mapCoord(mapCoord), amount(amount)
+		{}
 	};
 }
 

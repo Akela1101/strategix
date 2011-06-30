@@ -37,9 +37,9 @@ namespace Strategix
 
 	struct FeatureInfoCollect : FeatureInfo
 	{
-		ResType speed; // Res/sec
+		float speed; // Res/sec
 		float radius; // radius Enti is able to collect from
-		ResType capacity;
+		float capacity;
 
 		FeatureInfoCollect(const float speed, const float radius, const float capacity)
 			: speed(speed), radius(radius), capacity(capacity) {}

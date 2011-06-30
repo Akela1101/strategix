@@ -22,6 +22,8 @@ namespace Sample1
 		string meshName;
 		float meshScale;
 
+		EntiInfoMesh() : EntiInfo() {}
+
 		virtual EntiInfoMesh* copy() const
 		{
 			EntiInfoMesh *copy = new EntiInfoMesh();

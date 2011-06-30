@@ -5,10 +5,11 @@
  * Created on 13 Февраль 2010 г., 23:19
  */
 
+#include "Resources.h"
+#include "ConfigurationBuilder.h"
 #include "TechTreesBuilder.h"
+#include "StrategixError.h"
 
-#include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/xml_parser.hpp>
 #include <boost/filesystem.hpp>
 
 #include "KernelBase.h"
@@ -17,29 +18,17 @@
 namespace Strategix
 {
 	using namespace std;
-	using namespace boost;
-	namespace pt = boost::property_tree;
+	using namespace boost;	
 	namespace fs = boost::filesystem;
 
-void KernelBase::Configure(const string configFileName)
+
+void KernelBase::Configure(sh_p<ConfigurationBuilder> configurationBuilder,
+		sh_p<TechTreesBuilder> techTreesBuilder)
 {
-	pt::ptree propTree;
-	pt::read_xml(configFileName, propTree);
-
-	int i = 0;
-	foreach( const pt::ptree::value_type &v, propTree.get_child("resource_types") )
-	{
-		const string meshName = v.second.get<string>("mesh");
-		resourceInfos[v.first].reset(new ResourceInfo(v.first, meshName, i++));
-	}
-}
-
-void KernelBase::BuildTechTrees(sh_p<TechTreesBuilder> techTreesBuilder)
-{	
+	configurationBuilder->Build(&resourceInfos);
 	techTreesBuilder->Build(&techTrees);
 }
 
-// Checking directory with Maps
 sh_p<vector<string> > KernelBase::GetMapNames()
 {
 	sh_p<vector<string> > mapNames(new vector<string>());
@@ -55,7 +44,6 @@ sh_p<vector<string> > KernelBase::GetMapNames()
 	return mapNames;
 }
 
-// Checking TechTree
 sh_p<vector<string> > KernelBase::GetRaceNames()
 {
 	sh_p<vector<string> > raceNames(new vector<string>());
@@ -65,6 +53,26 @@ sh_p<vector<string> > KernelBase::GetRaceNames()
 		raceNames->push_back(tt_pair.second->raceName);
 	}
 	return raceNames;
+}
+
+Resource KernelBase::MakeResource(const string name, const float amount)
+{
+	ResourceInfosType::iterator iRi = resourceInfos.find(name);
+	if( iRi == resourceInfos.end() )
+	{
+		STRATEGIX_ERROR("There is no resource named: " + name);
+	}
+	return Resource(iRi->first, amount);
+}
+
+sh_p<Resources> KernelBase::MakeResources()
+{
+	sh_p<Resources> resourses(new Resources);
+	foreach( const ResourceInfosType::value_type &ri, resourceInfos )
+	{
+		resourses->values.insert(make_pair(ri.first, 0));
+	}
+	return resourses;
 }
 
 }

@@ -21,7 +21,7 @@ namespace Strategix
 	{
 	protected:
 		const FeatureInfoCollect *featureInfoCollect; // Link to tree
-		const ResType &capacity; // == featureInfoCollect->capacity
+		const float &capacity; // == featureInfoCollect->capacity
 		
 	private:
 		float load; // amount of resource Enti is holding, load must be float to avoid loses

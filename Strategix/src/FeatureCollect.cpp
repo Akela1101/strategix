@@ -5,6 +5,7 @@
  * Created on 18 Май 2011 г., 14:48
  */
 
+#include "KernelBase.h"
 #include "Enti.h"
 #include "EntiSlot.h"
 #include "Player.h"
@@ -114,7 +115,7 @@ void FeatureCollect::OnComplete(bool isComplete)
 	else // near the collector, so unload
 	{
 		enti->entiSlot->OnBringStop();
-		enti->player->AddResources(Resources(0, load));
+		enti->player->AddResource(KernelBase::GS().MakeResource("gold", load)); // @#~ Repair for any resource !!!!!!!!
 		load = 0;
 
 		// Going back to resource

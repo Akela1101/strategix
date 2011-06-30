@@ -39,15 +39,14 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/MapFull.o \
 	${OBJECTDIR}/src/Player.o \
 	${OBJECTDIR}/src/StrategixLog.o \
-	${OBJECTDIR}/src/Resources.o \
 	${OBJECTDIR}/src/FeatureMove.o \
 	${OBJECTDIR}/src/FeatureCollect.o \
 	${OBJECTDIR}/src/MapsPathsFinder.o \
 	${OBJECTDIR}/src/TechTree.o \
 	${OBJECTDIR}/src/FeatureAttack.o \
 	${OBJECTDIR}/src/Enti.o \
-	${OBJECTDIR}/src/FeatureHealth.o \
 	${OBJECTDIR}/src/KernelBase.o \
+	${OBJECTDIR}/src/FeatureHealth.o \
 	${OBJECTDIR}/src/CoordStructs.o
 
 
@@ -107,11 +106,6 @@ ${OBJECTDIR}/src/StrategixLog.o: src/StrategixLog.cpp
 	${RM} $@.d
 	$(COMPILE.cc) -g -Isrc -I../include_common -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/StrategixLog.o src/StrategixLog.cpp
 
-${OBJECTDIR}/src/Resources.o: src/Resources.cpp 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} $@.d
-	$(COMPILE.cc) -g -Isrc -I../include_common -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Resources.o src/Resources.cpp
-
 ${OBJECTDIR}/src/FeatureMove.o: src/FeatureMove.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
@@ -142,15 +136,15 @@ ${OBJECTDIR}/src/Enti.o: src/Enti.cpp
 	${RM} $@.d
 	$(COMPILE.cc) -g -Isrc -I../include_common -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Enti.o src/Enti.cpp
 
-${OBJECTDIR}/src/FeatureHealth.o: src/FeatureHealth.cpp 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} $@.d
-	$(COMPILE.cc) -g -Isrc -I../include_common -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/FeatureHealth.o src/FeatureHealth.cpp
-
 ${OBJECTDIR}/src/KernelBase.o: src/KernelBase.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.cc) -g -Isrc -I../include_common -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/KernelBase.o src/KernelBase.cpp
+
+${OBJECTDIR}/src/FeatureHealth.o: src/FeatureHealth.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -g -Isrc -I../include_common -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/FeatureHealth.o src/FeatureHealth.cpp
 
 ${OBJECTDIR}/src/CoordStructs.o: src/CoordStructs.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

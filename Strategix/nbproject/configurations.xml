@@ -2,6 +2,7 @@
 <configurationDescriptor version="69">
   <logicalFolder name="root" displayName="root" projectFiles="true">
     <logicalFolder name="src" displayName="src" projectFiles="true">
+      <itemPath>src/ConfigurationBuilder.h</itemPath>
       <itemPath>src/CoordStructs.cpp</itemPath>
       <itemPath>src/CoordStructs.h</itemPath>
       <itemPath>src/Enti.cpp</itemPath>
@@ -36,8 +37,8 @@
       <itemPath>src/Player.cpp</itemPath>
       <itemPath>src/Player.h</itemPath>
       <itemPath>src/PlayerSlot.h</itemPath>
+      <itemPath>src/Resource.h</itemPath>
       <itemPath>src/ResourceInfo.h</itemPath>
-      <itemPath>src/Resources.cpp</itemPath>
       <itemPath>src/Resources.h</itemPath>
       <itemPath>src/StrategixCommon.h</itemPath>
       <itemPath>src/StrategixError.h</itemPath>

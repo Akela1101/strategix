@@ -43,6 +43,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/OgreWrap/src/MyFrameListener.o \
 	${OBJECTDIR}/OgreWrap/src/TerrainPositioner.o \
 	${OBJECTDIR}/OgreWrap/src/OObject.o \
+	${OBJECTDIR}/src/ConfigurationBuilderFromXml.o \
 	${OBJECTDIR}/OgreWrap/src/LabelsHolder.o \
 	${OBJECTDIR}/OgreWrap/src/OObjectEntiSlot.o \
 	${OBJECTDIR}/OgreWrap/src/ObjectTitle.o
@@ -123,6 +124,11 @@ ${OBJECTDIR}/OgreWrap/src/OObject.o: OgreWrap/src/OObject.cpp
 	${MKDIR} -p ${OBJECTDIR}/OgreWrap/src
 	${RM} $@.d
 	$(COMPILE.cc) -g -Isrc -IOgreWrap/src -I../Strategix/src -I../include_common -I/usr/include/OGRE -I/usr/include/OIS -I/usr/local/include/MYGUI -MMD -MP -MF $@.d -o ${OBJECTDIR}/OgreWrap/src/OObject.o OgreWrap/src/OObject.cpp
+
+${OBJECTDIR}/src/ConfigurationBuilderFromXml.o: src/ConfigurationBuilderFromXml.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -g -Isrc -IOgreWrap/src -I../Strategix/src -I../include_common -I/usr/include/OGRE -I/usr/include/OIS -I/usr/local/include/MYGUI -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/ConfigurationBuilderFromXml.o src/ConfigurationBuilderFromXml.cpp
 
 ${OBJECTDIR}/OgreWrap/src/LabelsHolder.o: OgreWrap/src/LabelsHolder.cpp 
 	${MKDIR} -p ${OBJECTDIR}/OgreWrap/src

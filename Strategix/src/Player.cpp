@@ -25,7 +25,8 @@ Player::Player(const string name, const PlayerType playerType,
 	name(name),
 	playerType(playerType),
 	playerNumber(playerNumber),
-	techTree(new TechTree(KernelBase::GS().GetTechTree(raceName)))
+	resources(KernelBase::GS().MakeResources()),
+	techTree(KernelBase::GS().MakeTechTreeCopy(raceName))
 {}
 
 void Player::Start()
@@ -73,15 +74,13 @@ void Player::AddMapResource(sh_p<MapResource> mapResource)
 		playerSlot->OnAddMapResource(mapResource);
 }
 
-bool Player::AddResources(const Resources deltaResources)
+bool Player::AddResource(const Resource deltaResource)
 {
-	if( resources.isNegative() )
-		return false;
-
-	resources += deltaResources;
+	// @#~ Check it
+	
+	*resources += deltaResource;
 	if( playerSlot )
 		playerSlot->OnChangeResources(resources);
-
 	return true;
 }
 

@@ -8,7 +8,9 @@
 #ifndef _RESOURCES_H
 #define	_RESOURCES_H
 
-#include <vector>
+#include "Resource.h"
+
+#include <map>
 #include <string>
 #include <algorithm>
 
@@ -17,76 +19,100 @@ namespace Strategix
 {
 	using namespace std;
 
-	typedef float ResType;
-
 	class Resources
 	{
-		vector<ResType> resources;
-		
-	private:
-		struct opAdd { int operator() (ResType i, ResType j) { return i + j; } };
-		struct opSub { int operator() (ResType i, ResType j) { return i - j; } };
-		struct opMinus { int operator() (ResType i) { return -i; } };
-		struct isNeg { bool operator() (ResType i) { return i < 0; } };
+		friend class KernelBase;
 
+		map<string, float> values;
+	
 	public:
-		// Криво, блин =__=
-		Resources();
-		Resources(const int index, const ResType res);
+		Resources(const Resources &_c) { init(_c); }
+		Resources& operator =(const Resources &_c) { if( this != &_c ) init(_c);   return *this; }
 
-		Resources(const Resources &_c);
-		Resources & operator =(const Resources &_c);
+		// Get @#~ Needless?
+		const map<string, float> &Get() { return values; }
 
 		// Get resource by name
-		ResType& operator() (const string resourceName);
-		const ResType& operator() (const string resourceName) const;
+		float& at(const string resourceName)
+		{
+			return values.find(resourceName)->second; // never throws
+		}
+		const float& at(const string resourceName) const
+		{
+			return values.find(resourceName)->second; // never throws
+		}
 
+		// with Resource
+		Resources operator +(const Resource &resource) const
+		{
+			Resources new_r = *this;
+			new_r.at(resource.value.first) += resource.value.second;
+			return new_r;
+		}
+		Resources operator -(const Resource &resource) const
+		{
+			Resources new_r = *this;
+			new_r.at(resource.value.first) -= resource.value.second;
+			return new_r;
+		}
+		Resources& operator +=(const Resource &resource)
+		{
+			this->at(resource.value.first) += resource.value.second;
+			return *this;
+		}
+		Resources& operator -=(const Resource &resource)
+		{
+			this->at(resource.value.first) -= resource.value.second;
+			return *this;
+		}
+
+		// with other Resources
 		Resources operator +(const Resources &_r) const
 		{
 			Resources new_r;
-			transform(resources.begin(), resources.end(),
-				_r.resources.begin(), new_r.resources.begin(), opAdd());
+			map<string, float>::const_iterator iValue1 = values.begin();
+			map<string, float>::const_iterator iValue2 = _r.values.begin();
+			
+			for( ; iValue1 != values.end(); ++iValue1, ++iValue2 )
+			{
+				new_r.values.insert(make_pair(iValue1->first, iValue1->second + iValue2->second));
+			}
 			return new_r;
 		}
+//		Resources operator -(const Resources &_r) const
+//		{
+//			Resources new_r;
+//			transform(values.begin(), values.end(),
+//				_r.values.begin(), new_r.values.begin(), opSub());
+//			return new_r;
+//		}
+//		Resources& operator +=(const Resources &_r)
+//		{
+//			transform(values.begin(), values.end(),
+//				_r.values.begin(), values.begin(), opAdd());
+//			return *this;
+//		}
+//		Resources& operator -=(const Resources &_r)
+//		{
+//			transform(values.begin(), values.end(),
+//				_r.values.begin(), values.begin(), opSub());
+//			return *this;
+//		}
 
-		Resources operator -(const Resources &_r) const
-		{
-			Resources new_r;
-			transform(resources.begin(), resources.end(),
-				_r.resources.begin(), new_r.resources.begin(), opSub());
-			return new_r;
-		}
-
-		Resources& operator +=(const Resources &_r)
-		{
-			transform(resources.begin(), resources.end(),
-				_r.resources.begin(), resources.begin(), opAdd());
-			return *this;
-		}
-
-		Resources& operator -=(const Resources &_r)
-		{
-			transform(resources.begin(), resources.end(),
-				_r.resources.begin(), resources.begin(), opSub());
-			return *this;
-		}
-
-		Resources operator -()
-		{
-			Resources new_r;
-			transform(resources.begin(), resources.end(), new_r.resources.begin(), opMinus());
-			return new_r;
-		}
-
-		bool isNegative()
-		{
-			if( resources.end() == find_if(resources.begin(), resources.end(), isNeg()) )
-				return false;
-			return true;
-		}
+//		Resources operator -()
+//		{
+//			Resources new_r;
+//			transform(values.begin(), values.end(), new_r.values.begin(), opMinus());
+//			return new_r;
+//		}
 
 	private:
-		inline void init(const Resources &_c);
+		Resources() {}
+		void init(const Resources &_c) { values = _c.values; }
+
+//		struct opAdd { int operator() (const Resource::PairType i, const Resource::PairType j) { return i.second + j.second; } };
+//		struct opSub { int operator() (const Resource::PairType i, const Resource::PairType j) { return i.second - j.second; } };
+//		struct opMinus { int operator() (Resource::PairType i) { return -i.second; } };
 	};
 }
 

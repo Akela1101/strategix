@@ -8,6 +8,9 @@
 #ifndef _STRATEGIXCOMMON_H
 #define	_STRATEGIXCOMMON_H
 
+#include "Resource.h"
+
+
 namespace Strategix
 {
 	enum PlayerType

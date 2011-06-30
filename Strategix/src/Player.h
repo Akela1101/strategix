@@ -8,12 +8,12 @@
 #ifndef _PLAYER_H
 #define	_PLAYER_H
 
+#include "Strategix_Forward.h"
+#include "MapResource.h"
+
 #include <map>
 #include <string>
 #include <set>
-
-#include "Strategix_Forward.h"
-#include "MapResource.h"
 
 
 namespace Strategix
@@ -30,8 +30,8 @@ namespace Strategix
 		string name; // Name given by user.
 		PlayerType playerType; // human, ai, net
 		const int playerNumber; // number of player on the map
-		Resources resources;
 		
+		sh_p<Resources> resources;
 		sh_p<TechTree> techTree; // local COPY of race tree
 		sh_p<MapLocal> mapLocal;
 
@@ -49,7 +49,7 @@ namespace Strategix
 		void Tick(const float seconds);
 		void AddEnti(sh_p<Enti> enti);
 		void AddMapResource(sh_p<MapResource> mapResource);
-		bool AddResources(const Resources deltaResources);
+		bool AddResource(const Resource deltaResource);
 
 	private:
 		Player(const Player& orig);

@@ -6,6 +6,7 @@
  */
 
 #include "MyApp.h"
+#include "ConfigurationBuilderFromXml.h"
 #include "TechTreesBuilderFromXml.h"
 
 #include <Strategix.h>
@@ -89,8 +90,9 @@ int main(int argc, char *argv[])
 	// What is current path? ( Must be /Strategix/Sample1 )
 	cout << "Current dir: " << boost::filesystem::current_path() << endl;
 
-	KernelBase::GS().Configure("xml/strategix_config.xml");
-	KernelBase::GS().BuildTechTrees(sh_p<TechTreesBuilder>(new TechTreesBuilderFromXml));
+	KernelBase::GS().Configure(
+		sh_p<ConfigurationBuilder>(new ConfigurationBuilderFromXml),
+		sh_p<TechTreesBuilder>(new TechTreesBuilderFromXml) );
 
 	cout << endl << "Maps: " << endl;
 	sh_p<std::vector<std::string> > mapNames = KernelBase::GS().GetMapNames();
@@ -116,7 +118,7 @@ int main(int argc, char *argv[])
 		MyApp myApp(kernel);
 		try
 		{
-			myApp.go(false);
+			myApp.go(true);
 		}
 		catch( Ogre::Exception& e )
 		{

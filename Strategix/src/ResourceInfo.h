@@ -8,17 +8,23 @@
 #ifndef _RESOURCEINFO_H
 #define	_RESOURCEINFO_H
 
+#include <map>
+#include <string>
+
+#include "Strategix_Forward.h"
+
+
 namespace Strategix
 {
 	struct ResourceInfo
 	{
 		const string name;
-		const string meshName;
-		const int index; // index in resource vector
 
-		ResourceInfo(const string name, const string meshName, const int index)
-			:name(name), meshName(meshName), index(index) {}
+		ResourceInfo(const string name)	: name(name) {}
+		virtual ~ResourceInfo() {}
 	};
+
+	typedef std::map<std::string, sh_p<ResourceInfo> > ResourceInfosType;
 }
 
 #endif	/* _RESOURCEINFO_H */

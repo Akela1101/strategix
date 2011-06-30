@@ -47,14 +47,15 @@ void HumanPlayerSlot::OnAddMapResource(sh_p<MapResource> mapResource)
 	resources.push_back(sh_p<OObjectResource>(new OObjectResource(mapResource)));
 }
 
-void HumanPlayerSlot::OnChangeResources(const Resources &newResources)
+void HumanPlayerSlot::OnChangeResources(sh_p<Resources> newResources)
 {
-	string resourceCaption = "#FFFFFF";
-	foreach( const ResourceInfos::value_type pa, KernelBase::GS().GetResourceInfos() )
+	string resourceCaption = "#FFFFFF"; // white
+	typedef std::map<string, float>::value_type ValueType;
+	foreach( const ValueType pa, newResources->Get() )
 	{
 		resourceCaption += pa.first + ": ";
 
-		std::stringstream ss; ss << newResources(pa.first);
+		std::stringstream ss; ss << pa.second;
 		resourceCaption += ss.str() + "   ";
 	}
 	resourcesText->setCaption(resourceCaption);

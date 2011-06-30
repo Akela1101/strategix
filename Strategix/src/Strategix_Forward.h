@@ -13,13 +13,13 @@
 #include "StrategixError.h"
 
 #include "CoordStructs.h"
-#include "Resources.h"
 
 #include "Nya.hpp"
 
 
 namespace Strategix
 {
+	class ConfigurationBuilder;
 	class Enti;
 	class EntiInfo;	
 	class EntiSlot;	

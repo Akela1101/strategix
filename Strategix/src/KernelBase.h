@@ -24,26 +24,27 @@ namespace Strategix
 	using namespace std;
 	using namespace boost;
 
-	typedef std::map<std::string, sh_p<ResourceInfo> > ResourceInfos;
 
 	class KernelBase : public StrategixSingleton<KernelBase>
 	{
 	private:
 		TechTreesType techTrees;
-		
-		ResourceInfos resourceInfos;
+		ResourceInfosType resourceInfos;
 
-	public:
-		// These functions are called before initialize Kernel!
-		void Configure(const string configFileName);
-		void BuildTechTrees(sh_p<TechTreesBuilder> techTreesBuilder);
+	public:	
+		// Call before initialize Kernel!
+		void Configure(sh_p<ConfigurationBuilder> configurationBuilder,
+				sh_p<TechTreesBuilder> techTreesBuilder);
 		
 		// GET
 		sh_p<vector<string> > GetMapNames();
-		sh_p<vector<string> > GetRaceNames();
-		const TechTree& GetTechTree(const string raceName) { return *techTrees[raceName]; }
-		const ResourceInfo& GetResourceInfo(const string resourceName) { return *resourceInfos[resourceName]; }
-		const ResourceInfos& GetResourceInfos() { return resourceInfos; }
+		sh_p<vector<string> > GetRaceNames();		
+		const ResourceInfo& GetResourceInfo(const string name) { return *resourceInfos[name]; }
+
+		// MAKE
+		sh_p<TechTree> MakeTechTreeCopy(const string raceName) { return sh_p<TechTree>(new TechTree(*techTrees[raceName])); }
+		Resource MakeResource(const string name, const float amount);
+		sh_p<Resources> MakeResources(); // filled with zero
 	};
 }
 

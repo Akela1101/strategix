@@ -8,7 +8,9 @@
 #ifndef _ENTIINFO_H
 #define	_ENTIINFO_H
 
+#include "KernelBase.h"
 #include "FeatureInfo.h"
+#include "Resources.h"
 
 #include <map>
 #include <string>
@@ -25,14 +27,14 @@ namespace Strategix
 	{
 		string name;
 		string kind; // building or entiSlot
-		Resources resources;
+		sh_p<Resources> resources;
 		vector<string> depends; 
 		vector<string> provides;
 		
 		typedef map<string, sh_p<FeatureInfo> > FeatureInfosType;
 		FeatureInfosType featureInfos;
 
-		EntiInfo() {}
+		EntiInfo() : resources(KernelBase::GS().MakeResources()) {}
 		virtual ~EntiInfo() {}
 
 		// virtual copy constructor
@@ -48,7 +50,7 @@ namespace Strategix
 		{
 			name = _c.name;
 			kind = _c.kind;
-			resources = _c.resources;
+			*resources = *_c.resources;
 			depends = _c.depends;
 			provides = _c.provides;
 

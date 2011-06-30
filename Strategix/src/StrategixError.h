@@ -24,13 +24,6 @@ namespace Strategix
 		const string message;
 
 	public:
-		StrategixError(const char *file, int line, const char *message)
-			:
-			file(file),
-			line(line),
-			message(message)
-		{}
-
 		StrategixError(const char *file, int line, const string message)
 			:
 			file(file),

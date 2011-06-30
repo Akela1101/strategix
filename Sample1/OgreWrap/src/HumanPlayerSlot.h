@@ -37,7 +37,7 @@ namespace Sample1
 
 		virtual void OnAddEnti(Enti *enti);
 		virtual void OnAddMapResource(sh_p<MapResource> mapResource);
-		virtual void OnChangeResources(const Resources &newResources);
+		virtual void OnChangeResources(sh_p<Resources> newResources);
 	};
 }
 

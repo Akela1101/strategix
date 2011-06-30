@@ -76,11 +76,11 @@ void TechTreesBuilderFromXml::BuildEntity(sh_p<TechTree> techTree, const pt::ptr
 
 	foreach( const pt::ptree::value_type &v, entityPropTree.get_child("resources") )
 	{
-		const string &resName = v.first; // gold or something else
-		// @#~ Check if such resName is defined in config
+		const string &resourceName = v.first; // gold or something else
+		// @#~ Check if such resName is not defined in config !!!!!
 
-		const pt::ptree &res = v.second; 
-		eim->resources(resName) = res.get_value<ResType>();
+		const pt::ptree &resource = v.second; 
+		eim->resources->at(resourceName) = resource.get_value<float>();
 	}
 /*
 	foreach( const pt::ptree::value_type &v, entityPropTree.get_child("depends", pt::ptree()) ) // Empty if no depends
@@ -110,9 +110,9 @@ void TechTreesBuilderFromXml::BuildEntity(sh_p<TechTree> techTree, const pt::ptr
 			}
 			else if( featureName == "collect" )
 			{
-				const float speed = feature.get<ResType>("speed");
+				const float speed = feature.get<float>("speed");
 				const float radius = feature.get<float>("radius");
-				const float capacity = feature.get_child("capacity").get<ResType>("gold");
+				const float capacity = feature.get_child("capacity").get<float>("gold");
 				// @#~ Only gold !!!! So change it to Resources.
 				eim->featureInfos[featureName].reset(new FeatureInfoCollect(speed, radius, capacity));
 			}

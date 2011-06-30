@@ -24,7 +24,7 @@ namespace Sample1
 		TechTreesType *pTechTrees; // Link to building tree
 
 	public:
-		virtual void Build(TechTreesType *pTechTrees);
+		void Build(TechTreesType *pTechTrees);
 
 	private:
 		void BuildRace(const string &raceName, const pt::ptree &property_tree);

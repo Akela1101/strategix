@@ -75,12 +75,15 @@ MapFull::MapFull(const string &name)
 	// Resources
 	int nResources, i, j;
 	string resourceName;
-	ResType initialAmount;
+	float initialAmount;
 
 	fin >> nResources;
 	for( int iRes = nResources; iRes; --iRes )
 	{
 		fin >> i >> j >> resourceName >> initialAmount;
+		
+		// @#~ проверять правильность входных параметров!!!
+
 		cells[j][i].mapResource.reset(new MapResource(resourceName, MapCoord(i, j), initialAmount));
 	}
 

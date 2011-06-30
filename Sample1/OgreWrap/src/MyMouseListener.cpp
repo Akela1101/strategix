@@ -89,8 +89,7 @@ bool MyMouseListener::mousePressed(const OIS::MouseEvent &mouse_event, OIS::Mous
 			{
 				OObjectEntiSlot *oObjectTarget
 					= any_cast<OObjectEntiSlot*>(entity->getUserAny());
-				oObjectEntiSlot->enti->
-					Do<FeatureAttack>()->Attack(oObjectTarget->enti);
+				oObjectEntiSlot->enti->Do<FeatureAttack>()->Attack(oObjectTarget->enti);
 			}
 			else // Move
 			{

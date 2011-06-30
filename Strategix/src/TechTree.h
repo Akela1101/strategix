@@ -31,6 +31,8 @@ namespace Strategix
 
 	public:
 		TechTree(const string &raceName);
+		virtual ~TechTree() {}
+		
 		TechTree(const TechTree &_c);
 		TechTree & operator =(const TechTree &_c);
 		inline void init(const TechTree &_c);

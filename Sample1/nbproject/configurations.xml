@@ -29,8 +29,11 @@
       <itemPath>OgreWrap/src/TerrainPositioner.h</itemPath>
     </logicalFolder>
     <logicalFolder name="src" displayName="src" projectFiles="true">
+      <itemPath>src/ConfigurationBuilderFromXml.cpp</itemPath>
+      <itemPath>src/ConfigurationBuilderFromXml.h</itemPath>
       <itemPath>src/EntiInfoMesh.h</itemPath>
       <itemPath>src/Main.cpp</itemPath>
+      <itemPath>src/ResourceInfoMesh.h</itemPath>
       <itemPath>src/Sample1_Forward.h</itemPath>
       <itemPath>../include_common/Strategix.h</itemPath>
       <itemPath>src/TechTreesBuilderFromXml.cpp</itemPath>
