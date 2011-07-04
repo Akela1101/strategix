@@ -24,61 +24,42 @@ namespace Strategix
 FeatureCollect::FeatureCollect(const FeatureInfo *featureInfo, Enti *enti)
 	:
 	Feature(enti),
-	featureInfoCollect(dynamic_cast<const FeatureInfoCollect*>(featureInfo)),
-	capacity(featureInfoCollect->capacity),
-	load(0),
-	collector(0),
+	featureInfoCollect(dynamic_cast<const FeatureInfoCollect*>(featureInfo)),	
 	isMovingToCollector(false)
 {}
 
 bool FeatureCollect::Collect(sh_p<MapResource> mapResource)
 {
+	if( !mapResource )
+		return false;
+	
 	// Try move and set OnComplete for this
 	if( !enti->Do<FeatureMove>()->Move(mapResource->mapCoord, this) )
 		return false;
 
-	isMovingToCollector = false;
-
 	// Setting target resource
 	this->mapResource = mapResource;
+	
+	resourceName = mapResource->GetResourceInfo()->name;
+	capacity = featureInfoCollect->capacities->at(resourceName);
+	load = 0;
+	isMovingToCollector = false;
+
 	return true;
 }
 
 bool FeatureCollect::Tick(const float seconds)
 {
 	// If Enti is not full and resource still exists
-	sh_p<MapResource> shMapResource; // Shared
-	if( load < capacity && ( shMapResource = mapResource.lock() ) )
+	if( load < capacity && mapResource )
 	{
 		float piece = seconds * featureInfoCollect->speed;
-		if( piece > shMapResource->amount )
+		if( piece > capacity - load )
 		{
-			piece = shMapResource->amount;
+			piece = capacity - load; // all it can bring
 		}
+		load += enti->player->mapLocal->GetResource(mapResource, piece);
 
-		// piece fits
-		if( load + piece < capacity )
-		{
-			// resource is over
-			if( piece == shMapResource->amount )
-			{
-				shMapResource->amount = 0;
-				// remove resource from Map
-				MapCoord mapCoord = shMapResource->mapCoord;
-				enti->player->mapLocal->GetCell(mapCoord).mapResource.reset();
-			}			
-			else // resource remained
-			{
-				shMapResource->amount -= piece;
-			}			
-			load += piece;
-		}		
-		else // piece does not fit
-		{
-			// , so load all we can
-			shMapResource->amount -= capacity - load;
-			load = capacity;
-		}
 		enti->entiSlot->OnCollect();
 	}
 	else // full load or no more resources
@@ -93,6 +74,10 @@ bool FeatureCollect::Tick(const float seconds)
 void FeatureCollect::Stop()
 {
 	enti->entiSlot->OnCollectStop();
+	if( mapResource && mapResource->GetResource() == 0 )
+	{
+		mapResource.reset();
+	}
 }
 
 void FeatureCollect::OnComplete(bool isComplete)
@@ -100,7 +85,7 @@ void FeatureCollect::OnComplete(bool isComplete)
 	if( !isComplete )
 		return;
 	
-	if( !isMovingToCollector ) // moving to resource complete
+	if( !isMovingToCollector ) // neared to the resource
 	{
 		if( load < capacity )
 		{
@@ -112,16 +97,16 @@ void FeatureCollect::OnComplete(bool isComplete)
 			MoveToCollector();
 		}
 	}	
-	else // near the collector, so unload
+	else // neared to the collector, so unload
 	{
 		enti->entiSlot->OnBringStop();
-		enti->player->AddResource(KernelBase::GS().MakeResource("gold", load)); // @#~ Repair for any resource !!!!!!!!
+		enti->player->AddResource(KernelBase::GS().MakeResource(resourceName, load));
 		load = 0;
 
 		// Going back to resource
-		if( !mapResource.expired() )
+		if( mapResource )
 		{
-			Collect(sh_p<MapResource>(mapResource));
+			Collect(mapResource);
 		}
 	}
 }
@@ -138,10 +123,8 @@ Enti* FeatureCollect::FindCollector()
 
 void FeatureCollect::MoveToCollector()
 {
-	if( !collector )
-	{
-		collector = FindCollector(); // @#~ check if 0.
-	}
+	Enti *collector = FindCollector(); // @#~ check if 0.
+
 	if( enti->Do<FeatureMove>()->Move(collector->coord, this) )
 	{
 		isMovingToCollector = true;

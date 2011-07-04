@@ -8,6 +8,8 @@
 #ifndef _MAP_H
 #define	_MAP_H
 
+#include "MapResource.h"
+
 #include <list>
 
 #include "Strategix_Forward.h"
@@ -33,12 +35,29 @@ namespace Strategix
 		int width, length;
 		Cell **cells; // [rows][columns] (i.e. [y][x])
 			
-	public:		
+	public:
+		virtual ~Map() {}
+
 		const string &GetName() const { return name; }
 		const int GetWidth() const { return width; }
 		const int GetLength() const { return length; }
 		const Cell &GetCell(const int x, const int y) const	{ return cells[y][x]; }
 		const Cell &GetCell(const MapCoord mc) const { return cells[mc.y][mc.x]; }
+		const float GetResource(sh_p<MapResource> mapResource, const float amount)
+		{
+			if( mapResource->resource >= amount )
+			{
+				mapResource->resource -= amount;
+				return amount;
+			}
+			else // remove resource
+			{
+				const float remain = mapResource->resource;
+				mapResource->resource -= remain;
+				mapResource.reset();
+				return remain;
+			}
+		}
 
 		bool IsCell(const MapCoord &mc) const
 		{

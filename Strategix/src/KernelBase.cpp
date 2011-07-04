@@ -75,4 +75,11 @@ sh_p<Resources> KernelBase::MakeResources()
 	return resourses;
 }
 
+sh_p<Resources> KernelBase::MakeResources(const ResourcesAllType& values)
+{
+	sh_p<Resources> resourses(new Resources);
+	resourses->values = values;
+	return resourses;
+}
+
 }

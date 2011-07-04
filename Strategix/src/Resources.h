@@ -10,8 +10,6 @@
 
 #include "Resource.h"
 
-#include <map>
-#include <string>
 #include <algorithm>
 
 
@@ -23,46 +21,42 @@ namespace Strategix
 	{
 		friend class KernelBase;
 
-		map<string, float> values;
+		ResourcesAllType values;
 	
 	public:
 		Resources(const Resources &_c) { init(_c); }
 		Resources& operator =(const Resources &_c) { if( this != &_c ) init(_c);   return *this; }
 
 		// Get @#~ Needless?
-		const map<string, float> &Get() { return values; }
+		const ResourcesAllType &Get() { return values; }
 
-		// Get resource by name
-		float& at(const string resourceName)
+		// Get resource by name		
+		const Resource at(const string resourceName) const
 		{
-			return values.find(resourceName)->second; // never throws
-		}
-		const float& at(const string resourceName) const
-		{
-			return values.find(resourceName)->second; // never throws
+			return *values.find(resourceName); // never throws
 		}
 
 		// with Resource
 		Resources operator +(const Resource &resource) const
 		{
 			Resources new_r = *this;
-			new_r.at(resource.value.first) += resource.value.second;
+			new_r.set(resource.value.first) += resource.value.second;
 			return new_r;
 		}
 		Resources operator -(const Resource &resource) const
 		{
 			Resources new_r = *this;
-			new_r.at(resource.value.first) -= resource.value.second;
+			new_r.set(resource.value.first) -= resource.value.second;
 			return new_r;
 		}
 		Resources& operator +=(const Resource &resource)
 		{
-			this->at(resource.value.first) += resource.value.second;
+			this->set(resource.value.first) += resource.value.second;
 			return *this;
 		}
 		Resources& operator -=(const Resource &resource)
 		{
-			this->at(resource.value.first) -= resource.value.second;
+			this->set(resource.value.first) -= resource.value.second;
 			return *this;
 		}
 
@@ -110,9 +104,12 @@ namespace Strategix
 		Resources() {}
 		void init(const Resources &_c) { values = _c.values; }
 
-//		struct opAdd { int operator() (const Resource::PairType i, const Resource::PairType j) { return i.second + j.second; } };
-//		struct opSub { int operator() (const Resource::PairType i, const Resource::PairType j) { return i.second - j.second; } };
-//		struct opMinus { int operator() (Resource::PairType i) { return -i.second; } };
+		// for convenience inside the class
+		float &set(const string resourceName) { return values.find(resourceName)->second; }
+
+//		struct opAdd { int operator() (const Resource::ResourceValueType i, const Resource::ResourceValueType j) { return i.second + j.second; } };
+//		struct opSub { int operator() (const Resource::ResourceValueType i, const Resource::ResourceValueType j) { return i.second - j.second; } };
+//		struct opMinus { int operator() (Resource::ResourceValueType i) { return -i.second; } };
 	};
 }
 

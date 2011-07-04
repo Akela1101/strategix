@@ -79,6 +79,7 @@
             <pElem>src</pElem>
             <pElem>../include_common</pElem>
           </incDir>
+          <warningLevel>2</warningLevel>
         </ccTool>
         <archiverTool>
         </archiverTool>
@@ -100,6 +101,7 @@
             <pElem>src</pElem>
             <pElem>../include_common</pElem>
           </incDir>
+          <warningLevel>2</warningLevel>
         </ccTool>
         <fortranCompilerTool>
           <developmentMode>5</developmentMode>

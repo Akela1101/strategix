@@ -9,8 +9,7 @@
 #define	_MAPRESOURCE_H
 
 #include "KernelBase.h"
-
-#include <string>
+#include "Resource.h"
 
 #include "Strategix_Forward.h"
 
@@ -19,15 +18,21 @@ namespace Strategix
 {
 	using namespace std;
 	
-	struct MapResource
+	class MapResource
 	{
-		const ResourceInfo &resourceInfo;
-		const MapCoord mapCoord;
-		float amount;
+		friend class Map;
 
-		MapResource(const string name, const MapCoord mapCoord, const float amount)
-			: resourceInfo(KernelBase::GS().GetResourceInfo(name)), mapCoord(mapCoord), amount(amount)
-		{}
+		Resource resource;
+
+	public:
+		const MapCoord mapCoord;
+
+	public:
+		MapResource(const Resource resource, const MapCoord mapCoord)
+			: resource(resource), mapCoord(mapCoord) {}
+
+		sh_p<const ResourceInfo> GetResourceInfo() const { return KernelBase::GS().GetResourceInfo(resource); }
+		const Resource &GetResource() const { return resource; }
 	};
 }
 

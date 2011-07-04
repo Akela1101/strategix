@@ -42,9 +42,9 @@
         <collect>
           <speed>50</speed>
           <radius>0.5</radius>
-          <capacity>
+          <capacities>
             <gold>200</gold>
-          </capacity>
+          </capacities>
         </collect>
         <health>
           <hp>50</hp>

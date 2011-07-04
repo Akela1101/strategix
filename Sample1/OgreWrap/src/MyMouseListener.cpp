@@ -80,15 +80,12 @@ bool MyMouseListener::mousePressed(const OIS::MouseEvent &mouse_event, OIS::Mous
 			Entity *entity = SelectEntity(mouse_event, mask);
 			if( entity && (mask == RES_MASK) ) // Collect
 			{
-				OObjectResource *oObjectResource
-					= any_cast<OObjectResource*>(entity->getUserAny());
-				oObjectEntiSlot->enti->
-					Do<FeatureCollect>()->Collect(oObjectResource->mapResource);
+				OObjectResource *oObjectResource = any_cast<OObjectResource*>(entity->getUserAny());
+				oObjectEntiSlot->enti->Do<FeatureCollect>()->Collect(oObjectResource->mapResource);
 			}
 			else if( entity && (mask == ENTI_MASK) ) // Attack
 			{
-				OObjectEntiSlot *oObjectTarget
-					= any_cast<OObjectEntiSlot*>(entity->getUserAny());
+				OObjectEntiSlot *oObjectTarget = any_cast<OObjectEntiSlot*>(entity->getUserAny());
 				oObjectEntiSlot->enti->Do<FeatureAttack>()->Attack(oObjectTarget->enti);
 			}
 			else // Move

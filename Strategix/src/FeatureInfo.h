@@ -8,6 +8,8 @@
 #ifndef _FEATUREINFO_H
 #define	_FEATUREINFO_H
 
+#include "Resources.h"
+
 #include "Strategix_Forward.h"
 
 
@@ -30,8 +32,7 @@ namespace Strategix
 	{
 		float speed;
 
-		FeatureInfoMove(const float speed) : speed(speed) {}
-		virtual ~FeatureInfoMove() {}
+		FeatureInfoMove(const float speed) : speed(speed) {}		
 		virtual FeatureInfoMove* copy() { return new FeatureInfoMove(speed); }
 	};
 
@@ -39,12 +40,11 @@ namespace Strategix
 	{
 		float speed; // Res/sec
 		float radius; // radius Enti is able to collect from
-		float capacity;
+		sh_p<Resources> capacities; // Maximum amout of each resource, creature can bear
 
-		FeatureInfoCollect(const float speed, const float radius, const float capacity)
-			: speed(speed), radius(radius), capacity(capacity) {}
-		virtual ~FeatureInfoCollect() {}
-		virtual FeatureInfoCollect* copy() { return new FeatureInfoCollect(speed, radius, capacity); }
+		FeatureInfoCollect(const float speed, const float radius, sh_p<Resources> capacities)
+			: speed(speed), radius(radius), capacities(capacities) {}
+		virtual FeatureInfoCollect* copy() { return new FeatureInfoCollect(speed, radius, capacities); }
 	};
 
 	struct FeatureInfoHealth : FeatureInfo
@@ -54,7 +54,6 @@ namespace Strategix
 		
 		FeatureInfoHealth(const HpType hp, const float regenSpeed)
 			: hp(hp), regenSpeed(regenSpeed) {}
-		virtual ~FeatureInfoHealth() {}
 		virtual FeatureInfoHealth* copy() { return new FeatureInfoHealth(hp, regenSpeed); }
 	};
 
@@ -65,7 +64,6 @@ namespace Strategix
 
 		FeatureInfoAttack(const HpType damage, const float speed)
 			: damage(damage), speed(speed) {}
-		virtual ~FeatureInfoAttack() {}
 		virtual FeatureInfoAttack* copy() { return new FeatureInfoAttack(damage, speed); }
 	};
 }

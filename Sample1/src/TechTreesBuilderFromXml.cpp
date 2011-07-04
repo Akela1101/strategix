@@ -58,13 +58,13 @@ void TechTreesBuilderFromXml::BuildRace(const string &raceName, const pt::ptree 
 
 	foreach( const pt::ptree::value_type &v, propTree.get_child("entities") )
 	{
-		BuildEntity(techTree, v.second);
+		techTree->AddNode(BuildEntity(v.second));
 	}
 
-	pTechTrees->insert(TechTreesType::value_type(raceName, techTree));
+	pTechTrees->insert(std::make_pair(raceName, techTree));
 }
 
-void TechTreesBuilderFromXml::BuildEntity(sh_p<TechTree> techTree, const pt::ptree &entityPropTree)
+sh_p<EntiInfoMesh> TechTreesBuilderFromXml::BuildEntity(const pt::ptree &entityPropTree)
 {
 	sh_p<EntiInfoMesh> eim(new EntiInfoMesh);
 
@@ -73,15 +73,8 @@ void TechTreesBuilderFromXml::BuildEntity(sh_p<TechTree> techTree, const pt::ptr
 
 	eim->meshName = entityPropTree.get<string>("mesh");
 	eim->meshScale = entityPropTree.get<float>("scale");
-
-	foreach( const pt::ptree::value_type &v, entityPropTree.get_child("resources") )
-	{
-		const string &resourceName = v.first; // gold or something else
-		// @#~ Check if such resName is not defined in config !!!!!
-
-		const pt::ptree &resource = v.second; 
-		eim->resources->at(resourceName) = resource.get_value<float>();
-	}
+	
+	eim->resources = BuildResources(entityPropTree.get_child("resources"));
 /*
 	foreach( const pt::ptree::value_type &v, entityPropTree.get_child("depends", pt::ptree()) ) // Empty if no depends
 	{
@@ -111,10 +104,9 @@ void TechTreesBuilderFromXml::BuildEntity(sh_p<TechTree> techTree, const pt::ptr
 			else if( featureName == "collect" )
 			{
 				const float speed = feature.get<float>("speed");
-				const float radius = feature.get<float>("radius");
-				const float capacity = feature.get_child("capacity").get<float>("gold");
-				// @#~ Only gold !!!! So change it to Resources.
-				eim->featureInfos[featureName].reset(new FeatureInfoCollect(speed, radius, capacity));
+				const float radius = feature.get<float>("radius");				
+				sh_p<Resources> capacities = BuildResources(feature.get_child("capacities"));
+				eim->featureInfos[featureName].reset(new FeatureInfoCollect(speed, radius, capacities));
 			}
 			else if( featureName == "health" )
 			{
@@ -131,11 +123,25 @@ void TechTreesBuilderFromXml::BuildEntity(sh_p<TechTree> techTree, const pt::ptr
 		}
 		catch(pt::ptree_error){}
 	}
-
-	techTree->AddNode(eim);
-
+	return eim;
 	// U can catch( ptree_error == ptree_bad_path || ptree_bad_data )
 	// in place of setting default value
+}
+
+sh_p<Resources> TechTreesBuilderFromXml::BuildResources(const pt::ptree &resourcesPropTree)
+{
+	ResourcesAllType values;
+	foreach( const pt::ptree::value_type &v, resourcesPropTree )
+	{
+		const string &resourceName = v.first; // gold or something else
+		if( !KernelBase::GS().GetResourceInfo(resourceName) )
+			STRATEGIX_ERROR("Wrong resource type in one of Races: " + resourceName +
+			                "\nCheck configuration file.");
+
+		const pt::ptree &resource = v.second;
+		values.insert(make_pair(resourceName, resource.get_value<float>()));
+	}
+	return KernelBase::GS().MakeResources(values);
 }
 
 }

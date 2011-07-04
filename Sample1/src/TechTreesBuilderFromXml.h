@@ -12,12 +12,16 @@
 
 #include <boost/property_tree/ptree.hpp>
 
+#include <Strategix_Forward.h>
+
 
 namespace Sample1
 {
 	using namespace Strategix;
 	using namespace std;
 	namespace pt = boost::property_tree;
+
+	class EntiInfoMesh;
 
 	class TechTreesBuilderFromXml : public TechTreesBuilder
 	{
@@ -27,8 +31,9 @@ namespace Sample1
 		void Build(TechTreesType *pTechTrees);
 
 	private:
-		void BuildRace(const string &raceName, const pt::ptree &property_tree);
-		void BuildEntity(sh_p<TechTree> techTree, const pt::ptree &entity_pt);
+		void BuildRace(const string &raceName, const pt::ptree &propTree);
+		sh_p<EntiInfoMesh> BuildEntity(const pt::ptree &entityPropTree);
+		sh_p<Resources> BuildResources(const pt::ptree &resourcesPropTree);
 	};
 }
 

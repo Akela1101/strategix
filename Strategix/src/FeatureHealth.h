@@ -25,8 +25,7 @@ namespace Strategix
 		
 	public:
 		FeatureHealth(const FeatureInfo *featureInfo, Enti *enti);
-		virtual ~FeatureHealth() {}
-
+		
 		virtual bool Tick(const float seconds);
 		virtual void Stop();
 

@@ -33,8 +33,7 @@ namespace Strategix
 
 	public:
 		FeatureMove(const FeatureInfo *featureInfo, Enti *enti);
-		virtual ~FeatureMove() {}
-		
+				
 		bool Move(const RealCoord newCoord, ICommand *iCommand = 0);
 		virtual bool Tick(const float seconds);
 		virtual void Stop();

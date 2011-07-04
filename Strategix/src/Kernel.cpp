@@ -41,9 +41,9 @@ void Kernel::Start()
 	}
 
 	// @#~
-	players[0]->AddEnti(sh_p<Enti>(new Enti(&*players[0]->techTree->Node("Spher_Worker"), MapCoord(4, 16))));
-	players[0]->AddEnti(sh_p<Enti>(new Enti(&*players[0]->techTree->Node("Spher_Worker"), MapCoord(6, 17))));
-	players[0]->AddEnti(sh_p<Enti>(new Enti(&*players[0]->techTree->Node("Spher_Worker"), MapCoord(6, 16))));
+	players[0]->AddEnti(sh_p<Enti>(new Enti(&*players[0]->techTree->Node("Spher_Worker"), MapCoord(4, 6))));
+	players[0]->AddEnti(sh_p<Enti>(new Enti(&*players[0]->techTree->Node("Spher_Worker"), MapCoord(6, 7))));
+	players[0]->AddEnti(sh_p<Enti>(new Enti(&*players[0]->techTree->Node("Spher_Worker"), MapCoord(6, 6))));
 
 	// @#~
 	players[0]->AddResource(KernelBase::GS().MakeResource("gold", 0)); // badly refreshing

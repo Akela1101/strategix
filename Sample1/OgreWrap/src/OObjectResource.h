@@ -31,7 +31,7 @@ namespace Sample1
 	public:
 		OObjectResource(sh_p<MapResource> mapResource)
 			:
-			OObject(static_cast<const ResourceInfoMesh&>(mapResource->resourceInfo).meshName),
+			OObject(static_cast<const ResourceInfoMesh&>(*mapResource->GetResourceInfo()).meshName),
 			mapResource(mapResource)
 		{
 			entity->setUserAny(Any(this)); // Link from Entity

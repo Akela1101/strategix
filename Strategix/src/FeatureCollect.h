@@ -21,18 +21,16 @@ namespace Strategix
 	{
 	protected:
 		const FeatureInfoCollect *featureInfoCollect; // Link to tree
-		const float &capacity; // == featureInfoCollect->capacity
+		float capacity; // amount of resource Enti can hold
+		std::string resourceName;
 		
 	private:
-		float load; // amount of resource Enti is holding, load must be float to avoid loses
-		w_p<MapResource> mapResource; // target
-		Enti *collector; // where to take resources to
-
+		float load; // amount of resource Enti is holding
+		sh_p<MapResource> mapResource; // target		
 		bool isMovingToCollector;
 
 	public:
-		FeatureCollect(const FeatureInfo *featureInfo, Enti *enti);
-		virtual ~FeatureCollect() {}
+		FeatureCollect(const FeatureInfo *featureInfo, Enti *enti);		
 		
 		bool Collect(sh_p<MapResource> mapResource);
 		virtual bool Tick(const float seconds);

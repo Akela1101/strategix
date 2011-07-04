@@ -25,8 +25,7 @@ namespace Strategix
 		sh_p<MapsPathsFinder> pathsFinder;
 
 	public:
-		MapLocal(Player *player, MapFull *mapFull);
-		virtual ~MapLocal() {}
+		MapLocal(Player *player, MapFull *mapFull);		
 
 		const MapCoord GetInitialPostion() const { return initialPosition; }
 		sh_p<MapsPath> FindPath(const MapCoord from, const MapCoord till);

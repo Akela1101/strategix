@@ -52,8 +52,8 @@
     </logicalFolder>
   </logicalFolder>
   <sourceRootList>
-    <Elem>src</Elem>
-    <Elem>OgreWrap/src</Elem>
+    <Elem>/home/akela/NetBeansProjects/DIPLOM/Sample1/src</Elem>
+    <Elem>/home/akela/NetBeansProjects/DIPLOM/Sample1/OgreWrap/src</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
@@ -74,6 +74,7 @@
             <pElem>/usr/include/OIS</pElem>
             <pElem>/usr/local/include/MYGUI</pElem>
           </incDir>
+          <warningLevel>2</warningLevel>
         </ccTool>
         <linkerTool>
           <linkerAddLib>
@@ -97,9 +98,10 @@
                             OP="dist/Debug/GNU-Linux-x86/libstrategix.a">
               </makeArtifact>
             </linkerLibProjectItem>
-            <linkerLibLibItem>boost_filesystem</linkerLibLibItem>
-            <linkerLibLibItem>MyGUI.OgrePlatform</linkerLibLibItem>
-            <linkerLibLibItem>MyGUIEngine</linkerLibLibItem>
+            <linkerLibFileItem>/usr/lib/libboost_system.a</linkerLibFileItem>
+            <linkerLibFileItem>/usr/lib/libboost_filesystem.a</linkerLibFileItem>
+            <linkerLibFileItem>/home/akela/Programs/MyGUI3.0/lib/libMyGUI.OgrePlatform.a</linkerLibFileItem>
+            <linkerLibFileItem>/home/akela/Programs/MyGUI3.0/lib/libMyGUIEngine.so</linkerLibFileItem>
           </linkerLibItems>
         </linkerTool>
         <requiredProjects>
@@ -137,6 +139,7 @@
             <pElem>/usr/include/OIS</pElem>
             <pElem>/usr/local/include/MYGUI</pElem>
           </incDir>
+          <warningLevel>2</warningLevel>
         </ccTool>
         <fortranCompilerTool>
           <developmentMode>5</developmentMode>
@@ -166,9 +169,10 @@
                             OP="dist/Debug/GNU-Linux-x86/libstrategix.a">
               </makeArtifact>
             </linkerLibProjectItem>
-            <linkerLibLibItem>boost_filesystem</linkerLibLibItem>
-            <linkerLibLibItem>MyGUI.OgrePlatform</linkerLibLibItem>
-            <linkerLibLibItem>MyGUIEngine</linkerLibLibItem>
+            <linkerLibFileItem>/usr/lib/libboost_system.a</linkerLibFileItem>
+            <linkerLibFileItem>/usr/lib/libboost_filesystem.a</linkerLibFileItem>
+            <linkerLibFileItem>/home/akela/Programs/MyGUI3.0/lib/libMyGUI.OgrePlatform.a</linkerLibFileItem>
+            <linkerLibFileItem>/home/akela/Programs/MyGUI3.0/lib/libMyGUIEngine.so</linkerLibFileItem>
           </linkerLibItems>
         </linkerTool>
         <requiredProjects>

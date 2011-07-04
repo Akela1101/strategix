@@ -39,12 +39,17 @@ namespace Strategix
 		// GET
 		sh_p<vector<string> > GetMapNames();
 		sh_p<vector<string> > GetRaceNames();		
-		const ResourceInfo& GetResourceInfo(const string name) { return *resourceInfos[name]; }
+		sh_p<const ResourceInfo> GetResourceInfo(const string name) const
+		{
+			ResourceInfosType::const_iterator iRi = resourceInfos.find(name);
+			return iRi != resourceInfos.end() ? iRi->second : sh_p<const ResourceInfo>();
+		}
 
 		// MAKE
 		sh_p<TechTree> MakeTechTreeCopy(const string raceName) { return sh_p<TechTree>(new TechTree(*techTrees[raceName])); }
 		Resource MakeResource(const string name, const float amount);
 		sh_p<Resources> MakeResources(); // filled with zero
+		sh_p<Resources> MakeResources(const ResourcesAllType& values);
 	};
 }
 

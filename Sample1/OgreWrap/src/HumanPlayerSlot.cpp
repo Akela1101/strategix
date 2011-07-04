@@ -50,8 +50,7 @@ void HumanPlayerSlot::OnAddMapResource(sh_p<MapResource> mapResource)
 void HumanPlayerSlot::OnChangeResources(sh_p<Resources> newResources)
 {
 	string resourceCaption = "#FFFFFF"; // white
-	typedef std::map<string, float>::value_type ValueType;
-	foreach( const ValueType pa, newResources->Get() )
+	foreach( const ResourceValueType pa, newResources->Get() )
 	{
 		resourceCaption += pa.first + ": ";
 

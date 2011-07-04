@@ -27,8 +27,7 @@ namespace Strategix
 
 	public:
 		FeatureAttack(const FeatureInfo *featureInfo, Enti *enti);
-		virtual ~FeatureAttack() {}
-
+		
 		bool Attack(Enti *target);
 		virtual bool Tick(const float seconds);
 		virtual void Stop();

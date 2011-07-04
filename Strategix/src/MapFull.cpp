@@ -84,14 +84,11 @@ MapFull::MapFull(const string &name)
 		
 		// @#~ проверять правильность входных параметров!!!
 
-		cells[j][i].mapResource.reset(new MapResource(resourceName, MapCoord(i, j), initialAmount));
+		const Resource resource = KernelBase::GS().MakeResource(resourceName, initialAmount);
+		cells[j][i].mapResource.reset(new MapResource(resource, MapCoord(i, j)));
 	}
 
 	fin.close();
-}
-
-MapFull::~MapFull()
-{
 }
 
 bool MapFull::LoadTerrains()

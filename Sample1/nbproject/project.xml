@@ -13,8 +13,8 @@
                 <make-dep-project>../Strategix</make-dep-project>
             </make-dep-projects>
             <sourceRootList>
-                <sourceRootElem>src</sourceRootElem>
-                <sourceRootElem>OgreWrap/src</sourceRootElem>
+                <sourceRootElem>/home/akela/NetBeansProjects/DIPLOM/Sample1/src</sourceRootElem>
+                <sourceRootElem>/home/akela/NetBeansProjects/DIPLOM/Sample1/OgreWrap/src</sourceRootElem>
             </sourceRootList>
             <confList>
                 <confElem>Debug</confElem>
