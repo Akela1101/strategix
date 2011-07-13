@@ -16,7 +16,7 @@
 
 namespace Strategix
 {
-
+#ifndef MSCC
 Enti::Enti(const EntiInfo *entityInfo, const RealCoord &coord)
 	:
 	entityInfo(entityInfo),
@@ -29,7 +29,7 @@ Enti::Enti(const EntiInfo *entityInfo, const RealCoord &coord)
 		AddFeature(pa.first, pa.second.get());
 	}
 }
-
+#endif
 void Enti::AddFeature(const string &name, const FeatureInfo *featureInfo)
 {
 	if( name == "move" )

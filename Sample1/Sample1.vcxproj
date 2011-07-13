@@ -54,8 +54,8 @@
     <ClCompile>
       <AdditionalOptions>/MP4 %(AdditionalOptions)</AdditionalOptions>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(ProjectDir)\src;$(ProjectDir)\OgreWrap\src;$(SolutionDir)\Strategix\src;$(SolutionDir)\common_include;$(OGRE_HOME)\include\OIS;$(OGRE_HOME)\include\OGRE;$(BOOST_ROOT);C:\Users\Nya\Projects\MyGUI3.0\MyGUIEngine\include;C:\Users\Nya\Projects\MyGUI3.0\Platforms\Ogre\OgrePlatform\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)\src;$(ProjectDir)\OgreWrap\src;$(SolutionDir)\Strategix\src;$(SolutionDir)\include_common;$(OGRE_HOME)\include\OIS;$(OGRE_HOME)\include\OGRE;$(BOOST_ROOT);C:\Users\Nya\Projects\MyGUI3.0\MyGUIEngine\include;C:\Users\Nya\Projects\MyGUI3.0\Platforms\Ogre\OgrePlatform\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>MSCC;WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -82,8 +82,8 @@
       <AdditionalOptions>/MP4 %(AdditionalOptions)</AdditionalOptions>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(ProjectDir)\src;$(ProjectDir)\OgreWrap\src;$(SolutionDir)\Strategix\src;$(SolutionDir)\common_include;$(OGRE_HOME)\include\OIS;$(OGRE_HOME)\include\OGRE;$(BOOST_ROOT);C:\Users\Nya\Projects\MyGUI3.0\MyGUIEngine\include;C:\Users\Nya\Projects\MyGUI3.0\Platforms\Ogre\OgrePlatform\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)\src;$(ProjectDir)\OgreWrap\src;$(SolutionDir)\Strategix\src;$(SolutionDir)\include_common;$(OGRE_HOME)\include\OIS;$(OGRE_HOME)\include\OGRE;$(BOOST_ROOT);C:\Users\Nya\Projects\MyGUI3.0\MyGUIEngine\include;C:\Users\Nya\Projects\MyGUI3.0\Platforms\Ogre\OgrePlatform\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>MSCC;WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <PrecompiledHeader>
@@ -115,35 +115,36 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="OgreWrap\src\MapTexture.h" />
-    <ClInclude Include="OgreWrap\src\MediatorFrameListener.h" />
+    <ClInclude Include="OgreWrap\src\HumanPlayerSlot.h" />
+    <ClInclude Include="OgreWrap\src\LabelsHolder.h" />
     <ClInclude Include="OgreWrap\src\MyApp.h" />
     <ClInclude Include="OgreWrap\src\MyAppCommon.h" />
     <ClInclude Include="OgreWrap\src\MyFrameListener.h" />
     <ClInclude Include="OgreWrap\src\MyMouseListener.h" />
     <ClInclude Include="OgreWrap\src\ObjectTitle.h" />
     <ClInclude Include="OgreWrap\src\OObject.h" />
+    <ClInclude Include="OgreWrap\src\OObjectEntiSlot.h" />
     <ClInclude Include="OgreWrap\src\OObjectLabel.h" />
     <ClInclude Include="OgreWrap\src\OObjectResource.h" />
     <ClInclude Include="OgreWrap\src\OObjectTitled.h" />
-    <ClInclude Include="OgreWrap\src\OObjectUnit.h" />
+    <ClInclude Include="OgreWrap\src\TerrainPositioner.h" />
     <ClInclude Include="src\EntiInfoMesh.h" />
-    <ClInclude Include="src\LabelsHolder.h" />
+    <ClInclude Include="src\FrameListenerKernelSlot.h" />
+    <ClInclude Include="src\Sample1_Forward.h" />
     <ClInclude Include="src\TechTreesBuilderFromXml.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="OgreWrap\src\MapTexture.cpp" />
-    <ClCompile Include="OgreWrap\src\MediatorFrameListener.cpp" />
+    <ClCompile Include="OgreWrap\src\HumanPlayerSlot.cpp" />
+    <ClCompile Include="OgreWrap\src\LabelsHolder.cpp" />
     <ClCompile Include="OgreWrap\src\MyApp.cpp" />
     <ClCompile Include="OgreWrap\src\MyFrameListener.cpp" />
     <ClCompile Include="OgreWrap\src\MyMouseListener.cpp" />
     <ClCompile Include="OgreWrap\src\ObjectTitle.cpp" />
     <ClCompile Include="OgreWrap\src\OObject.cpp" />
+    <ClCompile Include="OgreWrap\src\OObjectEntiSlot.cpp" />
     <ClCompile Include="OgreWrap\src\OObjectLabel.cpp" />
-    <ClCompile Include="OgreWrap\src\OObjectResource.cpp" />
-    <ClCompile Include="OgreWrap\src\OObjectTitled.cpp" />
-    <ClCompile Include="OgreWrap\src\OObjectUnit.cpp" />
-    <ClCompile Include="src\LabelsHolder.cpp" />
+    <ClCompile Include="OgreWrap\src\TerrainPositioner.cpp" />
+    <ClCompile Include="src\FrameListenerKernelSlot.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\TechTreesBuilderFromXml.cpp" />
   </ItemGroup>

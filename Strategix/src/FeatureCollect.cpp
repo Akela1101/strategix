@@ -25,6 +25,7 @@ FeatureCollect::FeatureCollect(const FeatureInfo *featureInfo, Enti *enti)
 	:
 	Feature(enti),
 	featureInfoCollect(dynamic_cast<const FeatureInfoCollect*>(featureInfo)),	
+	load(0),
 	isMovingToCollector(false)
 {}
 
@@ -41,8 +42,7 @@ bool FeatureCollect::Collect(sh_p<MapResource> mapResource)
 	this->mapResource = mapResource;
 	
 	resourceName = mapResource->GetResourceInfo()->name;
-	capacity = featureInfoCollect->capacities->at(resourceName);
-	load = 0;
+	capacity = featureInfoCollect->capacities->at(resourceName);	
 	isMovingToCollector = false;
 
 	return true;

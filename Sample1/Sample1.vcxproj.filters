@@ -9,19 +9,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\EntiInfoMesh.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\LabelsHolder.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\TechTreesBuilderFromXml.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="OgreWrap\src\MapTexture.h">
+    <ClInclude Include="OgreWrap\src\HumanPlayerSlot.h">
       <Filter>OgreWrap</Filter>
     </ClInclude>
-    <ClInclude Include="OgreWrap\src\MediatorFrameListener.h">
+    <ClInclude Include="OgreWrap\src\LabelsHolder.h">
       <Filter>OgreWrap</Filter>
     </ClInclude>
     <ClInclude Include="OgreWrap\src\MyApp.h">
@@ -42,6 +33,9 @@
     <ClInclude Include="OgreWrap\src\OObject.h">
       <Filter>OgreWrap</Filter>
     </ClInclude>
+    <ClInclude Include="OgreWrap\src\OObjectEntiSlot.h">
+      <Filter>OgreWrap</Filter>
+    </ClInclude>
     <ClInclude Include="OgreWrap\src\OObjectLabel.h">
       <Filter>OgreWrap</Filter>
     </ClInclude>
@@ -51,24 +45,27 @@
     <ClInclude Include="OgreWrap\src\OObjectTitled.h">
       <Filter>OgreWrap</Filter>
     </ClInclude>
-    <ClInclude Include="OgreWrap\src\OObjectUnit.h">
+    <ClInclude Include="OgreWrap\src\TerrainPositioner.h">
       <Filter>OgreWrap</Filter>
+    </ClInclude>
+    <ClInclude Include="src\EntiInfoMesh.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FrameListenerKernelSlot.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sample1_Forward.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TechTreesBuilderFromXml.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\LabelsHolder.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Main.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TechTreesBuilderFromXml.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="OgreWrap\src\MapTexture.cpp">
+    <ClCompile Include="OgreWrap\src\HumanPlayerSlot.cpp">
       <Filter>OgreWrap</Filter>
     </ClCompile>
-    <ClCompile Include="OgreWrap\src\MediatorFrameListener.cpp">
+    <ClCompile Include="OgreWrap\src\LabelsHolder.cpp">
       <Filter>OgreWrap</Filter>
     </ClCompile>
     <ClCompile Include="OgreWrap\src\MyApp.cpp">
@@ -86,17 +83,23 @@
     <ClCompile Include="OgreWrap\src\OObject.cpp">
       <Filter>OgreWrap</Filter>
     </ClCompile>
+    <ClCompile Include="OgreWrap\src\OObjectEntiSlot.cpp">
+      <Filter>OgreWrap</Filter>
+    </ClCompile>
     <ClCompile Include="OgreWrap\src\OObjectLabel.cpp">
       <Filter>OgreWrap</Filter>
     </ClCompile>
-    <ClCompile Include="OgreWrap\src\OObjectResource.cpp">
+    <ClCompile Include="OgreWrap\src\TerrainPositioner.cpp">
       <Filter>OgreWrap</Filter>
     </ClCompile>
-    <ClCompile Include="OgreWrap\src\OObjectTitled.cpp">
-      <Filter>OgreWrap</Filter>
+    <ClCompile Include="src\FrameListenerKernelSlot.cpp">
+      <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="OgreWrap\src\OObjectUnit.cpp">
-      <Filter>OgreWrap</Filter>
+    <ClCompile Include="src\Main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TechTreesBuilderFromXml.cpp">
+      <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

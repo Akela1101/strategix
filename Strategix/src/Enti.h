@@ -8,6 +8,10 @@
 #ifndef _ENTI_H
 #define	_ENTI_H
 
+#ifdef MSCC
+#include "EntiInfo.h"
+#endif
+
 #include "FeatureMove.h"
 #include "FeatureCollect.h"
 #include "FeatureHealth.h"
@@ -44,8 +48,22 @@ namespace Strategix
 		bool isLastFeature; // check if there is no new tickFeature before remove it
 
 	public:
+#ifndef MSCC
 		Enti(const EntiInfo *entityInfo, const RealCoord &coord);
-		
+#else
+		Enti(const EntiInfo *entityInfo, const RealCoord &coord)
+			:
+			entityInfo(entityInfo),
+			coord(coord),
+			tickFeature(0),
+			isLastFeature(true)
+		{
+			foreach(const EntiInfo::FeatureInfosType::value_type &pa, entityInfo->featureInfos)
+			{
+				AddFeature(pa.first, pa.second.get());
+			}
+		}
+#endif
 		void Tick(const float seconds);
 		void AssignTickFeature(Feature *feature, bool isPassive = false);
 
