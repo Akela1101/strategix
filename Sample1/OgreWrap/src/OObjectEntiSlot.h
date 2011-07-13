@@ -30,8 +30,7 @@ namespace Sample1
 		std::map<string, sh_p<AnimationState> > animationStates;
 
 	public:
-		OObjectEntiSlot(Enti *enti);
-		virtual ~OObjectEntiSlot() {}
+		OObjectEntiSlot(sh_p<Enti> enti);
 
 		virtual void OnTick(const float seconds);
 		virtual void OnMoveStart();

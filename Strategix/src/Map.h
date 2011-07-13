@@ -27,13 +27,13 @@ namespace Strategix
 			int terrainType;
 			float retard; // defines from terrain type
 			mutable sh_p<MapResource> mapResource;
-			mutable list<Enti*> entis;
+			//mutable list<Enti*> entis;
 		};
 
 	protected:
 		string name;
 		int width, length;
-		Cell **cells; // [rows][columns] (i.e. [y][x])
+		sh_a<sh_a<Cell> > cells; // [rows][columns] (i.e. [y][x])
 			
 	public:
 		virtual ~Map() {}
@@ -43,21 +43,8 @@ namespace Strategix
 		const int GetLength() const { return length; }
 		const Cell &GetCell(const int x, const int y) const	{ return cells[y][x]; }
 		const Cell &GetCell(const MapCoord mc) const { return cells[mc.y][mc.x]; }
-		const float GetResource(sh_p<MapResource> mapResource, const float amount)
-		{
-			if( mapResource->resource >= amount )
-			{
-				mapResource->resource -= amount;
-				return amount;
-			}
-			else // remove resource
-			{
-				const float remain = mapResource->resource;
-				mapResource->resource -= remain;
-				mapResource.reset();
-				return remain;
-			}
-		}
+
+		virtual float PickResource(sh_p<MapResource> mapResource, const float amount) = 0;
 
 		bool IsCell(const MapCoord &mc) const
 		{
@@ -65,8 +52,6 @@ namespace Strategix
 		}
 	};	
 }
-
-
 
 #endif	/* _MAP_H */
 

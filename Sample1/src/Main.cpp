@@ -112,7 +112,7 @@ int main(int argc, char *argv[])
 	{
 		sh_p<Kernel> kernel(new Kernel("1x1"));
 		kernel->AddPlayer(sh_p<Player>(new Player("Neko123", HUMAN, 0, "Spher")));
-		kernel->AddPlayer(sh_p<Player>(new Player("Inu456", AI, 1, "Spher")));
+		//kernel->AddPlayer(sh_p<Player>(new Player("Inu456", AI, 1, "Spher")));
 
 		// Graphics init.
 		MyApp myApp(kernel);

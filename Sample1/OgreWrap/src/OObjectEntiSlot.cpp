@@ -27,7 +27,7 @@ namespace Sample1
 		static LabelVector labelVector;
 		//
 
-OObjectEntiSlot::OObjectEntiSlot(Enti *enti)
+OObjectEntiSlot::OObjectEntiSlot(sh_p<Enti> enti)
 	:
 	EntiSlot(enti),
 	OObjectTitled(dynamic_cast<const EntiInfoMesh*>(enti->entityInfo)->meshName),

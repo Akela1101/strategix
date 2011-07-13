@@ -6,6 +6,7 @@
  */
 
 #include "MapResource.h"
+#include "MapLocal.h"
 
 #include <fstream>
 #include <iostream>
@@ -41,17 +42,15 @@ MapFull::MapFull(const string &name)
 	// Map Content
 	fin >> width >> length;
 
-	cells = new Cell*[length];
+	cells.reset(new sh_a<Cell>[length]);
 	for( int j = 0; j < length; ++j )
 	{
-		cells[j] = new Cell[width];
+		cells[j].reset(new Cell[width]);
 		for( int i = 0; i < width; ++i )
 		{
 			if( fin.good() )
 			{
 				Cell &cell = cells[j][i];
-				//cell.mc = MapCoord(i, j);
-
 				fin >> cell.terrainType;
 				cell.retard = terrains[cell.terrainType].retard;
 			}
@@ -115,6 +114,41 @@ bool MapFull::LoadTerrains()
 	}
 	fdesc.close();
 	return true;
+}
+
+sh_p<MapLocal> MapFull::CreateMapLocal(Player *player)
+{
+	sh_p<MapLocal> mapLocal(new MapLocal(player, this));
+	mapLocals.push_back(mapLocal);
+	return mapLocal;
+}
+
+float MapFull::PickResource(sh_p<MapResource> mapResource, const float amount)
+{
+	if( mapResource->resource > amount )
+	{
+		mapResource->resource -= amount;
+		return amount;
+	}
+	else 
+	{
+		sh_p<MapResource> &mapResourceOnMap = GetCell(mapResource->mapCoord).mapResource;
+		if( !mapResourceOnMap )
+		{
+			return 0;
+		}
+		else // remove resource
+		{
+			const float remain = mapResource->resource;
+			mapResource->resource -= remain;
+			foreach(sh_p<MapLocal> mapLocal, mapLocals)
+			{
+				mapLocal->RemoveMapResource(mapResource);
+			}
+			mapResourceOnMap.reset();
+			return remain;
+		}
+	}
 }
 
 }

@@ -19,10 +19,10 @@ namespace Strategix
 			public IHealth, public IAttack
 	{
 	public:
-		Enti *enti;
+		sh_p<Enti> enti;
 
 	public:
-		EntiSlot(Enti *enti);
+		EntiSlot(sh_p<Enti> enti);
 		virtual ~EntiSlot() = 0;		
 
 	private:

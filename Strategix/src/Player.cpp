@@ -64,7 +64,7 @@ void Player::AddEnti(sh_p<Enti> enti)
 	entis.insert(EntisType::value_type(enti->entityInfo->name, enti));
 	enti->player = this;
 	if( playerSlot )
-		playerSlot->OnAddEnti(enti.get());
+		playerSlot->OnAddEnti(enti);
 }
 
 void Player::AddMapResource(sh_p<MapResource> mapResource)

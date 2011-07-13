@@ -63,7 +63,7 @@
     </logicalFolder>
   </logicalFolder>
   <sourceRootList>
-    <Elem>src</Elem>
+    <Elem>/home/akela/NetBeansProjects/DIPLOM/Strategix/src</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
@@ -79,7 +79,6 @@
             <pElem>src</pElem>
             <pElem>../include_common</pElem>
           </incDir>
-          <warningLevel>2</warningLevel>
         </ccTool>
         <archiverTool>
         </archiverTool>
@@ -101,7 +100,6 @@
             <pElem>src</pElem>
             <pElem>../include_common</pElem>
           </incDir>
-          <warningLevel>2</warningLevel>
         </ccTool>
         <fortranCompilerTool>
           <developmentMode>5</developmentMode>

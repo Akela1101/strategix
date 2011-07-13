@@ -37,14 +37,19 @@ HumanPlayerSlot::~HumanPlayerSlot()
 	myGUI.reset();
 }
 
-void HumanPlayerSlot::OnAddEnti(Enti *enti)
+void HumanPlayerSlot::OnAddEnti(sh_p<Enti> enti)
 {	
-	entiSlots.push_back(sh_p<OObjectEntiSlot>(new OObjectEntiSlot(enti)));
+	entiSlots.insert(make_pair(enti, sh_p<OObjectEntiSlot>(new OObjectEntiSlot(enti))));
 }
 
 void HumanPlayerSlot::OnAddMapResource(sh_p<MapResource> mapResource)
 {
-	resources.push_back(sh_p<OObjectResource>(new OObjectResource(mapResource)));
+	resources.insert(make_pair(mapResource, sh_p<OObjectResource>(new OObjectResource(mapResource))));
+}
+
+void HumanPlayerSlot::OnRemoveMapResource(sh_p<MapResource> mapResource)
+{
+	resources.erase(resources.find(mapResource));
 }
 
 void HumanPlayerSlot::OnChangeResources(sh_p<Resources> newResources)

@@ -5,6 +5,7 @@
  * Created on 4 Июнь 2011 г., 14:48
  */
 #include "HumanPlayerSlot.h"
+#include "AiPlayerSlot.h"
 
 #include <Strategix.h>
 
@@ -18,17 +19,19 @@ namespace Sample1
 FrameListenerKernelSlot::FrameListenerKernelSlot(sh_p<Kernel> kernel)
 	:
 	kernel(kernel)
-{
-	// PlayerSlot for HUMAN
+{	
 	humanPlayerSlot.reset(new HumanPlayerSlot());
+	aiPlayerSlot.reset(new AiPlayerSlot());
 
 	foreach( sh_p<Player > &player, kernel->players )
 	{
 		// Assigning Human's callback as this
 
 		// @#~ don't uncomment till there will've been slot for all players, including AI
-		//if( player->playerType == HUMAN )
-			player->playerSlot = humanPlayerSlot.get();		
+		if( player->playerType == HUMAN )
+			player->playerSlot = humanPlayerSlot.get();
+		else
+			player->playerSlot = aiPlayerSlot.get();
 	}
 }
 

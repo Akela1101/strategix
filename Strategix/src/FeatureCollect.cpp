@@ -51,14 +51,14 @@ bool FeatureCollect::Collect(sh_p<MapResource> mapResource)
 bool FeatureCollect::Tick(const float seconds)
 {
 	// If Enti is not full and resource still exists
-	if( load < capacity && mapResource )
+	if( load < capacity && mapResource->GetResource() )
 	{
 		float piece = seconds * featureInfoCollect->speed;
 		if( piece > capacity - load )
 		{
 			piece = capacity - load; // all it can bring
 		}
-		load += enti->player->mapLocal->GetResource(mapResource, piece);
+		load += enti->player->mapLocal->PickResource(mapResource, piece);
 
 		enti->entiSlot->OnCollect();
 	}

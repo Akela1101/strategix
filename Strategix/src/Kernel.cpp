@@ -26,7 +26,7 @@ Kernel::Kernel(const string &mapName)
 
 void Kernel::AddPlayer(sh_p<Player> player)
 {
-	player->mapLocal.reset(new MapLocal(player.get(), mapFull.get()));
+	player->mapLocal = mapFull->CreateMapLocal(player.get());
 	players.push_back(player);
 }
 

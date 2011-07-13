@@ -39,11 +39,16 @@ namespace Strategix
 		int nPlayers;
 		vector<MapCoord> initialPositions;
 
+		vector<sh_p<MapLocal> > mapLocals;
+
 	public:
 		MapFull(const string &name);
 
 		const Terrain &GetTerrain(const int terrainType) const { return terrains.find(terrainType)->second; }
 		const MapCoord GetInitialPostion(int iPlayer) const { return initialPositions[iPlayer]; }
+		sh_p<MapLocal> CreateMapLocal(Player *player);
+
+		float PickResource(sh_p<MapResource> mapResource, const float amount);
 
 	private:
 		MapFull(const MapFull &_c);

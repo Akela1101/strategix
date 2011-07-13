@@ -13,7 +13,7 @@
 namespace Strategix
 {
 
-EntiSlot::EntiSlot(Enti *enti) : enti(enti)
+EntiSlot::EntiSlot(sh_p<Enti> enti) : enti(enti)
 {
 	enti->entiSlot = this;
 }

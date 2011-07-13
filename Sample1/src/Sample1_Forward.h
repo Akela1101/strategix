@@ -24,6 +24,7 @@ namespace Sample1
 	class OObjectLabel;
 	class OObjectResource;
 	class HumanPlayerSlot;
+	class AiPlayerSlot;
 }
 
 #endif	/* _SAMPLE1_FORWARD_H */

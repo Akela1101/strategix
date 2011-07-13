@@ -8,16 +8,18 @@
 #include "MapFull.h"
 #include "MapsPathsFinder.h"
 #include "Player.h"
+#include "PlayerSlot.h"
 
 #include "MapLocal.h"
+
 
 namespace Strategix
 {
 
 MapLocal::MapLocal(Player *player, MapFull *mapFull)
 	:
-	player(player),
 	Map(*static_cast<Map*>(mapFull)),
+	player(player),	
 	mapFull(mapFull),
 	initialPosition(mapFull->GetInitialPostion(player->playerNumber)),
 	pathsFinder(new MapsPathsFinder(*this))
@@ -26,6 +28,17 @@ MapLocal::MapLocal(Player *player, MapFull *mapFull)
 sh_p<MapsPath> MapLocal::FindPath(const MapCoord from, const MapCoord till)
 {
 	return pathsFinder->FindPath(from, till);
+}
+
+float MapLocal::PickResource(sh_p<MapResource> mapResource, const float amount)
+{
+	return mapFull->PickResource(mapResource, amount);
+}
+
+void MapLocal::RemoveMapResource(sh_p<MapResource> mapResource)
+{
+	player->playerSlot->OnRemoveMapResource(mapResource);
+	GetCell(mapResource->mapCoord).mapResource.reset();
 }
 
 }

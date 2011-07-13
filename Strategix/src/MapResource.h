@@ -20,7 +20,7 @@ namespace Strategix
 	
 	class MapResource
 	{
-		friend class Map;
+		friend class MapFull;
 
 		Resource resource;
 

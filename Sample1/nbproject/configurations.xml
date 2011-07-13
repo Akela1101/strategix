@@ -2,6 +2,8 @@
 <configurationDescriptor version="69">
   <logicalFolder name="root" displayName="root" projectFiles="true">
     <logicalFolder name="f1" displayName="OgreWrap" projectFiles="true">
+      <itemPath>/home/akela/NetBeansProjects/DIPLOM/Sample1/src/AiPlayerSlot.cpp</itemPath>
+      <itemPath>/home/akela/NetBeansProjects/DIPLOM/Sample1/src/AiPlayerSlot.h</itemPath>
       <itemPath>src/FrameListenerKernelSlot.cpp</itemPath>
       <itemPath>src/FrameListenerKernelSlot.h</itemPath>
       <itemPath>OgreWrap/src/HumanPlayerSlot.cpp</itemPath>
@@ -74,7 +76,6 @@
             <pElem>/usr/include/OIS</pElem>
             <pElem>/usr/local/include/MYGUI</pElem>
           </incDir>
-          <warningLevel>2</warningLevel>
         </ccTool>
         <linkerTool>
           <linkerAddLib>
@@ -139,7 +140,6 @@
             <pElem>/usr/include/OIS</pElem>
             <pElem>/usr/local/include/MYGUI</pElem>
           </incDir>
-          <warningLevel>2</warningLevel>
         </ccTool>
         <fortranCompilerTool>
           <developmentMode>5</developmentMode>

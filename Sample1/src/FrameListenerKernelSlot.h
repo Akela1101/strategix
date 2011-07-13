@@ -23,6 +23,7 @@ namespace Sample1
 	{
 		sh_p<Kernel> kernel;
 		sh_p<HumanPlayerSlot> humanPlayerSlot;
+		sh_p<AiPlayerSlot> aiPlayerSlot;
 
 	public:
 		FrameListenerKernelSlot(sh_p<Kernel> kernel);
