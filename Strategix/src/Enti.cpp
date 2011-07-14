@@ -17,14 +17,14 @@
 namespace Strategix
 {
 #ifndef MSCC
-Enti::Enti(const EntiInfo *entityInfo, const RealCoord &coord)
+Enti::Enti(const EntiInfo *entiInfo, const RealCoord &coord)
 	:
-	entityInfo(entityInfo),
+	entiInfo(entiInfo),
 	coord(coord),
 	tickFeature(0),
 	isLastFeature(true)
 {
-	foreach(const EntiInfo::FeatureInfosType::value_type &pa, entityInfo->featureInfos)
+	foreach(const EntiInfo::FeatureInfosType::value_type &pa, entiInfo->featureInfos)
 	{
 		AddFeature(pa.first, pa.second.get());
 	}

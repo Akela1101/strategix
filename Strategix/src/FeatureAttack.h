@@ -22,13 +22,13 @@ namespace Strategix
 		const FeatureInfoAttack *featureInfoAttack; // Link to tree
 		
 	private:
-		Enti *target;
+		sh_p<Enti> target; // @#~ weak ptr - better ???
 		HpType hitProgress;
 
 	public:
 		FeatureAttack(const FeatureInfo *featureInfo, Enti *enti);
 		
-		bool Attack(Enti *target);
+		bool Attack(sh_p<Enti> target);
 		virtual bool Tick(const float seconds);
 		virtual void Stop();
 

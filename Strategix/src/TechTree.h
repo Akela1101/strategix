@@ -38,7 +38,7 @@ namespace Strategix
 		inline void init(const TechTree &_c);
 		// Don't forget updating copy constuctor after changing member list!
 
-		void AddNode(sh_p<EntiInfo> entityInfo);
+		void AddNode(sh_p<EntiInfo> entiInfo);
 		sh_p<EntiInfo> Node(const string name) const
 		{
 			TechMapType::const_iterator itEi = techMap.find(name);

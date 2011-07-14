@@ -42,6 +42,11 @@ void HumanPlayerSlot::OnAddEnti(sh_p<Enti> enti)
 	entiSlots.insert(make_pair(enti, sh_p<OObjectEntiSlot>(new OObjectEntiSlot(enti))));
 }
 
+void HumanPlayerSlot::OnRemoveEnti(sh_p<Enti> enti)
+{
+	entiSlots.erase(entiSlots.find(enti));
+}
+
 void HumanPlayerSlot::OnAddMapResource(sh_p<MapResource> mapResource)
 {
 	resources.insert(make_pair(mapResource, sh_p<OObjectResource>(new OObjectResource(mapResource))));

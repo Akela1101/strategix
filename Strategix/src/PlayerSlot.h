@@ -20,6 +20,7 @@ namespace Strategix
 		virtual ~PlayerSlot() {}
 		
 		virtual void OnAddEnti(sh_p<Enti> enti) = 0;
+		virtual void OnRemoveEnti(sh_p<Enti> enti) = 0;
 		virtual void OnAddMapResource(sh_p<MapResource> mapResource) = 0;
 		virtual void OnRemoveMapResource(sh_p<MapResource> mapResource) = 0;
 		virtual void OnChangeResources(sh_p<Resources> newResources) = 0;

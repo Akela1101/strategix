@@ -11,7 +11,7 @@
 #include "Strategix_Forward.h"
 #include "MapResource.h"
 
-#include <map>
+#include <vector>
 #include <string>
 #include <set>
 
@@ -36,7 +36,7 @@ namespace Strategix
 		sh_p<MapLocal> mapLocal;
 
 	private:
-		typedef	multimap<string, sh_p<Enti> > EntisType;
+		typedef	vector<sh_p<Enti> > EntisType;
 		EntisType entis; // owned enties
 
 		set<MapResource*> mapResources; // known map resources
@@ -48,7 +48,9 @@ namespace Strategix
 		void Start();
 		void Tick(const float seconds);
 		void AddEnti(sh_p<Enti> enti);
+		void RemoveEnti(Enti *enti);
 		void AddMapResource(sh_p<MapResource> mapResource);
+		void RemoveMapResource(sh_p<MapResource> mapResource);
 		bool AddResource(const Resource deltaResource);
 
 	private:

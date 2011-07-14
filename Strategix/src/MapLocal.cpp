@@ -37,7 +37,7 @@ float MapLocal::PickResource(sh_p<MapResource> mapResource, const float amount)
 
 void MapLocal::RemoveMapResource(sh_p<MapResource> mapResource)
 {
-	player->playerSlot->OnRemoveMapResource(mapResource);
+	player->RemoveMapResource(mapResource);
 	GetCell(mapResource->mapCoord).mapResource.reset();
 }
 

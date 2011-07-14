@@ -16,6 +16,7 @@
 #include "FeatureMove.h"
 
 #include "FeatureCollect.h"
+#include "EntiInfo.h"
 
 
 namespace Strategix
@@ -111,21 +112,28 @@ void FeatureCollect::OnComplete(bool isComplete)
 	}
 }
 
-Enti* FeatureCollect::FindCollector()
+const Enti* FeatureCollect::FindCollector()
 {
 	// @#~ too simple
 	// @#~ Check if there is path to Collector and also select nearest
 	// @#~ Check out the case when there are no collectors or more than one !!!
 
 	const string collectorName = enti->player->techTree->mainBuildingName;
-	return enti->player->entis.find(collectorName)->second.get();
+	foreach( sh_p<const Enti> enti, enti->player->entis )
+	{
+		if( enti->entiInfo->name == collectorName )
+		{
+			return enti.get();
+		}
+	}
+	return 0;
 }
 
 void FeatureCollect::MoveToCollector()
 {
-	Enti *collector = FindCollector(); // @#~ check if 0.
+	const Enti *collector = FindCollector();
 
-	if( enti->Do<FeatureMove>()->Move(collector->coord, this) )
+	if( collector && enti->Do<FeatureMove>()->Move(collector->coord, this) )
 	{
 		isMovingToCollector = true;
 	}

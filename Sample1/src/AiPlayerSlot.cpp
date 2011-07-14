@@ -25,16 +25,4 @@ void AiPlayerSlot::OnAddEnti(sh_p<Enti> enti)
 	entiSlots.insert(make_pair(enti, sh_p<OObjectEntiSlot>(new OObjectEntiSlot(enti))));
 }
 
-void AiPlayerSlot::OnAddMapResource(sh_p<MapResource> mapResource)
-{
-}
-
-void AiPlayerSlot::OnRemoveMapResource(sh_p<MapResource> mapResource)
-{
-}
-
-void AiPlayerSlot::OnChangeResources(sh_p<Resources> newResources)
-{
-}
-
 }

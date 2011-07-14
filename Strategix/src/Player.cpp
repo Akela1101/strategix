@@ -33,8 +33,8 @@ void Player::Start()
 {
 	// Creating Base
 	const string baseName = techTree->mainBuildingName;
-	sh_p<const EntiInfo> entityInfo = techTree->Node(baseName);
-	AddEnti(sh_p<Enti>(new Enti(entityInfo.get(), mapLocal->GetInitialPostion())));
+	sh_p<const EntiInfo> entiInfo = techTree->Node(baseName);
+	AddEnti(sh_p<Enti>(new Enti(entiInfo.get(), mapLocal->GetInitialPostion())));
 
 	// @#~ there's still no warfog, so inform each player about resource
 	// Resources
@@ -53,25 +53,43 @@ void Player::Start()
 
 void Player::Tick(const float seconds)
 {
-	foreach(const EntisType::value_type &pa, entis)
+	foreach( sh_p<Enti> enti, entis )
 	{
-		pa.second->Tick(seconds);
+		enti->Tick(seconds);
 	}
 }
 
 void Player::AddEnti(sh_p<Enti> enti)
 {
-	entis.insert(EntisType::value_type(enti->entityInfo->name, enti));
+	entis.push_back(enti);
 	enti->player = this;
-	if( playerSlot )
-		playerSlot->OnAddEnti(enti);
+	playerSlot->OnAddEnti(enti);
+}
+
+void Player::RemoveEnti(Enti *enti)
+{
+	EntisType::iterator itEnti = entis.begin();
+	for( ; itEnti != entis.end(); ++itEnti ) // @#~ Another way - w_p desu.
+	{
+		if( (*itEnti).get() == enti ) // @#~ Also it was possible to check deadness )
+		{
+			playerSlot->OnRemoveEnti(*itEnti);
+			entis.erase(itEnti);
+			return;
+		}
+	}	
 }
 
 void Player::AddMapResource(sh_p<MapResource> mapResource)
 {
 	mapResources.insert(mapResource.get());
-	if( playerSlot )
-		playerSlot->OnAddMapResource(mapResource);
+	playerSlot->OnAddMapResource(mapResource);
+}
+
+void Player::RemoveMapResource(sh_p<MapResource> mapResource)
+{
+	playerSlot->OnRemoveMapResource(mapResource);
+	mapResources.erase(mapResource.get());
 }
 
 bool Player::AddResource(const Resource deltaResource)
@@ -79,8 +97,7 @@ bool Player::AddResource(const Resource deltaResource)
 	// @#~ Check it
 	
 	*resources += deltaResource;
-	if( playerSlot )
-		playerSlot->OnChangeResources(resources);
+	playerSlot->OnChangeResources(resources);
 	return true;
 }
 

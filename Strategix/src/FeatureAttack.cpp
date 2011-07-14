@@ -24,9 +24,9 @@ FeatureAttack::FeatureAttack(const FeatureInfo *featureInfo, Enti *enti)
 	hitProgress(0)
 {}
 
-bool FeatureAttack::Attack(Enti *target)
+bool FeatureAttack::Attack(sh_p<Enti> target)
 {
-	if( target == enti )
+	if( target.get() == enti )
 	{
 		// Log ( do not attak yourself ) :-)
 		return false;
@@ -66,6 +66,7 @@ bool FeatureAttack::Tick(const float seconds)
 void FeatureAttack::Stop()
 {
 	enti->entiSlot->OnAttackStop();
+	target.reset();
 }
 
 void FeatureAttack::OnComplete(bool isComplete)

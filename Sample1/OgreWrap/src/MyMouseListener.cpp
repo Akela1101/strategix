@@ -86,7 +86,7 @@ bool MyMouseListener::mousePressed(const OIS::MouseEvent &mouse_event, OIS::Mous
 			else if( entity && (mask == ENTI_MASK) ) // Attack
 			{
 				OObjectEntiSlot *oObjectTarget = any_cast<OObjectEntiSlot*>(entity->getUserAny());
-				oObjectEntiSlot->enti->Do<FeatureAttack>()->Attack(oObjectTarget->enti.get());
+				oObjectEntiSlot->enti->Do<FeatureAttack>()->Attack(oObjectTarget->enti);
 			}
 			else // Move
 			{

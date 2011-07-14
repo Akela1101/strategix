@@ -39,7 +39,7 @@ namespace Strategix
 		virtual void OnComplete(bool isComplete); // Moving Complete
 
 	protected:
-		Enti* FindCollector(); // resource collector
+		const Enti* FindCollector(); // resource collector
 		void MoveToCollector(); // going back to base(or other collector)
 			
 	private:

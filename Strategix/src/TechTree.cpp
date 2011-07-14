@@ -47,12 +47,12 @@ void TechTree::init(const TechTree &_c)
 	}
 }
 
-void TechTree::AddNode(sh_p<EntiInfo> entityInfo)
+void TechTree::AddNode(sh_p<EntiInfo> entiInfo)
 {
-	pair<string, sh_p<EntiInfo> > pairEl(entityInfo->name, entityInfo);
+	pair<string, sh_p<EntiInfo> > pairEl(entiInfo->name, entiInfo);
 	pair<TechMapType::iterator, bool> retPair = techMap.insert(pairEl);
 	if( retPair.second == false )
-		STRATEGIX_ERROR("More than one EntiInfo with name: " + entityInfo->name);
+		STRATEGIX_ERROR("More than one EntiInfo with name: " + entiInfo->name);
 }
 
 }

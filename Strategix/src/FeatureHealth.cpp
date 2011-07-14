@@ -10,6 +10,8 @@
 #include "FeatureInfo.h"
 
 #include "FeatureHealth.h"
+#include "Player.h"
+#include "PlayerSlot.h"
 
 
 namespace Strategix
@@ -42,11 +44,12 @@ bool FeatureHealth::HpChange(const HpType deltaHp)
 {
 	hp += deltaHp;	
 	
-	if( (int)hp <= 0 )
+	if( hp <= 0 )
 	{
 		// Dead
 		hp = 0;
-		enti->entiSlot->OnHpChange();
+		//enti->entiSlot->OnHpChange();
+		enti->player->RemoveEnti(enti);
 		return false;
 	}
 	else if ( hp > featureInfoHealth->hp )

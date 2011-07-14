@@ -30,13 +30,13 @@ namespace Sample1
 OObjectEntiSlot::OObjectEntiSlot(sh_p<Enti> enti)
 	:
 	EntiSlot(enti),
-	OObjectTitled(dynamic_cast<const EntiInfoMesh*>(enti->entityInfo)->meshName),
+	OObjectTitled(dynamic_cast<const EntiInfoMesh*>(enti->entiInfo)->meshName),
 	animationState(0)
 {
 	entity->setUserAny(Any(this)); // Link from Entity
 	entity->setQueryFlags(ENTI_MASK); // Mask for mouse selection
 	
-	const float scale = dynamic_cast<const EntiInfoMesh*>(enti->entityInfo)->meshScale;
+	const float scale = dynamic_cast<const EntiInfoMesh*>(enti->entiInfo)->meshScale;
 	node->setScale(scale, scale, scale);
 	node->setPosition(enti->coord.x, 0, enti->coord.y);
 

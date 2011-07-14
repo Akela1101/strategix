@@ -34,7 +34,7 @@ namespace Strategix
 	public:
 		EntiSlot *entiSlot; // Link to entiSlot
 		Player *player; // Link to owner
-		const EntiInfo *entityInfo; // Link to tree
+		const EntiInfo *entiInfo; // Link to tree
 		RealCoord coord; // real coordinate
 
 	private:		
@@ -49,16 +49,16 @@ namespace Strategix
 
 	public:
 #ifndef MSCC
-		Enti(const EntiInfo *entityInfo, const RealCoord &coord);
+		Enti(const EntiInfo *entiInfo, const RealCoord &coord);
 #else
-		Enti(const EntiInfo *entityInfo, const RealCoord &coord)
+		Enti(const EntiInfo *entiInfo, const RealCoord &coord)
 			:
-			entityInfo(entityInfo),
+			entiInfo(entiInfo),
 			coord(coord),
 			tickFeature(0),
 			isLastFeature(true)
 		{
-			foreach(const EntiInfo::FeatureInfosType::value_type &pa, entityInfo->featureInfos)
+			foreach(const EntiInfo::FeatureInfosType::value_type &pa, entiInfo->featureInfos)
 			{
 				AddFeature(pa.first, pa.second.get());
 			}
