@@ -40,6 +40,7 @@ namespace Strategix
 		EntisType entis; // owned enties
 
 		set<MapResource*> mapResources; // known map resources
+		vector<Enti*> entisToRemove; // entis removed at the end of Tick
 
 	public:
 		Player(const string name, const PlayerType playerType,
@@ -48,7 +49,7 @@ namespace Strategix
 		void Start();
 		void Tick(const float seconds);
 		void AddEnti(sh_p<Enti> enti);
-		void RemoveEnti(Enti *enti);
+		void QueueEntiToRemove(Enti *enti);
 		void AddMapResource(sh_p<MapResource> mapResource);
 		void RemoveMapResource(sh_p<MapResource> mapResource);
 		bool AddResource(const Resource deltaResource);
@@ -56,6 +57,8 @@ namespace Strategix
 	private:
 		Player(const Player& orig);
 		Player& operator =(const Player &_c);
+
+		void RemoveEnti(Enti *enti);
 	};
 }
 

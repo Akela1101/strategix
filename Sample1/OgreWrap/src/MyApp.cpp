@@ -40,6 +40,8 @@ MyApp::MyApp(sh_p<Kernel> kernel)
 
 MyApp::~MyApp()
 {
+	destroyScene();
+	
 	if( root )
 		OGRE_DELETE root;
 
@@ -56,8 +58,6 @@ void MyApp::go(const bool isConfigure)
 		return;
 
 	root->startRendering();
-
-	destroyScene();
 }
 
 bool MyApp::setup()

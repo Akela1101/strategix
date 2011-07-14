@@ -48,8 +48,8 @@ bool FeatureHealth::HpChange(const HpType deltaHp)
 	{
 		// Dead
 		hp = 0;
-		//enti->entiSlot->OnHpChange();
-		enti->player->RemoveEnti(enti);
+		enti->entiSlot->OnHpChange();
+		enti->player->QueueEntiToRemove(enti);
 		return false;
 	}
 	else if ( hp > featureInfoHealth->hp )

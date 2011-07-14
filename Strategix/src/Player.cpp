@@ -57,6 +57,16 @@ void Player::Tick(const float seconds)
 	{
 		enti->Tick(seconds);
 	}
+	
+	// Remove queued entis if there are ones
+	if( entisToRemove.size() )
+	{
+		rforeach( Enti *enti, entisToRemove )
+		{
+			RemoveEnti(enti);
+		}
+		entisToRemove.clear();
+	}
 }
 
 void Player::AddEnti(sh_p<Enti> enti)
@@ -64,6 +74,11 @@ void Player::AddEnti(sh_p<Enti> enti)
 	entis.push_back(enti);
 	enti->player = this;
 	playerSlot->OnAddEnti(enti);
+}
+
+void Player::QueueEntiToRemove(Enti *enti)
+{
+	entisToRemove.push_back(enti);
 }
 
 void Player::RemoveEnti(Enti *enti)

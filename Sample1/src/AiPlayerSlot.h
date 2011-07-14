@@ -28,7 +28,7 @@ namespace Sample1
 
 	public:
 		virtual void OnAddEnti(sh_p<Enti> enti);
-		virtual void OnRemoveEnti(sh_p<Enti> enti) {}
+		virtual void OnRemoveEnti(sh_p<Enti> enti);
 		virtual void OnAddMapResource(sh_p<MapResource> mapResource) {}
 		virtual void OnRemoveMapResource(sh_p<MapResource> mapResource) {}
 		virtual void OnChangeResources(sh_p<Resources> newResources) {}

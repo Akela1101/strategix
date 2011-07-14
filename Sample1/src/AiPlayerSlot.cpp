@@ -25,4 +25,9 @@ void AiPlayerSlot::OnAddEnti(sh_p<Enti> enti)
 	entiSlots.insert(make_pair(enti, sh_p<OObjectEntiSlot>(new OObjectEntiSlot(enti))));
 }
 
+void AiPlayerSlot::OnRemoveEnti(sh_p<Enti> enti)
+{
+	entiSlots.erase(entiSlots.find(enti));
+}
+
 }
