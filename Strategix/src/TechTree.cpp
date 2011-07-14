@@ -6,7 +6,7 @@
  */
 
 #include "EntiInfo.h"
-#include "StrategixError.h"
+#include "StrategixException.h"
 
 #include "TechTree.h"
 
@@ -52,7 +52,7 @@ void TechTree::AddNode(sh_p<EntiInfo> entiInfo)
 	pair<string, sh_p<EntiInfo> > pairEl(entiInfo->name, entiInfo);
 	pair<TechMapType::iterator, bool> retPair = techMap.insert(pairEl);
 	if( retPair.second == false )
-		STRATEGIX_ERROR("More than one EntiInfo with name: " + entiInfo->name);
+		STRATEGIX_EXCEPTION("More than one EntiInfo with name: " + entiInfo->name);
 }
 
 }

@@ -76,6 +76,9 @@
             <pElem>/usr/include/OIS</pElem>
             <pElem>/usr/local/include/MYGUI</pElem>
           </incDir>
+          <preprocessorList>
+            <Elem>_DEBUG</Elem>
+          </preprocessorList>
         </ccTool>
         <linkerTool>
           <linkerAddLib>

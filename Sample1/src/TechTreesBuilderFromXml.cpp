@@ -11,7 +11,6 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/xml_parser.hpp>
 #include <boost/filesystem.hpp>
-#include <iostream>
 
 #include "TechTreesBuilderFromXml.h"
 
@@ -42,7 +41,7 @@ void TechTreesBuilderFromXml::Build(TechTreesType *pTechTrees)
 			}
 			catch( const pt::xml_parser_error & )
 			{
-				STRATEGIX_ERROR( "Can't parse file: " + p.string() );
+				STRATEGIX_EXCEPTION("Can't parse file: " + p.string());
 			}
 
 			BuildRace(p.stem().string(), propTree.get_child("race"));
@@ -135,7 +134,7 @@ sh_p<Resources> TechTreesBuilderFromXml::BuildResources(const pt::ptree &resourc
 	{
 		const string &resourceName = v.first; // gold or something else
 		if( !KernelBase::GS().GetResourceInfo(resourceName) )
-			STRATEGIX_ERROR("Wrong resource type in one of Races: " + resourceName +
+			STRATEGIX_EXCEPTION("Wrong resource type in one of Races: " + resourceName +
 			                "\nCheck configuration file.");
 
 		const pt::ptree &resource = v.second;

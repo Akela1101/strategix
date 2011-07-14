@@ -10,7 +10,7 @@
 
 #include "StrategixCommon.h"
 #include "StrategixLog.h"
-#include "StrategixError.h"
+#include "StrategixException.h"
 
 #include "CoordStructs.h"
 

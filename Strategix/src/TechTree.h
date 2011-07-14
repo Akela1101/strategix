@@ -43,7 +43,7 @@ namespace Strategix
 		{
 			TechMapType::const_iterator itEi = techMap.find(name);
 			if( itEi == techMap.end() )
-				STRATEGIX_ERROR("Wrong Enti name: " + name);
+				STRATEGIX_EXCEPTION("Wrong Enti name: " + name);
 			return itEi->second;
 		}
 	};

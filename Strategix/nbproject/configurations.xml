@@ -41,7 +41,7 @@
       <itemPath>src/ResourceInfo.h</itemPath>
       <itemPath>src/Resources.h</itemPath>
       <itemPath>src/StrategixCommon.h</itemPath>
-      <itemPath>src/StrategixError.h</itemPath>
+      <itemPath>src/StrategixException.h</itemPath>
       <itemPath>src/StrategixLog.cpp</itemPath>
       <itemPath>src/StrategixLog.h</itemPath>
       <itemPath>src/StrategixSingleton.h</itemPath>
@@ -79,6 +79,9 @@
             <pElem>src</pElem>
             <pElem>../include_common</pElem>
           </incDir>
+          <preprocessorList>
+            <Elem>_DEBUG</Elem>
+          </preprocessorList>
         </ccTool>
         <archiverTool>
         </archiverTool>

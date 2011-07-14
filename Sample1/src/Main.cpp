@@ -88,7 +88,7 @@ int main(int argc, char *argv[])
 	// Also change plugin folder respectively
 
 	// What is current path? ( Must be /Strategix/Sample1 )
-	cout << "Current dir: " << boost::filesystem::current_path() << endl;
+	STRATEGIX_INFO("Current dir: " + boost::filesystem::current_path().string());
 
 	KernelBase::GS().Configure(
 		sh_p<ConfigurationBuilder>(new ConfigurationBuilderFromXml),
@@ -124,16 +124,20 @@ int main(int argc, char *argv[])
 		{
 			cout << endl << e.what() << endl;
 		}
+		catch( Strategix::Exception& e )
+		{
+			// Already printed
+		}
 		catch( std::exception &e )
 		{
 			cout << endl << e.what() << endl;
 		}
-		cout << endl << "Exit from Ogre. Start to destruct it." << endl;
+		STRATEGIX_INFO("Exit from Ogre. Start to destruct it.");
 	}
 
 // Reenable autorepeat in KDE ! *WALL*
 #ifdef __linux__
-	cout << endl << "Setting keyboard autorepeat back ON." << endl << endl;
+	STRATEGIX_INFO("Setting keyboard autorepeat back ON.");
 	ret = std::system("xset r");
 #endif
 

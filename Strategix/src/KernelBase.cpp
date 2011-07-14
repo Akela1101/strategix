@@ -8,7 +8,7 @@
 #include "Resources.h"
 #include "ConfigurationBuilder.h"
 #include "TechTreesBuilder.h"
-#include "StrategixError.h"
+#include "StrategixException.h"
 
 #include <boost/filesystem.hpp>
 
@@ -60,7 +60,7 @@ Resource KernelBase::MakeResource(const string name, const float amount)
 	ResourceInfosType::iterator iRi = resourceInfos.find(name);
 	if( iRi == resourceInfos.end() )
 	{
-		STRATEGIX_ERROR("There is no resource named: " + name);
+		STRATEGIX_EXCEPTION("There is no resource named: " + name);
 	}
 	return Resource(iRi->first, amount);
 }

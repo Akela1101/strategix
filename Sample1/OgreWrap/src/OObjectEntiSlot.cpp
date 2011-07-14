@@ -73,7 +73,7 @@ void OObjectEntiSlot::OnMoveStart()
 	}
 	catch( ItemIdentityException )
 	{
-		cout << endl << "Warning: No default Move action" << endl;
+		STRATEGIX_WARNING("No default Move action");
 	}
 }
 
@@ -116,7 +116,7 @@ void OObjectEntiSlot::OnMoveStop()
 	}
 	catch( ItemIdentityException )
 	{
-		cout << endl << "Warning: No default Idle action" << endl;
+		STRATEGIX_WARNING("Warning: No default Idle action");
 	}
 }
 

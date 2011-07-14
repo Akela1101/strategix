@@ -60,21 +60,21 @@ namespace Strategix
 //		Resource operator +(const Resource &resource) const
 //		{
 //			if( value.first != resource.value.first )
-//				STRATEGIX_ERROR("Trying addition resources with different types: "
+//				STRATEGIX_EXCEPTION("Trying addition resources with different types: "
 //				                + value.first + " & " + resource.value.first);
 //			return Resource(value.first, value.second + resource.value.second);
 //		}
 //		Resource operator -(const Resource &resource) const
 //		{
 //			if( value.first != resource.value.first )
-//				STRATEGIX_ERROR("Trying subtraction resources with different types: "
+//				STRATEGIX_EXCEPTION("Trying subtraction resources with different types: "
 //				                + value.first + " & " + resource.value.first);
 //			return Resource(value.first, value.second - resource.value.second);
 //		}
 //		Resource& operator +=(const Resource &resource)
 //		{
 //			if( value.first != resource.value.first )
-//				STRATEGIX_ERROR("Trying addition resources with different types: "
+//				STRATEGIX_EXCEPTION("Trying addition resources with different types: "
 //				                + value.first + " & " + resource.value.first);
 //			value.second += resource.value.second;
 //			return *this;
@@ -82,7 +82,7 @@ namespace Strategix
 //		Resource& operator -=(const Resource &resource)
 //		{
 //			if( value.first != resource.value.first )
-//				STRATEGIX_ERROR("Trying subtraction resources with different types: "
+//				STRATEGIX_EXCEPTION("Trying subtraction resources with different types: "
 //				                + value.first + " & " + resource.value.first);
 //			value.second -= resource.value.second;
 //			return *this;

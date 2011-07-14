@@ -9,7 +9,6 @@
 #include "MapLocal.h"
 
 #include <fstream>
-#include <iostream>
 #include <algorithm>
 #include <deque>
 #include <string>
@@ -25,7 +24,7 @@ MapFull::MapFull(const string &name)
 {
 	if( !LoadTerrains() )
 	{
-		STRATEGIX_ERROR("Wrong terrains.def");
+		STRATEGIX_EXCEPTION("Wrong terrains.def");
 	}
 
 	const string &fileName = GetFilePath(name);
@@ -56,7 +55,7 @@ MapFull::MapFull(const string &name)
 			}
 			else
 			{
-				STRATEGIX_ERROR("Wrong map format in file: " + fileName);
+				STRATEGIX_EXCEPTION("Wrong map format in file: " + fileName);
 			}
 		}
 	}
