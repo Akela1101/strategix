@@ -1,5 +1,4 @@
-"Stragegix Map"
-[string version]
+Stragegix Map [string version]
 [string def_file]
 [string map_name]
 
