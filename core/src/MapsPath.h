@@ -1,10 +1,3 @@
-/* 
- * File:   MapsPath.h
- * Author: Akela1101
- *
- * Created on 24 Март 2011 г., 17:13
- */
-
 #ifndef _MAPSPATH_H
 #define    _MAPSPATH_H
 

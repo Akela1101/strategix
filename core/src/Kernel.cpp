@@ -1,10 +1,3 @@
-/* 
- * File:   Kernel.cpp
- * Author: Akela1101
- * 
- * Created on 10 Январь 2011 г., 10:09
- */
-
 #include "Enti.h"
 #include "MapFull.h"
 #include "Player.h"

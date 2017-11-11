@@ -1,10 +1,3 @@
-/* 
- * File:   FeatureCollect.cpp
- * Author: Akela1101
- * 
- * Created on 18 Май 2011 г., 14:48
- */
-
 #include "KernelBase.h"
 #include "Enti.h"
 #include "EntiSlot.h"

@@ -1,10 +1,3 @@
-/* 
- * File:   ResourceInfo.h
- * Author: Akela1101
- *
- * Created on 18 Май 2011 г., 13:18
- */
-
 #ifndef _RESOURCEINFO_H
 #define    _RESOURCEINFO_H
 

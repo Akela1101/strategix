@@ -1,10 +1,3 @@
-/* 
- * File:   Strategix_Forward.h
- * Author: akela
- *
- * Created on 2 Июнь 2011 г., 17:29
- */
-
 #ifndef STRATEGIX_FORWARD_H
 #define	STRATEGIX_FORWARD_H
 

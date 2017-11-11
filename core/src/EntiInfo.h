@@ -1,10 +1,3 @@
-/* 
- * File:   EntiInfo.h
- * Author: Akela1101
- *
- * Created on 12 Март 2010 г., 18:34
- */
-
 #ifndef _ENTIINFO_H
 #define    _ENTIINFO_H
 

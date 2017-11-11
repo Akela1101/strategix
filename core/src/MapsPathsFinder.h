@@ -1,10 +1,3 @@
-/* 
- * File:   MapsPathsFinder.h
- * Author: Akela1101
- *
- * Created on 24 Март 2011 г., 17:14
- */
-
 #ifndef _MAPSPATHSFINDER_H
 #define    _MAPSPATHSFINDER_H
 

@@ -1,10 +1,3 @@
-/* 
- * File:   FeatureAttack.h
- * Author: Akela1101
- *
- * Created on 3 Июнь 2011 г., 16:17
- */
-
 #ifndef _FEATUREATTACK_H
 #define    _FEATUREATTACK_H
 

@@ -1,10 +1,3 @@
-/* 
- * File:   MapsPathsFinder.cpp
- * Author: Akela1101
- * 
- * Created on 24 Март 2011 г., 17:14
- */
-
 #include "MapsPath.h"
 #include "Map.h"
 

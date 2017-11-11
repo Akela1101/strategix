@@ -1,10 +1,3 @@
-/* 
- * File:   KernelBase.cpp
- * Author: Akela1101
- * 
- * Created on 13 Февраль 2010 г., 23:19
- */
-
 #include "Resources.h"
 #include "ConfigurationBuilder.h"
 #include "TechTreesBuilder.h"
@@ -32,7 +25,7 @@ s_p<vector<string>> KernelBase::GetMapNames()
 {
 	s_p<vector<string>> mapNames(new vector<string>());
 	
-	fs::recursive_directory_iterator it("Maps/"), eod;
+	fs::recursive_directory_iterator it("maps/"), eod;
 	for (; it != eod; ++it)
 	{
 		const fs::path& p = *it;

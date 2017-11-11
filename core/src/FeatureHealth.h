@@ -1,10 +1,3 @@
-/* 
- * File:   FeatureHealth.h
- * Author: Akela1101
- *
- * Created on 3 Июнь 2011 г., 13:14
- */
-
 #ifndef _FEATUREHEALTH_H
 #define    _FEATUREHEALTH_H
 

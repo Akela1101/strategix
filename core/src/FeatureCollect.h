@@ -1,10 +1,3 @@
-/* 
- * File:   FeatureCollect.h
- * Author: Akela1101
- *
- * Created on 18 Май 2011 г., 14:48
- */
-
 #ifndef _FEATURECOLLECT_H
 #define    _FEATURECOLLECT_H
 

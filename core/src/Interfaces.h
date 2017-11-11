@@ -1,10 +1,3 @@
-/* 
- * File:   Interfaces.h
- * Author: Akela1101
- *
- * Created on 18 Май 2011 г., 14:28
- */
-
 #ifndef _INTERFACES_H
 #define	_INTERFACES_H
 

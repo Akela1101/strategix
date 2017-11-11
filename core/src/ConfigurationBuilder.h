@@ -1,10 +1,3 @@
-/* 
- * File:   ConfigurationBuilder.h
- * Author: Akela1101
- *
- * Created on 28 Июнь 2011 г., 20:23
- */
-
 #ifndef _CONFIGURATIONBUILDER_H
 #define    _CONFIGURATIONBUILDER_H
 

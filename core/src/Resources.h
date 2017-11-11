@@ -1,10 +1,3 @@
-/* 
- * File:   Resources.h
- * Author: Akela1101
- *
- * Created on 17 Май 2011 г., 10:52
- */
-
 #ifndef _RESOURCES_H
 #define    _RESOURCES_H
 

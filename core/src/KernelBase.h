@@ -1,10 +1,3 @@
-/* 
- * File:   KernelBase.h
- * Author: Akela1101
- *
- * Created on 13 Февраль 2010 г., 23:19
- */
-
 #ifndef _KERNELBASE_H
 #define    _KERNELBASE_H
 

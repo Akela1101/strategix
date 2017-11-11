@@ -1,10 +1,3 @@
-/* 
- * File:   Resource.h
- * Author: Akela1101
- *
- * Created on 29 Июнь 2011 г., 13:49
- */
-
 #ifndef _RESOURCE_H
 #define    _RESOURCE_H
 

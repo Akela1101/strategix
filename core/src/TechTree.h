@@ -1,10 +1,3 @@
-/* 
- * File:   TechTree.h
- * Author: Akela1101
- *
- * Created on 12 Март 2010 г., 18:14
- */
-
 #ifndef _TECHTREE_H
 #define    _TECHTREE_H
 

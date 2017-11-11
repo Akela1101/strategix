@@ -1,10 +1,3 @@
-/* 
- * File:   TechTreesBuilder.h
- * Author: Akela1101
- *
- * Created on 12 Март 2010 г., 18:35
- */
-
 #ifndef _TECHTREEBUILDER_H
 #define    _TECHTREEBUILDER_H
 

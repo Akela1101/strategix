@@ -1,10 +1,3 @@
-/* 
- * File:   TechTree.cpp
- * Author: Akela1101
- * 
- * Created on 12 Март 2010 г., 18:14
- */
-
 #include "EntiInfo.h"
 
 

@@ -1,10 +1,3 @@
-/* 
- * File:   MapFull.cpp
- * Author: Akela1101
- * 
- * Created on 24 Март 2011 г., 14:02
- */
-
 #include "MapResource.h"
 #include "MapLocal.h"
 
@@ -90,7 +83,7 @@ MapFull::MapFull(const string& name)
 
 bool MapFull::LoadTerrains()
 {
-	ifstream fdesc("Maps/terrains.def");
+	ifstream fdesc("maps/terrains.def");
 	char cString[100];
 	fdesc.getline(cString, 100);
 	

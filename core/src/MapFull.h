@@ -1,10 +1,3 @@
-/* 
- * File:   MapFull.h
- * Author: Akela1101
- *
- * Created on 24 Март 2011 г., 14:02
- */
-
 #ifndef _MAPFULL_H
 #define    _MAPFULL_H
 
@@ -60,7 +53,7 @@ private:
 	
 	bool LoadTerrains();
 	
-	const string GetFilePath(const string& name) const { return "Maps/" + name + ".map"; }
+	const string GetFilePath(const string& name) const { return "maps/" + name + ".map"; }
 };
 }
 

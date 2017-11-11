@@ -1,10 +1,3 @@
-/* 
- * File:   MapLocal.h
- * Author: Akela1101
- *
- * Created on 24 Март 2011 г., 14:02
- */
-
 #ifndef _MAPLOCAL_H
 #define    _MAPLOCAL_H
 

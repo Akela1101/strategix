@@ -1,10 +1,3 @@
-/* 
- * File:   FeatureMove.h
- * Author: Akela1101
- *
- * Created on 23 Март 2011 г., 16:48
- */
-
 #ifndef _FEATUREMOVE_H
 #define    _FEATUREMOVE_H
 

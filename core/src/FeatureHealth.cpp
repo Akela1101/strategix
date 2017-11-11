@@ -1,10 +1,3 @@
-/* 
- * File:   FeatureHealth.cpp
- * Author: Akela1101
- * 
- * Created on 3 Июнь 2011 г., 13:14
- */
-
 #include "Enti.h"
 #include "EntiSlot.h"
 #include "FeatureInfo.h"

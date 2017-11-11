@@ -1,10 +1,3 @@
-/* 
- * File:   Enti.h
- * Author: Akela1101
- *
- * Created on 4 Февраль 2011 г., 18:41
- */
-
 #ifndef _ENTI_H
 #define _ENTI_H
 

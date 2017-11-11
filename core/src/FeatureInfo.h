@@ -1,10 +1,3 @@
-/* 
- * File:   FeatureInfo.h
- * Author: Akela1101
- *
- * Created on 21 Апрель 2011 г., 14:18
- */
-
 #ifndef _FEATUREINFO_H
 #define    _FEATUREINFO_H
 

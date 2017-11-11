@@ -1,10 +1,3 @@
-/* 
- * File:   FeatureMove.cpp
- * Author: Akela1101
- * 
- * Created on 23 Март 2011 г., 16:48
- */
-
 #include "Enti.h"
 #include "EntiSlot.h"
 #include "FeatureInfo.h"

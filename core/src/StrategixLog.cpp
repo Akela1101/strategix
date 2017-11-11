@@ -1,10 +1,3 @@
-/*
- * File:   StrategixLog.cpp
- * Author: Akela1101
- *
- * Created on 23 Апрель 2010 г., 23:25
- */
-
 #include <fstream>
 #include <iostream>
 #include <string>

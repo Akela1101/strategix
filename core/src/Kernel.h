@@ -1,10 +1,3 @@
-/* 
- * File:   Kernel.h
- * Author: Akela1101
- *
- * Created on 10 Январь 2011 г., 10:09
- */
-
 #ifndef _KERNEL_H
 #define    _KERNEL_H
 

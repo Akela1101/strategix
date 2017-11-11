@@ -1,10 +1,3 @@
-/* 
- * File:   MapLocal.cpp
- * Author: Akela1101
- * 
- * Created on 24 Март 2011 г., 14:02
- */
-
 #include "MapFull.h"
 #include "MapsPathsFinder.h"
 #include "Player.h"

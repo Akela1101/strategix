@@ -1,10 +1,3 @@
-/* 
- * File:   Player.cpp
- * Author: Akela1101
- * 
- * Created on 14 Февраль 2010 г., 17:56
- */
-
 #include "Enti.h"
 #include "EntiInfo.h"
 #include "MapLocal.h"

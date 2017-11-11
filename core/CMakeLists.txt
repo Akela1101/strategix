@@ -1,9 +1,7 @@
 project(strategix)
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
-
 include_directories(../../nya/src)
-link_libraries(libboost_filesystem)
+
 
 add_library(${PROJECT_NAME}
        src/ConfigurationBuilder.h

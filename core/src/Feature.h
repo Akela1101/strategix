@@ -1,10 +1,3 @@
-/* 
- * File:   Feature.h
- * Author: Akela1101
- *
- * Created on 23 Март 2011 г., 16:05
- */
-
 #ifndef _FEATURE_H
 #define    _FEATURE_H
 

@@ -1,10 +1,3 @@
-/* 
- * File:   StrategixException.h
- * Author: Akela1101
- *
- * Created on 14 Март 2010 г., 0:09
- */
-
 #ifndef _STRATEGIXEXCEPTION_H
 #define    _STRATEGIXEXCEPTION_H
 

@@ -1,10 +1,3 @@
-/* 
- * File:   StrategixSingleton.h
- * Author: akela
- *
- * Created on 2 Апрель 2010 г., 17:58
- */
-
 #ifndef _STRAXSINGLETON_H
 #define    _STRAXSINGLETON_H
 

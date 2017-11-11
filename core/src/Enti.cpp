@@ -1,10 +1,3 @@
-/* 
- * File:   Enti.cpp
- * Author: Akela1101
- * 
- * Created on 4 Февраль 2011 г., 18:41
- */
-
 #include "EntiInfo.h"
 #include "EntiSlot.h"
 
