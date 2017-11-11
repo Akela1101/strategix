@@ -1,7 +1,7 @@
 #include "ConfigurationBuilderFromXml.h"
 #include "TechTreesBuilderFromXml.h"
 
-#include "../../core/src/Strategix.h"
+#include <Strategix.h>
 #include <boost/filesystem.hpp>
 #include <iostream>
 
@@ -73,28 +73,28 @@ int main(int argc, char* argv[])
 {
 	int ret;
 #endif
-	KernelBase::GS().Configure(s_p<ConfigurationBuilder>(new ConfigurationBuilderFromXml)
+	Kernel::Configure(s_p<ConfigurationBuilder>(new ConfigurationBuilderFromXml)
 			, s_p<TechTreesBuilder>(new TechTreesBuilderFromXml));
 	
 	cout << endl << "Maps: " << endl;
-	s_p<vector<string>> mapNames = KernelBase::GS().GetMapNames();
-	for (auto&& mapName : *mapNames)
+	auto&& mapNames = Kernel::GetMapNames();
+	for (auto&& mapName : mapNames)
 	{
 		cout << mapName << endl;
 	}
 	
 	cout << endl << "Race names: " << endl;
-	s_p<vector<string>> raceNames = KernelBase::GS().GetRaceNames();
-	for (auto&& raceName : *raceNames)
+	auto&& raceNames = Kernel::GetRaceNames();
+	for (auto&& raceName : raceNames)
 	{
 		cout << raceName << endl;
 	}
 	
 	// One Game
 	{
-		s_p<Kernel> kernel(new Kernel("1x1"));
-		kernel->AddPlayer(s_p<Player>(new Player("Neko123", HUMAN, 0, "Spher")));
-		kernel->AddPlayer(s_p<Player>(new Player("Inu456", AI, 1, "Spher")));
+		Kernel::Init("1x1");
+		Kernel::AddPlayer(make_u<Player>("Inu",  HUMAN, 0, "Spher"));
+		Kernel::AddPlayer(make_u<Player>("Saru", AI,    1, "Spher"));
 		
 		try
 		{

@@ -11,12 +11,11 @@ using namespace Strategix;
 
 class FrameListenerKernelSlot
 {
-	s_p<Kernel> kernel;
 	//s_p<HumanPlayerSlot> humanPlayerSlot;
 	s_p<AiPlayerSlot> aiPlayerSlot;
 
 public:
-	FrameListenerKernelSlot(s_p<Kernel> kernel);
+	FrameListenerKernelSlot();
 	virtual ~FrameListenerKernelSlot() = default;
 };
 

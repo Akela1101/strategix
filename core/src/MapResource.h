@@ -1,9 +1,8 @@
 #ifndef _MAPRESOURCE_H
 #define    _MAPRESOURCE_H
 
-#include "KernelBase.h"
+#include "Kernel.h"
 #include "Resource.h"
-
 #include "Strategix_Forward.h"
 
 
@@ -15,18 +14,18 @@ class MapResource
 {
 	friend class MapFull;
 	
-	Resource resource;
-
-public:
+	u_p<Resource> resource;
 	const MapCoord mapCoord;
 
 public:
-	MapResource(Resource resource, MapCoord mapCoord)
-			: resource(resource), mapCoord(mapCoord) {}
+	MapResource(u_p<Resource> resource, const MapCoord& mapCoord)
+			: resource(move(resource)), mapCoord(mapCoord) {}
 	
-	s_p<const ResourceInfo> GetResourceInfo() const { return KernelBase::GS().GetResourceInfo(resource); }
+	const ResourceInfo* GetResourceInfo() const { return Kernel::GetResourceInfo(*resource); }
 	
-	const Resource& GetResource() const { return resource; }
+	const Resource& GetResource() const { return *resource; }
+	
+	MapCoord GetCoord() const { return mapCoord; }
 };
 }
 

@@ -18,7 +18,7 @@ struct ResourceInfo
 	virtual ~ResourceInfo() = default;
 };
 
-typedef std::map<std::string, s_p<ResourceInfo>> ResourceInfosType;
+using ResourceInfosType = std::map<std::string, s_p<ResourceInfo>>;
 }
 
 #endif    /* _RESOURCEINFO_H */

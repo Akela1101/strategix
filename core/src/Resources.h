@@ -2,8 +2,10 @@
 #define    _RESOURCES_H
 
 #include "Resource.h"
+#include "Kernel.h"
 
 #include <algorithm>
+#include <utility>
 
 
 namespace Strategix
@@ -12,16 +14,18 @@ using namespace std;
 
 class Resources
 {
-	friend class KernelBase;
-	
-	ResourcesAllType values;
+	ResourcesAllType values; // TODO: move constr
 
 public:
-	Resources(const Resources& _c) { init(_c); }
+	Resources() = default;
+	
+	Resources(const Resources& _c) : values(_c.values) {}
+	
+	Resources(ResourcesAllType values) : values(move(values)) {}
 	
 	Resources& operator=(const Resources& _c)
 	{
-		if (this != &_c) init(_c);
+		if (this != &_c) values = _c.values;
 		return *this;
 	}
 	
@@ -29,7 +33,7 @@ public:
 	const ResourcesAllType& Get() { return values; }
 	
 	// Get resource by name
-	const Resource at(string resourceName) const
+	const Resource at(const string& resourceName) const
 	{
 		return *values.find(resourceName); // never throws
 	}
@@ -38,26 +42,26 @@ public:
 	Resources operator+(const Resource& resource) const
 	{
 		Resources new_r = *this;
-		new_r.set(resource.value.first) += resource.value.second;
+		new_r.set(resource.value->first) += resource.value->second;
 		return new_r;
 	}
 	
 	Resources operator-(const Resource& resource) const
 	{
 		Resources new_r = *this;
-		new_r.set(resource.value.first) -= resource.value.second;
+		new_r.set(resource.value->first) -= resource.value->second;
 		return new_r;
 	}
 	
 	Resources& operator+=(const Resource& resource)
 	{
-		this->set(resource.value.first) += resource.value.second;
+		this->set(resource.value->first) += resource.value->second;
 		return *this;
 	}
 	
 	Resources& operator-=(const Resource& resource)
 	{
-		this->set(resource.value.first) -= resource.value.second;
+		this->set(resource.value->first) -= resource.value->second;
 		return *this;
 	}
 	
@@ -74,44 +78,10 @@ public:
 		}
 		return new_r;
 	}
-//		Resources operator -(const Resources &_r) const
-//		{
-//			Resources new_r;
-//			transform(values.begin(), values.end(),
-//				_r.values.begin(), new_r.values.begin(), opSub());
-//			return new_r;
-//		}
-//		Resources& operator +=(const Resources &_r)
-//		{
-//			transform(values.begin(), values.end(),
-//				_r.values.begin(), values.begin(), opAdd());
-//			return *this;
-//		}
-//		Resources& operator -=(const Resources &_r)
-//		{
-//			transform(values.begin(), values.end(),
-//				_r.values.begin(), values.begin(), opSub());
-//			return *this;
-//		}
-
-//		Resources operator -()
-//		{
-//			Resources new_r;
-//			transform(values.begin(), values.end(), new_r.values.begin(), opMinus());
-//			return new_r;
-//		}
 
 private:
-	Resources() = default;
-	
-	void init(const Resources& _c) { values = _c.values; }
-	
 	// for convenience inside the class
-	float& set(string resourceName) { return values.find(resourceName)->second; }
-
-//		struct opAdd { int operator() (const Resource::ResourceValueType i, const Resource::ResourceValueType j) { return i.second + j.second; } };
-//		struct opSub { int operator() (const Resource::ResourceValueType i, const Resource::ResourceValueType j) { return i.second - j.second; } };
-//		struct opMinus { int operator() (Resource::ResourceValueType i) { return -i.second; } };
+	float& set(const string& resourceName) { return values.find(resourceName)->second; }
 };
 }
 

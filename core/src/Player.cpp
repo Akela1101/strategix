@@ -1,7 +1,9 @@
 #include "Enti.h"
 #include "EntiInfo.h"
+#include "Kernel.h"
 #include "MapLocal.h"
 #include "PlayerSlot.h"
+#include "TechTree.h"
 
 #include "Player.h"
 
@@ -14,8 +16,8 @@ Player::Player(const string name, const PlayerType playerType, const int playerN
 		, name(name)
 		, playerType(playerType)
 		, playerNumber(playerNumber)
-		, resources(KernelBase::GS().MakeResources())
-		, techTree(KernelBase::GS().MakeTechTreeCopy(raceName)) {}
+		, resources(Kernel::MakeResources())
+		, techTree(Kernel::MakeTechTreeCopy(raceName)) {}
 
 void Player::Start()
 {
@@ -59,7 +61,7 @@ void Player::Tick(const float seconds)
 
 void Player::AddEnti(s_p<Enti> enti)
 {
-	entis.push_back(enti);
+	entis.push_back(move(enti));
 	enti->player = this;
 	playerSlot->OnAddEnti(enti);
 }
@@ -95,7 +97,7 @@ void Player::RemoveMapResource(s_p<MapResource> mapResource)
 	mapResources.erase(mapResource.get());
 }
 
-bool Player::AddResource(const Resource deltaResource)
+bool Player::AddResource(const Resource& deltaResource)
 {
 	// @#~ Check it
 	

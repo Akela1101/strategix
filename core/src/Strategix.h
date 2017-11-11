@@ -9,7 +9,6 @@
 #include "FeatureHealth.h"
 #include "FeatureAttack.h"
 #include "Kernel.h"
-#include "KernelBase.h"
 #include "Map.h"
 #include "MapFull.h"
 #include "MapResource.h"

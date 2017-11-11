@@ -25,8 +25,6 @@ add_library(${PROJECT_NAME}
        src/Interfaces.h
        src/Kernel.cpp
        src/Kernel.h
-       src/KernelBase.cpp
-       src/KernelBase.h
        src/Map.h
        src/MapFull.cpp
        src/MapFull.h

@@ -1,21 +1,18 @@
-#include "KernelBase.h"
 #include "Enti.h"
-#include "EntiSlot.h"
-#include "Player.h"
-#include "MapLocal.h"
-#include "FeatureInfo.h"
-
 #include "EntiInfo.h"
+#include "EntiSlot.h"
+#include "MapLocal.h"
+#include "Player.h"
+#include "ResourceInfo.h"
+#include "TechTree.h"
 
 
 namespace Strategix
 {
 
 FeatureCollect::FeatureCollect(const FeatureInfo* featureInfo, Enti* enti)
-		:
-		Feature(enti), featureInfoCollect(dynamic_cast<const FeatureInfoCollect*>(featureInfo)), load(0)
-		, isMovingToCollector(false)
-{}
+		: Feature(enti), featureInfoCollect(dynamic_cast<const FeatureInfoCollect*>(featureInfo)), load(0)
+		, isMovingToCollector(false) {}
 
 bool FeatureCollect::Collect(s_p<MapResource> mapResource)
 {
@@ -23,7 +20,7 @@ bool FeatureCollect::Collect(s_p<MapResource> mapResource)
 		return false;
 	
 	// Try move and set OnComplete for this
-	if (!enti->Do<FeatureMove>()->Move(mapResource->mapCoord, this))
+	if (!enti->Do<FeatureMove>()->Move(mapResource->GetCoord(), this))
 		return false;
 	
 	// Setting target resource
@@ -88,7 +85,7 @@ void FeatureCollect::OnComplete(bool isComplete)
 	else // neared to the collector, so unload
 	{
 		enti->entiSlot->OnBringStop();
-		enti->player->AddResource(KernelBase::GS().MakeResource(resourceName, load));
+		enti->player->AddResource(*Kernel::MakeResource(resourceName, load));
 		load = 0;
 		
 		// Going back to resource

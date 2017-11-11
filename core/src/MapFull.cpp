@@ -74,8 +74,8 @@ MapFull::MapFull(const string& name)
 		
 		// @#~ проверять правильность входных параметров!!!
 		
-		const Resource resource = KernelBase::GS().MakeResource(resourceName, initialAmount);
-		cells[j][i].mapResource.reset(new MapResource(resource, MapCoord(i, j)));
+		auto&& resource = Kernel::MakeResource(resourceName, initialAmount);
+		cells[j][i].mapResource.reset(new MapResource(move(resource), MapCoord(i, j)));
 	}
 	
 	fin.close();
@@ -116,9 +116,9 @@ s_p<MapLocal> MapFull::CreateMapLocal(Player* player)
 
 float MapFull::PickResource(s_p<MapResource> mapResource, const float amount)
 {
-	if (mapResource->resource > amount)
+	if (*mapResource->resource > amount)
 	{
-		mapResource->resource -= amount;
+		*mapResource->resource -= amount;
 		return amount;
 	}
 	else
@@ -130,9 +130,9 @@ float MapFull::PickResource(s_p<MapResource> mapResource, const float amount)
 		}
 		else // remove resource
 		{
-			const float remain = mapResource->resource;
-			mapResource->resource -= remain;
-			for (auto& mapLocal : mapLocals)
+			float remain = *mapResource->resource;
+			*mapResource->resource -= remain;
+			for (auto&& mapLocal : mapLocals)
 			{
 				mapLocal->RemoveMapResource(mapResource);
 			}

@@ -18,20 +18,14 @@ struct EntiInfoMesh : public Strategix::EntiInfo
 	
 	EntiInfoMesh() : EntiInfo() {}
 	
-	virtual EntiInfoMesh* copy() const
+	EntiInfoMesh(const EntiInfoMesh& _c)
+		: EntiInfo(_c)
 	{
-		EntiInfoMesh* copy = new EntiInfoMesh();
-		copy->init(*this);
-		return copy;
-	}
-
-protected:
-	void init(const EntiInfoMesh& _c)
-	{
-		EntiInfo::init(_c);
 		meshName = _c.meshName;
 		meshScale = _c.meshScale;
 	}
+	
+	EntiInfoMesh* clone() const override { return new EntiInfoMesh(*this); }
 };
 }
 

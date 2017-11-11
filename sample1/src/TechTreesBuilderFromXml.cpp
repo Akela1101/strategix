@@ -56,9 +56,9 @@ void TechTreesBuilderFromXml::BuildRace(const string& raceName, const pt::ptree&
 	pTechTrees->insert(std::make_pair(raceName, techTree));
 }
 
-s_p<EntiInfoMesh> TechTreesBuilderFromXml::BuildEntity(const pt::ptree& entityPropTree)
+u_p<EntiInfoMesh> TechTreesBuilderFromXml::BuildEntity(const pt::ptree& entityPropTree)
 {
-	s_p<EntiInfoMesh> eim(new EntiInfoMesh);
+	u_p<EntiInfoMesh> eim(new EntiInfoMesh);
 	
 	eim->name = entityPropTree.get<string>("name");
 	eim->kind = entityPropTree.get<string>("kind");
@@ -120,20 +120,20 @@ s_p<EntiInfoMesh> TechTreesBuilderFromXml::BuildEntity(const pt::ptree& entityPr
 	// in place of setting default value
 }
 
-s_p<Resources> TechTreesBuilderFromXml::BuildResources(const pt::ptree& resourcesPropTree)
+u_p<Resources> TechTreesBuilderFromXml::BuildResources(const pt::ptree& resourcesPropTree)
 {
 	ResourcesAllType values;
 	for (auto&& v : resourcesPropTree)
 	{
 		const string& resourceName = v.first; // gold or something else
-		if (!KernelBase::GS().GetResourceInfo(resourceName)) STRATEGIX_EXCEPTION(
+		if (!Kernel::GetResourceInfo(resourceName)) STRATEGIX_EXCEPTION(
 				"Wrong resource type in one of Races: " + resourceName +
 				"\nCheck configuration file.");
 		
 		const pt::ptree& resource = v.second;
 		values.insert(make_pair(resourceName, resource.get_value<float>()));
 	}
-	return KernelBase::GS().MakeResources(values);
+	return make_u<Resources>(values);
 }
 
 }

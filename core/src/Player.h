@@ -44,7 +44,7 @@ public:
 	void QueueEntiToRemove(Enti* enti);
 	void AddMapResource(s_p<MapResource> mapResource);
 	void RemoveMapResource(s_p<MapResource> mapResource);
-	bool AddResource(Resource deltaResource);
+	bool AddResource(const Resource& deltaResource);
 
 private:
 	Player(const Player& orig);

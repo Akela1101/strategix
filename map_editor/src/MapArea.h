@@ -1,7 +1,7 @@
 #ifndef _MAPAREA_H
 #define	_MAPAREA_H
 
-#include "nya.hpp"
+#include <nya.hpp>
 #include "MapInfo.h"
 
 #include <QtGui>

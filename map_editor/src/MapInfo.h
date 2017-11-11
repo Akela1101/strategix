@@ -1,7 +1,7 @@
 #ifndef _MAPINFO_H
 #define    _MAPINFO_H
 
-#include "nya.hpp"
+#include <nya.hpp>
 
 #include <QPixmap>
 #include <QString>

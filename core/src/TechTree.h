@@ -33,7 +33,7 @@ public:
 	
 	void AddNode(s_p<EntiInfo> entiInfo);
 	
-	s_p<EntiInfo> Node(string name) const
+	s_p<EntiInfo> Node(const string& name) const
 	{
 		auto itEi = techMap.find(name);
 		if (itEi == techMap.end()) STRATEGIX_EXCEPTION("Wrong Enti name: " + name);

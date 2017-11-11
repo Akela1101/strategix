@@ -9,18 +9,18 @@ namespace Sample1
 {
 using namespace Strategix;
 
-FrameListenerKernelSlot::FrameListenerKernelSlot(s_p<Kernel> kernel)
-		: kernel(kernel)
+FrameListenerKernelSlot::FrameListenerKernelSlot()
 {
 	// humanPlayerSlot.reset();
 	aiPlayerSlot.reset(new AiPlayerSlot());
 	
-	for (s_p<Player>& player : kernel->players)
+	for (auto& player : Kernel::GetPlayers())
 	{
 		// Assigning Human's callback as this
 		
 		// @#~ don't uncomment till there will've been slot for all players, including AI
-		if (player->playerType == HUMAN); // human
+		if (player->playerType == HUMAN)
+			; // human
 		else
 			player->playerSlot = aiPlayerSlot.get();
 	}

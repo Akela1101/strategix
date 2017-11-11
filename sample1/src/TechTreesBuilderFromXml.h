@@ -25,8 +25,8 @@ public:
 
 private:
 	void BuildRace(const string& raceName, const pt::ptree& propTree);
-	s_p<EntiInfoMesh> BuildEntity(const pt::ptree& entityPropTree);
-	s_p<Resources> BuildResources(const pt::ptree& resourcesPropTree);
+	u_p<EntiInfoMesh> BuildEntity(const pt::ptree& entityPropTree);
+	u_p<Resources> BuildResources(const pt::ptree& resourcesPropTree);
 };
 }
 

@@ -1,7 +1,7 @@
 #ifndef _MAINFORM_H
 #define    _MAINFORM_H
 
-#include "nya.hpp"
+#include <nya.hpp>
 #include "MapInfo.h"
 
 #include "ui_MainForm.h"

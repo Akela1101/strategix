@@ -8,7 +8,7 @@
 #include "StrategixException.h"
 #include "StrategixLog.h"
 
-#include "nya.hpp"
+#include <nya.hpp>
 
 
 namespace Strategix
@@ -23,7 +23,6 @@ namespace Strategix
 	class FeatureInfoMove;
 	class FeatureInfoHealth;
 	class FeatureInfoAttack;
-	class Kernel;
 	class Map;
 	class MapFull;
 	class MapLocal;
@@ -32,10 +31,10 @@ namespace Strategix
 	class MapsPathsFinder;
 	class Player;
 	class PlayerSlot;
+	class ResourceInfo;
 	class Resources;
 	class TechTree;
 	class TechTreesBuilder;
-
 }
 
 #endif	/* STRATEGIX_FORWARD_H */

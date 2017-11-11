@@ -1,4 +1,5 @@
 #include "EntiInfo.h"
+#include "TechTree.h"
 
 
 namespace Strategix
@@ -30,13 +31,13 @@ void TechTree::init(const TechTree& _c)
 	
 	for (auto&& pa : _c.techMap)
 	{
-		techMap[pa.first].reset(pa.second->copy());
+		techMap[pa.first].reset(pa.second->clone());
 	}
 }
 
 void TechTree::AddNode(s_p<EntiInfo> entiInfo)
 {
-	pair<string, s_p<EntiInfo>> pairEl(entiInfo->name, entiInfo);
+	auto pairEl = make_p(entiInfo->name, entiInfo);
 	pair<TechMapType::iterator, bool> retPair = techMap.insert(pairEl);
 	if (!retPair.second) STRATEGIX_EXCEPTION("More than one EntiInfo with name: " + entiInfo->name);
 }
