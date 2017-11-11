@@ -3,8 +3,13 @@ The main aim of this project is a base library for common Real-Time Strategy gam
 
 ## Contents
 * core — strategix core library
-* map_editor — Qt application for map editing
-* samples — samples of games \[ outdated ]
+* map_editor — qt application for map editing
+* sample\#i — samples of games \[ outdated ]
+
+## Dependencies
+* nya
+* boost
+* qt5 (map_editor)
 
 ## Build
 Probably any popular C++17 compiler can be used. 
