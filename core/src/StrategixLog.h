@@ -11,6 +11,8 @@
 #define STRATEGIX_DEBUG_EXCEPTION // Show exception message in log
 
 
+//TODO: use something good for logging
+
 namespace Strategix
 {
 class Log : public StrategixSingleton<Log>
@@ -21,25 +23,21 @@ public:
 };
 }
 
-#ifdef _DEBUG
 #define STRATEGIX_LOG(message, level, tabs) Strategix::Log::GS().Write(__TIME__, level, __FILE__, __LINE__, message, tabs)
 
-	#if STRATEGIX_DEBUG_LEVEL >= 2
-		#define STRATEGIX_INFO(message) STRATEGIX_LOG(message, "info", 0)
-	#else
-		#define STRATEGIX_INFO(message)
-	#endif
+#if STRATEGIX_DEBUG_LEVEL >= 2
+	#define STRATEGIX_INFO(message) STRATEGIX_LOG(message, "info", 0)
+#else
+	#define STRATEGIX_INFO(message)
+#endif
 
-	#if STRATEGIX_DEBUG_LEVEL >= 1
-		#define STRATEGIX_WARNING(message) STRATEGIX_LOG(message, "Warning", 1)
-	#else
-		#define STRATEGIX_WARNING(message)
-	#endif
+#if STRATEGIX_DEBUG_LEVEL >= 1
+	#define STRATEGIX_WARNING(message) STRATEGIX_LOG(message, "Warning", 1)
+#else
+	#define STRATEGIX_WARNING(message)
+#endif
 
 #define STRATEGIX_ERROR(message) STRATEGIX_LOG(message, "ERROR", 2)
-#else
-#define STRATEGIX_ERROR(message)
-#endif
 
 #endif    /* _STRATEGIXLOG_H */
 

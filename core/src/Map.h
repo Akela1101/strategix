@@ -37,11 +37,11 @@ public:
 	
 	const size_t GetLength() const { return length; }
 	
-	const Cell& GetCell(const int x, const int y) const { return cells[y][x]; }
+	const Cell& GetCell(int x, int y) const { return cells[y][x]; }
 	
 	const Cell& GetCell(const MapCoord mc) const { return cells[mc.y][mc.x]; }
 	
-	virtual float PickResource(s_p<MapResource> mapResource, float amount) = 0;
+	virtual float PickResource(s_p<MapResource>& mapResource, float amount) = 0;
 	
 	bool IsCell(const MapCoord& mc) const
 	{

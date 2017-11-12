@@ -17,7 +17,7 @@ Log::Log()
 }
 
 void Log::Write(const char* time, const char* level, const char* file
-		, const int line, const string message, const int tabs)
+		, int line, const string message, int tabs)
 {
 	stringstream ssLine;
 	ssLine << line;

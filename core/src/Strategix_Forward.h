@@ -13,7 +13,6 @@
 
 namespace Strategix
 {
-	class ConfigurationBuilder;
 	class Enti;
 	class EntiInfo;	
 	class EntiSlot;	
@@ -23,6 +22,7 @@ namespace Strategix
 	class FeatureInfoMove;
 	class FeatureInfoHealth;
 	class FeatureInfoAttack;
+	class KernelSlot;
 	class Map;
 	class MapFull;
 	class MapLocal;
@@ -35,6 +35,9 @@ namespace Strategix
 	class Resources;
 	class TechTree;
 	class TechTreesBuilder;
+
+	using ResourceInfosType = std::map<std::string, u_p<ResourceInfo>>;
+	using TechTreesType = map<string, u_p<TechTree>>;
 }
 
 #endif	/* STRATEGIX_FORWARD_H */

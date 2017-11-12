@@ -15,7 +15,7 @@ FeatureMove::FeatureMove(const FeatureInfo* featureInfo, Enti* enti)
 		: Feature(enti)
 		, featureInfoMove(dynamic_cast<const FeatureInfoMove*>(featureInfo))
 		, speed(featureInfoMove->speed)
-		, finish(enti->coord)
+		, finish(enti->GetCoord())
 		, isMoving(false)
 {}
 
@@ -23,7 +23,7 @@ bool FeatureMove::Move(const RealCoord newCoord, ICommand* iCommand)
 {
 	this->iCommand = iCommand;
 	distance = 0;
-	mapsPath = enti->player->mapLocal->FindPath(enti->coord, newCoord);
+	mapsPath = enti->GetPlayer().GetMapLocal().FindPath(enti->GetCoord(), newCoord);
 	
 	if (!mapsPath)
 		return false;
@@ -31,21 +31,21 @@ bool FeatureMove::Move(const RealCoord newCoord, ICommand* iCommand)
 	if (!isMoving)
 	{
 		isMoving = true;
-		enti->entiSlot->OnMoveStart();
+		enti->GetSlot().OnMoveStart();
 		enti->AssignTickFeature(this); // adding to Tick queue
 	}
 	
 	return true;
 }
 
-bool FeatureMove::Tick(const float seconds)
+bool FeatureMove::Tick(float seconds)
 {
 	if (distance > 0) // Moving
 	{
-		const float moving = seconds * speed;
+		float moving = seconds * speed;
 		distance = (distance > moving) ? (distance - moving) : 0;
-		enti->coord = finish - direction * distance;
-		enti->entiSlot->OnMove();
+		enti->GetCoord() = finish - direction * distance;
+		enti->GetSlot().OnMove();
 	}
 	else
 	{
@@ -60,7 +60,7 @@ bool FeatureMove::Tick(const float seconds)
 		else // Selecting next point
 		{
 			finish = mapsPath->PickFront();
-			const RealCoord delta = finish - enti->coord;
+			const RealCoord delta = finish - enti->GetCoord();
 			direction = delta.Norm();
 			distance = delta.Len();
 		}
@@ -73,7 +73,7 @@ void FeatureMove::Stop()
 	if (isMoving)
 	{
 		isMoving = false;
-		enti->entiSlot->OnMoveStop();
+		enti->GetSlot().OnMoveStop();
 	}
 }
 

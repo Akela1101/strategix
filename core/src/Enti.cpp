@@ -6,18 +6,17 @@
 
 namespace Strategix
 {
-#ifndef MSCC
-
-Enti::Enti(const EntiInfo* entiInfo, const RealCoord& coord)
-		: entiInfo(entiInfo), coord(coord), tickFeature(nullptr), isLastFeature(true)
+Enti::Enti(const EntiInfo& entiInfo, const RealCoord& coord)
+		: entiInfo(entiInfo)
+		, coord(coord)
+		, tickFeature(nullptr)
+		, isLastFeature(true)
 {
-	for (auto&& pa : entiInfo->featureInfos)
+	for (auto&& pa : entiInfo.featureInfos)
 	{
 		AddFeature(pa.first, pa.second.get());
 	}
 }
-
-#endif
 
 void Enti::AddFeature(const string& name, const FeatureInfo* featureInfo)
 {
@@ -40,7 +39,7 @@ void Enti::AddFeature(const string& name, const FeatureInfo* featureInfo)
 	// else ?
 }
 
-void Enti::Tick(const float seconds)
+void Enti::Tick(float seconds)
 {
 	for (auto itFeature = passiveTickFeatures.begin(); itFeature != passiveTickFeatures.end();)
 	{
@@ -63,7 +62,7 @@ void Enti::Tick(const float seconds)
 				isLastFeature = true;
 		}
 	}
-	entiSlot->OnTick(seconds);
+	slot->OnTick(seconds);
 }
 
 void Enti::AssignTickFeature(Feature* feature, bool isPassive)

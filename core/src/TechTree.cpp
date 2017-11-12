@@ -31,7 +31,7 @@ void TechTree::init(const TechTree& _c)
 	
 	for (auto&& pa : _c.techMap)
 	{
-		techMap[pa.first].reset(pa.second->clone());
+		techMap[pa.first] = pa.second->clone();
 	}
 }
 
@@ -39,7 +39,7 @@ void TechTree::AddNode(s_p<EntiInfo> entiInfo)
 {
 	auto pairEl = make_p(entiInfo->name, entiInfo);
 	pair<TechMapType::iterator, bool> retPair = techMap.insert(pairEl);
-	if (!retPair.second) STRATEGIX_EXCEPTION("More than one EntiInfo with name: " + entiInfo->name);
+	if (!retPair.second) STRATEGIX_THROW("More than one EntiInfo with name: " + entiInfo->name);
 }
 
 }

@@ -6,8 +6,8 @@
 
 namespace Sample1
 {
-	class FrameListenerKernelSlot;
-	class AiPlayerSlot;
+	class DefaultKernelSlot;
+	class DefaultPlayerSlot;
 }
 
 #endif	/* _SAMPLE1_FORWARD_H */

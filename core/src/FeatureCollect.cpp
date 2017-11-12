@@ -33,7 +33,7 @@ bool FeatureCollect::Collect(s_p<MapResource> mapResource)
 	return true;
 }
 
-bool FeatureCollect::Tick(const float seconds)
+bool FeatureCollect::Tick(float seconds)
 {
 	// If Enti is not full and resource still exists
 	if (load < capacity && mapResource->GetResource())
@@ -43,9 +43,9 @@ bool FeatureCollect::Tick(const float seconds)
 		{
 			piece = capacity - load; // all it can bring
 		}
-		load += enti->player->mapLocal->PickResource(mapResource, piece);
+		load += enti->GetPlayer().GetMapLocal().PickResource(mapResource, piece);
 		
-		enti->entiSlot->OnCollect();
+		enti->GetSlot().OnCollect();
 	}
 	else // full load or no more resources
 	{
@@ -58,7 +58,7 @@ bool FeatureCollect::Tick(const float seconds)
 
 void FeatureCollect::Stop()
 {
-	enti->entiSlot->OnCollectStop();
+	enti->GetSlot().OnCollectStop();
 	if (mapResource && mapResource->GetResource() == 0)
 	{
 		mapResource.reset();
@@ -74,7 +74,7 @@ void FeatureCollect::OnComplete(bool isComplete)
 	{
 		if (load < capacity)
 		{
-			enti->entiSlot->OnCollectStart();
+			enti->GetSlot().OnCollectStart();
 			enti->AssignTickFeature(this);
 		}
 		else
@@ -84,8 +84,8 @@ void FeatureCollect::OnComplete(bool isComplete)
 	}
 	else // neared to the collector, so unload
 	{
-		enti->entiSlot->OnBringStop();
-		enti->player->AddResource(*Kernel::MakeResource(resourceName, load));
+		enti->GetSlot().OnBringStop();
+		enti->GetPlayer().AddResource(*Kernel::MakeResource(resourceName, load));
 		load = 0;
 		
 		// Going back to resource
@@ -102,10 +102,10 @@ const Enti* FeatureCollect::FindCollector()
 	// @#~ Check if there is path to Collector and also select nearest
 	// @#~ Check out the case when there are no collectors or more than one !!!
 	
-	const string collectorName = enti->player->techTree->mainBuildingName;
-	for (s_p<const Enti> enti : enti->player->entis)
+	const string collectorName = enti->GetPlayer().techTree->mainBuildingName;
+	for (s_p<const Enti> enti : enti->GetPlayer().entis)
 	{
-		if (enti->entiInfo->name == collectorName)
+		if (enti->GetInfo().name == collectorName)
 		{
 			return enti.get();
 		}
@@ -117,7 +117,7 @@ void FeatureCollect::MoveToCollector()
 {
 	const Enti* collector = FindCollector();
 	
-	if (collector && enti->Do<FeatureMove>()->Move(collector->coord, this))
+	if (collector && enti->Do<FeatureMove>()->Move(collector->GetCoord(), this))
 	{
 		isMovingToCollector = true;
 	}

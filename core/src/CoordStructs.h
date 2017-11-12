@@ -54,7 +54,7 @@ struct Coord
 		return *this;
 	}
 	
-	Coord operator*(const float _v)
+	Coord operator*(float _v)
 	{
 		return Coord(_v * x, _v * y);
 	}

@@ -24,41 +24,34 @@ using namespace std;
 
 class Enti
 {
-public:
-	EntiSlot* entiSlot; // Link to entiSlot
-	Player* player; // Link to owner
-	const EntiInfo* entiInfo; // Link to tree
-	RealCoord coord; // real coordinate
-
-private:
-	typedef map<string, s_p<Feature>> FeaturesType;
-	FeaturesType features; // map[typeid.name]
+	friend class EntiSlot;
+	friend class Player;
 	
-	Feature* tickFeature; // current active feature getting Tick
+	EntiSlot* slot;           // Link to slot
+	Player* player;           // Link to owner
+	const EntiInfo& entiInfo; // Link to tree
+	RealCoord coord;          // real coordinate
+	
+	using FeaturesType = map<string, s_p<Feature>>;
+	FeaturesType features;    // map[typeid.name]
+	
+	Feature* tickFeature;     // current active feature getting Tick
 	list<Feature*> passiveTickFeatures; // features not interfering with tickFeature
 	/* ex.: regeneration, taking damage, etc. */
 	
-	bool isLastFeature; // check if there is no new tickFeature before remove it
+	bool isLastFeature;       // check if there is no new tickFeature before remove it
 
 public:
-#ifndef MSCC
-	Enti(const EntiInfo* entiInfo, const RealCoord& coord);
-#else
-	Enti(const EntiInfo* entiInfo, const RealCoord& coord)
-		: entiInfo(entiInfo)
-		, coord(coord)
-		, tickFeature(0)
-		, isLastFeature(true)
-	{
-		foreach(const EntiInfo::FeatureInfosType::value_type &pa, entiInfo->featureInfos)
-		{
-			AddFeature(pa.first, pa.second.get());
-		}
-	}
-#endif
+	Enti(const EntiInfo& entiInfo, const RealCoord& coord);
+	Enti(const Enti& _c) = delete;
+	Enti& operator=(const Enti& _c) = delete;
+	
+	EntiSlot& GetSlot() const { return *slot; }
+	Player& GetPlayer() const { return *player; }
+	const EntiInfo& GetInfo() const { return entiInfo; }
+	RealCoord GetCoord() const { return coord; }
 	
 	void Tick(float seconds);
-	
 	void AssignTickFeature(Feature* feature, bool isPassive = false);
 	
 	template<typename F>
@@ -70,15 +63,11 @@ public:
 		{
 			return dynamic_cast<F*>(iFeature->second.get());
 		}
-		STRATEGIX_EXCEPTION("There is no feature named: " + featureName);
+		STRATEGIX_THROW("There is no feature named: " + featureName);
 		return 0;
 	}
 
 private:
-	Enti(const Enti& _c);
-	
-	Enti& operator=(const Enti& _c);
-	
 	void AddFeature(const string& name, const FeatureInfo* featureInfo);
 };
 }

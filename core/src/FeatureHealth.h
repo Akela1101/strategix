@@ -18,19 +18,16 @@ private:
 
 public:
 	FeatureHealth(const FeatureInfo* featureInfo, Enti* enti);
+	FeatureHealth(const FeatureHealth& _c) = delete;
+	FeatureHealth& operator=(const FeatureHealth& _c) = delete;
 	
-	virtual bool Tick(const float seconds);
-	virtual void Stop();
+	bool Tick(float seconds) override;
+	void Stop() override;
 	
-	const HpType GetHp() const
-	{ return hp; }
+	const HpType GetHp() const { return hp; }
 	
 	const HpType GetMaxHp() const;
-	bool HpChange(const HpType deltaHp); // false if become dead
-
-private:
-	FeatureHealth(const FeatureHealth& _c);
-	FeatureHealth& operator=(const FeatureHealth& _c);
+	bool HpChange(HpType deltaHp); // false if become dead
 };
 }
 

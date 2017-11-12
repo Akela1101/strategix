@@ -20,7 +20,7 @@ struct ObjectInfo
 	QString name;
 	QPixmap image;
 	
-	ObjectInfo(const int id, const QString name, const QPixmap image)
+	ObjectInfo(int id, const QString name, const QPixmap image)
 			: id(id), name(name), image(image) {}
 };
 

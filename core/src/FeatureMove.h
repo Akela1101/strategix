@@ -28,7 +28,7 @@ public:
 	FeatureMove(const FeatureInfo* featureInfo, Enti* enti);
 	
 	bool Move(RealCoord newCoord, ICommand* iCommand = 0);
-	virtual bool Tick(const float seconds);
+	virtual bool Tick(float seconds);
 	virtual void Stop();
 
 private:

@@ -6,9 +6,9 @@
 namespace Strategix
 {
 
-EntiSlot::EntiSlot(s_p<Enti> enti) : enti(enti)
+EntiSlot::EntiSlot(s_p<Enti>& enti) : enti(enti)
 {
-	enti->entiSlot = this;
+	enti->slot = this;
 }
 
 EntiSlot::~EntiSlot() {}

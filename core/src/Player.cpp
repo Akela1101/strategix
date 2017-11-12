@@ -7,33 +7,46 @@
 
 #include "Player.h"
 
+#include <utility>
+
 
 namespace Strategix
 {
 
-Player::Player(const string name, const PlayerType playerType, const int playerNumber, const string raceName)
-		: playerSlot(0)
-		, name(name)
-		, playerType(playerType)
+Player::Player(string name, PlayerType playerType, int playerNumber, string raceName)
+		: slot(nullptr)
+		, name(move(name))
+		, type(playerType)
 		, playerNumber(playerNumber)
 		, resources(Kernel::MakeResources())
 		, techTree(Kernel::MakeTechTreeCopy(raceName)) {}
 
-void Player::Start()
+Player::~Player() = default;
+
+void Player::Init(u_p<MapLocal> mapLocal1)
 {
-	// Creating Base
-	const string baseName = techTree->mainBuildingName;
-	s_p<const EntiInfo> entiInfo = techTree->Node(baseName);
-	AddEnti(s_p<Enti>(new Enti(entiInfo.get(), mapLocal->GetInitialPostion())));
+	this->map = move(mapLocal1);
 	
-	// @#~ there's still no warfog, so inform each player about resource
-	// Resources
-	for (int i = 0; i < mapLocal->GetWidth(); ++i)
+	// headquarters
+	const string& headquartersName = techTree->mainBuildingName;
+	auto&& headquartersInfo = techTree->Node(headquartersName);
+	MapCoord hqCoord = map->GetInitialPostion();
+	AddEnti(make_s<Enti>(*headquartersInfo, hqCoord));
+	
+	// some workers
+	auto&& workerInfo = *GetTechTree().Node("Spher_Worker");
+	AddEnti(make_s<Enti>(workerInfo, hqCoord + MapCoord(2, 0)));
+	AddEnti(make_s<Enti>(workerInfo, hqCoord + MapCoord(0, 2)));
+	
+	// available resources
+	AddResource(*Kernel::MakeResource("gold", 1000));
+	
+	// resources on map
+	for (int i = 0; i < map->GetWidth(); ++i)
 	{
-		for (int j = 0; j < mapLocal->GetLength(); ++j)
+		for (int j = 0; j < map->GetLength(); ++j)
 		{
-			s_p<MapResource> mapResource = mapLocal->GetCell(i, j).mapResource;
-			if (mapResource)
+			if (s_p<MapResource> mapResource = map->GetCell(i, j).mapResource)
 			{
 				AddMapResource(mapResource);
 			}
@@ -41,7 +54,7 @@ void Player::Start()
 	}
 }
 
-void Player::Tick(const float seconds)
+void Player::Tick(float seconds)
 {
 	for (auto&& enti : entis)
 	{
@@ -61,9 +74,10 @@ void Player::Tick(const float seconds)
 
 void Player::AddEnti(s_p<Enti> enti)
 {
-	entis.push_back(move(enti));
+	entis.push_back(enti);
 	enti->player = this;
-	playerSlot->OnAddEnti(enti);
+	
+	if (slot) slot->OnAddEnti(enti);
 }
 
 void Player::QueueEntiToRemove(Enti* enti)
@@ -78,7 +92,7 @@ void Player::RemoveEnti(Enti* enti)
 	{
 		if ((*itEnti).get() == enti) // @#~ Also it was possible to check deadness )
 		{
-			playerSlot->OnRemoveEnti(*itEnti);
+			slot->OnRemoveEnti(*itEnti);
 			entis.erase(itEnti);
 			return;
 		}
@@ -88,21 +102,18 @@ void Player::RemoveEnti(Enti* enti)
 void Player::AddMapResource(s_p<MapResource> mapResource)
 {
 	mapResources.insert(mapResource.get());
-	playerSlot->OnAddMapResource(mapResource);
+	if (slot) slot->OnAddMapResource(mapResource);
 }
 
 void Player::RemoveMapResource(s_p<MapResource> mapResource)
 {
-	playerSlot->OnRemoveMapResource(mapResource);
+	slot->OnRemoveMapResource(mapResource);
 	mapResources.erase(mapResource.get());
 }
 
 bool Player::AddResource(const Resource& deltaResource)
 {
-	// @#~ Check it
-	
 	*resources += deltaResource;
-	playerSlot->OnChangeResources(resources);
 	return true;
 }
 

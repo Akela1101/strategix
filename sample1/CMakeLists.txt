@@ -11,18 +11,13 @@ include_directories(
         ../../nya/src)
 
 add_executable(${PROJECT_NAME}
-        src/AiPlayerSlot.cpp
-        src/AiPlayerSlot.h
-        src/ConfigurationBuilderFromXml.cpp
-        src/ConfigurationBuilderFromXml.h
-        src/EntiInfoMesh.h
-        src/FrameListenerKernelSlot.cpp
-        src/FrameListenerKernelSlot.h
+        src/DefaultPlayerSlot.cpp
+        src/DefaultPlayerSlot.h
+        src/DefaultKernelSlot.cpp
+        src/DefaultKernelSlot.h
         src/Main.cpp
-        src/ResourceInfoMesh.h
         src/Sample1_Forward.h
-        src/TechTreesBuilderFromXml.cpp
-        src/TechTreesBuilderFromXml.h)
+        )
 
 
 target_link_libraries(${PROJECT_NAME}

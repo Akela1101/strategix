@@ -4,6 +4,7 @@
 #include <fstream>
 #include <algorithm>
 #include <deque>
+#include <boost/format.hpp>
 
 #include "MapFull.h"
 
@@ -14,10 +15,7 @@ using namespace std;
 
 MapFull::MapFull(const string& name)
 {
-	if (!LoadTerrains())
-	{
-		STRATEGIX_EXCEPTION("Wrong terrains.def");
-	}
+	LoadTerrains();
 	
 	const string& fileName = GetFilePath(name);
 	ifstream fin(fileName.c_str());
@@ -47,7 +45,7 @@ MapFull::MapFull(const string& name)
 			}
 			else
 			{
-				STRATEGIX_EXCEPTION("Wrong map format in file: " + fileName);
+				STRATEGIX_THROW("Wrong map format in file: " + fileName);
 			}
 		}
 	}
@@ -74,47 +72,19 @@ MapFull::MapFull(const string& name)
 		
 		// @#~ проверять правильность входных параметров!!!
 		
-		auto&& resource = Kernel::MakeResource(resourceName, initialAmount);
+		auto resource = Kernel::MakeResource(resourceName, initialAmount);
 		cells[j][i].mapResource.reset(new MapResource(move(resource), MapCoord(i, j)));
 	}
 	
 	fin.close();
 }
 
-bool MapFull::LoadTerrains()
+u_p<MapLocal> MapFull::CreateMapLocal(Player* player)
 {
-	ifstream fdesc("maps/terrains.def");
-	char cString[100];
-	fdesc.getline(cString, 100);
-	
-	// Terrain Name and Retard
-	int nTypes = -1;
-	fdesc >> nTypes;
-	nTypes *= nTypes; // nTypes^2
-	
-	if (nTypes <= 0)
-		return false;
-	
-	string type;
-	float retard;
-	for (int n = 0; n < nTypes; ++n)
-	{
-		fdesc >> retard >> type;
-		
-		terrains[n] = Terrain(type, retard);
-	}
-	fdesc.close();
-	return true;
+	return make_u<MapLocal>(player, this);
 }
 
-s_p<MapLocal> MapFull::CreateMapLocal(Player* player)
-{
-	s_p<MapLocal> mapLocal(new MapLocal(player, this));
-	mapLocals.push_back(mapLocal);
-	return mapLocal;
-}
-
-float MapFull::PickResource(s_p<MapResource> mapResource, const float amount)
+float MapFull::PickResource(s_p<MapResource>& mapResource, float amount)
 {
 	if (*mapResource->resource > amount)
 	{
@@ -132,14 +102,55 @@ float MapFull::PickResource(s_p<MapResource> mapResource, const float amount)
 		{
 			float remain = *mapResource->resource;
 			*mapResource->resource -= remain;
-			for (auto&& mapLocal : mapLocals)
-			{
-				mapLocal->RemoveMapResource(mapResource);
-			}
+//			for (auto&& mapLocal : mapLocals)
+//			{
+//				mapLocal->RemoveMapResource(mapResource);
+//			}
 			mapResourceOnMap.reset();
 			return remain;
 		}
 	}
+}
+
+void MapFull::LoadTerrains()
+{
+	const string& filePath = Kernel::Get("terrains_file");
+	
+	ifstream definitionFile(filePath);
+	if (definitionFile.rdstate() & ios::failbit)
+	{
+		STRATEGIX_THROW("Wrong path: " + filePath);
+	}
+	
+	char cString[100];
+	definitionFile.getline(cString, 100);
+	
+	// Terrain Name and Retard
+	int nTypes = -1;
+	definitionFile >> nTypes;
+	nTypes *= nTypes; // nTypes^2
+	
+	if (nTypes <= 0)
+	{
+		STRATEGIX_THROW("Wrong format of " + filePath);
+	}
+	
+	string type;
+	float retard;
+	for (int n = 0; n < nTypes; ++n)
+	{
+		definitionFile >> retard >> type;
+		
+		terrains[n] = Terrain(type, retard);
+	}
+	definitionFile.close();
+}
+
+string MapFull::GetFilePath(const string& name) const
+{
+	using namespace boost;
+	auto&& pathFormat = Kernel::Get("map_path_format");
+	return str(format(pathFormat) % name);
 }
 
 }

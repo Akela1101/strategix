@@ -4,7 +4,7 @@
 #include "FeatureInfo.h"
 #include "Resources.h"
 
-#include <map>
+#include <unordered_map>
 #include <string>
 #include <vector>
 
@@ -18,12 +18,12 @@ using namespace std;
 struct EntiInfo
 {
 	string name;
-	string kind; // building or entiSlot
+	string kind; // building or entity
 	u_p<Resources> resources;
 	vector<string> depends;
 	vector<string> provides;
 	
-	typedef map<string, s_p<FeatureInfo>> FeatureInfosType;
+	using FeatureInfosType = umap<string, u_p<FeatureInfo>>;
 	FeatureInfosType featureInfos;
 	
 	
@@ -38,15 +38,13 @@ struct EntiInfo
 	{
 		for (const auto& pa : _c.featureInfos)
 		{
-			featureInfos[pa.first].reset(pa.second->copy());
+			featureInfos[pa.first].reset(pa.second->clone());
 		}
 	}
 	
 	EntiInfo& operator=(const EntiInfo& _c) = delete;
 	
-	virtual ~EntiInfo() = default;
-	
-	virtual EntiInfo* clone() const { return new EntiInfo(*this); }
+	u_p<EntiInfo> clone() const { return make_u<EntiInfo>(*this); }
 };
 }
 

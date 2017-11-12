@@ -3,8 +3,9 @@
 
 #include <map>
 #include <string>
+#include <utility>
 
-#include "Strategix_Forward.h"
+#include <Strategix_Forward.h>
 
 
 namespace Strategix
@@ -13,12 +14,10 @@ struct ResourceInfo
 {
 	const string name;
 	
-	ResourceInfo(string name) : name(name) {}
+	ResourceInfo(string name) : name(std::move(name)) {}
 	
 	virtual ~ResourceInfo() = default;
 };
-
-using ResourceInfosType = std::map<std::string, s_p<ResourceInfo>>;
 }
 
 #endif    /* _RESOURCEINFO_H */

@@ -10,7 +10,7 @@ struct ICommand
 
 struct ITick
 {
-	virtual void OnTick(const float seconds) {}
+	virtual void OnTick(float seconds) {}
 };
 
 struct IMove

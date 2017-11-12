@@ -15,21 +15,19 @@ using namespace std;
 
 class Player
 {
-	friend class FeatureCollect; // @#~ temporary
-
-public:
-	PlayerSlot* playerSlot; // Callback class
+	friend class FeatureCollect;  // @#~ temporary
 	
-	string name; // Name given by user.
-	PlayerType playerType; // human, ai, net
-	const int playerNumber; // number of player on the map
+	PlayerSlot* slot;       // Callback class
 	
-	s_p<Resources> resources;
-	s_p<TechTree> techTree; // local COPY of race tree
-	s_p<MapLocal> mapLocal;
-
-private:
-	typedef vector<s_p<Enti>> EntisType;
+	const string name;            // Unique name
+	const PlayerType type;        // human, ai, net
+	const int playerNumber;       // number of player on the map
+	
+	u_p<Resources> resources;     // available resources amount
+	u_p<TechTree> techTree;       // local COPY of race tree
+	u_p<MapLocal> map;            // local map for current player
+	
+	using EntisType = vector<s_p<Enti>>;
 	EntisType entis; // owned enties
 	
 	set<MapResource*> mapResources; // known map resources
@@ -37,8 +35,19 @@ private:
 
 public:
 	Player(string name, PlayerType playerType, int playerNumber, string raceName);
+	~Player();
+	Player(const Player& orig) = delete;
+	Player& operator=(const Player& _c) = delete;
 	
-	void Start();
+	const string& GetName() const { return name; }
+	PlayerType GetType() const { return type; }
+	int GetPlayerNumber() const { return playerNumber; }
+	TechTree& GetTechTree() const { return *techTree; }
+	MapLocal& GetMapLocal() const { return *map; }
+	
+	void SetSlot(PlayerSlot* playerSlot) { this->slot = playerSlot; }
+	void Init(u_p<MapLocal> map);
+	
 	void Tick(float seconds);
 	void AddEnti(s_p<Enti> enti);
 	void QueueEntiToRemove(Enti* enti);
@@ -47,9 +56,6 @@ public:
 	bool AddResource(const Resource& deltaResource);
 
 private:
-	Player(const Player& orig);
-	Player& operator=(const Player& _c);
-	
 	void RemoveEnti(Enti* enti);
 };
 }

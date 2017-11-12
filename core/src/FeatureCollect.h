@@ -26,7 +26,7 @@ public:
 	FeatureCollect(const FeatureInfo* featureInfo, Enti* enti);
 	
 	bool Collect(s_p<MapResource> mapResource);
-	virtual bool Tick(const float seconds);
+	virtual bool Tick(float seconds);
 	virtual void Stop();
 	
 	virtual void OnComplete(bool isComplete); // Moving Complete

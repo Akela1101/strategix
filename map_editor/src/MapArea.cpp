@@ -58,8 +58,8 @@ void MapArea::mouseMoveEvent(QMouseEvent* event)
 		lastGlobalPoint = globalPoint;
 	}
 	
-	const int tileX = point.x() / tileSize;
-	const int tileY = point.y() / tileSize;
+	int tileX = point.x() / tileSize;
+	int tileY = point.y() / tileSize;
 	const QRect& rc = QRect(tileX * tileSize, tileY * tileSize, tileSize, tileSize);
 	
 	// Draw objects, if LMB and current item is valid.

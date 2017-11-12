@@ -16,7 +16,7 @@ struct FeatureInfo
 	
 	virtual ~FeatureInfo() = default;
 	
-	virtual FeatureInfo* copy() = 0;
+	virtual FeatureInfo* clone() = 0;
 	
 	FeatureInfo(const FeatureInfo& _c) = delete;
 	FeatureInfo& operator=(const FeatureInfo& _c) = delete;
@@ -26,11 +26,9 @@ struct FeatureInfoMove : FeatureInfo
 {
 	float speed;
 	
-	FeatureInfoMove(const float speed) : speed(speed)
-	{}
+	FeatureInfoMove(float speed) : speed(speed) {}
 	
-	virtual FeatureInfoMove* copy()
-	{ return new FeatureInfoMove(speed); }
+	FeatureInfoMove* clone() override { return new FeatureInfoMove(speed); }
 };
 
 struct FeatureInfoCollect : FeatureInfo
@@ -39,12 +37,10 @@ struct FeatureInfoCollect : FeatureInfo
 	float radius; // radius Enti is able to collect from
 	s_p<Resources> capacities; // Maximum amout of each resource, creature can bear
 	
-	FeatureInfoCollect(const float speed, const float radius, s_p<Resources> capacities)
-			: speed(speed), radius(radius), capacities(capacities)
-	{}
+	FeatureInfoCollect(float speed, float radius, s_p<Resources> capacities)
+			: speed(speed), radius(radius), capacities(capacities) {}
 	
-	virtual FeatureInfoCollect* copy()
-	{ return new FeatureInfoCollect(speed, radius, capacities); }
+	FeatureInfoCollect* clone() override { return new FeatureInfoCollect(speed, radius, capacities); }
 };
 
 struct FeatureInfoHealth : FeatureInfo
@@ -52,12 +48,10 @@ struct FeatureInfoHealth : FeatureInfo
 	HpType hp;
 	float regenSpeed;
 	
-	FeatureInfoHealth(const HpType hp, const float regenSpeed)
-			: hp(hp), regenSpeed(regenSpeed)
-	{}
+	FeatureInfoHealth(const HpType hp, float regenSpeed)
+			: hp(hp), regenSpeed(regenSpeed) {}
 	
-	virtual FeatureInfoHealth* copy()
-	{ return new FeatureInfoHealth(hp, regenSpeed); }
+	FeatureInfoHealth* clone() override { return new FeatureInfoHealth(hp, regenSpeed); }
 };
 
 struct FeatureInfoAttack : FeatureInfo
@@ -65,12 +59,10 @@ struct FeatureInfoAttack : FeatureInfo
 	HpType damage;
 	float speed; // Hit/sec
 	
-	FeatureInfoAttack(const HpType damage, const float speed)
-			: damage(damage), speed(speed)
-	{}
+	FeatureInfoAttack(const HpType damage, float speed)
+			: damage(damage), speed(speed) {}
 	
-	virtual FeatureInfoAttack* copy()
-	{ return new FeatureInfoAttack(damage, speed); }
+	FeatureInfoAttack* clone() override { return new FeatureInfoAttack(damage, speed); }
 };
 }
 

@@ -1,7 +1,7 @@
-#include "ConfigurationBuilderFromXml.h"
-#include "TechTreesBuilderFromXml.h"
-
+#include <DefaultKernelSlot.h>
+#include <DefaultPlayerSlot.h>
 #include <Strategix.h>
+
 #include <boost/filesystem.hpp>
 #include <iostream>
 
@@ -71,43 +71,32 @@ INT WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR strCmdLine, INT)
 
 int main(int argc, char* argv[])
 {
-	int ret;
 #endif
-	Kernel::Configure(s_p<ConfigurationBuilder>(new ConfigurationBuilderFromXml)
-			, s_p<TechTreesBuilder>(new TechTreesBuilderFromXml));
+	// Initialize graphics and make slot to it...
+	auto kernelSlot = make_s<DefaultKernelSlot>();
 	
-	cout << endl << "Maps: " << endl;
-	auto&& mapNames = Kernel::GetMapNames();
-	for (auto&& mapName : mapNames)
-	{
-		cout << mapName << endl;
-	}
+	// Initialize Kernel...
+	Kernel::Configure(sp_cast<KernelSlot>(kernelSlot));
+	Kernel::PrintInfo();
 	
-	cout << endl << "Race names: " << endl;
-	auto&& raceNames = Kernel::GetRaceNames();
-	for (auto&& raceName : raceNames)
+	// Run a game
+	try
 	{
-		cout << raceName << endl;
-	}
-	
-	// One Game
-	{
+		// Initialize map and players...
 		Kernel::Init("1x1");
 		Kernel::AddPlayer(make_u<Player>("Inu",  HUMAN, 0, "Spher"));
 		Kernel::AddPlayer(make_u<Player>("Saru", AI,    1, "Spher"));
 		
-		try
-		{
-			// go
-		}
-		catch (Strategix::Exception& e)
-		{
-			// Already printed
-		}
-		catch (exception& e)
-		{
-			cout << endl << e.what() << endl;
-		}
+		// Handle frame updates...
+		// { Kernel::Tick(); }
+	}
+	catch (Strategix::Exception& e)
+	{
+		cerr << "Strategix error occurred. \nTerminating..." << endl;
+	}
+	catch (exception& e)
+	{
+		cerr << "Unexpected error occurred [" << e.what() << "] \nTerminating..." << endl;
 	}
 
 #if defined( _MSC_VER )

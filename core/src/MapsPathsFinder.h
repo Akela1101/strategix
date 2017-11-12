@@ -31,7 +31,7 @@ public:
 	
 	virtual ~MapsPathsFinder() = default;
 	
-	virtual s_p<MapsPath> FindPath(MapCoord from, MapCoord till);
+	virtual s_p<MapsPath> FindPath(MapCoord from, MapCoord till) const;
 
 private:
 	MapsPathsFinder(const MapsPathsFinder& _c);

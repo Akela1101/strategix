@@ -6,6 +6,7 @@
 #include <exception>
 #include <string>
 #include <sstream>
+#include <utility>
 
 
 namespace Strategix
@@ -19,26 +20,19 @@ class Exception : public std::exception
 	const string message;
 
 public:
-	Exception(const char* file, const int line, const string message)
-			: file(file), line(line), message(message) {}
+	Exception(const char* file, int line, string message)
+			: file(file), line(line), message(std::move(message)) {}
 	
-	virtual ~Exception() throw() {}
-	
-	virtual const char* what() const throw()
+	const char* what() const noexcept override
 	{
-		stringstream ssLine;
-		ssLine << line;
-		string s = string("Exception in ") + file + ":" + ssLine.str() + " >> " + message;
-		return s.c_str();
+		stringstream ss;
+		ss << file << ":" << line << " >> " << message;
+		return ss.str().c_str();
 	}
 };
 }
 
-#ifdef STRATEGIX_DEBUG_EXCEPTION
-	#define STRATEGIX_EXCEPTION(message) { STRATEGIX_ERROR(message); throw Strategix::Exception(__FILE__, __LINE__, message); }
-#else
-	#define STRATEGIX_EXCEPTION(message) throw StrategixException(__FILE__, __LINE__, message)
-#endif
+#define STRATEGIX_THROW(message) throw Strategix::Exception(__FILE__, __LINE__, message)
 
 #endif    /* _STRATEGIXEXCEPTION_H */
 

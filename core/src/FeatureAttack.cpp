@@ -19,19 +19,19 @@ bool FeatureAttack::Attack(s_p<Enti> target)
 	}
 	
 	// Try move and set OnComplete for this
-	if (!enti->Do<FeatureMove>()->Move(target->coord, this))
+	if (!enti->Do<FeatureMove>()->Move(target->GetCoord(), this))
 		return false;
 	
 	this->target = target;
 	return true;
 }
 
-bool FeatureAttack::Tick(const float seconds)
+bool FeatureAttack::Tick(float seconds)
 {
 	if (hitProgress < 1) // Preparing for 1 hit
 	{
 		hitProgress += seconds * featureInfoAttack->speed;
-		enti->entiSlot->OnAttack();
+		enti->GetSlot().OnAttack();
 	}
 	else // Inflict damage
 	{
@@ -51,7 +51,7 @@ bool FeatureAttack::Tick(const float seconds)
 
 void FeatureAttack::Stop()
 {
-	enti->entiSlot->OnAttackStop();
+	enti->GetSlot().OnAttackStop();
 	target.reset();
 }
 
@@ -60,7 +60,7 @@ void FeatureAttack::OnComplete(bool isComplete)
 	if (!isComplete)
 		return;
 	
-	enti->entiSlot->OnAttackStart();
+	enti->GetSlot().OnAttackStart();
 	enti->AssignTickFeature(this);
 }
 

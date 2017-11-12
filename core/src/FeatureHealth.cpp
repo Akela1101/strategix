@@ -13,7 +13,7 @@ FeatureHealth::FeatureHealth(const FeatureInfo* featureInfo, Enti* enti)
 		, hp(featureInfoHealth->hp)
 {}
 
-bool FeatureHealth::Tick(const float seconds)
+bool FeatureHealth::Tick(float seconds)
 {
 	// regeneration. if integer value changes -> OnHpChange
 	return true;
@@ -29,7 +29,7 @@ const HpType FeatureHealth::GetMaxHp() const
 	return featureInfoHealth->hp;
 }
 
-bool FeatureHealth::HpChange(const HpType deltaHp)
+bool FeatureHealth::HpChange(HpType deltaHp)
 {
 	hp += deltaHp;
 	
@@ -37,8 +37,8 @@ bool FeatureHealth::HpChange(const HpType deltaHp)
 	{
 		// Dead
 		hp = 0;
-		enti->entiSlot->OnHpChange();
-		enti->player->QueueEntiToRemove(enti);
+		enti->GetSlot().OnHpChange();
+		enti->GetPlayer().QueueEntiToRemove(enti);
 		return false;
 	}
 	else if (hp > featureInfoHealth->hp)
@@ -46,7 +46,7 @@ bool FeatureHealth::HpChange(const HpType deltaHp)
 		// Stop healing|repair
 		hp = featureInfoHealth->hp;
 	}
-	enti->entiSlot->OnHpChange();
+	enti->GetSlot().OnHpChange();
 	return true;
 }
 

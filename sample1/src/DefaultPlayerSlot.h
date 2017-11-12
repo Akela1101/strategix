@@ -1,5 +1,5 @@
-#ifndef _AIPLAYERSLOT_H
-#define    _AIPLAYERSLOT_H
+#ifndef _DEFAULTPLAYERSLOT_H
+#define    _DEFAULTPLAYERSLOT_H
 
 #include <PlayerSlot.h>
 
@@ -14,14 +14,12 @@ namespace Sample1
 using namespace std;
 using namespace Strategix;
 
-class AiPlayerSlot : public PlayerSlot
+class DefaultPlayerSlot : public PlayerSlot
 {
-protected:
-	//std::map<s_p<Enti>, s_p<OObjectEntiSlot>> entiSlots;
-
 public:
-	void OnAddEnti(s_p<Enti> enti) override;
-	void OnRemoveEnti(s_p<Enti> enti) override;
+	void OnAddEnti(s_p<Enti> enti) override {}
+	
+	void OnRemoveEnti(s_p<Enti> enti) override {}
 	
 	void OnAddMapResource(s_p<MapResource> mapResource) override {}
 	
@@ -31,5 +29,5 @@ public:
 };
 }
 
-#endif    /* _AIPLAYERSLOT_H */
+#endif    /* _DEFAULTPLAYERSLOT_H */
 

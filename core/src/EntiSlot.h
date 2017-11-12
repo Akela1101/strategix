@@ -14,7 +14,7 @@ public:
 	s_p<Enti> enti;
 
 public:
-	EntiSlot(s_p<Enti> enti);
+	EntiSlot(s_p<Enti>& enti);
 	virtual ~EntiSlot() = 0;
 
 private:

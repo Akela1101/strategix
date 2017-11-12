@@ -3,9 +3,10 @@
 
 #include "Map.h"
 
+#include <utility>
 #include <vector>
 #include <string>
-#include <map>
+#include <unordered_map>
 
 #include "Strategix_Forward.h"
 
@@ -23,37 +24,30 @@ protected:
 		float retard;
 		
 		Terrain() = default;
-		
-		Terrain(const Terrain& _c) = default;
-		
-		Terrain(const string& name, const float retard) : name(name), retard(retard) {}
+		Terrain(string name, float retard) : name(std::move(name)), retard(retard) {}
 	};
 
 protected:
-	map<int, Terrain> terrains;
+	umap<int, Terrain> terrains;
 	int nPlayers;
 	vector<MapCoord> initialPositions;
 	
-	vector<s_p<MapLocal>> mapLocals;
-
 public:
 	MapFull(const string& name);
+	MapFull(const MapFull& _c) = delete;
+	MapFull& operator=(const MapFull& _c) = delete;
 	
-	const Terrain& GetTerrain(const int terrainType) const { return terrains.find(terrainType)->second; }
+	const Terrain& GetTerrain(int terrainType) const { return terrains.find(terrainType)->second; }
+	MapCoord GetInitialPostion(int iPlayer) const { return initialPositions[iPlayer]; }
 	
-	const MapCoord GetInitialPostion(int iPlayer) const { return initialPositions[iPlayer]; }
+	u_p<MapLocal> CreateMapLocal(Player* player);
 	
-	s_p<MapLocal> CreateMapLocal(Player* player);
+	float PickResource(s_p<MapResource>& mapResource, float amount) override;
 	
-	float PickResource(s_p<MapResource> mapResource, float amount);
-
 private:
-	MapFull(const MapFull& _c);
-	MapFull& operator=(const MapFull& _c);
+	void LoadTerrains();
 	
-	bool LoadTerrains();
-	
-	const string GetFilePath(const string& name) const { return "maps/" + name + ".map"; }
+	string GetFilePath(const string& name) const;
 };
 }
 

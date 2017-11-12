@@ -11,7 +11,7 @@ MapsPathsFinder::MapsPathsFinder(const Map& map)
 		: map(map)
 {}
 
-s_p<MapsPath> MapsPathsFinder::FindPath(const MapCoord from, const MapCoord till)
+s_p<MapsPath> MapsPathsFinder::FindPath(const MapCoord from, const MapCoord till) const
 {
 	// Cannot be achieved
 	if (!IsAccessible(till))
@@ -77,7 +77,7 @@ s_p<MapsPath> MapsPathsFinder::FindPath(const MapCoord from, const MapCoord till
 				s_p<CellPrice> openedCell = GetByCoord(opened, checking_mc);
 				if (!openedCell.get())
 				{
-					const int new_H = Distance(checking_mc, till);
+					int new_H = Distance(checking_mc, till);
 					openedCell.reset(new CellPrice(checking_mc, current.get(), new_G, new_H));
 					opened.push_back(openedCell);
 				}

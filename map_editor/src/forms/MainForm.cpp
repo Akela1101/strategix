@@ -68,7 +68,7 @@ MainForm::MainForm()
 	{
 		for (int col = 0; col < divs; ++col)
 		{
-			const int terrId = divs * row + col; // Index of picture will become terrain type!!!
+			int terrId = divs * row + col; // Index of picture will become terrain type!!!
 			const QString& terrName = QString(terrainNames[terrId].c_str());
 			if (terrName == "none") // none name are skipped !!!
 				break;

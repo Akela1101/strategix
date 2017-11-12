@@ -48,23 +48,23 @@ public:
 	operator string() const { return value->first; }
 	
 	// With no resource type check !!!
-	const Resource operator+(const float amount) const
+	const Resource operator+(float amount) const
 	{
 		return Resource(value->first, value->second + amount);
 	}
 	
-	const Resource operator-(const float amount) const
+	const Resource operator-(float amount) const
 	{
 		return Resource(value->first, value->second - amount);
 	}
 	
-	Resource& operator+=(const float amount)
+	Resource& operator+=(float amount)
 	{
 		value->second += amount;
 		return *this;
 	}
 	
-	Resource& operator-=(const float amount)
+	Resource& operator-=(float amount)
 	{
 		value->second -= amount;
 		return *this;
