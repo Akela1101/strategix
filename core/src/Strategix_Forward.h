@@ -4,7 +4,7 @@
 #include <CoordStructs.h>
 #include <StrategixCommon.h>
 #include <memory>
-#include <nya/exceptoin.hpp>
+#include <nya/exception.hpp>
 #include <nya/log.hpp>
 #include <nya.hpp>
 
