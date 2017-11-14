@@ -45,7 +45,11 @@ add_library(${PROJECT_NAME}
         src/TechTree.cpp
         src/TechTree.h
         src/TechTreesBuilder.h
-        src/ConfigurationManager.cpp src/KernelSlot.h)
+        src/ConfigurationManager.cpp
+        src/KernelSlot.h
+        )
+
+set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 17)
 
 target_include_directories(${PROJECT_NAME} PUBLIC
         src

@@ -16,6 +16,8 @@ add_executable(${PROJECT_NAME}
         src/Sample1_Forward.h
         )
 
+set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 17)
+
 target_include_directories(${PROJECT_NAME} PRIVATE src)
 
 target_link_libraries(${PROJECT_NAME}
