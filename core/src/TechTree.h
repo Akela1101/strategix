@@ -36,7 +36,7 @@ public:
 	s_p<EntiInfo> Node(const string& name) const
 	{
 		auto itEi = techMap.find(name);
-		if (itEi == techMap.end()) STRATEGIX_THROW("Wrong Enti name: " + name);
+		if (itEi == techMap.end()) throw_nya("Wrong Enti name: " + name);
 		return itEi->second;
 	}
 };

@@ -1,13 +1,14 @@
 cmake_minimum_required(VERSION 3.9)
 
-set(CMAKE_CXX_STANDARD 17)
-# set(CMAKE_VERBOSE_MAKEFILE ON)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -w") # disable all warnings!
-if(MSVC)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++latest")
-endif(MSVC)
+# Common stuff
+add_subdirectory(../nya nya)
 
+# Easylogging
+set(build_static_lib ON cache)
+add_subdirectory(../easyloggingpp easyloggingpp)
+target_compile_definitions(easyloggingpp PRIVATE ELPP_NO_DEFAULT_LOG_FILE)
 
+# Strategix
 add_subdirectory(core)
 add_subdirectory(map_editor)
 

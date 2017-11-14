@@ -1,3 +1,4 @@
+include(../core/cmake/common.cmake)
 project(sample1)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
@@ -5,10 +6,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
 
 find_package(Boost COMPONENTS system filesystem REQUIRED)
 
-include_directories(
-        src
-        ../core/src
-        ../../nya/src)
 
 add_executable(${PROJECT_NAME}
         src/DefaultPlayerSlot.cpp
@@ -19,9 +16,11 @@ add_executable(${PROJECT_NAME}
         src/Sample1_Forward.h
         )
 
+target_include_directories(${PROJECT_NAME} PRIVATE src)
 
 target_link_libraries(${PROJECT_NAME}
         strategix
+        easyloggingpp
         ${Boost_SYSTEM_LIBRARY}
         ${Boost_FILESYSTEM_LIBRARY})
 

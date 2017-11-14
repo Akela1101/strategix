@@ -1,6 +1,5 @@
+include(cmake/common.cmake)
 project(strategix)
-
-include_directories(../../nya/src src)
 
 
 add_library(${PROJECT_NAME}
@@ -42,11 +41,14 @@ add_library(${PROJECT_NAME}
         src/Resources.h
         src/Strategix_Forward.h
         src/StrategixCommon.h
-        src/StrategixException.h
-        src/StrategixLog.cpp
-        src/StrategixLog.h
         src/StrategixSingleton.h
         src/TechTree.cpp
         src/TechTree.h
         src/TechTreesBuilder.h
         src/ConfigurationManager.cpp src/KernelSlot.h)
+
+target_include_directories(${PROJECT_NAME} PUBLIC
+        src
+        ../../easyloggingpp/src)
+
+target_link_libraries(${PROJECT_NAME} nya)

@@ -1,7 +1,7 @@
-#include "MapArea.h"
-#include "MainForm.h"
-
+#include <forms/MainForm.h>
 #include <QScrollBar>
+
+#include "MapArea.h"
 
 
 static QPoint globalPoint, lastGlobalPoint;

@@ -45,7 +45,7 @@ MapFull::MapFull(const string& name)
 			}
 			else
 			{
-				STRATEGIX_THROW("Wrong map format in file: " + fileName);
+				throw_nya("Wrong map format in file: " + fileName);
 			}
 		}
 	}
@@ -119,7 +119,7 @@ void MapFull::LoadTerrains()
 	ifstream definitionFile(filePath);
 	if (definitionFile.rdstate() & ios::failbit)
 	{
-		STRATEGIX_THROW("Wrong path: " + filePath);
+		throw_nya("Wrong path: " + filePath);
 	}
 	
 	char cString[100];
@@ -132,7 +132,7 @@ void MapFull::LoadTerrains()
 	
 	if (nTypes <= 0)
 	{
-		STRATEGIX_THROW("Wrong format of " + filePath);
+		throw_nya("Wrong format of " + filePath);
 	}
 	
 	string type;

@@ -6,6 +6,10 @@
 #include <iostream>
 
 
+#include <easylogging++.h>
+INITIALIZE_EASYLOGGINGPP
+
+
 using namespace Strategix;
 using namespace Sample1;
 using namespace std;
@@ -72,6 +76,12 @@ INT WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR strCmdLine, INT)
 int main(int argc, char* argv[])
 {
 #endif
+	// Logs
+	el::Loggers::configureFromGlobal(Kernel::Get("log_config_file").c_str());
+	el::Configurations conf;
+	conf.parseFromText("*GLOBAL:\n FORMAT = %msg", el::Loggers::getLogger("default")->configurations());
+	el::Loggers::getLogger("raw")->configure(conf);
+	
 	// Initialize graphics and make slot to it...
 	auto kernelSlot = make_s<DefaultKernelSlot>();
 	
@@ -90,7 +100,7 @@ int main(int argc, char* argv[])
 		// Handle frame updates...
 		// { Kernel::Tick(); }
 	}
-	catch (Strategix::Exception& e)
+	catch (nya::exception& e)
 	{
 		cerr << "Strategix error occurred. \nTerminating..." << endl;
 	}

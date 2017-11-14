@@ -1,5 +1,5 @@
+#include <forms/MainForm.h>
 #include <QApplication>
-#include "MainForm.h"
 
 #ifdef Q_OS_WIN
 	Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin)

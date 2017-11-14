@@ -30,14 +30,14 @@ void ParseConfig(ResourceInfosType* pResourceInfos)
 			const string& resourceName = name_tree.first;
 			if (in_(resourceName, *pResourceInfos))
 			{
-				STRATEGIX_WARNING("Wrong resource type in one of Races: " + resourceName);
+				info_log << "Wrong resource type in one of Races: %s"s % resourceName;
 			}
 			pResourceInfos->insert(make_pair(resourceName, new ResourceInfo(resourceName)));
 		}
 	}
 	catch (exception& e)
 	{
-		STRATEGIX_ERROR(e.what());
+		error_log << e.what();
 	}
 }
 
@@ -51,8 +51,7 @@ u_p<Resources> ParseResources(const pt::ptree& resourcesPropTree)
 			const string& resourceName = name_tree.first; // gold or something else
 			if (!Kernel::GetResourceInfo(resourceName))
 			{
-				STRATEGIX_WARNING("Wrong resource type in one of Races: " + resourceName
-				                  + "\nCheck configuration file.");
+				info_log << "Wrong resource type in one of Races: %s\nCheck configuration file."s % resourceName;
 				continue;
 			}
 			
@@ -63,7 +62,7 @@ u_p<Resources> ParseResources(const pt::ptree& resourcesPropTree)
 	}
 	catch (pt::ptree_error& e)
 	{
-		STRATEGIX_WARNING(e.what());
+		info_log << e.what();
 		return nullptr;
 	}
 }
@@ -99,7 +98,7 @@ u_p<FeatureInfo> ParseFeature(const string& name, const pt::ptree& feature)
 	}
 	catch (pt::ptree_error& e)
 	{
-		STRATEGIX_WARNING("Unable to parse feature: " + name + " Error: " + e.what());
+		info_log << "Unable to parse feature: %s. Error: %s"s % name % e.what();
 		return nullptr;
 	}
 }
@@ -126,7 +125,7 @@ u_p<EntiInfo> ParseEntity(const pt::ptree& entityPropTree)
 	}
 	catch (pt::ptree_error& e)
 	{
-		STRATEGIX_WARNING(e.what());
+		info_log << e.what();
 		return nullptr;
 	}
 }
@@ -146,7 +145,7 @@ u_p<TechTree> ParseRace(const string& raceName, const pt::ptree& propTree)
 	}
 	catch (pt::ptree_error& e)
 	{
-		STRATEGIX_WARNING(e.what());
+		info_log << e.what();
 		return nullptr;
 	}
 }
@@ -171,14 +170,14 @@ void ParseTechTrees(TechTreesType* pTechTrees)
 				}
 				catch (const pt::ptree_error& e)
 				{
-					STRATEGIX_ERROR(e.what());
+					error_log << e.what();
 				}
 			}
 		}
 	}
 	catch (exception& e)
 	{
-		STRATEGIX_ERROR(e.what());
+		error_log << e.what();
 	}
 }
 

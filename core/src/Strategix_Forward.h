@@ -1,13 +1,11 @@
 #ifndef STRATEGIX_FORWARD_H
 #define	STRATEGIX_FORWARD_H
 
+#include <CoordStructs.h>
+#include <StrategixCommon.h>
 #include <memory>
-
-#include "CoordStructs.h"
-#include "StrategixCommon.h"
-#include "StrategixException.h"
-#include "StrategixLog.h"
-
+#include <nya/exceptoin.hpp>
+#include <nya/log.hpp>
 #include <nya.hpp>
 
 

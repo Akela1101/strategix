@@ -63,7 +63,7 @@ public:
 		{
 			return dynamic_cast<F*>(iFeature->second.get());
 		}
-		STRATEGIX_THROW("There is no feature named: " + featureName);
+		throw_nya("There is no feature named: " + featureName);
 		return 0;
 	}
 

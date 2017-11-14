@@ -25,6 +25,7 @@ namespace fs = boost::filesystem;
 static const umap<string, string> constants
 		= {
 				{ "config_file",      "config/strategix_config.xml" },
+				{ "log_config_file",  "config/log.conf" },
 				{ "races_config_dir", "config/races/" },
 				{ "terrains_file",    "maps/terrains.def" },
 				{ "map_path_format",  "maps/%s.map" }
@@ -47,14 +48,14 @@ void Configure(s_p<KernelSlot>&& slot)
 
 void Init(const string& mapName)
 {
-	if (!slot) STRATEGIX_THROW("Configure() should be run before Init().");
+	if (!slot) throw_nya("Configure() should be run before Init().");
 	
 	mapFull = make_u<MapFull>(mapName);
 }
 
 void AddPlayer(u_p<Player> player)
 {
-	if (!mapFull) STRATEGIX_THROW("Init() should be run before AddPlayer().");
+	if (!mapFull) throw_nya("Init() should be run before AddPlayer().");
 	
 	Player* pPlayer = player.get();
 	player->Init(mapFull->CreateMapLocal(pPlayer));
@@ -92,7 +93,7 @@ string Get(const string& name)
 	try { return constants.at(name); }
 	catch (...)
 	{
-		STRATEGIX_WARNING(name + " is not defined in Strategix::Kernel.");
+		info_log << "%s is not defined in Strategix::Kernel."s % name;
 		return "";
 	}
 }
@@ -129,7 +130,7 @@ vector<string> GetMapNames()
 	}
 	catch (fs::filesystem_error& e)
 	{
-		STRATEGIX_ERROR(e.what());
+		error_log << e.what();
 	}
 	return mapNames;
 }
@@ -149,7 +150,7 @@ u_p<Resource> MakeResource(const string& name, float amount)
 	auto iRi = resourceInfos.find(name);
 	if (iRi == resourceInfos.end())
 	{
-		STRATEGIX_THROW("There is no resource named: " + name);
+		throw_nya("There is no resource named: " + name);
 	}
 	return make_u<Resource>(iRi->first, amount);
 }
