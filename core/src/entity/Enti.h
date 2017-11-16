@@ -5,10 +5,10 @@
 #include "EntiInfo.h"
 #endif
 
-#include "FeatureMove.h"
-#include "FeatureCollect.h"
-#include "FeatureHealth.h"
-#include "FeatureAttack.h"
+#include "feature/FeatureMove.h"
+#include "feature/FeatureCollect.h"
+#include "feature/FeatureHealth.h"
+#include "feature/FeatureAttack.h"
 
 #include <map>
 #include <list>

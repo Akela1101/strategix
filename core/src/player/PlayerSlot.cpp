@@ -1,5 +1,5 @@
-#include <EntiSlot.h>
-#include <Player.h>
+#include <entity/EntiSlot.h>
+#include <player/Player.h>
 
 #include "PlayerSlot.h"
 

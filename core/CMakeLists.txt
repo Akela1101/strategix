@@ -6,36 +6,36 @@ add_library(${PROJECT_NAME}
         src/ConfigurationManager.h
         src/CoordStructs.cpp
         src/CoordStructs.h
-        src/Enti.cpp
-        src/Enti.h
-        src/EntiInfo.h
-        src/EntiSlot.cpp
-        src/EntiSlot.h
-        src/Feature.h
-        src/FeatureAttack.cpp
-        src/FeatureAttack.h
-        src/FeatureCollect.cpp
-        src/FeatureCollect.h
-        src/FeatureHealth.cpp
-        src/FeatureHealth.h
-        src/FeatureInfo.h
-        src/FeatureMove.cpp
-        src/FeatureMove.h
+        src/entity/Enti.cpp
+        src/entity/Enti.h
+        src/entity/EntiInfo.h
+        src/entity/EntiSlot.cpp
+        src/entity/EntiSlot.h
+        src/feature/Feature.h
+        src/feature/FeatureAttack.cpp
+        src/feature/FeatureAttack.h
+        src/feature/FeatureCollect.cpp
+        src/feature/FeatureCollect.h
+        src/feature/FeatureHealth.cpp
+        src/feature/FeatureHealth.h
+        src/feature/FeatureInfo.h
+        src/feature/FeatureMove.cpp
+        src/feature/FeatureMove.h
         src/Interfaces.h
         src/Kernel.cpp
         src/Kernel.h
-        src/Map.h
-        src/MapFull.cpp
-        src/MapFull.h
-        src/MapLocal.cpp
-        src/MapLocal.h
-        src/Mine.h
-        src/MapsPath.h
-        src/MapsPathsFinder.cpp
-        src/MapsPathsFinder.h
-        src/Player.cpp
-        src/Player.h
-        src/PlayerSlot.h
+        src/map/Map.h
+        src/map/MapFull.cpp
+        src/map/MapFull.h
+        src/map/MapLocal.cpp
+        src/map/MapLocal.h
+        src/map/Mine.h
+        src/map/MapsPath.h
+        src/map/MapsPathsFinder.cpp
+        src/map/MapsPathsFinder.h
+        src/player/Player.cpp
+        src/player/Player.h
+        src/player/PlayerSlot.h
         src/Resource.h
         src/Resources.h
         src/Strategix_Forward.h
@@ -46,7 +46,7 @@ add_library(${PROJECT_NAME}
         src/TechTreesBuilder.h
         src/ConfigurationManager.cpp
         src/KernelSlot.h
-        src/PlayerSlot.cpp)
+        src/player/PlayerSlot.cpp)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 17)
 

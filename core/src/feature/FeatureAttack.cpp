@@ -1,5 +1,5 @@
-#include "Enti.h"
-#include "EntiSlot.h"
+#include "entity/Enti.h"
+#include "entity/EntiSlot.h"
 #include "FeatureInfo.h"
 
 

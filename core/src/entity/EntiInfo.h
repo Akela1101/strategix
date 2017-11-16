@@ -1,7 +1,7 @@
 #ifndef _ENTIINFO_H
 #define    _ENTIINFO_H
 
-#include "FeatureInfo.h"
+#include "feature/FeatureInfo.h"
 #include "Resources.h"
 
 #include <unordered_map>

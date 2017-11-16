@@ -1,7 +1,7 @@
-#include <EntiInfo.h>
+#include <entity/EntiInfo.h>
 #include <SamplePlayerSlot.h>
-#include <MapLocal.h>
-#include <Player.h>
+#include <map/MapLocal.h>
+#include <player/Player.h>
 #include <TechTree.h>
 
 #include "SampleKernelSlot.h"

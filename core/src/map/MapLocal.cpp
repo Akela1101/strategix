@@ -1,6 +1,6 @@
 #include "MapFull.h"
 #include "MapsPathsFinder.h"
-#include "Player.h"
+#include "player/Player.h"
 
 #include "MapLocal.h"
 

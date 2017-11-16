@@ -1,7 +1,7 @@
 #ifndef _SAMPLEENTISLOT_H
 #define _SAMPLEENTISLOT_H
 
-#include <EntiSlot.h>
+#include <entity/EntiSlot.h>
 
 namespace sample1
 {

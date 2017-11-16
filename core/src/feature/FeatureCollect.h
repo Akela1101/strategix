@@ -3,7 +3,7 @@
 
 #include "Feature.h"
 #include "Interfaces.h"
-#include "Map.h"
+#include "map/Map.h"
 
 #include "Strategix_Forward.h"
 

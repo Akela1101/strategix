@@ -1,8 +1,8 @@
 #ifndef _PLAYER_H
 #define    _PLAYER_H
 
-#include <Mine.h>
-#include <PlayerSlot.h>
+#include <map/Mine.h>
+#include <player/PlayerSlot.h>
 #include <Strategix_Forward.h>
 
 #include <vector>

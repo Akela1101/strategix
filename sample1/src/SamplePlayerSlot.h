@@ -1,7 +1,7 @@
 #ifndef _SAMPLEPLAYERSLOT_H
 #define    _SAMPLEPLAYERSLOT_H
 
-#include <PlayerSlot.h>
+#include <player/PlayerSlot.h>
 
 #include <map>
 

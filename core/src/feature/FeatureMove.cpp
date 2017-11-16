@@ -1,9 +1,9 @@
-#include "Enti.h"
-#include "EntiSlot.h"
+#include "entity/Enti.h"
+#include "entity/EntiSlot.h"
 #include "FeatureInfo.h"
-#include "MapLocal.h"
-#include "MapsPath.h"
-#include "Player.h"
+#include "map/MapLocal.h"
+#include "map/MapsPath.h"
+#include "player/Player.h"
 
 #include "FeatureMove.h"
 

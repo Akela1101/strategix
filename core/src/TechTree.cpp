@@ -1,4 +1,4 @@
-#include "EntiInfo.h"
+#include "entity/EntiInfo.h"
 #include "TechTree.h"
 
 

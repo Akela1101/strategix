@@ -1,8 +1,8 @@
-#include "Enti.h"
-#include "EntiInfo.h"
-#include "EntiSlot.h"
+#include "entity/Enti.h"
+#include "entity/EntiInfo.h"
+#include "entity/EntiSlot.h"
 #include "Kernel.h"
-#include "MapLocal.h"
+#include "map/MapLocal.h"
 #include "PlayerSlot.h"
 #include "TechTree.h"
 

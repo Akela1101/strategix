@@ -1,9 +1,9 @@
 #include <ConfigurationManager.h>
-#include <Enti.h>
-#include <EntiInfo.h>
-#include <MapFull.h>
-#include <MapLocal.h>
-#include <Player.h>
+#include <entity/Enti.h>
+#include <entity/EntiInfo.h>
+#include <map/MapFull.h>
+#include <map/MapLocal.h>
+#include <player/Player.h>
 #include <Resources.h>
 #include <TechTreesBuilder.h>
 
