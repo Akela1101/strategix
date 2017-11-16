@@ -6,7 +6,7 @@
 #include "Strategix_Forward.h"
 
 
-namespace Strategix
+namespace strategix
 {
 // Global feature properties
 

@@ -1,75 +1,69 @@
+#include <ConfigurationManager.h>
 #include <Enti.h>
+#include <EntiInfo.h>
 #include <MapFull.h>
 #include <MapLocal.h>
 #include <Player.h>
-#include <ResourceInfo.h>
 #include <Resources.h>
-#include <ConfigurationManager.h>
 #include <TechTreesBuilder.h>
 
 #include <boost/filesystem.hpp>
-#include <iostream>
 
 #include "Kernel.h"
 #include "KernelSlot.h"
 
 
-namespace Strategix::Kernel
+namespace strategix::Kernel
 {
-using namespace Strategix;
+using namespace strategix;
 using namespace std;
 using namespace boost;
 namespace fs = boost::filesystem;
 
-// Constants
-static const umap<string, string> constants
-		= {
-				{ "config_file",      "config/strategix_config.xml" },
-				{ "log_config_file",  "config/log.conf" },
-				{ "races_config_dir", "config/races/" },
-				{ "terrains_file",    "maps/terrains.def" },
-				{ "map_path_format",  "maps/%s.map" }
-		};
+
+using PlayersType = umap<string, u_p<Player>>;
+
 
 // Variables
-static s_p<KernelSlot> slot;            // Main event receiver
-static u_p<MapFull> mapFull;            // Current map
-static vector<u_p<Player>> players;     // List of players
-static ResourceInfosType resourceInfos; // List of resource descriptoins
-static TechTreesType techTrees;         // Technology trees
+static u_p<KernelSlot> slot;            // main event receiver
+static u_p<MapFull> mapFull;            // current map
+static PlayersType players;             // players by name
+static ResourceInfosType resourceInfos; // resource descriptions
+static TechTreesType techTrees;         // technology trees
+static string mapsDirectory;            // usually "maps"
 
-
-void Configure(s_p<KernelSlot>&& slot)
+void Configure(KernelSlot* slot)
 {
-	Kernel::slot = slot;
-	ConfigurationManager::ParseConfig(&resourceInfos);
-	ConfigurationManager::ParseTechTrees(&techTrees);
+	Kernel::slot.reset(slot);
+	tie(resourceInfos, techTrees) = ConfigurationManager().ParseConfig(slot->GetConfigPath());
+	mapsDirectory = slot->GetMapsPath();
 }
 
-void Init(const string& mapName)
+void SetMap(const string& mapName)
 {
-	if (!slot) throw_nya("Configure() should be run before Init().");
+	if (!slot) throw_nya("Configure() should be run before SetMap().");
 	
 	mapFull = make_u<MapFull>(mapName);
 }
 
-void AddPlayer(u_p<Player> player)
+void AddPlayer(PlayerSlot* playerSlot)
 {
-	if (!mapFull) throw_nya("Init() should be run before AddPlayer().");
+	if (!mapFull) throw_nya("SetMap() should be run before AddPlayer().");
 	
-	Player* pPlayer = player.get();
-	player->Init(mapFull->CreateMapLocal(pPlayer));
+	auto player = new Player(playerSlot);
+	player->Init(mapFull->CreateMapLocal(player));
 	
-	players.push_back(move(player));
-	
-	slot->OnAddPlayer(pPlayer);
+	players.emplace(player->GetName(), player);
 }
+
+void Start()
+{}
 
 void Tick(float seconds)
 {
-	for (auto& player : players)
+	for (auto& name_player : players)
 	{
-		player->Tick(seconds);
+		name_player.second->Tick(seconds);
 	}
 }
 
@@ -88,29 +82,18 @@ void PrintInfo()
 	}
 }
 
-string Get(const string& name)
-{
-	try { return constants.at(name); }
-	catch (...)
-	{
-		info_log << "%s is not defined in Strategix::Kernel."s % name;
-		return "";
-	}
-}
+const string& GetMapsDir() { return mapsDirectory; }
 
 MapFull& GetMap() { return *mapFull; }
 
-vector<u_p<Player>>& GetPlayers() { return players; }
-
-ResourceInfo* GetResourceInfo(const string& name)
+bool CheckResource(const string& name)
 {
-	auto iRi = resourceInfos.find(name);
-	return iRi != resourceInfos.end() ? &*iRi->second : nullptr;
+	return find(all_(resourceInfos), name) != resourceInfos.end();
 }
 
-u_p<TechTree> MakeTechTreeCopy(const string& raceName)
+const TechTree& GetTechTree(const string& raceName)
 {
-	return make_u<TechTree>(*techTrees[raceName]);
+	return *techTrees[raceName];
 }
 
 vector<string> GetMapNames()
@@ -118,7 +101,7 @@ vector<string> GetMapNames()
 	vector<string> mapNames;
 	try
 	{
-		fs::recursive_directory_iterator it("maps/"), eod;
+		fs::recursive_directory_iterator it(mapsDirectory), eod;
 		for (; it != eod; ++it)
 		{
 			const fs::path& p = *it;
@@ -140,27 +123,26 @@ vector<string> GetRaceNames()
 	vector<string> raceNames;
 	for (auto&& name_tree : techTrees)
 	{
-		raceNames.push_back(name_tree.second->raceName);
+		raceNames.push_back(name_tree.second->GetRaceName());
 	}
 	return raceNames;
 }
 
 u_p<Resource> MakeResource(const string& name, float amount)
 {
-	auto iRi = resourceInfos.find(name);
-	if (iRi == resourceInfos.end())
+	if (!CheckResource(name))
 	{
 		throw_nya("There is no resource named: " + name);
 	}
-	return make_u<Resource>(iRi->first, amount);
+	return make_u<Resource>(name, amount);
 }
 
 u_p<Resources> MakeResources()
 {
 	auto resources = make_u<Resources>();
-	for (auto&& name_resource : resourceInfos)
+	for (auto&& resourceName : resourceInfos)
 	{
-		*resources += Resource(name_resource.first, 0);
+		*resources += Resource(resourceName, 0);
 	}
 	return resources;
 }

@@ -11,7 +11,7 @@
 #include "Kernel.h"
 #include "Map.h"
 #include "MapFull.h"
-#include "MapResource.h"
+#include "Mine.h"
 #include "Player.h"
 #include "TechTree.h"
 

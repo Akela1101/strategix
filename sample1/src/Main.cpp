@@ -1,17 +1,14 @@
-#include <DefaultKernelSlot.h>
-#include <DefaultPlayerSlot.h>
+#include <SampleEntiSlot.h>
+#include <SampleKernelSlot.h>
+#include <SamplePlayerSlot.h>
 #include <Strategix.h>
 
-#include <boost/filesystem.hpp>
-#include <iostream>
 
-
-#include <easylogging++.h>
 INITIALIZE_EASYLOGGINGPP
 
 
-using namespace Strategix;
-using namespace Sample1;
+using namespace strategix;
+using namespace sample1;
 using namespace std;
 
 #if defined( _MSC_VER )
@@ -73,32 +70,37 @@ INT WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR strCmdLine, INT)
 	//SetCurrentDirectory("C:\\.......");
 #else
 
-int main(int argc, char* argv[])
+
+void InitLogs()
 {
-#endif
-	// Logs
-	el::Loggers::configureFromGlobal(Kernel::Get("log_config_file").c_str());
+	el::Loggers::configureFromGlobal("config/log.conf");
 	el::Configurations conf;
 	conf.parseFromText("*GLOBAL:\n FORMAT = %msg", el::Loggers::getLogger("default")->configurations());
 	el::Loggers::getLogger("raw")->configure(conf);
+}
+
+int main(int argc, char* argv[])
+{
+#endif
+	InitLogs();
 	
-	// Initialize graphics and make slot to it...
-	auto kernelSlot = make_s<DefaultKernelSlot>();
-	
-	// Initialize Kernel...
-	Kernel::Configure(sp_cast<KernelSlot>(kernelSlot));
+	// initialize graphics and make slot to it
+	Kernel::Configure(new SampleKernelSlot("config/strategix.json", "maps"));
+
 	Kernel::PrintInfo();
-	
-	// Run a game
-	try
+
+	try // run a game
 	{
-		// Initialize map and players...
-		Kernel::Init("1x1");
-		Kernel::AddPlayer(make_u<Player>("Inu",  HUMAN, 0, "Spher"));
-		Kernel::AddPlayer(make_u<Player>("Saru", AI,    1, "Spher"));
+		// initialize map and players
+		Kernel::SetMap("1x1");
+		auto inu = new SamplePlayerSlot("Inu", HUMAN, 0, "Spher");
+		auto saru = new SamplePlayerSlot("Saru", AI, 1, "Spher");
+		inu->AddEnti(new SampleEntiSlot("Spher_Worker"));
+		Kernel::AddPlayer(inu);
+		Kernel::AddPlayer(saru);
 		
-		// Handle frame updates...
-		// { Kernel::Tick(); }
+		// start event loop in other thread
+		Kernel::Start();
 	}
 	catch (nya::exception& e)
 	{

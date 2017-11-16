@@ -3,14 +3,9 @@
 #include "EntiSlot.h"
 
 
-namespace Strategix
+namespace strategix
 {
 
-EntiSlot::EntiSlot(s_p<Enti>& enti) : enti(enti)
-{
-	enti->slot = this;
-}
-
-EntiSlot::~EntiSlot() {}
+EntiSlot::~EntiSlot() = default;
 
 }

@@ -4,7 +4,7 @@
 #include "MapsPathsFinder.h"
 
 
-namespace Strategix
+namespace strategix
 {
 
 MapsPathsFinder::MapsPathsFinder(const Map& map)

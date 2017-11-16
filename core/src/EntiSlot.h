@@ -6,20 +6,19 @@
 #include "Strategix_Forward.h"
 
 
-namespace Strategix
+namespace strategix
 {
 class EntiSlot : public ITick, public IMove, public ICollect, public IHealth, public IAttack
 {
+	const string name;
+	
 public:
-	s_p<Enti> enti;
-
-public:
-	EntiSlot(s_p<Enti>& enti);
+	EntiSlot(const string& name) : name(name) {}
 	virtual ~EntiSlot() = 0;
-
-private:
-	EntiSlot(const EntiSlot& _c);
-	EntiSlot& operator=(const EntiSlot& _c);
+	EntiSlot(const EntiSlot& _c) = delete;
+	EntiSlot& operator=(const EntiSlot& _c) = delete;
+	
+	const string& GetName() const { return name; }
 };
 }
 

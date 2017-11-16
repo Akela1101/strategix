@@ -4,7 +4,7 @@
 #include "Strategix_Forward.h"
 
 
-namespace Strategix
+namespace strategix
 {
 class Feature
 {

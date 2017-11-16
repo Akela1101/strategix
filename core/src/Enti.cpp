@@ -4,7 +4,7 @@
 #include "Enti.h"
 
 
-namespace Strategix
+namespace strategix
 {
 Enti::Enti(const EntiInfo& entiInfo, const RealCoord& coord)
 		: entiInfo(entiInfo)

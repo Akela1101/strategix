@@ -3,30 +3,29 @@
 #include "EntiSlot.h"
 #include "MapLocal.h"
 #include "Player.h"
-#include "ResourceInfo.h"
 #include "TechTree.h"
 
 
-namespace Strategix
+namespace strategix
 {
 
 FeatureCollect::FeatureCollect(const FeatureInfo* featureInfo, Enti* enti)
 		: Feature(enti), featureInfoCollect(dynamic_cast<const FeatureInfoCollect*>(featureInfo)), load(0)
 		, isMovingToCollector(false) {}
 
-bool FeatureCollect::Collect(s_p<MapResource> mapResource)
+bool FeatureCollect::Collect(Mine* mine)
 {
-	if (!mapResource)
+	if (!mine)
 		return false;
 	
 	// Try move and set OnComplete for this
-	if (!enti->Do<FeatureMove>()->Move(mapResource->GetCoord(), this))
+	if (!enti->Do<FeatureMove>()->Move(mine->GetCoord(), this))
 		return false;
 	
 	// Setting target resource
-	this->mapResource = mapResource;
+	this->mine = mine;
 	
-	resourceName = mapResource->GetResourceInfo()->name;
+	resourceName = mine->GetResourceName();
 	capacity = featureInfoCollect->capacities->at(resourceName);
 	isMovingToCollector = false;
 	
@@ -36,14 +35,14 @@ bool FeatureCollect::Collect(s_p<MapResource> mapResource)
 bool FeatureCollect::Tick(float seconds)
 {
 	// If Enti is not full and resource still exists
-	if (load < capacity && mapResource->GetResource())
+	if (load < capacity && mine->GetResource())
 	{
 		float piece = seconds * featureInfoCollect->speed;
 		if (piece > capacity - load)
 		{
 			piece = capacity - load; // all it can bring
 		}
-		load += enti->GetPlayer().GetMapLocal().PickResource(mapResource, piece);
+		load += enti->GetPlayer().GetMapLocal().PickResource(mine, piece);
 		
 		enti->GetSlot().OnCollect();
 	}
@@ -59,10 +58,6 @@ bool FeatureCollect::Tick(float seconds)
 void FeatureCollect::Stop()
 {
 	enti->GetSlot().OnCollectStop();
-	if (mapResource && mapResource->GetResource() == 0)
-	{
-		mapResource.reset();
-	}
 }
 
 void FeatureCollect::OnComplete(bool isComplete)
@@ -89,23 +84,22 @@ void FeatureCollect::OnComplete(bool isComplete)
 		load = 0;
 		
 		// Going back to resource
-		if (mapResource)
+		if (mine)
 		{
-			Collect(mapResource);
+			Collect(mine);
 		}
 	}
 }
 
 const Enti* FeatureCollect::FindCollector()
 {
-	// @#~ too simple
+	//TODO: FindCollector() need more unified logic
 	// @#~ Check if there is path to Collector and also select nearest
-	// @#~ Check out the case when there are no collectors or more than one !!!
+	// @#~ Check out the case when there are no collectors or more than one
 	
-	const string collectorName = enti->GetPlayer().techTree->mainBuildingName;
 	for (s_p<const Enti> enti : enti->GetPlayer().entis)
 	{
-		if (enti->GetInfo().name == collectorName)
+		if (enti->GetInfo().name == "")
 		{
 			return enti.get();
 		}

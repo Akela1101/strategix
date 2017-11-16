@@ -3,7 +3,7 @@
 #include "FeatureInfo.h"
 
 
-namespace Strategix
+namespace strategix
 {
 
 FeatureAttack::FeatureAttack(const FeatureInfo* featureInfo, Enti* enti)

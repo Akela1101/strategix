@@ -7,7 +7,7 @@
 #include "Strategix_Forward.h"
 
 
-namespace Strategix
+namespace strategix
 {
 class FeatureMove : public Feature
 {

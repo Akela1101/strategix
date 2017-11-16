@@ -8,7 +8,7 @@
 #include "FeatureMove.h"
 
 
-namespace Strategix
+namespace strategix
 {
 
 FeatureMove::FeatureMove(const FeatureInfo* featureInfo, Enti* enti)

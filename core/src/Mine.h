@@ -1,16 +1,16 @@
-#ifndef _MAPRESOURCE_H
-#define    _MAPRESOURCE_H
+#ifndef _MINE_H
+#define    _MINE_H
 
 #include "Kernel.h"
 #include "Resource.h"
 #include "Strategix_Forward.h"
 
 
-namespace Strategix
+namespace strategix
 {
 using namespace std;
 
-class MapResource
+class Mine
 {
 	friend class MapFull;
 	
@@ -18,16 +18,14 @@ class MapResource
 	const MapCoord mapCoord;
 
 public:
-	MapResource(u_p<Resource> resource, const MapCoord& mapCoord)
+	Mine(u_p<Resource> resource, const MapCoord& mapCoord)
 			: resource(move(resource)), mapCoord(mapCoord) {}
 	
-	const ResourceInfo* GetResourceInfo() const { return Kernel::GetResourceInfo(*resource); }
-	
+	const string& GetResourceName() const { return resource->GetName(); }
 	const Resource& GetResource() const { return *resource; }
-	
 	MapCoord GetCoord() const { return mapCoord; }
 };
 }
 
-#endif    /* _MAPRESOURCE_H */
+#endif    /* _MINE_H */
 

@@ -8,13 +8,14 @@ find_package(Boost COMPONENTS system filesystem REQUIRED)
 
 
 add_executable(${PROJECT_NAME}
-        src/DefaultPlayerSlot.cpp
-        src/DefaultPlayerSlot.h
-        src/DefaultKernelSlot.cpp
-        src/DefaultKernelSlot.h
+        src/SamplePlayerSlot.cpp
+        src/SamplePlayerSlot.h
+        src/SampleKernelSlot.cpp
+        src/SampleKernelSlot.h
         src/Main.cpp
         src/Sample1_Forward.h
-        )
+        src/SampleEntiSlot.cpp
+        src/SampleEntiSlot.h)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 17)
 

@@ -5,7 +5,7 @@
 #include "Player.h"
 
 
-namespace Strategix
+namespace strategix
 {
 
 FeatureHealth::FeatureHealth(const FeatureInfo* featureInfo, Enti* enti)

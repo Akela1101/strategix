@@ -11,7 +11,7 @@
 #include "Strategix_Forward.h"
 
 
-namespace Strategix
+namespace strategix
 {
 using namespace std;
 

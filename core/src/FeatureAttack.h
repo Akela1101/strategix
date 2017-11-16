@@ -7,7 +7,7 @@
 #include "Strategix_Forward.h"
 
 
-namespace Strategix
+namespace strategix
 {
 class FeatureAttack : public Feature, public ICommand
 {

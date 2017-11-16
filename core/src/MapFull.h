@@ -11,7 +11,7 @@
 #include "Strategix_Forward.h"
 
 
-namespace Strategix
+namespace strategix
 {
 using namespace std;
 
@@ -42,7 +42,7 @@ public:
 	
 	u_p<MapLocal> CreateMapLocal(Player* player);
 	
-	float PickResource(s_p<MapResource>& mapResource, float amount) override;
+	float PickResource(Mine* mine, float amount) override;
 	
 private:
 	void LoadTerrains();

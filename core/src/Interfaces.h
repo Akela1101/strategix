@@ -1,7 +1,7 @@
 #ifndef _INTERFACES_H
 #define	_INTERFACES_H
 
-namespace Strategix
+namespace strategix
 {
 struct ICommand
 {

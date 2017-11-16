@@ -2,7 +2,7 @@
 #define    _COORDSTRUCTS_H
 
 
-namespace Strategix
+namespace strategix
 {
 template<typename T, typename Y>
 struct Coord

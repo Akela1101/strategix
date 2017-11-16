@@ -3,13 +3,21 @@
 
 #include <Strategix_Forward.h>
 
-namespace Strategix
+namespace strategix
 {
+using namespace std;
+
 class KernelSlot
 {
+	string configPath;
+	string mapsPath;
+	
 public:
+	KernelSlot(string configPath, string mapsPath) : configPath(move(configPath)), mapsPath(move(mapsPath)) {}
 	virtual ~KernelSlot() = default;
-	virtual void OnAddPlayer(Player* player) = 0;
+	
+	string GetConfigPath() const { return configPath; }
+	string GetMapsPath() const { return mapsPath; }
 };
 
 }

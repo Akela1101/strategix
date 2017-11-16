@@ -5,7 +5,7 @@
 #include "MapLocal.h"
 
 
-namespace Strategix
+namespace strategix
 {
 
 MapLocal::MapLocal(Player* player, MapFull* mapFull)
@@ -20,15 +20,15 @@ s_p<MapsPath> MapLocal::FindPath(MapCoord from, MapCoord till) const
 	return pathsFinder->FindPath(from, till);
 }
 
-float MapLocal::PickResource(s_p<MapResource>& mapResource, float amount)
+float MapLocal::PickResource(Mine* mine, float amount)
 {
-	return mapFull->PickResource(mapResource, amount);
+	return mapFull->PickResource(mine, amount);
 }
 
-void MapLocal::RemoveMapResource(s_p<MapResource>& mapResource)
+void MapLocal::RemoveMine(Mine* mine)
 {
-	player->RemoveMapResource(mapResource);
-	GetCell(mapResource->GetCoord()).mapResource.reset();
+	player->RemoveMine(mine);
+	GetCell(mine->GetCoord()).mine.reset();
 }
 
 }

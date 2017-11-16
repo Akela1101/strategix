@@ -4,7 +4,7 @@
 #include "TechTree.h"
 
 
-namespace Strategix
+namespace strategix
 {
 class TechTreesBuilder
 {

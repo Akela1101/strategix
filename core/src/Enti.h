@@ -18,7 +18,7 @@
 #include "Strategix_Forward.h"
 
 
-namespace Strategix
+namespace strategix
 {
 using namespace std;
 
@@ -64,7 +64,6 @@ public:
 			return dynamic_cast<F*>(iFeature->second.get());
 		}
 		throw_nya("There is no feature named: " + featureName);
-		return 0;
 	}
 
 private:

@@ -8,7 +8,7 @@
 #include <nya.hpp>
 
 
-namespace Strategix
+namespace strategix
 {
 using namespace std;
 
@@ -24,28 +24,16 @@ class Resource
 
 public:
 	Resource(const string& name, float resource) : value(new ResourceValueType {name, resource}) {}
-	
 	Resource(const ResourceValueType& _pa) : value(make_u<ResourceValueType>(_pa)) {}
-	
 	Resource(const Resource& _c) : value(make_u<ResourceValueType>(*_c.value)) {}
+	Resource& operator=(const ResourceValueType& _pa) { value = make_u<ResourceValueType>(_pa); return *this; }
+	Resource& operator=(const Resource& _c) { if (this != &_c) value = make_u<ResourceValueType>(*_c.value); return *this; }
 	
-	Resource& operator=(const ResourceValueType& _pa)
-	{
-		value = make_u<ResourceValueType>(_pa);
-		return *this;
-	}
 	
-	Resource& operator=(const Resource& _c)
-	{
-		if (this != &_c) value = make_u<ResourceValueType>(*_c.value);
-		return *this;
-	}
+	const string& GetName() const { return value->first; }
 	
 	operator float&() { return value->second; }
-	
 	operator float() const { return value->second; }
-	
-	operator string() const { return value->first; }
 	
 	// With no resource type check !!!
 	const Resource operator+(float amount) const

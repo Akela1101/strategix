@@ -2,44 +2,28 @@
 #include "TechTree.h"
 
 
-namespace Strategix
+namespace strategix
 {
 using namespace std;
 
 
-TechTree::TechTree(const string& raceName)
-		: raceName(raceName) {}
-
-TechTree::TechTree(const TechTree& _c)
+const EntiInfo& TechTree::GetNode(const string& name) const
 {
-	init(_c);
-}
-
-TechTree& TechTree::operator=(const TechTree& _c)
-{
-	if (this != &_c)
+	auto it = techMap.find(name);
+	if (it == techMap.end())
 	{
-		init(_c);
+		throw_nya("Wrong Enti name: " + name);
 	}
-	return *this;
+	return *it->second;
 }
 
-void TechTree::init(const TechTree& _c)
+void TechTree::AddNode(u_p<EntiInfo> entiInfo)
 {
-	raceName = _c.raceName;
-	mainBuildingName = _c.mainBuildingName;
-	
-	for (auto&& pa : _c.techMap)
+	auto iter_ok = techMap.emplace(entiInfo->name, move(entiInfo));
+	if (!iter_ok.second)
 	{
-		techMap[pa.first] = pa.second->clone();
+		throw_nya("More than one EntiInfo with name: " + entiInfo->name);
 	}
-}
-
-void TechTree::AddNode(s_p<EntiInfo> entiInfo)
-{
-	auto pairEl = make_p(entiInfo->name, entiInfo);
-	pair<TechMapType::iterator, bool> retPair = techMap.insert(pairEl);
-	if (!retPair.second) throw_nya("More than one EntiInfo with name: " + entiInfo->name);
 }
 
 }

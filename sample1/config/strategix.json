@@ -1,0 +1,36 @@
+{
+	"resource_types" : [ "gold" ],
+	"races" : [
+	{
+		"name" : "Spher",
+		"entities" : [
+		{
+			"name" : "Spher_Base",
+			"kind" : "building",
+			"resources" : { "gold" : 10000 },
+			"provides" : [ "Spher_Worker" ],
+			"features" : 
+			{
+				"health" : { "hp" : 1000, "regenSpeed" : 1.0 }
+			}
+		},
+		{
+			"name" : "Spher_Worker",
+			"kind" : "unit",
+			"resources" : { "gold" : 500 },
+			"provides" : [ "Spher_Base" ],
+			"features" : {
+				"move" : { "speed" : 3.0 },
+				"collect" : {
+					"speed" : 50,
+					"radius" : 0.5,
+					"capacities" : { "gold" : 200 }
+				},
+				"health" : { "hp" : 50, "regenSpeed" : 0.1 },
+				"attack" : { "damage" : 20, "speed" : 1.0 }
+			}
+		}
+		]
+	}
+	]
+}

@@ -1,7 +1,7 @@
 #include "CoordStructs.h"
 
 
-namespace Strategix
+namespace strategix
 {
 #ifndef MSCC // GCC
 

@@ -8,7 +8,7 @@
 #include <utility>
 
 
-namespace Strategix
+namespace strategix
 {
 using namespace std;
 

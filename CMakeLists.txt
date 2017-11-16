@@ -8,7 +8,7 @@ set(build_static_lib ON cache)
 add_subdirectory(../easyloggingpp easyloggingpp)
 target_compile_definitions(easyloggingpp PRIVATE ELPP_NO_DEFAULT_LOG_FILE)
 
-# Strategix
+# strategix
 add_subdirectory(core)
 add_subdirectory(map_editor)
 

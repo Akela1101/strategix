@@ -8,7 +8,7 @@
 #include "Strategix_Forward.h"
 
 
-namespace Strategix
+namespace strategix
 {
 class FeatureCollect : public Feature, public ICommand
 {
@@ -19,13 +19,13 @@ protected:
 
 private:
 	float load; // amount of resource Enti is holding
-	s_p<MapResource> mapResource; // target
+	Mine* mine; // target
 	bool isMovingToCollector;
 
 public:
 	FeatureCollect(const FeatureInfo* featureInfo, Enti* enti);
 	
-	bool Collect(s_p<MapResource> mapResource);
+	bool Collect(Mine* mine);
 	virtual bool Tick(float seconds);
 	virtual void Stop();
 	

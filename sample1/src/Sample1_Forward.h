@@ -4,10 +4,10 @@
 #include <nya.hpp>
 
 
-namespace Sample1
+namespace sample1
 {
-	class DefaultKernelSlot;
-	class DefaultPlayerSlot;
+	class SampleKernelSlot;
+	class SamplePlayerSlot;
 }
 
 #endif	/* _SAMPLE1_FORWARD_H */

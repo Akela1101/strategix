@@ -9,7 +9,7 @@
 #include <nya.hpp>
 
 
-namespace Strategix
+namespace strategix
 {
 	class Enti;
 	class EntiInfo;	
@@ -24,17 +24,16 @@ namespace Strategix
 	class Map;
 	class MapFull;
 	class MapLocal;
-	class MapResource;
+	class Mine;
 	class MapsPath;
 	class MapsPathsFinder;
 	class Player;
 	class PlayerSlot;
-	class ResourceInfo;
 	class Resources;
 	class TechTree;
 	class TechTreesBuilder;
 
-	using ResourceInfosType = std::map<std::string, u_p<ResourceInfo>>;
+	using ResourceInfosType = std::vector<std::string>;
 	using TechTreesType = map<string, u_p<TechTree>>;
 }
 

@@ -29,7 +29,7 @@ add_library(${PROJECT_NAME}
         src/MapFull.h
         src/MapLocal.cpp
         src/MapLocal.h
-        src/MapResource.h
+        src/Mine.h
         src/MapsPath.h
         src/MapsPathsFinder.cpp
         src/MapsPathsFinder.h
@@ -37,7 +37,6 @@ add_library(${PROJECT_NAME}
         src/Player.h
         src/PlayerSlot.h
         src/Resource.h
-        src/ResourceInfo.h
         src/Resources.h
         src/Strategix_Forward.h
         src/StrategixCommon.h
@@ -47,7 +46,7 @@ add_library(${PROJECT_NAME}
         src/TechTreesBuilder.h
         src/ConfigurationManager.cpp
         src/KernelSlot.h
-        )
+        src/PlayerSlot.cpp)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 17)
 

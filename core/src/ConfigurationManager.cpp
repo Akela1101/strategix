@@ -1,184 +1,174 @@
 #include <EntiInfo.h>
-#include <Kernel.h>
-#include <ResourceInfo.h>
 #include <TechTree.h>
 
+#include <boost/range/adaptors.hpp>
 #include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/xml_parser.hpp>
+#include <boost/property_tree/json_parser.hpp>
 #include <boost/filesystem.hpp>
 
 #include "ConfigurationManager.h"
 
 
-namespace Strategix::ConfigurationManager
+namespace strategix
 {
-using namespace Strategix;
 using namespace std;
+using namespace boost::adaptors;
 namespace pt = boost::property_tree;
 namespace fs = boost::filesystem;
 
 
-void ParseConfig(ResourceInfosType* pResourceInfos)
+struct ConfigurationManager::ConfigurationManagerImpl
 {
+	string configFile;
+	ResourceInfosType resourceInfos;
+	TechTreesType techTrees;
+	
+	u_p<TechTree> ParseRace(const pt::ptree& raceTree)
+	{
+		try
+		{
+			auto&& raceName = raceTree.get<string>("name");
+			u_p<TechTree> techTree(new TechTree(raceName));
+			
+			for (auto&& entiTree : raceTree.get_child("entities") | map_values)
+			{
+				techTree->AddNode(ParseEntity(entiTree));
+			}
+			return techTree;
+		}
+		catch (pt::ptree_error& e)
+		{
+			info_log << e.what();
+			return nullptr;
+		}
+	}
+	
+	u_p<EntiInfo> ParseEntity(const pt::ptree& entityPropTree)
+	{
+		try
+		{
+			u_p<EntiInfo> eim(new EntiInfo);
+			
+			eim->name = entityPropTree.get<string>("name");
+			eim->kind = entityPropTree.get<string>("kind");
+			eim->resources = ParseResources(entityPropTree.get_child("resources"));
+			
+			for (auto&& name_tree : entityPropTree.get_child("features", pt::ptree())) // Empty if no features
+			{
+				const string& name = name_tree.first;
+				if (auto&& feature = ParseFeature(name, name_tree.second))
+				{
+					eim->featureInfos[name] = move(feature);
+				}
+			}
+			return eim;
+		}
+		catch (pt::ptree_error& e)
+		{
+			info_log << e.what();
+			return nullptr;
+		}
+	}
+	
+	u_p<FeatureInfo> ParseFeature(const string& name, const pt::ptree& feature)
+	{
+		try
+		{
+			if (name == "move")
+			{
+				auto speed = feature.get<float>("speed");
+				return make_u<FeatureInfoMove>(speed);
+			}
+			else if (name == "collect")
+			{
+				auto speed = feature.get<float>("speed");
+				auto radius = feature.get<float>("radius");
+				s_p<Resources> capacities = ParseResources(feature.get_child("capacities"));
+				return make_u<FeatureInfoCollect>(speed, radius, capacities);
+			}
+			else if (name == "health")
+			{
+				auto hp = feature.get<HpType>("hp");
+				auto regenSpeed = feature.get<float>("regenSpeed");
+				return make_u<FeatureInfoHealth>(hp, regenSpeed);
+			}
+			else if (name == "attack")
+			{
+				auto damage = feature.get<HpType>("damage");
+				auto speed = feature.get<float>("speed");
+				return make_u<FeatureInfoAttack>(damage, speed);
+			}
+		}
+		catch (pt::ptree_error& e)
+		{
+			info_log << "Unable to parse feature: %s. Error: %s"s % name % e.what();
+			return nullptr;
+		}
+	}
+	
+	u_p<Resources> ParseResources(const pt::ptree& resourcesPropTree)
+	{
+		try
+		{
+			ResourcesAllType values;
+			for (auto&& name_tree : resourcesPropTree)
+			{
+				const string& resourceName = name_tree.first; // gold or something else
+				if (find(all_(resourceInfos), resourceName) == resourceInfos.end())
+				{
+					info_log << "Wrong resource [%s] in configuration file: %s"s
+							% resourceName % configFile;
+					continue;
+				}
+				
+				const pt::ptree& resource = name_tree.second;
+				values.insert(make_pair(resourceName, resource.get_value<float>()));
+			}
+			return make_u<Resources>(values);
+		}
+		catch (pt::ptree_error& e)
+		{
+			info_log << e.what();
+			return nullptr;
+		}
+	}
+};
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ConfigurationManager::ConfigurationManager() = default;
+ConfigurationManager::~ConfigurationManager() = default;
+
+pair<ResourceInfosType, TechTreesType> ConfigurationManager::ParseConfig(string configFile)
+{
+	impl.reset(new ConfigurationManagerImpl);
+	impl->configFile = configFile;
 	try
 	{
 		pt::ptree propTree;
-		pt::read_xml(Kernel::Get("config_file"), propTree);
+		pt::read_json(configFile, propTree);
 		
-		for (auto&& name_tree : propTree.get_child("resource_types"))
+		for (auto&& tree : propTree.get_child("resource_types") | map_values)
 		{
-			const string& resourceName = name_tree.first;
-			if (in_(resourceName, *pResourceInfos))
-			{
-				info_log << "Wrong resource type in one of Races: %s"s % resourceName;
-			}
-			pResourceInfos->insert(make_pair(resourceName, new ResourceInfo(resourceName)));
+			const string& resourceName = tree.get_value<string>();
+			impl->resourceInfos.push_back(resourceName);
 		}
+		
+		for (auto&& tree : propTree.get_child("races") | map_values)
+		{
+			auto&& techTree = impl->ParseRace(tree);
+			auto&& raceName = techTree->GetRaceName();
+			impl->techTrees.emplace(raceName, move(techTree));
+		}
+	}
+	catch (const pt::ptree_error& e)
+	{
+		info_log << e.what();
 	}
 	catch (exception& e)
 	{
-		error_log << e.what();
+		error_log << "Unexpected error: " << e.what();
 	}
-}
-
-u_p<Resources> ParseResources(const pt::ptree& resourcesPropTree)
-{
-	try
-	{
-		ResourcesAllType values;
-		for (auto&& name_tree : resourcesPropTree)
-		{
-			const string& resourceName = name_tree.first; // gold or something else
-			if (!Kernel::GetResourceInfo(resourceName))
-			{
-				info_log << "Wrong resource type in one of Races: %s\nCheck configuration file."s % resourceName;
-				continue;
-			}
-			
-			const pt::ptree& resource = name_tree.second;
-			values.insert(make_pair(resourceName, resource.get_value<float>()));
-		}
-		return make_u<Resources>(values);
-	}
-	catch (pt::ptree_error& e)
-	{
-		info_log << e.what();
-		return nullptr;
-	}
-}
-
-u_p<FeatureInfo> ParseFeature(const string& name, const pt::ptree& feature)
-{
-	try
-	{
-		if (name == "move")
-		{
-			auto speed = feature.get<float>("speed");
-			return make_u<FeatureInfoMove>(speed);
-		}
-		else if (name == "collect")
-		{
-			auto speed = feature.get<float>("speed");
-			auto radius = feature.get<float>("radius");
-			s_p<Resources> capacities = ParseResources(feature.get_child("capacities"));
-			return make_u<FeatureInfoCollect>(speed, radius, capacities);
-		}
-		else if (name == "health")
-		{
-			auto hp = feature.get<HpType>("hp");
-			auto regenSpeed = feature.get<float>("regenSpeed");
-			return make_u<FeatureInfoHealth>(hp, regenSpeed);
-		}
-		else if (name == "attack")
-		{
-			auto damage = feature.get<HpType>("damage");
-			auto speed = feature.get<float>("speed");
-			return make_u<FeatureInfoAttack>(damage, speed);
-		}
-	}
-	catch (pt::ptree_error& e)
-	{
-		info_log << "Unable to parse feature: %s. Error: %s"s % name % e.what();
-		return nullptr;
-	}
-}
-
-u_p<EntiInfo> ParseEntity(const pt::ptree& entityPropTree)
-{
-	try
-	{
-		u_p<EntiInfo> eim(new EntiInfo);
-		
-		eim->name = entityPropTree.get<string>("name");
-		eim->kind = entityPropTree.get<string>("kind");
-		eim->resources = ParseResources(entityPropTree.get_child("resources"));
-		
-		for (auto&& name_tree : entityPropTree.get_child("features", pt::ptree())) // Empty if no features
-		{
-			const string& name = name_tree.first;
-			if (auto&& feature = ParseFeature(name, name_tree.second))
-			{
-				eim->featureInfos[name] = move(feature);
-			}
-		}
-		return eim;
-	}
-	catch (pt::ptree_error& e)
-	{
-		info_log << e.what();
-		return nullptr;
-	}
-}
-
-u_p<TechTree> ParseRace(const string& raceName, const pt::ptree& propTree)
-{
-	try
-	{
-		u_p<TechTree> techTree(new TechTree(raceName));
-		techTree->mainBuildingName = propTree.get<string>("main_building");
-		
-		for (auto&& name_tree : propTree.get_child("entities"))
-		{
-			techTree->AddNode(ParseEntity(name_tree.second));
-		}
-		return techTree;
-	}
-	catch (pt::ptree_error& e)
-	{
-		info_log << e.what();
-		return nullptr;
-	}
-}
-
-void ParseTechTrees(TechTreesType* pTechTrees)
-{
-	try
-	{
-		fs::recursive_directory_iterator it(Kernel::Get("races_config_dir")), eod;
-		for (; it != eod; ++it)
-		{
-			if (fs::is_regular_file(*it) && fs::extension(*it) == ".xml")
-			{
-				pt::ptree propTree;
-				const fs::path& path = it->path();
-				try
-				{
-					pt::read_xml(path.string(), propTree);
-					auto&& raceName = path.stem().string();
-					auto&& techTree = ParseRace(raceName, propTree.get_child("race"));
-					pTechTrees->insert(std::make_pair(raceName, move(techTree)));
-				}
-				catch (const pt::ptree_error& e)
-				{
-					error_log << e.what();
-				}
-			}
-		}
-	}
-	catch (exception& e)
-	{
-		error_log << e.what();
-	}
+	return make_p(move(impl->resourceInfos), move(impl->techTrees));
 }
 
 }

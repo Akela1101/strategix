@@ -1,7 +1,7 @@
 #ifndef _STRAXSINGLETON_H
 #define    _STRAXSINGLETON_H
 
-namespace Strategix
+namespace strategix
 {
 template<typename T>
 class StrategixSingleton

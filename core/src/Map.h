@@ -1,14 +1,14 @@
 #ifndef _MAP_H
 #define    _MAP_H
 
-#include "MapResource.h"
+#include "Mine.h"
 
 #include <vector>
 
 #include "Strategix_Forward.h"
 
 
-namespace Strategix
+namespace strategix
 {
 using namespace std;
 
@@ -19,7 +19,7 @@ public:
 	{
 		int terrainType;
 		float retard; // defines from terrain type
-		mutable s_p<MapResource> mapResource;
+		mutable s_p<Mine> mine;
 		//mutable list<Enti*> entis;
 	};
 
@@ -41,7 +41,7 @@ public:
 	
 	const Cell& GetCell(const MapCoord mc) const { return cells[mc.y][mc.x]; }
 	
-	virtual float PickResource(s_p<MapResource>& mapResource, float amount) = 0;
+	virtual float PickResource(Mine* mine, float amount) = 0;
 	
 	bool IsCell(const MapCoord& mc) const
 	{

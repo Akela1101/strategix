@@ -6,7 +6,7 @@
 #include "Strategix_Forward.h"
 
 
-namespace Strategix
+namespace strategix
 {
 using namespace std;
 
@@ -28,8 +28,8 @@ public:
 	
 	s_p<MapsPath> FindPath(MapCoord from, MapCoord till) const;
 	
-	float PickResource(s_p<MapResource>& mapResource, float amount) override;
-	void RemoveMapResource(s_p<MapResource>& mapResource);
+	float PickResource(Mine* mine, float amount) override;
+	void RemoveMine(Mine* mine);
 };
 }
 

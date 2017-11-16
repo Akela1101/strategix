@@ -4,7 +4,7 @@
 #include "Resource.h"
 
 
-namespace Strategix
+namespace strategix
 {
 enum PlayerType
 {
