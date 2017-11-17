@@ -16,15 +16,15 @@ add_executable(${PROJECT_NAME}
         src/forms/DialogNew.h
         src/forms/MainForm.cpp
         src/forms/MainForm.h
-        src/MapArea.cpp
-        src/MapArea.h
+        src/forms/MapAreaWidget.cpp
+        src/forms/MapAreaWidget.h
         src/MapInfo.cpp
         src/MapInfo.h
         src/main.cpp)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 17)
 
-target_include_directories(${PROJECT_NAME} PRIVATE src)
+target_include_directories(${PROJECT_NAME} PRIVATE src src/forms)
 
 target_link_libraries(${PROJECT_NAME}
         Qt5::Widgets

@@ -6,6 +6,7 @@
 #include <deque>
 #include <boost/format.hpp>
 #include <boost/filesystem.hpp>
+#include <boost/range/iterator_range.hpp>
 
 #include "MapFull.h"
 
@@ -17,23 +18,24 @@ namespace fs = boost::filesystem;
 
 MapFull::MapFull(const string& name)
 {
-	LoadTerrains();
+	this->name = name;
 	
 	const string& fileName = GetFilePath(name);
 	ifstream fin(fileName.c_str());
 	
-	char cString[101];
-	fin.getline(cString, 100); // top string
-	fin.getline(cString, 100); // terrains.def
-	
-	// Name
-	fin.getline(cString, 100);
-	this->name = cString;
+	char cString[1001];
+	fin.getline(cString, 1000); // top string
+	fin.getline(cString, 1000); // version
 	
 	// Map Content
 	fin >> width >> length;
+	if (width > 1000 || length > 1000)
+	{
+		throw_nya << "Map size is too large: %dx%d."s % width % length;
+	}
 	
 	cells.resize(length);
+	umultimap<int, float&> type_retards;
 	for (int j = 0; j < length; ++j)
 	{
 		cells[j].resize(width);
@@ -43,36 +45,51 @@ MapFull::MapFull(const string& name)
 			{
 				Cell& cell = cells[j][i];
 				fin >> cell.terrainType;
-				cell.retard = terrains[cell.terrainType].retard;
+				type_retards.emplace(cell.terrainType, cell.retard); // +M
 			}
 			else
 			{
-				throw_nya("Wrong map format in file: " + fileName);
+				throw_nya << "Wrong map format in file: " << fileName;
 			}
 		}
 	}
 	
-	// Initial Positions
-	MapCoord mc;
+	// Terrain descriptions
+	int nTypes = 0;
+	fin >> nTypes;
+	for (int n = 0; n < nTypes; ++n)
+	{
+		int terrainType;
+		string terrainName;
+		float retard;
+		fin >> terrainType >> terrainName >> retard;
+		
+		terrains[n] = Terrain(terrainName, retard);
+		
+		for (auto&& type_retard : make_ir(type_retards.equal_range(terrainType)))
+		{
+			type_retard.second = retard; // R
+		}
+	}
 	
+	// Initial Positions
 	fin >> nPlayers;
 	for (int iPlayer = nPlayers; iPlayer; --iPlayer)
 	{
+		MapCoord mc;
 		fin >> mc.x >> mc.y;
 		initialPositions.push_back(mc);
 	}
 	
 	// Resources
-	int nResources, i, j;
-	string resourceName;
-	float initialAmount;
-	
+	int nResources = 0;
 	fin >> nResources;
 	for (int iRes = nResources; iRes; --iRes)
 	{
+		int i, j;
+		string resourceName;
+		float initialAmount;
 		fin >> i >> j >> resourceName >> initialAmount;
-		
-		// @#~ проверять правильность входных параметров!!!
 		
 		auto resource = Kernel::MakeResource(resourceName, initialAmount);
 		cells[j][i].mine.reset(new Mine(move(resource), MapCoord(i, j)));
@@ -112,40 +129,6 @@ float MapFull::PickResource(Mine* mine, float amount)
 			return remain;
 		}
 	}
-}
-
-void MapFull::LoadTerrains()
-{
-	const string& filePath = "maps/terrains.def"; //TODO: should be inside each *.map
-	
-	ifstream definitionFile(filePath);
-	if (definitionFile.rdstate() & ios::failbit)
-	{
-		throw_nya("Wrong path: " + filePath);
-	}
-	
-	char cString[100];
-	definitionFile.getline(cString, 100);
-	
-	// Terrain Name and Retard
-	int nTypes = -1;
-	definitionFile >> nTypes;
-	nTypes *= nTypes; // nTypes^2
-	
-	if (nTypes <= 0)
-	{
-		throw_nya("Wrong format of " + filePath);
-	}
-	
-	string type;
-	float retard;
-	for (int n = 0; n < nTypes; ++n)
-	{
-		definitionFile >> retard >> type;
-		
-		terrains[n] = Terrain(type, retard);
-	}
-	definitionFile.close();
 }
 
 string MapFull::GetFilePath(const string& name) const

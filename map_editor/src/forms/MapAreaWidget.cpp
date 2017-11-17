@@ -1,25 +1,25 @@
 #include <forms/MainForm.h>
 #include <QScrollBar>
 
-#include "MapArea.h"
+#include "MapAreaWidget.h"
 
 
 static QPoint globalPoint, lastGlobalPoint;
 
-MapArea::MapArea(QWidget* parent) : QWidget(parent)
+MapAreaWidget::MapAreaWidget(QWidget* parent) : QWidget(parent)
 {
 	tileSize = 50;
 	this->setMouseTracking(true);
 	isHighlight = false;
 }
 
-void MapArea::SetPs(MainForm* mainForm, QScrollArea* scrollArea)
+void MapAreaWidget::SetPs(MainForm* mainForm, QScrollArea* scrollArea)
 {
 	this->mainForm = mainForm;
 	this->scrollArea = scrollArea;
 }
 
-void MapArea::paintEvent(QPaintEvent* event)
+void MapAreaWidget::paintEvent(QPaintEvent* event)
 {
 	Q_UNUSED(event);
 	
@@ -38,7 +38,7 @@ void MapArea::paintEvent(QPaintEvent* event)
 	}
 }
 
-void MapArea::mouseMoveEvent(QMouseEvent* event)
+void MapAreaWidget::mouseMoveEvent(QMouseEvent* event)
 {
 	const QPoint& point = event->pos();
 	
@@ -119,7 +119,7 @@ void MapArea::mouseMoveEvent(QMouseEvent* event)
 	}
 }
 
-void MapArea::AddObjectWithPainter(s_p<QPixmap>& pixmap, const QRect& rc, s_p<ObjectInfo>& obj
+void MapAreaWidget::AddObjectWithPainter(s_p<QPixmap>& pixmap, const QRect& rc, s_p<ObjectInfo>& obj
 		, const s_p<ObjectInfo>& newObj)
 {
 	obj = newObj;
@@ -136,7 +136,7 @@ void MapArea::AddObjectWithPainter(s_p<QPixmap>& pixmap, const QRect& rc, s_p<Ob
 	mainForm->MapChanged(); // !!!
 }
 
-void MapArea::mousePressEvent(QMouseEvent* event)
+void MapAreaWidget::mousePressEvent(QMouseEvent* event)
 {
 	lastGlobalPoint = event->globalPos();
 	if (event->buttons() & Qt::RightButton)
@@ -151,7 +151,7 @@ void MapArea::mousePressEvent(QMouseEvent* event)
 	this->mouseMoveEvent(event); // for single mouse click processing
 }
 
-void MapArea::mouseReleaseEvent(QMouseEvent* event)
+void MapAreaWidget::mouseReleaseEvent(QMouseEvent* event)
 {
 	Q_UNUSED(event);
 	
@@ -160,7 +160,7 @@ void MapArea::mouseReleaseEvent(QMouseEvent* event)
 
 //=================================================================
 
-void MapArea::SetMap(s_p<MapInfo>& mapInfo)
+void MapAreaWidget::SetMap(s_p<MapInfo>& mapInfo)
 {
 	this->mapInfo = mapInfo;
 	const size_t& width = mapInfo->width;
@@ -195,7 +195,7 @@ void MapArea::SetMap(s_p<MapInfo>& mapInfo)
 	this->update();
 }
 
-s_p<MapInfo> MapArea::GetMapInfo() const
+s_p<MapInfo> MapAreaWidget::GetMapInfo() const
 {
 	return mapInfo;
 }

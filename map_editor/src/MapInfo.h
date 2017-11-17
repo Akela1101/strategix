@@ -2,15 +2,13 @@
 #define    _MAPINFO_H
 
 #include <nya.hpp>
+#include <memory>
 
+#include <QHash>
+#include <QList>
 #include <QPixmap>
 #include <QString>
-#include <QPoint>
-#include <map>
-#include <memory>
-#include <set>
-#include <string>
-#include <vector>
+
 
 
 //=========================================================================
@@ -22,6 +20,12 @@ struct ObjectInfo
 	
 	ObjectInfo(int id, const QString name, const QPixmap image)
 			: id(id), name(name), image(image) {}
+};
+
+struct TerrainInfo
+{
+	QString name;
+	float retard;
 };
 
 //=========================================================================
@@ -36,19 +40,19 @@ public:
 
 public:
 	// Infos maps, that are need for Load
-	static std::map<int, s_p<ObjectInfo>> terrInfos;
-	static std::map<int, s_p<ObjectInfo>> objInfos;
+	static QHash<int, s_p<ObjectInfo>> terrInfos;
+	static QHash<int, s_p<ObjectInfo>> objInfos;
 	
-	std::string name;
+	QString name;
 	size_t width, height;
-	std::vector<std::vector<Tile>> tiles;
+	QList<QList<Tile>> tiles;
 
 public:
-	MapInfo(const std::string& name, size_t width, size_t height);
+	MapInfo(const QString& name, size_t width, size_t height);
 	MapInfo(const QString& fileName);
 	
-	bool SaveToFile(QString fileName) const;
-	bool LoadFromFile(QString fileName);
+	bool SaveToFile(const QString& fileName, const QList<TerrainInfo>& terrainInfos) const;
+	bool LoadFromFile(const QString& fileName);
 };
 
 #endif    /* _MAPINFO_H */

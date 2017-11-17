@@ -104,7 +104,7 @@
        </property>
        <layout class="QGridLayout" name="gridLayout">
         <item row="0" column="0">
-         <widget class="MapArea" name="mapArea" native="true">
+         <widget class="MapAreaWidget" name="mapArea" native="true">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -195,9 +195,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>MapArea</class>
+   <class>MapAreaWidget</class>
    <extends>QWidget</extends>
-   <header location="global">MapArea.h</header>
+   <header location="global">MapAreaWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

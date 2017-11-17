@@ -1,150 +1,186 @@
 #include "MapInfo.h"
 
+#include <iomanip>
 #include <fstream>
+#include <unordered_map>
+#include <QFileInfo>
 #include <QMessageBox>
+
 
 using namespace std;
 
-extern const char mapFileTopString[];
-extern const char terrainsDefinitionFileName[];
 
-map<int, s_p<ObjectInfo>> MapInfo::terrInfos;
-map<int, s_p<ObjectInfo>> MapInfo::objInfos;
+const char mapFileTopString[] = "Strategix Map";
+const char editorVersion[] = "0.0.1";
 
-MapInfo::MapInfo(const string& name, size_t width, size_t height)
+QHash<int, s_p<ObjectInfo>> MapInfo::terrInfos;
+QHash<int, s_p<ObjectInfo>> MapInfo::objInfos;
+
+
+MapInfo::MapInfo(const QString& name, size_t width, size_t height)
 		: name(name), width(width), height(height)
 {
-	tiles.resize(height);
+	tiles.reserve(height);
 	for (int row = 0; row < height; ++row)
 	{
-		tiles[row].resize(width);
+		tiles.push_back(QList<Tile>());
+		auto& t = tiles.back();
+		t.reserve(width);
 		for (int col = 0; col < width; ++col)
 		{
-			tiles[row][col].terrain = terrInfos[10];
+			t.push_back({terrInfos[10], nullptr});
 		}
 	}
 }
 
 MapInfo::MapInfo(const QString& fileName)
 {
-	if (!LoadFromFile(fileName))
+	if (!LoadFromFile(fileName)) //TODO: use exception to get message
+	{
 		QMessageBox::critical(nullptr, "Unable to open file!", "May be wrong file format or version...");
+	}
 }
 
-bool MapInfo::SaveToFile(QString fileName) const
+bool MapInfo::SaveToFile(const QString& fileName, const QList<TerrainInfo>& terrainInfos) const
 {
 	using namespace std;
 	ofstream fout(fileName.toLocal8Bit());
 	
-	// Name
-	fout << mapFileTopString << endl;
-	fout << terrainsDefinitionFileName << endl;
-	fout << name << endl;
-	fout << endl;
+	// Top string and version
+	fout << mapFileTopString << "\n"
+	     << editorVersion << "\n"
+	     << "\n";
 	
 	// Dimensions
-	fout << width << " " << height << endl;
+	fout << width << " " << height << "\n";
 	
 	list<QPoint> playerPositions;
 	typedef pair<QPoint, int> PPI;
 	list<PPI> objectPositions;
 	
 	// Terrain
+	QSet<int> uniqueTerrains;
 	for (int row = 0; row < height; ++row)
 	{
 		for (int col = 0; col < width; ++col)
 		{
 			auto& tile = tiles[row][col];
-			fout << tile.terrain->id << " ";
+			int id = tile.terrain->id;
+			uniqueTerrains.insert(id);
+			
+			fout << setw(2) << id << " ";
+			
 			if (tile.object)
 			{
-				int id = tile.object->id;
-				if (!id)
-				{
-					playerPositions.emplace_back(col, row);
-				}
+				if (int objectId = tile.object->id)
+					objectPositions.emplace_back(make_pair(QPoint(col, row), objectId));
 				else
-				{
-					objectPositions.emplace_back(make_pair(QPoint(col, row), id));
-				}
+					playerPositions.emplace_back(col, row);
 			}
 		}
-		fout << endl;
+		fout << "\n";
 	}
-	fout << endl;
+	fout << "\n";
+	
+	// Terrain descriptions
+	fout << uniqueTerrains.size() << "\n";
+	for (int id : uniqueTerrains)
+	{
+		string name = terrainInfos[id].name.toStdString();
+		float retard = terrainInfos[id].retard;
+		fout << id << " "
+		     << name << " "
+		     << retard << "\n";
+	}
+	fout << "\n";
 	
 	// Player initial positions
-	fout << playerPositions.size() << endl;
-			foreach(QPoint p, playerPositions)
-		{
-			fout << p.x() << " " << p.y() << endl;
-		}
-	fout << endl;
+	fout << playerPositions.size() << "\n";
+	for (auto&& pos : playerPositions)
+	{
+		fout << pos.x() << " " << pos.y() << "\n";
+	}
+	fout << "\n";
 	
-	// Resources
-	fout << objectPositions.size() << endl;
-			foreach(PPI pa, objectPositions)
-		{
-			fout << pa.first.x() << " " << pa.first.y() << " "
-			     << "gold" << " " << 100000 << endl; // @#~!!!!!!!!
-		}
+	// Mines
+	fout << objectPositions.size() << "\n";
+	for (auto&& pos_id : objectPositions)
+	{
+		fout << pos_id.first.x() << " " << pos_id.first.y() << " "
+		     << "gold" << " " << 100000 << "\n";
+	}
 	
 	fout.close();
 	return true;
 }
 
-bool MapInfo::LoadFromFile(QString fileName) // @#~ Make errors more verbose !!!
+bool MapInfo::LoadFromFile(const QString& fileName)
 {
+	name = QFileInfo(fileName).completeBaseName();
+	
 	using namespace std;
 	ifstream fin(fileName.toLocal8Bit());
 	
 	char cString[100];
+	
+	// Top string
 	fin.getline(cString, 100);
-	if (strcmp(cString, mapFileTopString))
+	if (strcmp(cString, mapFileTopString) != 0)
 		return false;
 	
+	// Version
 	fin.getline(cString, 100);
-//	if( strcmp(cString, terrainsDefinitionFileName) )
-//		return false;
-	
-	// Name
-	fin.getline(cString, 100);
-	name = string(cString);
+	if (strcmp(cString, editorVersion) != 0)
+		return false;
 	
 	// Dimensions
 	fin >> width >> height;
 	if (width > 200 || height > 200)
 		return false;
 	
-	// Terrain
-	int id;
-	tiles.resize(height);
+	// Map content
+	tiles.reserve(height);
 	for (int row = 0; row < height; ++row)
 	{
-		tiles[row].resize(width);
+		tiles.push_back(QList<Tile>());
+		auto& t = tiles.back();
+		t.reserve(width);
 		for (int col = 0; col < width; ++col)
 		{
+			int id;
 			fin >> id;
-			tiles[row][col].terrain = terrInfos[id];
+			t.push_back({terrInfos[id], nullptr});
 		}
 	}
 	
-	// Player initial positions
-	int size, row, col;
-	fin >> size;
-	for (int i = 0; i < size; ++i)
+	// Terrain description
+	int terrainsNumber;
+	fin >> terrainsNumber;
+	for (int i = 0; i < terrainsNumber; ++i)
 	{
+		int id;
+		string terrainName;
+		float retard;
+		fin >> id >> terrainName >> retard;
+	}
+	
+	// Player initial positions
+	int n;
+	fin >> n;
+	for (int i = 0; i < n; ++i)
+	{
+		int row, col;
 		fin >> col >> row;
 		tiles[row][col].object = objInfos[0];
 	}
 	
 	// Resources
-	string name;
-	int amount;
-	fin >> size;
-	for (int i = 0; i < size; ++i)
+	fin >> n;
+	for (int i = 0; i < n; ++i)
 	{
-		fin >> col >> row >> name >> amount;// @#~!!!!!!!!
+		int row, col, amount;
+		string name;
+		fin >> col >> row >> name >> amount;
 		tiles[row][col].object = objInfos[1];
 	}
 	

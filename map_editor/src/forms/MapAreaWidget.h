@@ -13,7 +13,7 @@
 
 class MainForm;
 
-class MapArea: public QWidget
+class MapAreaWidget: public QWidget
 {
 	Q_OBJECT
 
@@ -31,7 +31,7 @@ private:
 	bool isHighlight;
 
 public:
-	MapArea(QWidget *parent = nullptr);
+	MapAreaWidget(QWidget *parent = nullptr);
 
 	void SetPs(MainForm *mainForm, QScrollArea *scrollArea);
 	void SetMap(s_p<MapInfo>& mapInfo);

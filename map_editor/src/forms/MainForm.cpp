@@ -1,14 +1,18 @@
 #include "MainForm.h"
 #include "DialogNew.h"
 
-#include <QMessageBox>
+#include <QDir>
+#include <QFile>
 #include <QFileDialog>
-#include <fstream>
+#include <QMessageBox>
+#include <QTextStream>
 
 
-const char mapFileTopString[] = "Strategix Map v.0.1";
-const char terrainsDefinitionFileName[] = "terrains.def";
-static const char sTitle[] = "Map Editor";
+static constexpr char terrainsDefinitionFileName[] = "terrains.def";
+static constexpr char sTitle[] = "Map Editor";
+static constexpr char configDir[] = "config/";
+static constexpr char imagesPath[] = "config/images/";
+
 
 QString MainForm::GetMapsPath() const
 {
@@ -18,46 +22,19 @@ QString MainForm::GetMapsPath() const
 //===========================================================================
 
 MainForm::MainForm()
+		: isMapOpened(false)
+		, currentItem(nullptr)
 {
-	static const QString configPath = "config/";
-	static const QString imagesPath = configPath + "images/";
-	
 	widget.setupUi(this);
 	
-	this->setWindowTitle(sTitle);
-	
-	isMapOpened = false;
+	setWindowTitle(sTitle);
 	widget.actionSave->setEnabled(false);
-	currentItem = nullptr;
 	
-	char terrainsImageFileName[100];
-	int divs;
-	std::vector<std::string> terrainNames;
-	
-	// Load description
-	{
-		using namespace std;
-		
-		ifstream fin((configPath + terrainsDefinitionFileName).toStdString().c_str());
-		fin.getline(terrainsImageFileName, 100);
-		fin >> divs;
-		
-		float retard; // No need here
-		string terrName;
-		for (;;)
-		{
-			fin >> retard >> terrName;
-			if (!fin.good())
-				break;
-			
-			terrainNames.push_back(terrName);
-		}
-		fin.close();
-	}
+	LoadTerrainDescription();
 	
 	// 1. Load terrain images and add them as icons to List.
 	QPixmap pixmap;
-	if (!pixmap.load(configPath + terrainsImageFileName))
+	if (!pixmap.load(configDir + terrainsImageFileName))
 	{
 		QMessageBox::warning(this, tr("Open Image"), tr("The image files could not be loaded."), QMessageBox::Cancel);
 		return;
@@ -69,7 +46,7 @@ MainForm::MainForm()
 		for (int col = 0; col < divs; ++col)
 		{
 			int terrId = divs * row + col; // Index of picture will become terrain type!!!
-			const QString& terrName = QString(terrainNames[terrId].c_str());
+			const QString& terrName = terrainInfos[terrId].name;
 			if (terrName == "none") // none name are skipped !!!
 				break;
 			const QPixmap& terrPixmap = pixmap.copy(col * tileSize, row * tileSize, tileSize, tileSize);
@@ -79,17 +56,17 @@ MainForm::MainForm()
 	}
 	
 	// 2. Resources
-	pixmap.load(imagesPath + "gold.png");
+	pixmap.load(QDir(imagesPath).filePath("gold.png"));
 	AddToListWidget(1, "Gold", pixmap, &MapInfo::objInfos, widget.resourceListWidget);
 	
 	
 	// 0. Tools
 	// Player's initial positions
-	pixmap.load(imagesPath + "player_position.png");
+	pixmap.load(QDir(imagesPath).filePath("player_position.png"));
 	AddToListWidget(0, "Set Player Position", pixmap, &MapInfo::objInfos, widget.toolsListWidget);
 	
 	// Delete object button
-	pixmap.load(imagesPath + "delete_button.png");
+	pixmap.load(QDir(imagesPath).filePath("delete_button.png"));
 	AddToListWidget(-1, "Delete object", pixmap, nullptr, widget.toolsListWidget);
 	
 	
@@ -108,7 +85,7 @@ void MainForm::FileNew()
 	DialogNew dialogNew;
 	if (dialogNew.exec() == QDialog::Accepted)
 	{
-		const std::string& mapName = dialogNew.mapName.toStdString();
+		const QString& mapName = dialogNew.mapName;
 		const size_t& mapWidth = dialogNew.mapWidth;
 		const size_t& mapHeight = dialogNew.mapHeight;
 		s_p<MapInfo> mapInfo(new MapInfo(mapName, mapWidth, mapHeight));
@@ -176,14 +153,41 @@ void MainForm::CurrentToolboxItemChanged(int index)
 }
 
 //------------------------------------------------------------------------------
+void MainForm::LoadTerrainDescription()
+{
+	QFile file(QDir(configDir).filePath(terrainsDefinitionFileName));
+	if (!file.open(QIODevice::ReadOnly))
+	{
+		QMessageBox::warning(this, tr("Terrain definitions")
+				, tr("%1 could not be loaded.").arg(file.fileName()), QMessageBox::Cancel);
+		return;
+	}
+	
+	QTextStream fin(&file);
+	terrainsImageFileName = fin.readLine();
+	fin >> divs;
+	
+	float retard;
+	QString terrName;
+	for (;;)
+	{
+		fin >> retard >> terrName;
+		if (fin.atEnd())
+			break;
+		
+		terrainInfos.push_back({terrName, retard});
+	}
+	file.close();
+}
+
 bool MainForm::TrySaveMap()
 {
 	// Trying to save previous opened map
 	if (isMapOpened && !isMapSaved)
 	{
 		if (QMessageBox::Yes ==
-		    QMessageBox::question(this, "Map wasn't saved", "Save changes?", QMessageBox::Yes | QMessageBox::No
-				    , QMessageBox::No))
+				QMessageBox::question(this, "Map wasn't saved", "Save changes?", QMessageBox::Yes | QMessageBox::No
+						, QMessageBox::No))
 		{
 			if (SaveMap().isEmpty())
 			{
@@ -211,11 +215,11 @@ QString MainForm::SaveMap()
 			return fileName;
 	}
 	// Write file
-	if (widget.mapArea->GetMapInfo()->SaveToFile(fileName))
+	if (widget.mapArea->GetMapInfo()->SaveToFile(fileName, terrainInfos))
 	{
 		isMapSaved = true;
 		widget.actionSave->setEnabled(false);
-		QString pathlessName(widget.mapArea->GetMapInfo()->name.c_str());
+		QString pathlessName = widget.mapArea->GetMapInfo()->name;
 		this->setWindowTitle(pathlessName.section('/', -1) + " - " + sTitle);
 	}
 	else
@@ -231,18 +235,18 @@ void MainForm::MapChanged()
 	// Able to write file ^
 	isMapSaved = false;
 	widget.actionSave->setEnabled(true);
-	QString pathlessName(widget.mapArea->GetMapInfo()->name.c_str());
+	QString pathlessName = widget.mapArea->GetMapInfo()->name;
 	this->setWindowTitle(pathlessName.section('/', -1) + " (*) - " + sTitle);
 }
 
 void MainForm::AddToListWidget(int objId, QString name, QPixmap pixmap
-		, std::map<int, s_p<ObjectInfo>>* pInfos, QListWidget* listWidget)
+		, QHash<int, s_p<ObjectInfo>>* pInfos, QListWidget* listWidget)
 {
 	s_p<ObjectInfo> info;
 	if (objId != -1)
 	{
 		info.reset(new ObjectInfo(objId, name, pixmap));
-		pInfos->insert(std::pair<int, s_p<ObjectInfo>>(objId, info));
+		pInfos->insert(objId, info);
 	}
 	
 	// Add List entry

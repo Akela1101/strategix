@@ -41,14 +41,14 @@ void Configure(KernelSlot* slot)
 
 void SetMap(const string& mapName)
 {
-	if (!slot) throw_nya("Configure() should be run before SetMap().");
+	if (!slot) throw_nya << "Configure() should be run before SetMap().";
 	
 	mapFull = make_u<MapFull>(mapName);
 }
 
 void AddPlayer(PlayerSlot* playerSlot)
 {
-	if (!mapFull) throw_nya("SetMap() should be run before AddPlayer().");
+	if (!mapFull) throw_nya << "SetMap() should be run before AddPlayer().";
 	
 	auto player = new Player(playerSlot);
 	player->Init(mapFull->CreateMapLocal(player));
@@ -132,7 +132,7 @@ u_p<Resource> MakeResource(const string& name, float amount)
 {
 	if (!CheckResource(name))
 	{
-		throw_nya("There is no resource named: " + name);
+		throw_nya << "There is no resource named: " << name;
 	}
 	return make_u<Resource>(name, amount);
 }

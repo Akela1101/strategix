@@ -104,11 +104,11 @@ int main(int argc, char* argv[])
 	}
 	catch (nya::exception& e)
 	{
-		cerr << "Strategix error occurred. \nTerminating..." << endl;
+		fatal_log << "Strategix error occurred. \nTerminating..." << endl;
 	}
 	catch (exception& e)
 	{
-		cerr << "Unexpected error occurred [" << e.what() << "] \nTerminating..." << endl;
+		fatal_log << "Unexpected error occurred [" << e.what() << "] \nTerminating..." << endl;
 	}
 
 #if defined( _MSC_VER )

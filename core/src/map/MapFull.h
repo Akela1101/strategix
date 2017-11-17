@@ -45,8 +45,6 @@ public:
 	float PickResource(Mine* mine, float amount) override;
 	
 private:
-	void LoadTerrains();
-	
 	string GetFilePath(const string& name) const;
 };
 }
