@@ -7,9 +7,7 @@ DialogNew::DialogNew()
 	widget.setupUi(this);
 }
 
-DialogNew::~DialogNew()
-{
-}
+DialogNew::~DialogNew() = default;
 
 void DialogNew::accept()
 {
@@ -21,8 +19,8 @@ void DialogNew::accept()
 		return;
 	}
 	
-	mapWidth = (size_t)widget.horizontalSlider->sliderPosition();
-	mapHeight = (size_t)widget.verticalSlider->sliderPosition();
+	mapWidth = (size_t) widget.horizontalSlider->sliderPosition();
+	mapHeight = (size_t) widget.verticalSlider->sliderPosition();
 	
 	QDialog::accept();
 }

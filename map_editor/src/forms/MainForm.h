@@ -2,7 +2,7 @@
 #define    _MAINFORM_H
 
 #include <nya.hpp>
-#include <MapInfo.h>
+#include <Common.h>
 
 #include <ui_MainForm.h>
 
@@ -10,25 +10,18 @@
 class MainForm : public QMainWindow
 {
 Q_OBJECT
-
-public:
-	const QListWidgetItem* currentItem;
-	int currentToolboxIndex;
-
-private:
+	
 	Ui::MainForm widget;
 	
 	bool isMapOpened, isMapSaved;
 	QString fileName;
-	
-	QString terrainsImageFileName;
-	int divs;
-	QList<TerrainInfo> terrainInfos;
+	const QListWidgetItem* currentItem;
 
 public:
 	MainForm();
 	
-	void MapChanged();
+	const QListWidgetItem* GetCurrentWidgetItem() const { return currentItem; }
+	void MapChanged(bool yes = true);
 
 private slots:
 	void FileNew();
@@ -41,15 +34,12 @@ private slots:
 	void CurrentToolboxItemChanged(int index);
 
 private:
-	void LoadTerrainDescription();
+	std::pair<std::string, int> LoadTerrainDescription();
+	void ListWidgetFillTerrains(const std::string& terrainsImageFileName, int divs);
+	void ListWidgetFill(ToolType type, const std::string& name, const QString& imageFileName, QListWidget* listWidget);
+	void ListWidgetFill(ToolType type, const std::string& name, const QPixmap& pixmap, QListWidget* listWidget);
 	bool TrySaveMap();
 	QString SaveMap();
-	QString GetMapsPath() const;
-	void AddToListWidget(int objId, QString name, QPixmap pixmap
-			, QHash<int, s_p<ObjectInfo>>* pInfos, QListWidget* listWidget);
-	
 };
-
-extern const char mapFileTopString[];
 
 #endif    /* _MAINFORM_H */

@@ -9,19 +9,18 @@ class DialogNew : public QDialog
 Q_OBJECT
 	
 	friend class MainForm;
-
-private:
+	
+	Ui::DialogNew widget;
+	
 	QString mapName;
 	size_t mapWidth, mapHeight;
-
-private slots:
-	void accept();
 
 public:
 	DialogNew();
 	virtual ~DialogNew();
-private:
-	Ui::DialogNew widget;
+
+private slots:
+	void accept();
 };
 
 #endif    /* _DIALOGNEW_H */

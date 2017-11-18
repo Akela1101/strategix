@@ -18,9 +18,9 @@ add_executable(${PROJECT_NAME}
         src/forms/MainForm.h
         src/forms/MapAreaWidget.cpp
         src/forms/MapAreaWidget.h
-        src/MapInfo.cpp
-        src/MapInfo.h
-        src/main.cpp)
+        src/main.cpp
+        src/Common.cpp
+        src/Common.h)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 17)
 
