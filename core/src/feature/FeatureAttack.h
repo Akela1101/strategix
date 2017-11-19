@@ -4,7 +4,7 @@
 #include "Feature.h"
 #include "Interfaces.h"
 
-#include "Strategix_Forward.h"
+#include "common/Strategix_Forward.h"
 
 
 namespace strategix

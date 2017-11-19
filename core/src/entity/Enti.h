@@ -15,12 +15,11 @@
 #include <string>
 #include <typeinfo>
 
-#include "Strategix_Forward.h"
+#include "common/Strategix_Forward.h"
 
 
 namespace strategix
 {
-using namespace std;
 
 class Enti
 {

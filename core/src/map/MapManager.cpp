@@ -1,6 +1,3 @@
-#include "Mine.h"
-#include "MapLocal.h"
-
 #include <fstream>
 #include <algorithm>
 #include <deque>
@@ -8,42 +5,45 @@
 #include <boost/filesystem.hpp>
 #include <boost/range/iterator_range.hpp>
 
-#include "MapFull.h"
+#include <Kernel.h>
+#include <map/Map.h>
+#include <map/Mine.h>
+
+#include "MapManager.h"
 
 
 namespace strategix
 {
-using namespace std;
 namespace fs = boost::filesystem;
 
-MapFull::MapFull(const string& name)
+MapManager::MapManager(const string& mapName)
+		: mapName(mapName)
+		, map(new Map(this))
 {
-	this->name = name;
-	
-	const string& fileName = GetFilePath(name);
+	const string& fileName = GetFilePath(mapName);
 	ifstream fin(fileName.c_str());
 	
-	char cString[1001];
-	fin.getline(cString, 1000); // top string
-	fin.getline(cString, 1000); // version
+	string cString;
+	getline(fin, cString); // top string
+	getline(fin, cString); // version
 	
 	// Map Content
-	fin >> width >> length;
-	if (width > 1000 || length > 1000)
+	fin >> map->width >> map->length;
+	if (map->width > 1000 || map->length > 1000)
 	{
-		throw_nya << "Map size is too large: %dx%d."s % width % length;
+		throw_nya << "Map size is too large: %dx%d."s % map->width % map->length;
 	}
 	
-	cells.resize(length);
+	map->cells.resize(map->length);
 	umultimap<int, float&> type_retards;
-	for (int j = 0; j < length; ++j)
+	for (int j = 0; j < map->length; ++j)
 	{
-		cells[j].resize(width);
-		for (int i = 0; i < width; ++i)
+		map->cells[j].resize(map->width);
+		for (int i = 0; i < map->width; ++i)
 		{
 			if (fin.good())
 			{
-				Cell& cell = cells[j][i];
+				Cell& cell = map->cells[j][i];
 				fin >> cell.terrainType;
 				type_retards.emplace(cell.terrainType, cell.retard); // +M
 			}
@@ -56,6 +56,7 @@ MapFull::MapFull(const string& name)
 	
 	// Terrain descriptions
 	int nTypes = 0;
+	umap<int, pair<string, float>> terrains;
 	fin >> nTypes;
 	for (int n = 0; n < nTypes; ++n)
 	{
@@ -64,7 +65,7 @@ MapFull::MapFull(const string& name)
 		float retard;
 		fin >> terrainType >> terrainName >> retard;
 		
-		terrains[n] = Terrain(terrainName, retard);
+		terrains[n] = { terrainName, retard };
 		
 		for (auto&& type_retard : make_ir(type_retards.equal_range(terrainType)))
 		{
@@ -92,46 +93,28 @@ MapFull::MapFull(const string& name)
 		fin >> i >> j >> resourceName >> initialAmount;
 		
 		auto resource = Kernel::MakeResource(resourceName, initialAmount);
-		cells[j][i].mine.reset(new Mine(move(resource), MapCoord(i, j)));
+		auto mine = new Mine(move(resource), MapCoord(i, j));
+		map->cells[j][i].mine = mine;
+		mines.emplace(mine, mine);
 	}
 	
 	fin.close();
 }
 
-u_p<MapLocal> MapFull::CreateMapLocal(Player* player)
+MapManager::~MapManager() = default;
+
+u_p<Map> MapManager::CreateMap(Player* player)
 {
-	return make_u<MapLocal>(player, this);
+	return make_u<Map>(this); //TODO: local map
 }
 
-float MapFull::PickResource(Mine* mine, float amount)
+void MapManager::RemoveResource(Mine* mine)
 {
-	if (*mine->resource > amount)
-	{
-		*mine->resource -= amount;
-		return amount;
-	}
-	else
-	{
-		s_p<Mine>& mineOnMap = GetCell(mine->mapCoord).mine;
-		if (!mineOnMap)
-		{
-			return 0;
-		}
-		else // remove resource
-		{
-			float remain = *mine->resource;
-			*mine->resource -= remain;
-//			for (auto&& mapLocal : mapLocals)
-//			{
-//				mapLocal->RemoveMine(mine);
-//			}
-			mineOnMap.reset();
-			return remain;
-		}
-	}
+	map->GetCell(mine->mapCoord).mine = nullptr;
+	mines.erase(mine);
 }
 
-string MapFull::GetFilePath(const string& name) const
+string MapManager::GetFilePath(const string& name) const
 {
 	auto fileName = boost::str(boost::format("%s.map") % name);
 	return (fs::path(Kernel::GetMapsDir()) / fileName).string();

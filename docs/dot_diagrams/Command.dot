@@ -11,6 +11,6 @@ digraph G
 	FeatureMove [color = green]
 	EntiSlot [color = yellow]
 	
-	// {rank = same; FeatureMove; MapLocal}
+	// {rank = same; FeatureMove; Map}
 	
 }

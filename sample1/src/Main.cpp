@@ -92,7 +92,7 @@ int main(int argc, char* argv[])
 	try // run a game
 	{
 		// initialize map and players
-		Kernel::SetMap("1x1");
+		Kernel::LoadMap("1x1");
 		auto inu = new SamplePlayerSlot("Inu", HUMAN, 0, "Spher");
 		auto saru = new SamplePlayerSlot("Saru", AI, 1, "Spher");
 		inu->AddEnti(new SampleEntiSlot("Spher_Worker"));

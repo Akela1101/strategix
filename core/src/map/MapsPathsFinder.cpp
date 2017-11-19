@@ -8,19 +8,18 @@ namespace strategix
 {
 
 MapsPathsFinder::MapsPathsFinder(const Map& map)
-		: map(map)
-{}
+		: map(map) {}
 
-s_p<MapsPath> MapsPathsFinder::FindPath(const MapCoord from, const MapCoord till) const
+u_p<MapsPath> MapsPathsFinder::FindPath(const MapCoord from, const MapCoord till) const
 {
 	// Cannot be achieved
 	if (!IsAccessible(till))
 	{
-		return s_p<MapsPath>(); // Zero
+		return nullptr;
 	}
 	
 	// Already on place
-	s_p<MapsPath> mapsPath(new MapsPath);
+	auto mapsPath = make_u<MapsPath>();
 	if (from.x == till.x && from.y == till.y)
 		return mapsPath;
 	
@@ -98,6 +97,21 @@ s_p<MapsPath> MapsPathsFinder::FindPath(const MapCoord from, const MapCoord till
 	return mapsPath;
 }
 
+s_p<MapsPathsFinder::CellPrice> MapsPathsFinder::GetByCoord(list<s_p<CellPrice>>& list, MapCoord checking_mc) const
+{
+	for (auto&& cellPrice : list)
+	{
+		if (cellPrice->mc == checking_mc)
+			return cellPrice;
+	}
+	return s_p<CellPrice>();
+}
+
+bool MapsPathsFinder::IsAccessible(const MapCoord& mc) const
+{
+	return map.GetCell(mc).retard > 0;
+}
+
 //void OObjectEntiSlot::AddWayTo_Debug(Vector3 &pos)
 //{
 //	static MapCoord oldMapCoord = MapCoord(-1, -1);
@@ -123,7 +137,7 @@ s_p<MapsPath> MapsPathsFinder::FindPath(const MapCoord from, const MapCoord till
 //
 //		for( CellList::iterator at = p_closed->begin(); at != p_closed->end(); ++at)
 //		{
-//			std::stringstream title;
+//			stringstream title;
 //			title << "\n" << (*at)->G << " + " << (*at)->H << "\n = " << (*at)->F ;
 //			s_p<OObjectLabel> labelEntiSlot(new OObjectLabel((*at)->mc, title.str().c_str()));
 //

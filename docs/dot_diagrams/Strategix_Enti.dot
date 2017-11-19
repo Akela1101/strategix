@@ -18,7 +18,7 @@ digraph G
 		}
 		subgraph cluster2
 		{
-			label = "[MapLocal]"
+			label = "[Map]"
 			color = blue;		
 			"Entis*"
 			"Resources*"
@@ -40,7 +40,7 @@ digraph G
 
 	subgraph cluster4
 	{
-		label = "[MapFull]"
+		label = "[MapManager]"
 		color = blue;		
 		"Entis**"
 		Resources

@@ -1,11 +1,10 @@
 #ifndef _KERNELSLOT_H
 #define _KERNELSLOT_H
 
-#include <Strategix_Forward.h>
+#include <common/Strategix_Forward.h>
 
 namespace strategix
 {
-using namespace std;
 
 class KernelSlot
 {

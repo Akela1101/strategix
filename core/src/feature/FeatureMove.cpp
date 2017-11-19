@@ -1,7 +1,7 @@
 #include "entity/Enti.h"
 #include "entity/EntiSlot.h"
 #include "FeatureInfo.h"
-#include "map/MapLocal.h"
+#include "map/Map.h"
 #include "map/MapsPath.h"
 #include "player/Player.h"
 
@@ -23,7 +23,7 @@ bool FeatureMove::Move(const RealCoord newCoord, ICommand* iCommand)
 {
 	this->iCommand = iCommand;
 	distance = 0;
-	mapsPath = enti->GetPlayer().GetMapLocal().FindPath(enti->GetCoord(), newCoord);
+	mapsPath = enti->GetPlayer().GetMap().FindPath(enti->GetCoord(), newCoord);
 	
 	if (!mapsPath)
 		return false;

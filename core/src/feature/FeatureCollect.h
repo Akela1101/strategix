@@ -5,7 +5,7 @@
 #include "Interfaces.h"
 #include "map/Map.h"
 
-#include "Strategix_Forward.h"
+#include "common/Strategix_Forward.h"
 
 
 namespace strategix
@@ -15,7 +15,7 @@ class FeatureCollect : public Feature, public ICommand
 protected:
 	const FeatureInfoCollect* featureInfoCollect; // Link to tree
 	float capacity; // amount of resource Enti can hold
-	std::string resourceName;
+	string resourceName;
 
 private:
 	float load; // amount of resource Enti is holding

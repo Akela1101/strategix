@@ -1,9 +1,9 @@
 #ifndef _FEATUREINFO_H
 #define    _FEATUREINFO_H
 
-#include "Resources.h"
+#include "common/Resources.h"
 
-#include "Strategix_Forward.h"
+#include "common/Strategix_Forward.h"
 
 
 namespace strategix

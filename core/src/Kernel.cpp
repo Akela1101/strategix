@@ -1,13 +1,13 @@
-#include <ConfigurationManager.h>
+#include <boost/filesystem.hpp>
+
+#include <common/ConfigurationManager.h>
 #include <entity/Enti.h>
 #include <entity/EntiInfo.h>
-#include <map/MapFull.h>
-#include <map/MapLocal.h>
+#include <map/MapManager.h>
+#include <map/Map.h>
 #include <player/Player.h>
-#include <Resources.h>
-#include <TechTreesBuilder.h>
-
-#include <boost/filesystem.hpp>
+#include <common/Resources.h>
+#include <common/TechTree.h>
 
 #include "Kernel.h"
 #include "KernelSlot.h"
@@ -16,7 +16,6 @@
 namespace strategix::Kernel
 {
 using namespace strategix;
-using namespace std;
 using namespace boost;
 namespace fs = boost::filesystem;
 
@@ -26,7 +25,7 @@ using PlayersType = umap<string, u_p<Player>>;
 
 // Variables
 static u_p<KernelSlot> slot;            // main event receiver
-static u_p<MapFull> mapFull;            // current map
+static u_p<MapManager> mapManager;      // has all information about the map
 static PlayersType players;             // players by name
 static ResourceInfosType resourceInfos; // resource descriptions
 static TechTreesType techTrees;         // technology trees
@@ -39,19 +38,19 @@ void Configure(KernelSlot* slot)
 	mapsDirectory = slot->GetMapsPath();
 }
 
-void SetMap(const string& mapName)
+void LoadMap(const string& mapName)
 {
-	if (!slot) throw_nya << "Configure() should be run before SetMap().";
+	if (!slot) throw_nya << "Configure() should be run before LoadMap().";
 	
-	mapFull = make_u<MapFull>(mapName);
+	mapManager = make_u<MapManager>(mapName);
 }
 
 void AddPlayer(PlayerSlot* playerSlot)
 {
-	if (!mapFull) throw_nya << "SetMap() should be run before AddPlayer().";
+	if (!mapManager) throw_nya << "LoadMap() should be run before AddPlayer().";
 	
 	auto player = new Player(playerSlot);
-	player->Init(mapFull->CreateMapLocal(player));
+	player->Init(mapManager->CreateMap(player));
 	
 	players.emplace(player->GetName(), player);
 }
@@ -84,7 +83,7 @@ void PrintInfo()
 
 const string& GetMapsDir() { return mapsDirectory; }
 
-MapFull& GetMap() { return *mapFull; }
+MapManager& GetMap() { return *mapManager; }
 
 bool CheckResource(const string& name)
 {
@@ -128,7 +127,7 @@ vector<string> GetRaceNames()
 	return raceNames;
 }
 
-u_p<Resource> MakeResource(const string& name, float amount)
+u_p<Resource> MakeResource(const string& name, ResourceUnit amount)
 {
 	if (!CheckResource(name))
 	{

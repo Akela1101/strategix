@@ -4,11 +4,10 @@
 #include <utility>
 #include <string>
 
-#include <Strategix_Forward.h>
+#include <common/Strategix_Forward.h>
 
 namespace strategix
 {
-using namespace std;
 
 /// Reusable configuration manager.
 class ConfigurationManager

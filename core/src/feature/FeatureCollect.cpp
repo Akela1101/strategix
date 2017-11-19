@@ -1,9 +1,9 @@
 #include "entity/Enti.h"
 #include "entity/EntiInfo.h"
 #include "entity/EntiSlot.h"
-#include "map/MapLocal.h"
+#include "map/Map.h"
 #include "player/Player.h"
-#include "TechTree.h"
+#include "common/TechTree.h"
 
 
 namespace strategix
@@ -42,7 +42,7 @@ bool FeatureCollect::Tick(float seconds)
 		{
 			piece = capacity - load; // all it can bring
 		}
-		load += enti->GetPlayer().GetMapLocal().PickResource(mine, piece);
+		load += enti->GetPlayer().GetMap().PickResource(mine, piece);
 		
 		enti->GetSlot().OnCollect();
 	}

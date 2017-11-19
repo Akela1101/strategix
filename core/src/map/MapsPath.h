@@ -3,7 +3,7 @@
 
 #include <deque>
 
-#include "Strategix_Forward.h"
+#include "common/Strategix_Forward.h"
 
 
 namespace strategix

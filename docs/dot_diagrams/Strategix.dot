@@ -6,7 +6,7 @@ digraph G
 	{
 		label = "[3. Maps]"
 		color = blue;		
-		MapFull -> MapLocal [arrowhead = none]
+		MapManager -> Map [arrowhead = none]
 	}
 
 	subgraph cluster3
@@ -34,18 +34,18 @@ digraph G
 		EntiInfo -> FeatureInfo [arrowhead = dot]
 	}
 	
-	Kernel -> MapFull [arrowhead = dot]
+	Kernel -> MapManager [arrowhead = dot]
 	Kernel -> KernelBase [arrowhead = none]
 	
 	Player -> PlayerSlot
 	Player -> TechTree [arrowhead = none]
-	Player -> MapLocal [arrowhead = dot]
+	Player -> Map [arrowhead = dot]
 	
 	Enti -> EntiSlot
 	Enti -> EntiInfo [arrowhead = none]
 
 	Feature -> FeatureInfo [arrowhead = none]
 	
-	{rank = same; Kernel; KernelBase; MapFull;}
-	{rank = same; Player; MapLocal; TechTree}
+	{rank = same; Kernel; KernelBase; MapManager;}
+	{rank = same; Player; Map; TechTree}
 }

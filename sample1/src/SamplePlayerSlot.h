@@ -5,7 +5,7 @@
 
 #include <map>
 
-#include <Strategix_Forward.h>
+#include <common/Strategix_Forward.h>
 #include "Sample1_Forward.h"
 
 

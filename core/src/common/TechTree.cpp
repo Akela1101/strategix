@@ -4,7 +4,6 @@
 
 namespace strategix
 {
-using namespace std;
 
 
 const EntiInfo& TechTree::GetNode(const string& name) const

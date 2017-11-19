@@ -10,11 +10,11 @@
 #include "feature/FeatureAttack.h"
 #include "Kernel.h"
 #include "map/Map.h"
-#include "map/MapFull.h"
+#include "map/MapManager.h"
 #include "map/Mine.h"
 #include "player/Player.h"
-#include "TechTree.h"
+#include "common/TechTree.h"
 
-#include "Strategix_Forward.h"
+#include "common/Strategix_Forward.h"
 
 #endif	/* STRATEGIX_H */

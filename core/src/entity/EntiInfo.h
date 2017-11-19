@@ -2,18 +2,12 @@
 #define    _ENTIINFO_H
 
 #include "feature/FeatureInfo.h"
-#include "Resources.h"
-
-#include <unordered_map>
-#include <string>
-#include <vector>
-
-#include "Strategix_Forward.h"
+#include "common/Resources.h"
+#include "common/Strategix_Forward.h"
 
 
 namespace strategix
 {
-using namespace std;
 
 struct EntiInfo
 {
@@ -27,22 +21,22 @@ struct EntiInfo
 	FeatureInfosType featureInfos;
 	
 	
-	EntiInfo() : resources(Kernel::MakeResources()) {}
+	EntiInfo() : resources(new Resources()) {}
 	
-	EntiInfo(const EntiInfo& _c)
-			: name(_c.name)
-			, kind(_c.kind)
-			, resources(new Resources(*_c.resources))
-			, depends(_c.depends)
-			, provides(_c.provides)
+	EntiInfo(const EntiInfo& other)
+			: name(other.name)
+			, kind(other.kind)
+			, resources(new Resources(*other.resources))
+			, depends(other.depends)
+			, provides(other.provides)
 	{
-		for (const auto& pa : _c.featureInfos)
+		for (const auto& pa : other.featureInfos)
 		{
 			featureInfos[pa.first].reset(pa.second->clone());
 		}
 	}
 	
-	EntiInfo& operator=(const EntiInfo& _c) = delete;
+	EntiInfo& operator=(const EntiInfo&) = delete;
 	
 	u_p<EntiInfo> clone() const { return make_u<EntiInfo>(*this); }
 };

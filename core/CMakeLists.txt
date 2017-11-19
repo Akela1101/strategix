@@ -3,9 +3,9 @@ project(strategix)
 
 
 add_library(${PROJECT_NAME}
-        src/ConfigurationManager.h
-        src/CoordStructs.cpp
-        src/CoordStructs.h
+        src/common/ConfigurationManager.h
+        src/common/CoordStructs.cpp
+        src/common/CoordStructs.h
         src/entity/Enti.cpp
         src/entity/Enti.h
         src/entity/EntiInfo.h
@@ -21,14 +21,14 @@ add_library(${PROJECT_NAME}
         src/feature/FeatureInfo.h
         src/feature/FeatureMove.cpp
         src/feature/FeatureMove.h
-        src/Interfaces.h
+        src/feature/Interfaces.h
         src/Kernel.cpp
         src/Kernel.h
+        src/map/MapManager.cpp
+        src/map/MapManager.h
+        src/map/Map.cpp
         src/map/Map.h
-        src/map/MapFull.cpp
-        src/map/MapFull.h
-        src/map/MapLocal.cpp
-        src/map/MapLocal.h
+        src/map/Mine.cpp
         src/map/Mine.h
         src/map/MapsPath.h
         src/map/MapsPathsFinder.cpp
@@ -36,15 +36,13 @@ add_library(${PROJECT_NAME}
         src/player/Player.cpp
         src/player/Player.h
         src/player/PlayerSlot.h
-        src/Resource.h
-        src/Resources.h
-        src/Strategix_Forward.h
-        src/StrategixCommon.h
-        src/StrategixSingleton.h
-        src/TechTree.cpp
-        src/TechTree.h
-        src/TechTreesBuilder.h
-        src/ConfigurationManager.cpp
+        src/common/Resource.h
+        src/common/Resources.h
+        src/common/Strategix_Forward.h
+        src/common/StrategixCommon.h
+        src/common/TechTree.cpp
+        src/common/TechTree.h
+        src/common/ConfigurationManager.cpp
         src/KernelSlot.h
         src/player/PlayerSlot.cpp)
 

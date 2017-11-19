@@ -9,7 +9,6 @@
 
 namespace strategix
 {
-using namespace std;
 
 class TechTree
 {

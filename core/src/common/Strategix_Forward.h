@@ -1,12 +1,15 @@
 #ifndef STRATEGIX_FORWARD_H
 #define	STRATEGIX_FORWARD_H
 
-#include <CoordStructs.h>
-#include <StrategixCommon.h>
 #include <memory>
+#include <string>
+#include <vector>
+#include <unordered_map>
+#include <unordered_set>
+#include <utility>
+#include <nya.hpp>
 #include <nya/exception.hpp>
 #include <nya/log.hpp>
-#include <nya.hpp>
 
 
 namespace strategix
@@ -22,8 +25,7 @@ namespace strategix
 	class FeatureInfoAttack;
 	class KernelSlot;
 	class Map;
-	class MapFull;
-	class MapLocal;
+	class MapManager;
 	class Mine;
 	class MapsPath;
 	class MapsPathsFinder;
@@ -33,9 +35,15 @@ namespace strategix
 	class TechTree;
 	class TechTreesBuilder;
 
-	using ResourceInfosType = std::vector<std::string>;
-	using TechTreesType = map<string, u_p<TechTree>>;
+	using namespace std; // only in my namespace, so it won't affect foreign headers
+
+	using ResourceInfosType = vector<string>;
+	using TechTreesType = umap<string, u_p<TechTree>>;
 }
+
+#include <common/CoordStructs.h>
+#include <common/Resource.h>
+#include <common/StrategixCommon.h>
 
 #endif	/* STRATEGIX_FORWARD_H */
 

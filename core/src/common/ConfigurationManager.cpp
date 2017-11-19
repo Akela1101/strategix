@@ -1,5 +1,5 @@
 #include <entity/EntiInfo.h>
-#include <TechTree.h>
+#include <common/TechTree.h>
 
 #include <boost/range/adaptors.hpp>
 #include <boost/property_tree/ptree.hpp>
@@ -11,7 +11,6 @@
 
 namespace strategix
 {
-using namespace std;
 using namespace boost::adaptors;
 namespace pt = boost::property_tree;
 namespace fs = boost::filesystem;
@@ -110,7 +109,7 @@ struct ConfigurationManager::ConfigurationManagerImpl
 	{
 		try
 		{
-			ResourcesAllType values;
+			auto resources = make_u<Resources>();
 			for (auto&& name_tree : resourcesPropTree)
 			{
 				const string& resourceName = name_tree.first; // gold or something else
@@ -122,9 +121,9 @@ struct ConfigurationManager::ConfigurationManagerImpl
 				}
 				
 				const pt::ptree& resource = name_tree.second;
-				values.insert(make_pair(resourceName, resource.get_value<float>()));
+				resources->emplace(resourceName, resource.get_value<ResourceUnit>());
 			}
-			return make_u<Resources>(values);
+			return resources;
 		}
 		catch (pt::ptree_error& e)
 		{

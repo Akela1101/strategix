@@ -1,9 +1,9 @@
 #ifndef _ENTISLOT_H
 #define    _ENTISLOT_H
 
-#include "Interfaces.h"
+#include "feature/Interfaces.h"
 
-#include "Strategix_Forward.h"
+#include "common/Strategix_Forward.h"
 
 
 namespace strategix
