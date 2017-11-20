@@ -14,6 +14,7 @@
 
 namespace strategix
 {
+	class BaseMap;
 	class Enti;
 	class EntiInfo;	
 	class EntiSlot;	

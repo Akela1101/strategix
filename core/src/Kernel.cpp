@@ -52,7 +52,7 @@ void AddPlayer(PlayerSlot* playerSlot)
 	if (!mapManager) throw_nya << "LoadMap() should be run before AddPlayer().";
 	
 	auto player = new Player(playerSlot);
-	player->Init(mapManager->CreateMap(player));
+	player->Init(mapManager->CreateMap(*player));
 	
 	players.emplace(player->GetName(), player);
 }

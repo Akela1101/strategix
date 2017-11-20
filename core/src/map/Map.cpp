@@ -9,8 +9,9 @@
 
 namespace strategix
 {
-Map::Map(MapManager* mapFull)
-		: mapManager(mapFull)
+Map::Map(const BaseMap& map, Player& player)
+		: BaseMap(map)
+		, player(player)
 		, pathsFinder(new MapsPathsFinder(*this)) {}
 
 Map::~Map() = default;
@@ -27,7 +28,7 @@ ResourceUnit Map::PickResource(Mine* mine, ResourceUnit amount)
 
 void Map::RemoveMine(Mine* mine)
 {
-	player->RemoveMine(mine);
+	player.RemoveMine(mine);
 	//GetCell(mine->GetCoord()).mine.reset();
 }
 

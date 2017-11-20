@@ -21,9 +21,9 @@ Player::Player(PlayerSlot* slot)
 
 Player::~Player() = default;
 
-void Player::Init(u_p<Map> mapLocal1)
+void Player::Init(u_p<Map> map)
 {
-	this->map = move(mapLocal1);
+	this->map = move(map);
 	
 	// available resources
 	AddResource(*Kernel::MakeResource("gold", 1000));

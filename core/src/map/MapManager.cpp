@@ -18,7 +18,7 @@ namespace fs = boost::filesystem;
 
 MapManager::MapManager(const string& mapName)
 		: mapName(mapName)
-		, map(new Map(this))
+		, baseMap(new BaseMap())
 {
 	const string& fileName = GetFilePath(mapName);
 	ifstream fin(fileName.c_str());
@@ -28,22 +28,22 @@ MapManager::MapManager(const string& mapName)
 	getline(fin, cString); // version
 	
 	// Map Content
-	fin >> map->width >> map->length;
-	if (map->width > 1000 || map->length > 1000)
+	fin >> baseMap->width >> baseMap->length;
+	if (baseMap->width > 1000 || baseMap->length > 1000)
 	{
-		throw_nya << "Map size is too large: %dx%d."s % map->width % map->length;
+		throw_nya << "Map size is too large: %dx%d."s % baseMap->width % baseMap->length;
 	}
 	
-	map->cells.resize(map->length);
+	baseMap->cells.resize(baseMap->length);
 	umultimap<int, float&> type_retards;
-	for (int j = 0; j < map->length; ++j)
+	for (int j = 0; j < baseMap->length; ++j)
 	{
-		map->cells[j].resize(map->width);
-		for (int i = 0; i < map->width; ++i)
+		baseMap->cells[j].resize(baseMap->width);
+		for (int i = 0; i < baseMap->width; ++i)
 		{
 			if (fin.good())
 			{
-				Cell& cell = map->cells[j][i];
+				Cell& cell = baseMap->cells[j][i];
 				fin >> cell.terrainType;
 				type_retards.emplace(cell.terrainType, cell.retard); // +M
 			}
@@ -94,7 +94,7 @@ MapManager::MapManager(const string& mapName)
 		
 		auto resource = Kernel::MakeResource(resourceName, initialAmount);
 		auto mine = new Mine(move(resource), MapCoord(i, j));
-		map->cells[j][i].mine = mine;
+		baseMap->cells[j][i].mine = mine;
 		mines.emplace(mine, mine);
 	}
 	
@@ -103,14 +103,14 @@ MapManager::MapManager(const string& mapName)
 
 MapManager::~MapManager() = default;
 
-u_p<Map> MapManager::CreateMap(Player* player)
+u_p<Map> MapManager::CreateMap(Player& player)
 {
-	return make_u<Map>(this); //TODO: local map
+	return make_u<Map>(*baseMap, player);
 }
 
 void MapManager::RemoveResource(Mine* mine)
 {
-	map->GetCell(mine->mapCoord).mine = nullptr;
+	baseMap->GetCell(mine->mapCoord).mine = nullptr;
 	mines.erase(mine);
 }
 
