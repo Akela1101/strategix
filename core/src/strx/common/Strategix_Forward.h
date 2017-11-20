@@ -1,16 +1,7 @@
 #ifndef STRATEGIX_FORWARD_H
 #define	STRATEGIX_FORWARD_H
 
-#include <memory>
-#include <string>
-#include <vector>
-#include <unordered_map>
-#include <unordered_set>
-#include <utility>
-#include <nya.hpp>
-#include <nya/exception.hpp>
-#include <nya/log.hpp>
-
+#include <nya/api.hpp>
 
 namespace strx
 {
@@ -37,9 +28,6 @@ namespace strx
 	class TechTreesBuilder;
 
 	using namespace std; // only in my namespace, so it won't affect foreign headers
-
-	using ResourceInfosType = vector<string>;
-	using TechTreesType = umap<string, u_p<TechTree>>;
 }
 
 #include <strx/common/CoordStructs.h>

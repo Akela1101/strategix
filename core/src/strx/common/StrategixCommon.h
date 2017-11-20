@@ -5,14 +5,17 @@
 
 namespace strx
 {
-enum PlayerType
+using HpType = int;
+using ResourceInfosType = vector<string>;
+using TechTreesType = umap<string, u_p<TechTree>>;
+
+
+enum class PlayerType
 {
 	HUMAN,
 	AI,
 	NET
 };
-
-typedef float HpType;
 
 /// Map cell
 struct Cell

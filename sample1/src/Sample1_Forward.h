@@ -1,7 +1,7 @@
 #ifndef _SAMPLE1_FORWARD_H
 #define	_SAMPLE1_FORWARD_H
 
-#include <nya.hpp>
+#include <nya/api.hpp>
 
 
 namespace sample1
