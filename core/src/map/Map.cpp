@@ -1,4 +1,4 @@
-#include <map/MapManager.h>
+#include <kernel/MapManager.h>
 #include <map/MapsPath.h>
 #include <map/MapsPathsFinder.h>
 #include <map/Mine.h>
@@ -9,9 +9,10 @@
 
 namespace strategix
 {
-Map::Map(const BaseMap& map, Player& player)
+Map::Map(const BaseMap& map, Player& player, MapCoord initialPosition)
 		: BaseMap(map)
 		, player(player)
+		, initialPosition(initialPosition)
 		, pathsFinder(new MapsPathsFinder(*this)) {}
 
 Map::~Map() = default;

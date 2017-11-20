@@ -6,7 +6,7 @@
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/filesystem.hpp>
 
-#include "ConfigurationManager.h"
+#include "ConfigManager.h"
 
 
 namespace strategix
@@ -16,7 +16,7 @@ namespace pt = boost::property_tree;
 namespace fs = boost::filesystem;
 
 
-struct ConfigurationManager::ConfigurationManagerImpl
+struct ConfigManager::ConfigurationManagerImpl
 {
 	string configFile;
 	ResourceInfosType resourceInfos;
@@ -134,10 +134,10 @@ struct ConfigurationManager::ConfigurationManagerImpl
 };
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-ConfigurationManager::ConfigurationManager() = default;
-ConfigurationManager::~ConfigurationManager() = default;
+ConfigManager::ConfigManager() = default;
+ConfigManager::~ConfigManager() = default;
 
-pair<ResourceInfosType, TechTreesType> ConfigurationManager::ParseConfig(string configFile)
+pair<ResourceInfosType, TechTreesType> ConfigManager::ParseConfig(string configFile)
 {
 	impl.reset(new ConfigurationManagerImpl);
 	impl->configFile = configFile;

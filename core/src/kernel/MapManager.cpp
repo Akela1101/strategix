@@ -5,9 +5,10 @@
 #include <boost/filesystem.hpp>
 #include <boost/range/iterator_range.hpp>
 
-#include <Kernel.h>
+#include <kernel/Kernel.h>
 #include <map/Map.h>
 #include <map/Mine.h>
+#include <player/Player.h>
 
 #include "MapManager.h"
 
@@ -74,12 +75,12 @@ MapManager::MapManager(const string& mapName)
 	}
 	
 	// Initial Positions
-	fin >> nPlayers;
-	for (int iPlayer = nPlayers; iPlayer; --iPlayer)
+	fin >> playersNumber;
+	for (int iPlayer = playersNumber; iPlayer; --iPlayer)
 	{
-		MapCoord mc;
-		fin >> mc.x >> mc.y;
-		initialPositions.push_back(mc);
+		MapCoord coord;
+		fin >> coord.x >> coord.y;
+		initialPositions.push_back(coord);
 	}
 	
 	// Resources
@@ -105,7 +106,7 @@ MapManager::~MapManager() = default;
 
 u_p<Map> MapManager::CreateMap(Player& player)
 {
-	return make_u<Map>(*baseMap, player);
+	return make_u<Map>(*baseMap, player, initialPositions[player.GetId()]);
 }
 
 void MapManager::RemoveResource(Mine* mine)

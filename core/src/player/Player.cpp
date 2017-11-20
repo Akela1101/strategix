@@ -3,7 +3,7 @@
 #include <entity/Enti.h>
 #include <entity/EntiInfo.h>
 #include <entity/EntiSlot.h>
-#include <Kernel.h>
+#include <kernel/Kernel.h>
 #include <map/Map.h>
 #include <player/PlayerSlot.h>
 #include <common/TechTree.h>
@@ -51,7 +51,7 @@ void Player::AddEnti(EntiSlot* entiSlot)
 {
 	const string& entiName = entiSlot->GetName();
 	auto&& entiInfo = techTree.GetNode(entiName);
-	auto enti = make_s<Enti>(entiInfo, MapCoord()); //TODO: pos ?
+	auto enti = make_s<Enti>(entiInfo, map->GetInitialPostion());
 	
 	entis.push_back(enti);
 	enti->player = this;

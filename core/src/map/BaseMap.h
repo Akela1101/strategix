@@ -14,7 +14,7 @@ class BaseMap
 	size_t width;
 	size_t length;
 	CellsType cells; /// [rows][columns] (i.e. [y][x])
-
+	
 	BaseMap() = default;
 	
 public:

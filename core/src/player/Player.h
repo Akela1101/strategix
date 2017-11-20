@@ -34,7 +34,7 @@ public:
 	
 	const string& GetName() const { return slot->GetName(); }
 	PlayerType GetType() const { return slot->GetType(); }
-	int GetPlayerNumber() const { return slot->GetPlayerNumber(); }
+	int GetId() const { return slot->GetId(); }
 	Map& GetMap() const { return *map; }
 	const TechTree& GetTechTree() const { return techTree; }
 	

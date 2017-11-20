@@ -9,11 +9,11 @@ namespace strategix
 
 class MapManager
 {
-	string mapName;
-	u_p<BaseMap> baseMap;                // general map information
-	umap<Mine*, u_p<Mine>> mines;        // all mines
-	int nPlayers;
-	vector<MapCoord> initialPositions;
+	string mapName;                /// map name
+	u_p<BaseMap> baseMap;          /// general map information
+	umap<Mine*, u_p<Mine>> mines;  /// all mines
+	int playersNumber;             /// number of players
+	vector<MapCoord> initialPositions; /// player initial positions
 	
 public:
 	MapManager(const string& mapName);
@@ -22,7 +22,6 @@ public:
 	~MapManager();
 	
 	const string& GetMapName() const { return mapName; }
-	MapCoord GetInitialPostion(int iPlayer) const { return initialPositions[iPlayer]; }
 	
 	u_p<Map> CreateMap(Player& player);
 	void RemoveResource(Mine* mine);

@@ -1,8 +1,7 @@
 #ifndef _KERNEL_H
-#define    _KERNEL_H
+#define _KERNEL_H
 
 #include <common/Strategix_Forward.h>
-#include <vector>
 
 
 /**
@@ -10,7 +9,6 @@
  */
 namespace strategix::Kernel
 {
-
 // keep this calling order
 void Configure(KernelSlot* slot);
 void LoadMap(const string& mapName);
@@ -30,5 +28,5 @@ u_p<Resource> MakeResource(const string& name, ResourceUnit amount);
 u_p<Resources> MakeResources(); // filled with zero
 }
 
-#endif    /* _KERNEL_H */
+#endif //_KERNEL_H
 

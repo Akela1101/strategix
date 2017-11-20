@@ -93,13 +93,12 @@ void FeatureCollect::OnComplete(bool isComplete)
 
 const Enti* FeatureCollect::FindCollector()
 {
-	//TODO: FindCollector() need more unified logic
 	// @#~ Check if there is path to Collector and also select nearest
 	// @#~ Check out the case when there are no collectors or more than one
 	
 	for (s_p<const Enti> enti : enti->GetPlayer().entis)
 	{
-		if (enti->GetInfo().name == "")
+		if (enti->GetInfo().kind == "building") // @#~ should be building type check
 		{
 			return enti.get();
 		}

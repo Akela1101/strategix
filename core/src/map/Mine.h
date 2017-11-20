@@ -1,7 +1,7 @@
 #ifndef _MINE_H
 #define    _MINE_H
 
-#include "Kernel.h"
+#include "kernel/Kernel.h"
 #include "common/Resource.h"
 #include "common/Strategix_Forward.h"
 

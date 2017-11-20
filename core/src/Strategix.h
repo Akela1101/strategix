@@ -1,20 +1,14 @@
 #ifndef STRATEGIX_H
 #define	STRATEGIX_H
 
-#include "entity/Enti.h"
-#include "entity/EntiInfo.h"
-#include "feature/FeatureInfo.h"
-#include "feature/FeatureMove.h"
-#include "feature/FeatureCollect.h"
-#include "feature/FeatureHealth.h"
-#include "feature/FeatureAttack.h"
-#include "Kernel.h"
-#include "map/Map.h"
-#include "map/MapManager.h"
-#include "map/Mine.h"
-#include "player/Player.h"
-#include "common/TechTree.h"
+// For starting point see kernel/Kernel.h
 
-#include "common/Strategix_Forward.h"
+#include <common/TechTree.h>
+#include <entity/EntiInfo.h>
+#include <entity/EntiSlot.h>
+#include <kernel/Kernel.h>
+#include <kernel/KernelSlot.h>
+#include <map/Map.h>
+#include <player/PlayerSlot.h>
 
 #endif	/* STRATEGIX_H */

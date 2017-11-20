@@ -17,7 +17,6 @@ PlayerSlot::~PlayerSlot() = default;
 
 void PlayerSlot::AddEnti(EntiSlot* enti)
 {
-	//TODO: async
 	if (player) player->AddEnti(enti);
 }
 

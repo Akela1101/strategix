@@ -1,7 +1,7 @@
 #ifndef _SAMPLEKERNELSLOT_H
 #define    _SAMPLEKERNELSLOT_H
 
-#include <KernelSlot.h>
+#include <kernel/KernelSlot.h>
 #include <Sample1_Forward.h>
 #include <unordered_map>
 

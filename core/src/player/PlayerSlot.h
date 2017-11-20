@@ -35,7 +35,7 @@ public:
 	PlayerType GetType() const { return type; }
 	
 	/// @return number of player on the map
-	int GetPlayerNumber() const { return playerNumber; }
+	int GetId() const { return playerNumber; }
 	
 	/// @return race name
 	const string& GetRaceName() const { return raceName; }

@@ -93,9 +93,13 @@ int main(int argc, char* argv[])
 	{
 		// initialize map and players
 		Kernel::LoadMap("1x1");
+		
 		auto inu = new SamplePlayerSlot("Inu", HUMAN, 0, "Spher");
-		auto saru = new SamplePlayerSlot("Saru", AI, 1, "Spher");
 		inu->AddEnti(new SampleEntiSlot("Spher_Worker"));
+		
+		auto saru = new SamplePlayerSlot("Saru", AI, 1, "Spher");
+		saru->AddEnti(new SampleEntiSlot("Spher_Worker"));
+		
 		Kernel::AddPlayer(inu);
 		Kernel::AddPlayer(saru);
 		

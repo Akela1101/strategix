@@ -10,14 +10,14 @@ namespace strategix
 {
 
 /// Reusable configuration manager.
-class ConfigurationManager
+class ConfigManager
 {
 	struct ConfigurationManagerImpl;
 	u_p<ConfigurationManagerImpl> impl;
 	
 public:
-	ConfigurationManager();
-	~ConfigurationManager();
+	ConfigManager();
+	~ConfigManager();
 	/**
 	 * @param configFile path of configuration file .json
 	 * @return valid resource names and technology trees

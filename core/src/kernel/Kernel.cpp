@@ -1,9 +1,9 @@
 #include <boost/filesystem.hpp>
 
-#include <common/ConfigurationManager.h>
+#include <kernel/ConfigManager.h>
 #include <entity/Enti.h>
 #include <entity/EntiInfo.h>
-#include <map/MapManager.h>
+#include <kernel/MapManager.h>
 #include <map/Map.h>
 #include <player/Player.h>
 #include <common/Resources.h>
@@ -23,20 +23,18 @@ using PlayersType = umap<string, u_p<Player>>;
 
 
 // Variables
-static u_p<KernelSlot> slot;            // main event receiver
-static u_p<MapManager> mapManager;      // has all information about the map
-static PlayersType players;             // players by name
-static ResourceInfosType resourceInfos; // resource descriptions
-static TechTreesType techTrees;         // technology trees
-static string mapsDirectory;            // usually "maps"
+static u_p<KernelSlot> slot;              // main event receiver
+static ConfigManager configManager;       // game configuration manager
+static u_p<MapManager> mapManager;        // has all information about the map
+static PlayersType players;               // players by name
+static ResourceInfosType resourceInfos;   // resource descriptions
+static TechTreesType techTrees;           // technology trees
+static string mapsDirectory;              // usually "maps"
 
 void Configure(KernelSlot* slot)
 {
 	Kernel::slot.reset(slot);
-	tie(resourceInfos, techTrees) = ConfigurationManager().ParseConfig(slot->GetConfigPath());
-//	auto&& pa = ConfigurationManager().ParseConfig(slot->GetConfigPath());
-//	resourceInfos = move(pa.first);
-//	techTrees = move(pa.second);
+	tie(resourceInfos, techTrees) = configManager.ParseConfig(slot->GetConfigPath());
 	mapsDirectory = slot->GetMapsPath();
 }
 
