@@ -16,7 +16,6 @@
 namespace strategix::Kernel
 {
 using namespace strategix;
-using namespace boost;
 namespace fs = boost::filesystem;
 
 
@@ -35,6 +34,9 @@ void Configure(KernelSlot* slot)
 {
 	Kernel::slot.reset(slot);
 	tie(resourceInfos, techTrees) = ConfigurationManager().ParseConfig(slot->GetConfigPath());
+//	auto&& pa = ConfigurationManager().ParseConfig(slot->GetConfigPath());
+//	resourceInfos = move(pa.first);
+//	techTrees = move(pa.second);
 	mapsDirectory = slot->GetMapsPath();
 }
 

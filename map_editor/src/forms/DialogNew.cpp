@@ -1,5 +1,6 @@
-#include "DialogNew.h"
 #include <QMessageBox>
+
+#include "DialogNew.h"
 
 
 DialogNew::DialogNew()

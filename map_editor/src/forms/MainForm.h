@@ -1,9 +1,7 @@
 #ifndef _MAINFORM_H
 #define    _MAINFORM_H
 
-#include <nya.hpp>
 #include <Common.h>
-
 #include <ui_MainForm.h>
 
 

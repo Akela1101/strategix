@@ -3,8 +3,6 @@
 
 #include "Common.h"
 
-using namespace boost;
-using namespace boost::adaptors;
 
 namespace common
 {
@@ -22,6 +20,8 @@ const char* str(const QString& message) { return message.toUtf8().data(); }
 
 TerrainInfo* GetTerrainById(int id)
 {
+	using namespace boost;
+	using namespace boost::adaptors;
 	return find_if(terrainInfos | map_values, [id](auto&& info) { return info->id == id; })->get();
 }
 

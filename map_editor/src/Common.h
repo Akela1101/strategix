@@ -1,14 +1,16 @@
 #ifndef Common_H
 #define Common_H
 
-#include <QPixmap>
-#include <QString>
-#include <nya.hpp>
-#include <nya/log.hpp>
-#include <boost/range/irange.hpp>
 #include <memory>
 #include <string>
 #include <unordered_map>
+#include <unordered_set>
+#include <boost/range/irange.hpp>
+#include <QPixmap>
+#include <QString>
+#include <nya.hpp>
+#include <nya/exception.hpp>
+#include <nya/log.hpp>
 
 
 enum class ToolType

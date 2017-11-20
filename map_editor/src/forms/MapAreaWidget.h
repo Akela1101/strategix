@@ -1,11 +1,11 @@
 #ifndef _MAPAREA_H
 #define    _MAPAREA_H
 
-#include <nya.hpp>
 #include <QtGui>
 #include <QWidget>
 #include <QListWidgetItem>
 #include <QScrollArea>
+#include <nya.hpp>
 
 
 class MainForm;

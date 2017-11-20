@@ -1,7 +1,8 @@
-#include <forms/MainForm.h>
 #include <exception>
 #include <QApplication>
 #include <QMessageBox>
+
+#include <forms/MainForm.h>
 
 
 #ifdef Q_OS_WIN

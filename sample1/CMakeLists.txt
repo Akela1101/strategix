@@ -3,19 +3,13 @@ project(sample1)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
 
-
 find_package(Boost COMPONENTS system filesystem REQUIRED)
 
 
-add_executable(${PROJECT_NAME}
-        src/SamplePlayerSlot.cpp
-        src/SamplePlayerSlot.h
-        src/SampleKernelSlot.cpp
-        src/SampleKernelSlot.h
-        src/Main.cpp
-        src/Sample1_Forward.h
-        src/SampleEntiSlot.cpp
-        src/SampleEntiSlot.h)
+file(GLOB_RECURSE SOURCES *.cpp *.cxx *.cc *.C *.c *.h *.hpp)
+
+
+add_executable(${PROJECT_NAME} ${SOURCES})
 
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 17)
 
@@ -27,10 +21,11 @@ target_link_libraries(${PROJECT_NAME}
         ${Boost_SYSTEM_LIBRARY}
         ${Boost_FILESYSTEM_LIBRARY})
 
+if (COMMAND cotire)
+    cotire(${PROJECT_NAME})
+endif()
+
+
+
 file(COPY config/ DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/config)
 file(COPY maps/ DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/maps)
-
-#get_cmake_property(_variableNames VARIABLES)
-#foreach (_variableName ${_variableNames})
-#    message(STATUS "${_variableName}=${${_variableName}}")
-#endforeach()

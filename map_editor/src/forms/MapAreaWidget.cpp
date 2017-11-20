@@ -1,19 +1,13 @@
-#include <forms/MainForm.h>
-#include <Common.h>
-
-#include <memory>
 #include <iomanip>
 #include <fstream>
-#include <unordered_map>
-#include <unordered_set>
 #include <QFileInfo>
 #include <QMessageBox>
 #include <QPixmap>
 #include <QString>
 #include <QScrollBar>
-#include <nya.hpp>
-#include <nya/exception.hpp>
+#include <Common.h>
 
+#include <forms/MainForm.h>
 #include "MapAreaWidget.h"
 
 using namespace std;

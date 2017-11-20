@@ -1,17 +1,17 @@
-#include "MainForm.h"
-#include "DialogNew.h"
-
-#include <QDir>
-#include <QFileDialog>
-#include <QMessageBox>
 #include <fstream>
 #include <boost/range/adaptors.hpp>
 #include <nya/exception.hpp>
+#include <QDir>
+#include <QFileDialog>
+#include <QMessageBox>
+
+
+#include "DialogNew.h"
+#include "MainForm.h"
 
 
 using namespace common;
 using namespace std;
-using namespace boost;
 
 MainForm::MainForm()
 		: isMapOpened(false)
@@ -121,7 +121,7 @@ std::pair<std::string, int> MainForm::LoadTerrainDescription()
 	getline(fin, terrainsImageFileName);
 	fin >> divs;
 	
-	for (int i : irange(0, divs * divs))
+	for (int i : boost::irange(0, divs * divs))
 	{
 		auto info = make_u<TerrainInfo>();
 		fin >> info->retard >> info->name;
