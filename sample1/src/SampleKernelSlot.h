@@ -1,13 +1,12 @@
 #ifndef _SAMPLEKERNELSLOT_H
 #define    _SAMPLEKERNELSLOT_H
 
-#include <kernel/KernelSlot.h>
+#include <strx/kernel/KernelSlot.h>
 #include <Sample1_Forward.h>
-#include <unordered_map>
 
 namespace sample1
 {
-using namespace strategix;
+using namespace strx;
 
 class SampleKernelSlot : public KernelSlot
 {

@@ -1,11 +1,11 @@
 #ifndef _SAMPLEENTISLOT_H
 #define _SAMPLEENTISLOT_H
 
-#include <entity/EntiSlot.h>
+#include <strx/entity/EntiSlot.h>
 
 namespace sample1
 {
-using namespace strategix;
+using namespace strx;
 class SampleEntiSlot : public EntiSlot
 {
 	using EntiSlot::EntiSlot;

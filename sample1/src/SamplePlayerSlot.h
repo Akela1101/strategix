@@ -1,18 +1,14 @@
 #ifndef _SAMPLEPLAYERSLOT_H
 #define    _SAMPLEPLAYERSLOT_H
 
-#include <player/PlayerSlot.h>
-
-#include <map>
-
-#include <common/Strategix_Forward.h>
-#include "Sample1_Forward.h"
+#include <strx/player/PlayerSlot.h>
+#include <Sample1_Forward.h>
 
 
 namespace sample1
 {
 using namespace std;
-using namespace strategix;
+using namespace strx;
 
 class SamplePlayerSlot : public PlayerSlot
 {

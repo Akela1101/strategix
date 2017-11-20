@@ -4,6 +4,6 @@
 namespace sample1
 {
 using namespace std;
-using namespace strategix;
+using namespace strx;
 
 }

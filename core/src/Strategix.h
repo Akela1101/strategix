@@ -3,12 +3,12 @@
 
 // For starting point see kernel/Kernel.h
 
-#include <common/TechTree.h>
-#include <entity/EntiInfo.h>
-#include <entity/EntiSlot.h>
-#include <kernel/Kernel.h>
-#include <kernel/KernelSlot.h>
-#include <map/Map.h>
-#include <player/PlayerSlot.h>
+#include <strx/common/TechTree.h>
+#include <strx/entity/EntiInfo.h>
+#include <strx/entity/EntiSlot.h>
+#include <strx/kernel/Kernel.h>
+#include <strx/kernel/KernelSlot.h>
+#include <strx/map/Map.h>
+#include <strx/player/PlayerSlot.h>
 
 #endif	/* STRATEGIX_H */

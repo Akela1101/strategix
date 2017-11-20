@@ -7,7 +7,7 @@
 INITIALIZE_EASYLOGGINGPP
 
 
-using namespace strategix;
+using namespace strx;
 using namespace sample1;
 using namespace std;
 
