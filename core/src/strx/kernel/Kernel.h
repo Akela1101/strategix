@@ -2,30 +2,43 @@
 #define _KERNEL_H
 
 #include <strx/common/Strategix_Forward.h>
-
+#include <nya/signal.hpp>
 
 /**
  * Main functionality is here.
  */
-namespace strx::Kernel
+namespace strx
 {
-// keep this calling order
-void Configure(KernelSlot* slot);
-void LoadMap(const string& mapName);
-void AddPlayer(PlayerSlot* playerSlot);
+class Kernel
+{
+	static nya::event_loop eventLoop;
 
-void Start();
-void Tick(float seconds);
-void PrintInfo();
-
-const string& GetMapsDir();
-MapManager& GetMap();
-bool CheckResource(const string& name);
-const TechTree& GetTechTree(const string& raceName);
-vector<string> GetMapNames();
-vector<string> GetRaceNames();
-u_p<Resource> MakeResource(const string& name, ResourceUnit amount);
-u_p<Resources> MakeResources(); // filled with zero
+public:
+	// keep this calling order
+	static void Configure(KernelSlot* slot);
+	static void LoadMap(const string& mapName);
+	static void AddPlayer(PlayerSlot* playerSlot);
+	
+	static void Start();
+	static void Stop();
+	static void Tick(float seconds);
+	static void PrintInfo();
+	
+	static const string& GetMapsDir();
+	static MapManager& GetMap();
+	static bool CheckResource(const string& name);
+	static const TechTree& GetTechTree(const string& raceName);
+	static vector <string> GetMapNames();
+	static vector <string> GetRaceNames();
+	static u_p<Resource> MakeResource(const string& name, ResourceUnit amount);
+	static u_p<Resources> MakeResources(); // filled with zero
+	
+	template<typename ...Args, typename Slot>
+	static void Connect(nya::sig<void(Args...)>& signalFunc, Slot&& slotFunc)
+	{
+		nya::connect_in(eventLoop, signalFunc, slotFunc);
+	}
+};
 }
 
 #endif //_KERNEL_H

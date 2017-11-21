@@ -1,4 +1,7 @@
+#include <future>
+#include <thread>
 #include <boost/filesystem.hpp>
+#include <nya/signal.hpp>
 
 #include <strx/common/Resources.h>
 #include <strx/common/TechTree.h>
@@ -13,39 +16,41 @@
 #include "KernelSlot.h"
 
 
-namespace strx::Kernel
+namespace strx
 {
-using namespace strx;
 namespace fs = boost::filesystem;
-
-
 using PlayersType = umap<string, u_p<Player>>;
 
 
 // Variables
-static u_p<KernelSlot> slot;              // main event receiver
-static ConfigManager configManager;       // game configuration manager
-static u_p<MapManager> mapManager;        // has all information about the map
-static PlayersType players;               // players by name
-static ResourceInfosType resourceInfos;   // resource descriptions
-static TechTreesType techTrees;           // technology trees
-static string mapsDirectory;              // usually "maps"
+static u_p<KernelSlot> slot;                  // main event receiver
+static ConfigManager configManager;           // game configuration manager
+static u_p<MapManager> mapManager;            // has all information about the map
+static u_p<thread> kernelThread;              // main Kernel thread
+nya::event_loop Kernel::eventLoop;            // asio::io_service event loop
+static u_p<nya::event_loop::work> dummyWork;  // work for io_service
 
-void Configure(KernelSlot* slot)
+static PlayersType players;                   // players by name
+static ResourceInfosType resourceInfos;       // resource descriptions
+static TechTreesType techTrees;               // technology trees
+static string mapsDirectory;                  // usually "maps"
+
+
+void Kernel::Configure(KernelSlot* slot)
 {
-	Kernel::slot.reset(slot);
+	strx::slot.reset(slot);
 	tie(resourceInfos, techTrees) = configManager.ParseConfig(slot->GetConfigPath());
 	mapsDirectory = slot->GetMapsPath();
 }
 
-void LoadMap(const string& mapName)
+void Kernel::LoadMap(const string& mapName)
 {
 	if (!slot) throw_nya << "Configure() should be run before LoadMap().";
 	
 	mapManager = make_u<MapManager>(mapName);
 }
 
-void AddPlayer(PlayerSlot* playerSlot)
+void Kernel::AddPlayer(PlayerSlot* playerSlot)
 {
 	if (!mapManager) throw_nya << "LoadMap() should be run before AddPlayer().";
 	
@@ -55,10 +60,23 @@ void AddPlayer(PlayerSlot* playerSlot)
 	players.emplace(player->GetName(), player);
 }
 
-void Start()
-{}
+void Kernel::Start()
+{
+	dummyWork.reset(new nya::event_loop::work(eventLoop));
+	kernelThread.reset(new thread([]
+	{
+		nya::SetThreadName("strategix");
+		eventLoop.run();
+	}));
+}
 
-void Tick(float seconds)
+void Kernel::Stop()
+{
+	dummyWork.reset();
+	kernelThread->join();
+}
+
+void Kernel::Tick(float seconds)
 {
 	for (auto& name_player : players)
 	{
@@ -66,7 +84,7 @@ void Tick(float seconds)
 	}
 }
 
-void PrintInfo()
+void Kernel::PrintInfo()
 {
 	cout << "\nMaps: " << endl;
 	for (auto&& mapName : GetMapNames())
@@ -81,21 +99,21 @@ void PrintInfo()
 	}
 }
 
-const string& GetMapsDir() { return mapsDirectory; }
+const string& Kernel::GetMapsDir() { return mapsDirectory; }
 
-MapManager& GetMap() { return *mapManager; }
+MapManager& Kernel::GetMap() { return *mapManager; }
 
-bool CheckResource(const string& name)
+bool Kernel::CheckResource(const string& name)
 {
 	return find(all_(resourceInfos), name) != resourceInfos.end();
 }
 
-const TechTree& GetTechTree(const string& raceName)
+const TechTree& Kernel::GetTechTree(const string& raceName)
 {
 	return *techTrees[raceName];
 }
 
-vector<string> GetMapNames()
+vector<string> Kernel::GetMapNames()
 {
 	vector<string> mapNames;
 	try
@@ -117,7 +135,7 @@ vector<string> GetMapNames()
 	return mapNames;
 }
 
-vector<string> GetRaceNames()
+vector<string> Kernel::GetRaceNames()
 {
 	vector<string> raceNames;
 	for (auto&& name_tree : techTrees)
@@ -127,7 +145,7 @@ vector<string> GetRaceNames()
 	return raceNames;
 }
 
-u_p<Resource> MakeResource(const string& name, ResourceUnit amount)
+u_p<Resource> Kernel::MakeResource(const string& name, ResourceUnit amount)
 {
 	if (!CheckResource(name))
 	{
@@ -136,7 +154,7 @@ u_p<Resource> MakeResource(const string& name, ResourceUnit amount)
 	return make_u<Resource>(name, amount);
 }
 
-u_p<Resources> MakeResources()
+u_p<Resources> Kernel::MakeResources()
 {
 	auto resources = make_u<Resources>();
 	for (auto&& resourceName : resourceInfos)

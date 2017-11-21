@@ -1,15 +1,18 @@
-#include <SampleEntiSlot.h>
+#include <SampleGame.h>
 #include <SampleKernelSlot.h>
-#include <SamplePlayerSlot.h>
 #include <Strategix.h>
 
 
 INITIALIZE_EASYLOGGINGPP
 
+void InitLogs()
+{
+	el::Loggers::configureFromGlobal("config/log.conf");
+	el::Configurations conf;
+	conf.parseFromText("*GLOBAL:\n FORMAT = %msg", el::Loggers::getLogger("default")->configurations());
+	el::Loggers::getLogger("raw")->configure(conf);
+}
 
-using namespace strx;
-using namespace sample1;
-using namespace std;
 
 #if defined( _MSC_VER )
 #define WIN32_LEAN_AND_MEAN
@@ -69,51 +72,37 @@ INT WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR strCmdLine, INT)
 	RedirectIOToConsole();
 	//SetCurrentDirectory("C:\\.......");
 #else
-
-
-void InitLogs()
-{
-	el::Loggers::configureFromGlobal("config/log.conf");
-	el::Configurations conf;
-	conf.parseFromText("*GLOBAL:\n FORMAT = %msg", el::Loggers::getLogger("default")->configurations());
-	el::Loggers::getLogger("raw")->configure(conf);
-}
-
 int main(int argc, char* argv[])
 {
 #endif
+	using namespace strx;
+	using namespace sample1;
+	
 	InitLogs();
 	
 	// initialize graphics and make slot to it
-	Kernel::Configure(new SampleKernelSlot("config/strategix.json", "maps"));
-
-	Kernel::PrintInfo();
+	auto kernelSlot = new SampleKernelSlot("config/strategix.json", "maps");
+	Kernel::Configure(kernelSlot);
+	//Kernel::PrintInfo();
 
 	try // run a game
 	{
-		// initialize map and players
-		Kernel::LoadMap("1x1");
-		
-		auto inu = new SamplePlayerSlot("Inu", PlayerType::HUMAN, 0, "Spher");
-		inu->AddEnti(new SampleEntiSlot("Spher_Worker"));
-		
-		auto saru = new SamplePlayerSlot("Saru", PlayerType::AI, 1, "Spher");
-		saru->AddEnti(new SampleEntiSlot("Spher_Worker"));
-		
-		Kernel::AddPlayer(inu);
-		Kernel::AddPlayer(saru);
+		SampleGame::Init();
 		
 		// start event loop in other thread
 		Kernel::Start();
+		
+		// start graphics engine
 	}
 	catch (nya::exception& e)
 	{
-		fatal_log << "Strategix error occurred. \nTerminating..." << endl;
+		error_log << "Strategix error occurred. \nFinishing the game..." << endl;
 	}
 	catch (exception& e)
 	{
-		fatal_log << "Unexpected error occurred [" << e.what() << "] \nTerminating..." << endl;
+		error_log << "Unexpected error occurred [" << e.what() << "] \nFinishing the game..." << endl;
 	}
+	Kernel::Stop();
 
 #if defined( _MSC_VER )
 	getch();

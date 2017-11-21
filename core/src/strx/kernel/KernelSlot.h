@@ -1,18 +1,19 @@
 #ifndef _KERNELSLOT_H
 #define _KERNELSLOT_H
 
+#include <nya/signal.hpp>
 #include <strx/common/Strategix_Forward.h>
+
 
 namespace strx
 {
-
 class KernelSlot
 {
-	string configPath;
-	string mapsPath;
+	const string configPath;
+	const string mapsPath;
 	
 public:
-	KernelSlot(string configPath, string mapsPath) : configPath(move(configPath)), mapsPath(move(mapsPath)) {}
+	KernelSlot(string configPath, string mapsPath);
 	virtual ~KernelSlot() = default;
 	
 	string GetConfigPath() const { return configPath; }

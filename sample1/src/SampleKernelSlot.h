@@ -2,7 +2,7 @@
 #define    _SAMPLEKERNELSLOT_H
 
 #include <strx/kernel/KernelSlot.h>
-#include <Sample1_Forward.h>
+#include <Sample_Forward.h>
 
 namespace sample1
 {
@@ -13,7 +13,7 @@ class SampleKernelSlot : public KernelSlot
 	umap<string, u_p<SamplePlayerSlot>> playerSlots;
 
 public:
-	using KernelSlot::KernelSlot;
+	SampleKernelSlot(std::string configPath, std::string mapsPath);
 	~SampleKernelSlot() override;
 };
 

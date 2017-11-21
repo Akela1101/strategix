@@ -2,7 +2,7 @@
 #define    _SAMPLEPLAYERSLOT_H
 
 #include <strx/player/PlayerSlot.h>
-#include <Sample1_Forward.h>
+#include <Sample_Forward.h>
 
 
 namespace sample1
