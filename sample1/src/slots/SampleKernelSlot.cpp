@@ -1,4 +1,4 @@
-#include <SamplePlayerSlot.h>
+#include <slots/SamplePlayerSlot.h>
 
 #include "SampleKernelSlot.h"
 

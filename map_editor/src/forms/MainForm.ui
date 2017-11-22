@@ -6,12 +6,9 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>927</width>
-    <height>596</height>
+    <width>1083</width>
+    <height>697</height>
    </rect>
-  </property>
-  <property name="windowTitle">
-   <string>Nyaaaaaaa!!!!!!!!!!!</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -30,15 +27,15 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="page_0">
        <property name="geometry">
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>290</width>
-         <height>451</height>
+         <width>300</width>
+         <height>557</height>
         </rect>
        </property>
        <attribute name="label">
@@ -55,8 +52,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>290</width>
-         <height>451</height>
+         <width>300</width>
+         <height>557</height>
         </rect>
        </property>
        <attribute name="label">
@@ -73,8 +70,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>290</width>
-         <height>451</height>
+         <width>300</width>
+         <height>557</height>
         </rect>
        </property>
        <attribute name="label">
@@ -89,38 +86,13 @@
      </widget>
     </item>
     <item>
-     <widget class="QScrollArea" name="scrollArea">
-      <property name="widgetResizable">
-       <bool>true</bool>
+     <widget class="MapAreaWidget" name="mapArea" native="true">
+      <property name="minimumSize">
+       <size>
+        <width>300</width>
+        <height>300</height>
+       </size>
       </property>
-      <widget class="QWidget" name="scrollAreaWidgetContents_2">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>0</y>
-         <width>609</width>
-         <height>539</height>
-        </rect>
-       </property>
-       <layout class="QGridLayout" name="gridLayout">
-        <item row="0" column="0">
-         <widget class="MapAreaWidget" name="mapArea" native="true">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>300</width>
-            <height>300</height>
-           </size>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
      </widget>
     </item>
    </layout>
@@ -130,8 +102,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>927</width>
-     <height>22</height>
+     <width>1083</width>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

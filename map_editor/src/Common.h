@@ -1,6 +1,8 @@
 #ifndef Common_H
 #define Common_H
 
+#define ELPP_QT_LOGGING
+
 #include <boost/range/irange.hpp>
 #include <nya/api.hpp>
 #include <QPixmap>

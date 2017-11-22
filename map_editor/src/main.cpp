@@ -1,4 +1,5 @@
 #include <exception>
+#include <QtPlugin>
 #include <QApplication>
 #include <QMessageBox>
 

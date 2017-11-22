@@ -1,10 +1,11 @@
 #include <iomanip>
 #include <fstream>
+#include <QtGui>
 #include <QFileInfo>
+#include <QListWidgetItem>
 #include <QMessageBox>
-#include <QPixmap>
-#include <QString>
 #include <QScrollBar>
+#include <QWidget>
 #include <Common.h>
 
 #include <forms/MainForm.h>
@@ -14,7 +15,9 @@ using namespace std;
 using namespace common;
 
 
-static QPoint globalPoint, lastGlobalPoint;
+static constexpr int minZoom = 4;
+static constexpr int maxZoom = 64;
+static constexpr int tileLenBase = 64; // size of tile pixmap
 
 struct MapInfo
 {
@@ -25,21 +28,30 @@ struct MapInfo
 	};
 	
 	QString name;
-	size_t width, height;
+	int width, height;
 	std::vector<std::vector<Tile>> tiles;
 	
-	MapInfo(const QString& name, size_t width, size_t height)
+	MapInfo(const QString& name, int width, int height)
 			: name(name), width(width), height(height)
 	{
-		tiles.reserve(height);
-		for (int row = 0; row < height; ++row)
+		try
 		{
-			auto& t = tiles.emplace_back();
-			t.reserve(width);
-			for (int col = 0; col < width; ++col)
+			CheckDimentions();
+			
+			tiles.reserve(height);
+			for (int row = 0; row < height; ++row)
 			{
-				t.push_back({terrainInfos["grass1"].get(), nullptr});
+				auto& t = tiles.emplace_back();
+				t.reserve(width);
+				for (int col = 0; col < width; ++col)
+				{
+					t.push_back({ terrainInfos["grass1"].get(), nullptr });
+				}
 			}
+		}
+		catch (exception& e)
+		{
+			QMessageBox::critical(nullptr, QString("Error creating map: %1").arg(name), e.what());
 		}
 	}
 	
@@ -124,7 +136,8 @@ struct MapInfo
 		fout.close();
 		return true;
 	}
-	
+
+private:
 	void LoadFromFile(const QString& fileName)
 	{
 		name = QFileInfo(fileName).completeBaseName();
@@ -144,8 +157,7 @@ struct MapInfo
 		
 		// Dimensions
 		fin >> width >> height;
-		if (width > 200 || height > 200)
-			throw_nya << "Maximum map dimensions (200x200) exceeded: %zux%zu"s % width % height;
+		CheckDimentions();
 		
 		// Map content
 		tiles.reserve(height);
@@ -157,7 +169,7 @@ struct MapInfo
 			{
 				int id;
 				fin >> id;
-				t.push_back({GetTerrainById(id), nullptr});
+				t.push_back({ GetTerrainById(id), nullptr });
 			}
 		}
 		
@@ -196,191 +208,277 @@ struct MapInfo
 			throw_nya << "Map content is corrupted!";
 		fin.close();
 	}
+	
+	void CheckDimentions()
+	{
+		if (width < 10 || height < 10)
+			throw_nya << "Minimum map dimensions (10x10) exceeded: %dx%d"s % width % height;
+		if (width > 200 || height > 200)
+			throw_nya << "Maximum map dimensions (200x200) exceeded: %dx%d"s % width % height;
+	}
 };
+
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+class MapAreaWidgetImpl : public QWidget
+{
+Q_OBJECT
+	friend class MapAreaWidget;
+	
+	MainForm* mainForm;
+	QScrollArea* scrollArea;
+	umap<const QListWidgetItem*, ToolInfo*> infoFromItem;
+	
+	u_p<MapInfo> mapInfo;
+	u_p<QPixmap> groundPixmap;
+	u_p<QPixmap> frontPixmap;
+	QRect rectBase;
+	QRect rectScaled;
+	QPoint lastPos;
+	QPoint globalPos;
+	QPoint lastGlobalPos;
+	int tileLen;
+	bool isHighlight;
+
+public:
+	MapAreaWidgetImpl(QScrollArea* parent)
+			: QWidget(parent)
+			, scrollArea(parent)
+			, isHighlight(false)
+	{
+		setMouseTracking(true);
+	}
+	
+	~MapAreaWidgetImpl() = default;
+
+
+protected:
+	void paintEvent(QPaintEvent*) override
+	{
+		if (!mapInfo) return;
+		
+		qreal scale = (qreal)tileLen / tileLenBase;
+		
+		QPainter painter(this);
+		painter.scale(scale, scale);
+		painter.drawPixmap(0, 0, *groundPixmap);
+		painter.drawPixmap(0, 0, *frontPixmap);
+		
+		if (isHighlight)
+		{
+			painter.setBrush(QColor(250, 250, 100, 150));
+			painter.setPen(Qt::NoPen);
+			painter.drawRect(rectBase);
+		}
+	}
+	
+	void wheelEvent(QWheelEvent* event) override
+	{
+		if (!mapInfo) return;
+		
+		tileLen += copysign(4, event->delta());
+		if (tileLen < minZoom) { tileLen = minZoom; return; }
+		if (tileLen > maxZoom) { tileLen = maxZoom; return; }
+		
+		// Update view
+		isHighlight = false;
+		setFixedSize(groundPixmap->size() * tileLen / tileLenBase);
+		update();
+		
+		// Move sliders to mouse center
+		QScrollBar* hSB = scrollArea->horizontalScrollBar();
+		int tilesNumberX = hSB->pageStep() / maxZoom;      // number of tiles on screen for max zoom
+		int centralWidth = mapInfo->width - tilesNumberX;  // number of tiles in the center of screen
+		int centralX = lastPos.x() - tilesNumberX / 2;     // position in central coordinates
+		if (centralWidth < 1) centralWidth = 1;
+		hSB->setSliderPosition(hSB->maximum() * centralX / centralWidth);
+		
+		QScrollBar* vSB = scrollArea->verticalScrollBar();
+		int tilesNumberY = vSB->pageStep() / maxZoom;
+		int centralHeight = mapInfo->height - tilesNumberY;
+		int centralY = lastPos.y() - tilesNumberY / 2;
+		if (centralHeight < 1) centralHeight = 1;
+		vSB->setSliderPosition(vSB->maximum() * centralY / centralHeight);
+	}
+	
+	void mouseMoveEvent(QMouseEvent* event) override
+	{
+		if (!mapInfo) return;
+		
+		const QPoint& point = event->pos();
+		if (!this->rect().contains(point)) return;
+			
+		// Move sliders
+		if (event->buttons() & Qt::RightButton)
+		{
+			globalPos = event->globalPos();
+			
+			QScrollBar* hSB = scrollArea->horizontalScrollBar();
+			hSB->setSliderPosition(hSB->sliderPosition() - globalPos.x() + lastGlobalPos.x());
+			QScrollBar* vSB = scrollArea->verticalScrollBar();
+			vSB->setSliderPosition(vSB->sliderPosition() - globalPos.y() + lastGlobalPos.y());
+			
+			lastGlobalPos = globalPos;
+		}
+		
+		QPoint pos(point.x() / tileLen, point.y() / tileLen);
+		rectBase = QRect(pos.x() * tileLenBase, pos.y() * tileLenBase, tileLenBase, tileLenBase);
+		
+		// Draw objects, if LMB and current item is valid.
+		if ((event->buttons() & Qt::LeftButton) && (mainForm->GetCurrentWidgetItem()))
+		{
+			isHighlight = false;
+			
+			auto& tile = mapInfo->tiles[pos.y()][pos.x()]; // On map
+			ToolInfo* object = infoFromItem[mainForm->GetCurrentWidgetItem()]; // In mouse
+			
+			if (object && object->type == ToolType::TERRAIN)
+			{
+				ReplaceObject(*groundPixmap, rectBase, object, tile.terrain);
+			}
+			else
+			{
+				// delete, if object == null
+				ReplaceObject(*frontPixmap, rectBase, object, tile.object);
+			}
+		}
+		else // Highlight current rectangle
+		{
+			isHighlight = true;
+		}
+		
+		// Update rects
+		QRect newRectScaled = QRect(pos.x() * tileLen, pos.y() * tileLen, tileLen, tileLen);
+		if (lastPos != pos)
+		{
+			update(rectScaled);
+			update(newRectScaled);
+			rectScaled = newRectScaled;
+			lastPos = pos;
+		}
+	}
+	
+	void mousePressEvent(QMouseEvent* event) override
+	{
+		lastGlobalPos = event->globalPos();
+		if (event->buttons() & Qt::RightButton)
+		{
+			grabMouse(QCursor(Qt::ClosedHandCursor));
+		}
+		else
+		{
+			grabMouse();
+		}
+		
+		mouseMoveEvent(event); // for single mouse click processing
+	}
+	
+	void mouseReleaseEvent(QMouseEvent* event) override
+	{
+		Q_UNUSED(event);
+		
+		releaseMouse();
+	}
+
+private:
+	void ReplaceObject(QPixmap& pixmap, const QRect& rc, ToolInfo* object, ToolInfo*& currentObject)
+	{
+		if (currentObject == object) return;
+		
+		currentObject = object;
+		{
+			QPainter painter(&pixmap);
+			painter.setCompositionMode(QPainter::CompositionMode_Source);
+			if (object)
+				painter.drawPixmap(rc, object->image);
+			else
+				painter.fillRect(rc, QColor(0, 0, 0, 0));
+		}
+		update(rc);
+		
+		mainForm->MapChanged();
+	}
+	
+	void SetMap(MapInfo* mapInfo)
+	{
+		this->mapInfo.reset(mapInfo);
+		size_t width = mapInfo->width;
+		size_t height = mapInfo->height;
+		QSize groundSize((int) width * tileLenBase, (int) height * tileLenBase);
+		
+		groundPixmap.reset(new QPixmap(groundSize));
+		frontPixmap.reset(new QPixmap(groundSize));
+		frontPixmap->fill(QColor(0, 0, 0, 0)); // Necessary clear!
+		
+		// Draw ground and objects
+		QPainter groundPainter, frontPainter;
+		groundPainter.begin(groundPixmap.get());
+		frontPainter.begin(frontPixmap.get());
+		for (int row = 0; row < height; ++row)
+		{
+			for (int col = 0; col < width; ++col)
+			{
+				const QRect& rc = QRect(col * tileLenBase, row * tileLenBase, tileLenBase, tileLenBase);
+				auto&& tile = mapInfo->tiles[row][col];
+				groundPainter.drawPixmap(rc, tile.terrain->image);
+				if (tile.object)
+				{
+					frontPainter.drawPixmap(rc, tile.object->image);
+				}
+			}
+		}
+		groundPainter.end();
+		frontPainter.end();
+		
+		tileLen = tileLenBase / 2;
+		setFixedSize(groundSize * tileLen / tileLenBase);
+		update();
+	}
+};
+#include "MapAreaWidget.moc"
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 MapAreaWidget::MapAreaWidget(QWidget* parent)
-		: QWidget(parent)
-		, tileSize(50)
-		, isHighlight(false)
+		: QScrollArea(parent)
+		, impl(new MapAreaWidgetImpl(this))
 {
-	setMouseTracking(true);
+	setWidget(impl);
+	setAlignment(Qt::AlignCenter);
 }
 
 MapAreaWidget::~MapAreaWidget() = default;
 
 const QString& MapAreaWidget::GetMapName() const
 {
-	return mapInfo->name;
+	return impl->mapInfo->name;
 }
 
-void MapAreaWidget::AssignMainForm(MainForm* mainForm, QScrollArea* scrollArea)
+void MapAreaWidget::SetInfoFromItem(const QListWidgetItem* item, ToolInfo* info)
 {
-	this->mainForm = mainForm;
-	this->scrollArea = scrollArea;
+	impl->infoFromItem.emplace(item, info);
+}
+
+void MapAreaWidget::AssignMainForm(MainForm* mainForm)
+{
+	impl->mainForm = mainForm;
 }
 
 void MapAreaWidget::SetMap(const QString& name, size_t width, size_t height)
 {
-	SetMap(new MapInfo(name, width, height));
+	impl->SetMap(new MapInfo(name, width, height));
 }
 
 void MapAreaWidget::LoadFromFile(const QString& fileName)
 {
-	SetMap(new MapInfo(fileName));
+	impl->SetMap(new MapInfo(fileName));
 }
 
 bool MapAreaWidget::SaveToFile(const QString& fileName) const
 {
-	mapInfo->SaveToFile(fileName);
+	impl->mapInfo->SaveToFile(fileName);
 }
 
-void MapAreaWidget::paintEvent(QPaintEvent* event)
+void MapAreaWidget::wheelEvent(QWheelEvent* event)
 {
-	Q_UNUSED(event);
-	
-	if (!mapInfo)
-		return;
-	
-	QPainter painter(this);
-	painter.drawPixmap(0, 0, *groundPixmap);
-	painter.drawPixmap(0, 0, *frontPixmap);
-	
-	if (isHighlight)
-	{
-		painter.setBrush(QColor(250, 250, 100, 150));
-		painter.setPen(Qt::NoPen);
-		painter.drawRect(lastRc);
-	}
-}
-
-void MapAreaWidget::mouseMoveEvent(QMouseEvent* event)
-{
-	const QPoint& point = event->pos();
-	
-	if (!mapInfo || !this->rect().contains(point))
-		return;
-	
-	// Move sliders
-	if (event->buttons() & Qt::RightButton)
-	{
-		globalPoint = event->globalPos();
-		
-		QScrollBar* hSB = scrollArea->horizontalScrollBar();
-		hSB->setSliderPosition(hSB->sliderPosition() - globalPoint.x() + lastGlobalPoint.x());
-		QScrollBar* vSB = scrollArea->verticalScrollBar();
-		vSB->setSliderPosition(vSB->sliderPosition() - globalPoint.y() + lastGlobalPoint.y());
-		
-		lastGlobalPoint = globalPoint;
-	}
-	
-	int tileX = point.x() / tileSize;
-	int tileY = point.y() / tileSize;
-	const QRect& rc = QRect(tileX * tileSize, tileY * tileSize, tileSize, tileSize);
-	
-	// Draw objects, if LMB and current item is valid.
-	if ((event->buttons() & Qt::LeftButton) && (mainForm->GetCurrentWidgetItem()))
-	{
-		isHighlight = false;
-		
-		auto& tile = mapInfo->tiles[tileY][tileX]; // On map
-		ToolInfo* object = infoFromItem[mainForm->GetCurrentWidgetItem()]; // In mouse
-		
-		if (object && object->type == ToolType::TERRAIN)
-		{
-			ReplaceObject(*groundPixmap, rc, object, tile.terrain);
-		}
-		else
-		{
-			// delete, if object == null
-			ReplaceObject(*frontPixmap, rc, object, tile.object);
-		}
-	}
-	else // Highlight current rectangle
-	{
-		isHighlight = true;
-	}
-	
-	// Update rects
-	if (lastRc.topLeft() != rc.topLeft())
-	{
-		update(lastRc);
-		lastRc = rc;
-		update(lastRc);
-	}
-}
-
-void MapAreaWidget::mousePressEvent(QMouseEvent* event)
-{
-	lastGlobalPoint = event->globalPos();
-	if (event->buttons() & Qt::RightButton)
-	{
-		grabMouse(QCursor(Qt::ClosedHandCursor));
-	}
-	else
-	{
-		grabMouse();
-	}
-	
-	mouseMoveEvent(event); // for single mouse click processing
-}
-
-void MapAreaWidget::mouseReleaseEvent(QMouseEvent* event)
-{
-	Q_UNUSED(event);
-	
-	releaseMouse();
-}
-
-void MapAreaWidget::ReplaceObject(QPixmap& pixmap, const QRect& rc, ToolInfo* object, ToolInfo*& currentObject)
-{
-	if (currentObject == object) return;
-	
-	currentObject = object;
-	{
-		QPainter painter(&pixmap);
-		painter.setCompositionMode(QPainter::CompositionMode_Source);
-		if (object)
-			painter.drawPixmap(rc, object->image);
-		else
-			painter.fillRect(rc, QColor(0, 0, 0, 0));
-	}
-	update(rc);
-	
-	mainForm->MapChanged();
-}
-
-void MapAreaWidget::SetMap(MapInfo* mapInfo)
-{
-	this->mapInfo.reset(mapInfo);
-	size_t width = mapInfo->width;
-	size_t height = mapInfo->height;
-	auto groundSize = QSize((int) width * tileSize, (int) height * tileSize);
-	
-	groundPixmap.reset(new QPixmap(groundSize));
-	frontPixmap.reset(new QPixmap(groundSize));
-	frontPixmap->fill(QColor(0, 0, 0, 0)); // Necessary clear!
-	
-	// Draw ground and objects
-	QPainter groundPainter, frontPainter;
-	groundPainter.begin(groundPixmap.get());
-	frontPainter.begin(frontPixmap.get());
-	for (int row = 0; row < height; ++row)
-	{
-		for (int col = 0; col < width; ++col)
-		{
-			const QRect& rc = QRect(col * tileSize, row * tileSize, tileSize, tileSize);
-			auto&& tile = mapInfo->tiles[row][col];
-			groundPainter.drawPixmap(rc, tile.terrain->image);
-			if (tile.object)
-			{
-				frontPainter.drawPixmap(rc, tile.object->image);
-			}
-		}
-	}
-	groundPainter.end();
-	frontPainter.end();
-	
-	setFixedSize(groundSize);
-	update();
+	event->ignore();
 }

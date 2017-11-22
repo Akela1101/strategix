@@ -35,7 +35,7 @@ MainForm::MainForm()
 	ListWidgetFill(ToolType::MINE, "Gold", "gold.png", widget.resourceListWidget);
 	
 	//
-	widget.mapArea->AssignMainForm(this, widget.scrollArea);
+	widget.mapArea->AssignMainForm(this);
 }
 
 void MainForm::FileNew()

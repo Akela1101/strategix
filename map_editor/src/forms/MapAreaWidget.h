@@ -1,53 +1,32 @@
 #ifndef _MAPAREA_H
 #define    _MAPAREA_H
 
-#include <QtGui>
-#include <QWidget>
-#include <QListWidgetItem>
 #include <QScrollArea>
 #include <nya.hpp>
 
 
 class MainForm;
 class MapInfo;
+class MapAreaWidgetImpl;
+class QListWidgetItem;
 
-class MapAreaWidget : public QWidget
+class MapAreaWidget : public QScrollArea
 {
-Q_OBJECT
-	
-	MainForm* mainForm;
-	QScrollArea* scrollArea;
-	umap<const QListWidgetItem*, ToolInfo*> infoFromItem;
-	
-	u_p<MapInfo> mapInfo;
-	int tileSize;
-	u_p<QPixmap> groundPixmap;
-	u_p<QPixmap> frontPixmap;
-	QRect lastRc;
-	bool isHighlight;
+	MapAreaWidgetImpl* impl;
 
 public:
 	MapAreaWidget(QWidget* parent = nullptr);
-	~MapAreaWidget();
+	~MapAreaWidget() override;
 	
-	void SetInfoFromItem(const QListWidgetItem* item, ToolInfo* info) { infoFromItem.emplace(item, info); }
-	MapInfo& GetMapInfo() const { return *mapInfo; }
+	void SetInfoFromItem(const QListWidgetItem* item, ToolInfo* info);
 	const QString& GetMapName() const;
-	void AssignMainForm(MainForm* mainForm, QScrollArea* scrollArea);
+	void AssignMainForm(MainForm* mainForm);
 	void SetMap(const QString& name, size_t width, size_t height);
 	void LoadFromFile(const QString& fileName);
 	bool SaveToFile(const QString& fileName) const;
 
 protected:
-	void paintEvent(QPaintEvent* event) override;
-	void mouseMoveEvent(QMouseEvent* event) override;
-	void mousePressEvent(QMouseEvent* event) override;
-	void mouseReleaseEvent(QMouseEvent* event) override;
-
-private:
-	void ReplaceObject(QPixmap& pixmap, const QRect& rc, ToolInfo* object, ToolInfo*& currentObject);
-	void SetMap(MapInfo* mapInfo);
+	void wheelEvent(QWheelEvent* event);
 };
-
 #endif    /* _MAPAREA_H */
 

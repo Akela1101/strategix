@@ -1,5 +1,5 @@
 #include <SampleGame.h>
-#include <SampleKernelSlot.h>
+#include <slots/SampleKernelSlot.h>
 #include <Strategix.h>
 
 

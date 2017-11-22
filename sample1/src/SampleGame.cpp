@@ -1,5 +1,5 @@
-#include <SampleEntiSlot.h>
-#include <SamplePlayerSlot.h>
+#include <slots/SampleEntiSlot.h>
+#include <slots/SamplePlayerSlot.h>
 #include <Strategix.h>
 
 #include "SampleGame.h"
