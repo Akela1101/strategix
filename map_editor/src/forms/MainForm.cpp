@@ -1,21 +1,23 @@
 #include <fstream>
 #include <boost/range/adaptors.hpp>
-#include <nya/exception.hpp>
+#include <boost/range/irange.hpp>
 #include <QDir>
 #include <QFileDialog>
 #include <QMessageBox>
-
 
 #include "DialogNew.h"
 #include "MainForm.h"
 
 
-using namespace common;
-using namespace std;
+namespace map_editor
+{
+using namespace map_info;
+
+const char* str(const QString& message) { return message.toUtf8().data(); }
+
 
 MainForm::MainForm()
 		: isMapOpened(false)
-		, currentItem(nullptr)
 {
 	widget.setupUi(this);
 	
@@ -35,7 +37,8 @@ MainForm::MainForm()
 	ListWidgetFill(ToolType::MINE, "Gold", "gold.png", widget.resourceListWidget);
 	
 	//
-	widget.mapArea->AssignMainForm(this);
+	connect(this, &CurrentToolChanged, widget.mapArea, &MapAreaWidget::CurrentToolChanged);
+	connect(widget.mapArea, &MapAreaWidget::MapChanged, this, &MapChanged);
 }
 
 void MainForm::FileNew()
@@ -90,11 +93,12 @@ void MainForm::CurrentItemChanged(QListWidgetItem* current, QListWidgetItem* pre
 {
 	Q_UNUSED(previous);
 	
-	currentItem = current;
-	if (currentItem)
-		this->statusBar()->showMessage(currentItem->text());
+	if (current)
+		this->statusBar()->showMessage(current->text());
 	else
 		this->statusBar()->showMessage("***");
+	
+	emit CurrentToolChanged(infoFromItem[current]);
 }
 
 void MainForm::CurrentToolboxItemChanged(int index)
@@ -129,7 +133,7 @@ std::pair<std::string, int> MainForm::LoadTerrainDescription()
 		
 		info->type = ToolType::TERRAIN;
 		info->id = i;
-		terrainInfos.emplace(info->name, std::move(info));
+		MapInfo::terrainInfos.emplace(info->name, std::move(info));
 	}
 	fin.close();
 	return { terrainsImageFileName, divs };
@@ -148,7 +152,7 @@ void MainForm::ListWidgetFillTerrains(const std::string& terrainsImageFileName, 
 	{
 		for (int col = 0; col < divs; ++col)
 		{
-			TerrainInfo* info = GetTerrainById(divs * row + col);
+			TerrainInfo* info = MapInfo::GetTerrainById(divs * row + col);
 			if (info->name == "none")
 				break; // none name are skipped !!!
 			
@@ -181,18 +185,18 @@ void MainForm::ListWidgetFill(ToolType type, const std::string& name, const QPix
 		{
 			auto info = make_u<ToolInfo>(type, name, pixmap);
 			pInfo = info.get();
-			objectInfos.emplace(type, std::move(info));
+			MapInfo::objectInfos.emplace(type, std::move(info));
 			break;
 		}
 		case ToolType::TERRAIN:
 		{
-			pInfo = terrainInfos[name].get();
+			pInfo = MapInfo::terrainInfos[name].get();
 			pInfo->image = pixmap;
 			break;
 		}
 	}
 	// Add link: ListItem - ToolInfo
-	widget.mapArea->SetInfoFromItem(newItem, pInfo);
+	infoFromItem.emplace(newItem, pInfo);
 }
 
 bool MainForm::TrySaveMap()
@@ -252,4 +256,6 @@ void MainForm::MapChanged(bool yes)
 			.arg(mapName)
 			.arg(yes ? "(*) " : "")
 			.arg(editorTitle));
+}
+
 }

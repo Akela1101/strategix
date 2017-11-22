@@ -34,8 +34,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>300</width>
-         <height>557</height>
+         <width>98</width>
+         <height>91</height>
         </rect>
        </property>
        <attribute name="label">
@@ -70,8 +70,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>300</width>
-         <height>557</height>
+         <width>98</width>
+         <height>91</height>
         </rect>
        </property>
        <attribute name="label">
@@ -86,7 +86,7 @@
      </widget>
     </item>
     <item>
-     <widget class="MapAreaWidget" name="mapArea" native="true">
+     <widget class="map_info::MapAreaWidget" name="mapArea" native="true">
       <property name="minimumSize">
        <size>
         <width>300</width>
@@ -167,7 +167,7 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>MapAreaWidget</class>
+   <class>map_info::MapAreaWidget</class>
    <extends>QWidget</extends>
    <header location="global">MapAreaWidget.h</header>
    <container>1</container>

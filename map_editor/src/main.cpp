@@ -22,6 +22,8 @@ void InitLogs()
 
 int main(int argc, char* argv[])
 {
+	using namespace map_editor;
+	
 	InitLogs();
 	
 	QApplication app(argc, argv);

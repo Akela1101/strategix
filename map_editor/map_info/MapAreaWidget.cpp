@@ -1,234 +1,23 @@
-#include <iomanip>
-#include <fstream>
 #include <QtGui>
-#include <QFileInfo>
-#include <QListWidgetItem>
-#include <QMessageBox>
 #include <QScrollBar>
-#include <QWidget>
-#include <Common.h>
+#include <MapInfo.h>
 
-#include <forms/MainForm.h>
 #include "MapAreaWidget.h"
 
-using namespace std;
-using namespace common;
 
-
+namespace map_info
+{
 static constexpr int minZoom = 4;
 static constexpr int maxZoom = 64;
 static constexpr int tileLenBase = 64; // size of tile pixmap
 
-struct MapInfo
-{
-	struct Tile
-	{
-		ToolInfo* terrain;
-		ToolInfo* object; // can be null
-	};
-	
-	QString name;
-	int width, height;
-	std::vector<std::vector<Tile>> tiles;
-	
-	MapInfo(const QString& name, int width, int height)
-			: name(name), width(width), height(height)
-	{
-		try
-		{
-			CheckDimentions();
-			
-			tiles.reserve(height);
-			for (int row = 0; row < height; ++row)
-			{
-				auto& t = tiles.emplace_back();
-				t.reserve(width);
-				for (int col = 0; col < width; ++col)
-				{
-					t.push_back({ terrainInfos["grass1"].get(), nullptr });
-				}
-			}
-		}
-		catch (exception& e)
-		{
-			QMessageBox::critical(nullptr, QString("Error creating map: %1").arg(name), e.what());
-		}
-	}
-	
-	MapInfo(const QString& fileName)
-	{
-		try
-		{
-			LoadFromFile(fileName);
-		}
-		catch (exception& e)
-		{
-			QMessageBox::critical(nullptr, QString("Error while reading the file: %1").arg(fileName), e.what());
-		}
-	}
-	
-	bool SaveToFile(const QString& fileName) const
-	{
-		ofstream fout(fileName.toLocal8Bit());
-		
-		// Top string and version
-		fout << mapFileTopString << "\n"
-		     << editorVersion << "\n"
-		     << "\n";
-		
-		// Dimensions
-		fout << width << " " << height << "\n";
-		
-		vector<QPoint> playerPositions;
-		vector<QPoint> objectPositions;
-		
-		// Terrain
-		uset<TerrainInfo*> uniqueTerrains;
-		for (int row = 0; row < height; ++row)
-		{
-			for (int col = 0; col < width; ++col)
-			{
-				auto& tile = tiles[row][col];
-				auto terrain = (TerrainInfo*) tile.terrain;
-				uniqueTerrains.insert(terrain);
-				
-				int id = terrain->id;
-				fout << setw(2) << id << " ";
-				
-				if (tile.object)
-				{
-					if (tile.object->type == ToolType::PLAYER)
-						playerPositions.emplace_back(col, row);
-					else
-						objectPositions.emplace_back(col, row);
-				}
-			}
-			fout << "\n";
-		}
-		fout << "\n";
-		
-		// Terrain descriptions
-		fout << uniqueTerrains.size() << "\n";
-		for (TerrainInfo* terrain : uniqueTerrains)
-		{
-			int id = terrain->id;
-			string name = terrain->name;
-			float retard = terrain->retard;
-			fout << id << " " << name << " " << retard << "\n";
-		}
-		fout << "\n";
-		
-		// Player initial positions
-		fout << playerPositions.size() << "\n";
-		for (auto&& pos : playerPositions)
-		{
-			fout << pos.x() << " " << pos.y() << "\n";
-		}
-		fout << "\n";
-		
-		// Mines
-		fout << objectPositions.size() << "\n";
-		for (auto&& pos : objectPositions)
-		{
-			fout << pos.x() << " " << pos.y() << " " << "gold" << " " << 100000 << "\n";
-		}
-		
-		fout.close();
-		return true;
-	}
-
-private:
-	void LoadFromFile(const QString& fileName)
-	{
-		name = QFileInfo(fileName).completeBaseName();
-		
-		ifstream fin(fileName.toLocal8Bit());
-		string oneString;
-		
-		// Top string
-		getline(fin, oneString);
-		if (oneString != mapFileTopString)
-			throw_nya << "%s is not a map file."s % fileName.toStdString();
-		
-		// Version
-		getline(fin, oneString);
-		if (oneString != editorVersion)
-			throw_nya << "Version of map [%s] should be [%s]."s % oneString % editorVersion;
-		
-		// Dimensions
-		fin >> width >> height;
-		CheckDimentions();
-		
-		// Map content
-		tiles.reserve(height);
-		for (int row = 0; row < height; ++row)
-		{
-			auto& t = tiles.emplace_back();
-			t.reserve(width);
-			for (int col = 0; col < width; ++col)
-			{
-				int id;
-				fin >> id;
-				t.push_back({ GetTerrainById(id), nullptr });
-			}
-		}
-		
-		// Terrain description
-		int terrainsNumber;
-		fin >> terrainsNumber;
-		for (int i = 0; i < terrainsNumber; ++i)
-		{
-			int id;
-			string terrainName;
-			float retard;
-			fin >> id >> terrainName >> retard;
-		}
-		
-		// Player initial positions
-		int n;
-		fin >> n;
-		for (int i = 0; i < n; ++i)
-		{
-			int row, col;
-			fin >> col >> row;
-			tiles[row][col].object = objectInfos[ToolType::PLAYER].get();
-		}
-		
-		// Resources
-		fin >> n;
-		for (int i = 0; i < n; ++i)
-		{
-			int row, col, amount;
-			string name;
-			fin >> col >> row >> name >> amount;
-			tiles[row][col].object = objectInfos[ToolType::MINE].get();
-		}
-		
-		if (!fin.good())
-			throw_nya << "Map content is corrupted!";
-		fin.close();
-	}
-	
-	void CheckDimentions()
-	{
-		if (width < 10 || height < 10)
-			throw_nya << "Minimum map dimensions (10x10) exceeded: %dx%d"s % width % height;
-		if (width > 200 || height > 200)
-			throw_nya << "Maximum map dimensions (200x200) exceeded: %dx%d"s % width % height;
-	}
-};
-
-
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 class MapAreaWidgetImpl : public QWidget
 {
 Q_OBJECT
 	friend class MapAreaWidget;
 	
-	MainForm* mainForm;
 	QScrollArea* scrollArea;
-	umap<const QListWidgetItem*, ToolInfo*> infoFromItem;
-	
+	ToolInfo* tool;
 	u_p<MapInfo> mapInfo;
 	u_p<QPixmap> groundPixmap;
 	u_p<QPixmap> frontPixmap;
@@ -257,7 +46,7 @@ protected:
 	{
 		if (!mapInfo) return;
 		
-		qreal scale = (qreal)tileLen / tileLenBase;
+		qreal scale = (qreal) tileLen / tileLenBase;
 		
 		QPainter painter(this);
 		painter.scale(scale, scale);
@@ -277,8 +66,16 @@ protected:
 		if (!mapInfo) return;
 		
 		tileLen += copysign(4, event->delta());
-		if (tileLen < minZoom) { tileLen = minZoom; return; }
-		if (tileLen > maxZoom) { tileLen = maxZoom; return; }
+		if (tileLen < minZoom)
+		{
+			tileLen = minZoom;
+			return;
+		}
+		if (tileLen > maxZoom)
+		{
+			tileLen = maxZoom;
+			return;
+		}
 		
 		// Update view
 		isHighlight = false;
@@ -307,7 +104,7 @@ protected:
 		
 		const QPoint& point = event->pos();
 		if (!this->rect().contains(point)) return;
-			
+		
 		// Move sliders
 		if (event->buttons() & Qt::RightButton)
 		{
@@ -325,21 +122,19 @@ protected:
 		rectBase = QRect(pos.x() * tileLenBase, pos.y() * tileLenBase, tileLenBase, tileLenBase);
 		
 		// Draw objects, if LMB and current item is valid.
-		if ((event->buttons() & Qt::LeftButton) && (mainForm->GetCurrentWidgetItem()))
+		if (tool && (event->buttons() & Qt::LeftButton))
 		{
 			isHighlight = false;
 			
 			auto& tile = mapInfo->tiles[pos.y()][pos.x()]; // On map
-			ToolInfo* object = infoFromItem[mainForm->GetCurrentWidgetItem()]; // In mouse
-			
-			if (object && object->type == ToolType::TERRAIN)
+			if (tool && tool->type == ToolType::TERRAIN)
 			{
-				ReplaceObject(*groundPixmap, rectBase, object, tile.terrain);
+				ReplaceObject(*groundPixmap, rectBase, tool, tile.terrain);
 			}
 			else
 			{
-				// delete, if object == null
-				ReplaceObject(*frontPixmap, rectBase, object, tile.object);
+				// delete, if tool == null
+				ReplaceObject(*frontPixmap, rectBase, tool, tile.object);
 			}
 		}
 		else // Highlight current rectangle
@@ -396,7 +191,7 @@ private:
 		}
 		update(rc);
 		
-		mainForm->MapChanged();
+		emit MapChanged();
 	}
 	
 	void SetMap(MapInfo* mapInfo)
@@ -434,6 +229,14 @@ private:
 		setFixedSize(groundSize * tileLen / tileLenBase);
 		update();
 	}
+	
+	void CurrentToolChanged(ToolInfo* tool)
+	{
+		this->tool = tool;
+	}
+
+signals:
+	void MapChanged(bool yes = true);
 };
 #include "MapAreaWidget.moc"
 
@@ -444,6 +247,8 @@ MapAreaWidget::MapAreaWidget(QWidget* parent)
 {
 	setWidget(impl);
 	setAlignment(Qt::AlignCenter);
+	
+	connect(impl, &MapAreaWidgetImpl::MapChanged, this, &MapChanged);
 }
 
 MapAreaWidget::~MapAreaWidget() = default;
@@ -451,16 +256,6 @@ MapAreaWidget::~MapAreaWidget() = default;
 const QString& MapAreaWidget::GetMapName() const
 {
 	return impl->mapInfo->name;
-}
-
-void MapAreaWidget::SetInfoFromItem(const QListWidgetItem* item, ToolInfo* info)
-{
-	impl->infoFromItem.emplace(item, info);
-}
-
-void MapAreaWidget::AssignMainForm(MainForm* mainForm)
-{
-	impl->mainForm = mainForm;
 }
 
 void MapAreaWidget::SetMap(const QString& name, size_t width, size_t height)
@@ -481,4 +276,11 @@ bool MapAreaWidget::SaveToFile(const QString& fileName) const
 void MapAreaWidget::wheelEvent(QWheelEvent* event)
 {
 	event->ignore();
+}
+
+void MapAreaWidget::CurrentToolChanged(ToolInfo* tool)
+{
+	impl->CurrentToolChanged(tool);
+}
+
 }

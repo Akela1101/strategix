@@ -1,9 +1,12 @@
 #ifndef _MAINFORM_H
-#define    _MAINFORM_H
+#define _MAINFORM_H
 
-#include <Common.h>
+#include <MapInfo.h>
 #include <ui_MainForm.h>
 
+namespace map_editor
+{
+using namespace map_info;
 
 class MainForm : public QMainWindow
 {
@@ -13,12 +16,12 @@ Q_OBJECT
 	
 	bool isMapOpened, isMapSaved;
 	QString fileName;
-	const QListWidgetItem* currentItem;
+	umap<const QListWidgetItem*, ToolInfo*> infoFromItem;
 
 public:
 	MainForm();
-	
-	const QListWidgetItem* GetCurrentWidgetItem() const { return currentItem; }
+
+public slots:
 	void MapChanged(bool yes = true);
 
 private slots:
@@ -38,6 +41,11 @@ private:
 	void ListWidgetFill(ToolType type, const std::string& name, const QPixmap& pixmap, QListWidget* listWidget);
 	bool TrySaveMap();
 	QString SaveMap();
+
+signals:
+	void CurrentToolChanged(ToolInfo* tool);
 };
+
+}
 
 #endif    /* _MAINFORM_H */
