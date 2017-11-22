@@ -33,6 +33,8 @@ public:
 	MapAreaWidgetImpl(QScrollArea* parent)
 			: QWidget(parent)
 			, scrollArea(parent)
+			, tool(nullptr)
+			, tileLen(0)
 			, isHighlight(false)
 	{
 		setMouseTracking(true);
@@ -127,13 +129,16 @@ protected:
 			isHighlight = false;
 			
 			auto& tile = mapInfo->tiles[pos.y()][pos.x()]; // On map
-			if (tool && tool->type == ToolType::TERRAIN)
+			if (tool->type == ToolType::TERRAIN)
 			{
 				ReplaceObject(*groundPixmap, rectBase, tool, tile.terrain);
 			}
-			else
+			else if (tool->type == ToolType::ERASE)
 			{
-				// delete, if tool == null
+				ReplaceObject(*frontPixmap, rectBase, nullptr, tile.object);
+			}
+			else // replace object
+			{
 				ReplaceObject(*frontPixmap, rectBase, tool, tile.object);
 			}
 		}
@@ -253,9 +258,9 @@ MapAreaWidget::MapAreaWidget(QWidget* parent)
 
 MapAreaWidget::~MapAreaWidget() = default;
 
-const QString& MapAreaWidget::GetMapName() const
+QString MapAreaWidget::GetMapName() const
 {
-	return impl->mapInfo->name;
+	return impl->mapInfo ? impl->mapInfo->name : "";
 }
 
 void MapAreaWidget::SetMap(const QString& name, size_t width, size_t height)
@@ -268,9 +273,9 @@ void MapAreaWidget::LoadFromFile(const QString& fileName)
 	impl->SetMap(new MapInfo(fileName));
 }
 
-bool MapAreaWidget::SaveToFile(const QString& fileName) const
+void MapAreaWidget::SaveToFile(const QString& fileName) const
 {
-	impl->mapInfo->SaveToFile(fileName);
+	if (impl->mapInfo) impl->mapInfo->SaveToFile(fileName);
 }
 
 void MapAreaWidget::wheelEvent(QWheelEvent* event)

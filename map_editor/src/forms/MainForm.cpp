@@ -1,6 +1,3 @@
-#include <fstream>
-#include <boost/range/adaptors.hpp>
-#include <boost/range/irange.hpp>
 #include <QDir>
 #include <QFileDialog>
 #include <QMessageBox>
@@ -13,7 +10,9 @@ namespace map_editor
 {
 using namespace map_info;
 
-const char* str(const QString& message) { return message.toUtf8().data(); }
+static const char editorTitle[] = "Strategix Map Editor";
+
+static const char* str(const QString& message) { return message.toUtf8().data(); }
 
 
 MainForm::MainForm()
@@ -24,17 +23,24 @@ MainForm::MainForm()
 	setWindowTitle(editorTitle);
 	widget.actionSave->setEnabled(false);
 	
-	auto[terrainsImageFileName, divs] = LoadTerrainDescription();
-	
-	// tools
-	ListWidgetFill(ToolType::PLAYER, "Set Player Position", "player_position.png", widget.toolsListWidget);
-	ListWidgetFill(ToolType::NONE, "Delete object", "delete_button.png", widget.toolsListWidget);
+	MapInfo::LoadTerrainInfos();
+	MapInfo::LoadObjectInfos();
 	
 	// terrains
-	ListWidgetFillTerrains(terrainsImageFileName, divs);
+	for (auto&& name_info : MapInfo::terrainInfos)
+	{
+		ListWidgetFill(ToolType::TERRAIN, name_info.first, widget.terrainListWidget);
+	}
+	
+	// tools
+	MapInfo::LoadMarkInfo("config/images/player_position.png");
+	MapInfo::LoadMarkInfo("config/images/delete_object.png", ToolType::ERASE);
+	ListWidgetFill(ToolType::MARK, "player_position", widget.toolsListWidget);
+	ListWidgetFill(ToolType::ERASE, "delete_object", widget.toolsListWidget);
 	
 	// resources
-	ListWidgetFill(ToolType::MINE, "Gold", "gold.png", widget.resourceListWidget);
+	ListWidgetFill(ToolType::MINE, "gold", widget.resourceListWidget);
+	ListWidgetFill(ToolType::MINE, "tree", widget.resourceListWidget);
 	
 	//
 	connect(this, &CurrentToolChanged, widget.mapArea, &MapAreaWidget::CurrentToolChanged);
@@ -49,7 +55,15 @@ void MainForm::FileNew()
 	DialogNew dialogNew;
 	if (dialogNew.exec() == QDialog::Accepted)
 	{
-		widget.mapArea->SetMap(dialogNew.mapName, dialogNew.mapWidth, dialogNew.mapHeight);
+		QString name = dialogNew.mapName;
+		try
+		{
+			widget.mapArea->SetMap(name, dialogNew.mapWidth, dialogNew.mapHeight);
+		}
+		catch (exception& e)
+		{
+			QMessageBox::critical(nullptr, QString("Error creating map: %1").arg(name), e.what());
+		}
 		isMapOpened = true;
 		MapChanged();
 	}
@@ -62,17 +76,23 @@ void MainForm::FileSave()
 
 void MainForm::FileLoad()
 {
-	if (!TrySaveMap())
-		return;
+	if (!TrySaveMap()) return;
 	
 	QString loadedFileName = QFileDialog::getOpenFileName(this, "Load the map", "", "Maps (*.map)");
-	if (!loadedFileName.isEmpty())
+	if (loadedFileName.isEmpty()) return;
+	
+	fileName = loadedFileName;
+	try
 	{
-		fileName = loadedFileName;
 		widget.mapArea->LoadFromFile(fileName);
-		isMapOpened = true;
-		MapChanged(false);
 	}
+	catch (exception& e)
+	{
+		QMessageBox::critical(nullptr, QString("Error while reading the file: %1").arg(fileName), e.what());
+		return;
+	}
+	isMapOpened = true;
+	MapChanged(false);
 }
 
 void MainForm::FileExit()
@@ -110,93 +130,35 @@ void MainForm::CurrentToolboxItemChanged(int index)
 }
 
 //------------------------------------------------------------------------------
-std::pair<std::string, int> MainForm::LoadTerrainDescription()
+void MainForm::ListWidgetFill(ToolType type, const std::string& name, QListWidget* listWidget)
 {
-	std::string terrainsImageFileName;
-	int divs;
-	
-	QString fileName = QDir(configDir).filePath(terrainsDefinitionFileName);
-	ifstream fin(fileName.toLocal8Bit());
-	if (!fin.good())
-	{
-		throw_nya << str(tr("%1 could not be loaded.").arg(fileName));
-	}
-	
-	getline(fin, terrainsImageFileName);
-	fin >> divs;
-	
-	for (int i : boost::irange(0, divs * divs))
-	{
-		auto info = make_u<TerrainInfo>();
-		fin >> info->retard >> info->name;
-		if (fin.eof()) break;
-		
-		info->type = ToolType::TERRAIN;
-		info->id = i;
-		MapInfo::terrainInfos.emplace(info->name, std::move(info));
-	}
-	fin.close();
-	return { terrainsImageFileName, divs };
-}
-
-void MainForm::ListWidgetFillTerrains(const std::string& terrainsImageFileName, int divs)
-{
-	QPixmap pixmap;
-	if (!pixmap.load(QDir(configDir).filePath(terrainsImageFileName.c_str())))
-	{
-		throw_nya << str(tr("The image files could not be loaded from %1").arg(terrainsImageFileName.c_str()));
-	}
-	int tileSize = pixmap.width() / divs;
-	
-	for (int row = 0; row < divs; ++row)
-	{
-		for (int col = 0; col < divs; ++col)
-		{
-			TerrainInfo* info = MapInfo::GetTerrainById(divs * row + col);
-			if (info->name == "none")
-				break; // none name are skipped !!!
-			
-			const QPixmap& terrPixmap = pixmap.copy(col * tileSize, row * tileSize, tileSize, tileSize);
-			
-			ListWidgetFill(ToolType::TERRAIN, info->name, terrPixmap, widget.terrainListWidget);
-		}
-	}
-}
-
-void MainForm::ListWidgetFill(ToolType type, const std::string& name
-		, const QString& imageFileName, QListWidget* listWidget)
-{
-	QPixmap pixmap;
-	pixmap.load(QDir(imagesPath).filePath(imageFileName));
-	ListWidgetFill(type, name, pixmap, listWidget);
-}
-
-void MainForm::ListWidgetFill(ToolType type, const std::string& name, const QPixmap& pixmap, QListWidget* listWidget)
-{
-	// Add List entry
-	QListWidgetItem* newItem = new QListWidgetItem(QIcon(pixmap), QString(name.c_str()));
-	listWidget->addItem(newItem);
-	
-	ToolInfo* pInfo = nullptr;
+	ToolInfo* info = nullptr;
 	switch (type)
 	{
-		case ToolType::PLAYER:
-		case ToolType::MINE:
-		{
-			auto info = make_u<ToolInfo>(type, name, pixmap);
-			pInfo = info.get();
-			MapInfo::objectInfos.emplace(type, std::move(info));
-			break;
-		}
 		case ToolType::TERRAIN:
 		{
-			pInfo = MapInfo::terrainInfos[name].get();
-			pInfo->image = pixmap;
+			info = MapInfo::terrainInfos[name].get();
+			break;
+		}
+		case ToolType::MARK:
+		case ToolType::ERASE:
+		{
+			info = MapInfo::markInfos[name].get();
+			break;
+		}
+		case ToolType::MINE:
+		{
+			info = MapInfo::objectInfos[name].get();
 			break;
 		}
 	}
+	// Add List entry
+	QString title = QString(name.c_str()).replace('_', ' ');
+	QListWidgetItem* newItem = new QListWidgetItem(QIcon(info->image), title);
+	listWidget->addItem(newItem);
+	
 	// Add link: ListItem - ToolInfo
-	infoFromItem.emplace(newItem, pInfo);
+	infoFromItem.emplace(newItem, info);
 }
 
 bool MainForm::TrySaveMap()
@@ -235,14 +197,15 @@ QString MainForm::SaveMap()
 			return fileName;
 	}
 	// Write file
-	if (widget.mapArea->SaveToFile(fileName))
+	try
 	{
+		widget.mapArea->SaveToFile(fileName);
 		MapChanged(false);
 	}
-	else
+	catch (exception& ex)
 	{
 		fileName.clear();
-		QMessageBox::critical(this, "Unable to save there!", "Try to save in other directory..");
+		QMessageBox::critical(this, "Unable to save map", ex.what());
 	}
 	return fileName;
 }

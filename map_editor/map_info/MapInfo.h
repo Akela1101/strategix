@@ -4,6 +4,7 @@
 #define ELPP_QT_LOGGING
 
 #include <nya/api.hpp>
+#include <nya/enum.hpp>
 #include <QPixmap>
 #include <QString>
 
@@ -12,21 +13,19 @@ namespace map_info
 {
 using namespace std;
 
-extern const char editorTitle[];
 extern const char editorVersion[];
 extern const char mapFileTopString[];
-extern const char terrainsDefinitionFileName[];
 extern const char configDir[];
 extern const char imagesPath[];
 
 
-enum class ToolType
-{
-	NONE,      // tools like eraser
-	PLAYER,    // player position
-	TERRAIN,   // terrain
-	MINE       // mine
-};
+#define ToolTypeDef(K, V)                      \
+	K(TERRAIN)  /* terrain */                  \
+	K(MARK)     /* player position, etc... */  \
+	K(ERASE)    /* eraser mark */              \
+	K(MINE)     /* resource mine */
+nya_enum(ToolType, ToolTypeDef)
+
 
 struct ToolInfo
 {
@@ -45,15 +44,17 @@ struct TerrainInfo : ToolInfo
 	float retard;
 };
 
+
 struct MapInfo
 {
 	static umap<string, u_p<TerrainInfo>> terrainInfos;
-	static umap<ToolType, u_p<ToolInfo>> objectInfos;
+	static umap<string, u_p<ToolInfo>> markInfos;
+	static umap<string, u_p<ToolInfo>> objectInfos;
 	
 	struct Tile
 	{
 		ToolInfo* terrain;
-		ToolInfo* object; // can be null
+		ToolInfo* object;     // can be null
 	};
 	
 	QString name;
@@ -65,8 +66,11 @@ struct MapInfo
 	MapInfo(const QString& fileName);
 	
 	static TerrainInfo* GetTerrainById(int id);
+	static void LoadTerrainInfos();
+	static void LoadObjectInfos();
+	static void LoadMarkInfo(const string& filePath, ToolType type = ToolType::MARK);
 	
-	bool SaveToFile(const QString& fileName) const;
+	void SaveToFile(const QString& fileName) const;
 	
 private:
 	void LoadFromFile(const QString& fileName);

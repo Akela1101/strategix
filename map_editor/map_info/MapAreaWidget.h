@@ -22,10 +22,10 @@ public:
 	MapAreaWidget(QWidget* parent = nullptr);
 	~MapAreaWidget() override;
 	
-	const QString& GetMapName() const;
+	QString GetMapName() const;
 	void SetMap(const QString& name, size_t width, size_t height);
 	void LoadFromFile(const QString& fileName);
-	bool SaveToFile(const QString& fileName) const;
+	void SaveToFile(const QString& fileName) const;
 
 protected:
 	void wheelEvent(QWheelEvent* event);

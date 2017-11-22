@@ -1,0 +1,12 @@
+terrains.png
+3
+
+0.0		none
+0.6		dirt
+0.8		rock
+0.0	    water
+0.5		sand
+1.5		rubble
+1.0		grass
+0.3		swamp
+0.0		none

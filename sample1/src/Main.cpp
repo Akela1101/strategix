@@ -1,6 +1,15 @@
 #include <SampleGame.h>
 #include <slots/SampleKernelSlot.h>
 #include <Strategix.h>
+#include <MapAreaWidget.h>
+#include <MapInfo.h>
+
+#include <QtPlugin>
+#include <QApplication>
+
+#ifdef Q_OS_WIN
+Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin)
+#endif
 
 
 INITIALIZE_EASYLOGGINGPP
@@ -77,7 +86,9 @@ int main(int argc, char* argv[])
 #endif
 	using namespace strx;
 	using namespace sample1;
+	using namespace map_info;
 	
+	QApplication app(argc, argv);
 	InitLogs();
 	
 	// initialize graphics and make slot to it
@@ -93,14 +104,21 @@ int main(int argc, char* argv[])
 		Kernel::Start();
 		
 		// start graphics engine
+		MapInfo::LoadTerrainInfos();
+		MapInfo::LoadObjectInfos();
+		
+		MapAreaWidget mapArea;
+		mapArea.LoadFromFile("maps/small.map");
+		mapArea.showMaximized();
+		app.exec();
 	}
 	catch (nya::exception& e)
 	{
-		error_log << "Strategix error occurred. \nFinishing the game..." << endl;
+		error_log << "Strategix error occurred:\n[" << e.what() << "] \nFinishing the game..." << endl;
 	}
 	catch (exception& e)
 	{
-		error_log << "Unexpected error occurred [" << e.what() << "] \nFinishing the game..." << endl;
+		error_log << "Unexpected error occurred:\n[" << e.what() << "] \nFinishing the game..." << endl;
 	}
 	Kernel::Stop();
 

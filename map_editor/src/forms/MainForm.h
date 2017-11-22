@@ -35,10 +35,7 @@ private slots:
 	void CurrentToolboxItemChanged(int index);
 
 private:
-	std::pair<std::string, int> LoadTerrainDescription();
-	void ListWidgetFillTerrains(const std::string& terrainsImageFileName, int divs);
-	void ListWidgetFill(ToolType type, const std::string& name, const QString& imageFileName, QListWidget* listWidget);
-	void ListWidgetFill(ToolType type, const std::string& name, const QPixmap& pixmap, QListWidget* listWidget);
+	void ListWidgetFill(ToolType type, const std::string& name, QListWidget* listWidget);
 	bool TrySaveMap();
 	QString SaveMap();
 
