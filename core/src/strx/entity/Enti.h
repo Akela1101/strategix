@@ -56,8 +56,8 @@ public:
 		{
 			return dynamic_cast<F*>(iFeature->second.get());
 		}
-		throw_nya << "There is no feature named: ";
-		throw_nya << featureName;
+		nya_throw << "There is no feature named: ";
+		nya_throw << featureName;
 	}
 
 private:

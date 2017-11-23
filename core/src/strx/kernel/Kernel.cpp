@@ -45,14 +45,14 @@ void Kernel::Configure(KernelSlot* slot)
 
 void Kernel::LoadMap(const string& mapName)
 {
-	if (!slot) throw_nya << "Configure() should be run before LoadMap().";
+	if (!slot) nya_throw << "Configure() should be run before LoadMap().";
 	
 	mapManager = make_u<MapManager>(mapName);
 }
 
 void Kernel::AddPlayer(PlayerSlot* playerSlot)
 {
-	if (!mapManager) throw_nya << "LoadMap() should be run before AddPlayer().";
+	if (!mapManager) nya_throw << "LoadMap() should be run before AddPlayer().";
 	
 	auto player = new Player(playerSlot);
 	player->Init(mapManager->CreateMap(*player));
@@ -149,7 +149,7 @@ u_p<Resource> Kernel::MakeResource(const string& name, ResourceUnit amount)
 {
 	if (!CheckResource(name))
 	{
-		throw_nya << "There is no resource named: " << name;
+		nya_throw << "There is no resource named: " << name;
 	}
 	return make_u<Resource>(name, amount);
 }

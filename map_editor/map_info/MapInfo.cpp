@@ -67,7 +67,7 @@ void MapInfo::LoadTerrainInfos()
 	ifstream fin(fileName.string());
 	if (!fin.good())
 	{
-		throw_nya << "%s could not be loaded."s % fileName;
+		nya_throw << "%s could not be loaded."s % fileName;
 	}
 	
 	std::string terrainsImageFileName;
@@ -77,7 +77,7 @@ void MapInfo::LoadTerrainInfos()
 	QPixmap pixmap;
 	if (!pixmap.load((path(mapConfigPath) / terrainsImageFileName).string().c_str()))
 	{
-		throw_nya << "The image files could not be loaded from " << terrainsImageFileName;
+		nya_throw << "The image files could not be loaded from " << terrainsImageFileName;
 	}
 	
 	int divs;
@@ -108,7 +108,7 @@ void MapInfo::LoadObjectInfos()
 	ifstream fin(fileName.string());
 	if (!fin.good())
 	{
-		throw_nya << "%s could not be loaded."s % fileName;
+		nya_throw << "%s could not be loaded."s % fileName;
 	}
 	
 	for (; ;)
@@ -121,7 +121,7 @@ void MapInfo::LoadObjectInfos()
 		QPixmap pixmap;
 		if (!pixmap.load((path(mapConfigPath) / imageFileName).string().c_str()))
 		{
-			throw_nya << "The image files could not be loaded from " << imageFileName;
+			nya_throw << "The image files could not be loaded from " << imageFileName;
 		}
 		
 		auto info = make_u<ToolInfo>();
@@ -140,7 +140,7 @@ void MapInfo::LoadMarkInfo(const string& filePath, ToolType type)
 	QPixmap pixmap;
 	if (!pixmap.load(filePath.c_str()))
 	{
-		throw_nya << "The image files could not be loaded from " << filePath;
+		nya_throw << "The image files could not be loaded from " << filePath;
 	}
 	
 	auto info = make_u<ToolInfo>();
@@ -154,7 +154,7 @@ void MapInfo::SaveToFile(const QString& fileName) const
 {
 	ofstream fout(fileName.toStdString());
 	if (!fout)
-		throw_nya << "Unable to save to " << fileName.toStdString();
+		nya_throw << "Unable to save to " << fileName.toStdString();
 	
 	// top string and version
 	fout << mapFileTopString << "\n"
@@ -236,19 +236,19 @@ void MapInfo::LoadFromFile(const QString& fileName)
 	
 	ifstream fin(fileName.toStdString());
 	if (!fin)
-		throw_nya << "Unable to load from " << fileName.toStdString();
+		nya_throw << "Unable to load from " << fileName.toStdString();
 	
 	string oneString;
 	
 	// top string
 	getline(fin, oneString);
 	if (oneString != mapFileTopString)
-		throw_nya << "%s is not a map file."s % fileName.toStdString();
+		nya_throw << "%s is not a map file."s % fileName.toStdString();
 	
 	// version
 	getline(fin, oneString);
 	if (oneString != editorVersion)
-		throw_nya << "Version of map [%s] should be [%s]."s % oneString % editorVersion;
+		nya_throw << "Version of map [%s] should be [%s]."s % oneString % editorVersion;
 	
 	// terrain description
 	umap<int, string> idName;
@@ -281,7 +281,7 @@ void MapInfo::LoadFromFile(const QString& fileName)
 			auto&& terrain = terrainInfos[idName[id]];
 			if (!terrain)
 			{
-				throw_nya << "Terrain with id [%d] is not found"s % id;
+				nya_throw << "Terrain with id [%d] is not found"s % id;
 			}
 			t.push_back({ terrain.get(), nullptr });
 		}
@@ -308,16 +308,16 @@ void MapInfo::LoadFromFile(const QString& fileName)
 	}
 	
 	if (!fin.good())
-		throw_nya << "Map content is corrupted!";
+		nya_throw << "Map content is corrupted!";
 	fin.close();
 }
 
 void MapInfo::CheckDimentions()
 {
 	if (width < 10 || height < 10)
-		throw_nya << "Minimum map dimensions (10x10) exceeded: %dx%d"s % width % height;
+		nya_throw << "Minimum map dimensions (10x10) exceeded: %dx%d"s % width % height;
 	if (width > 200 || height > 200)
-		throw_nya << "Maximum map dimensions (200x200) exceeded: %dx%d"s % width % height;
+		nya_throw << "Maximum map dimensions (200x200) exceeded: %dx%d"s % width % height;
 }
 
 }

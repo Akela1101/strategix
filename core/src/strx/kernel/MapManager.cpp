@@ -32,7 +32,7 @@ MapManager::MapManager(const string& mapName)
 	fin >> baseMap->width >> baseMap->length;
 	if (baseMap->width > 1000 || baseMap->length > 1000)
 	{
-		throw_nya << "Map size is too large: %dx%d."s % baseMap->width % baseMap->length;
+		nya_throw << "Map size is too large: %dx%d."s % baseMap->width % baseMap->length;
 	}
 	
 	baseMap->cells.resize(baseMap->length);
@@ -50,7 +50,7 @@ MapManager::MapManager(const string& mapName)
 			}
 			else
 			{
-				throw_nya << "Wrong map format in file: " << fileName;
+				nya_throw << "Wrong map format in file: " << fileName;
 			}
 		}
 	}
