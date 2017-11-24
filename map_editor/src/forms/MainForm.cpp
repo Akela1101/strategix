@@ -39,8 +39,12 @@ MainForm::MainForm()
 	ListWidgetFill(ToolType::ERASE, "delete_object", widget.toolsListWidget);
 	
 	// resources
-	ListWidgetFill(ToolType::MINE, "gold", widget.resourceListWidget);
-	ListWidgetFill(ToolType::MINE, "tree", widget.resourceListWidget);
+	ListWidgetFill(ToolType::MINE, "gold", widget.toolsListWidget);
+	ListWidgetFill(ToolType::MINE, "tree", widget.toolsListWidget);
+	
+	// objects
+	ListWidgetFill(ToolType::OBJECT, "az_base", widget.toolsListWidget);
+	ListWidgetFill(ToolType::OBJECT, "az_worker", widget.toolsListWidget);
 	
 	//
 	connect(this, &CurrentToolChanged, widget.mapArea, &MapAreaWidget::CurrentToolChanged);
@@ -124,7 +128,6 @@ void MainForm::CurrentItemChanged(QListWidgetItem* current, QListWidgetItem* pre
 void MainForm::CurrentToolboxItemChanged(int index)
 {
 	const QListWidget* listWidget = dynamic_cast<QListWidget*>(widget.toolBox->widget(index)->children().last());
-	// ^ Why last - i don't know ^_^
 	
 	CurrentItemChanged(listWidget->currentItem(), nullptr);
 }
@@ -147,6 +150,7 @@ void MainForm::ListWidgetFill(ToolType type, const std::string& name, QListWidge
 			break;
 		}
 		case ToolType::MINE:
+		case ToolType::OBJECT:
 		{
 			info = MapInfo::objectInfos[name].get();
 			break;

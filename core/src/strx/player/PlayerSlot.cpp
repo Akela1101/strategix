@@ -17,7 +17,10 @@ PlayerSlot::~PlayerSlot() = default;
 
 void PlayerSlot::AddEnti(EntiSlot* enti)
 {
-	if (player) player->AddEnti(enti);
+	if (!player)
+		nya_throw << "Add player to game before adding " << enti->GetName();
+	
+	player->AddEnti(enti);
 }
 
 }

@@ -14,13 +14,13 @@ namespace strx
  */
 class PlayerSlot
 {
-	Player* player = nullptr;
+	friend class Player;
 	
+	Player* player = nullptr;
 	const string name;
 	const PlayerType type;
 	const int playerNumber;
 	const string raceName;
-	vector<u_p<EntiSlot>> entis;
 	
 public:
 	PlayerSlot(string name, PlayerType type, int playerNumber, string raceName);
@@ -39,7 +39,8 @@ public:
 	
 	/// @return race name
 	const string& GetRaceName() const { return raceName; }
-	
+
+protected:
 	void AddEnti(EntiSlot* enti);
 	
 // Callbacks:

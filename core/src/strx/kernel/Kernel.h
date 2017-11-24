@@ -15,7 +15,7 @@ class Kernel
 
 public:
 	// keep this calling order
-	static void Configure(KernelSlot* slot);
+	static void Configure(const string& configPath, const string& mapsPath);
 	static void LoadMap(const string& mapName);
 	static void AddPlayer(PlayerSlot* playerSlot);
 	

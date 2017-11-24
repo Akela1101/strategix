@@ -17,7 +17,10 @@ namespace strx
 Player::Player(PlayerSlot* slot)
 		: slot(slot)
 		, resources(Kernel::MakeResources())
-		, techTree(Kernel::GetTechTree(slot->GetRaceName())) {}
+		, techTree(Kernel::GetTechTree(slot->GetRaceName()))
+{
+	slot->player = this;
+}
 
 Player::~Player() = default;
 
@@ -51,9 +54,9 @@ void Player::AddEnti(EntiSlot* entiSlot)
 {
 	const string& entiName = entiSlot->GetName();
 	auto&& entiInfo = techTree.GetNode(entiName);
-	auto enti = make_s<Enti>(entiInfo, map->GetInitialPostion());
+	auto enti = new Enti(entiInfo, map->GetInitialPostion());
 	
-	entis.push_back(enti);
+	entis.emplace_back(enti);
 	enti->player = this;
 	
 	slot->OnAddEnti(entiSlot);

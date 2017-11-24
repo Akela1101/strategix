@@ -6,11 +6,12 @@
 namespace sample1
 {
 using namespace strx;
+
 class SampleEntiSlot : public EntiSlot
 {
-	using EntiSlot::EntiSlot;
-	
 public:
+	SampleEntiSlot(const string& name);
+	
 	void OnMove() override {}
 };
 }

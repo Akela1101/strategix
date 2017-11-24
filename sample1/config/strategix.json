@@ -2,23 +2,23 @@
 	"resource_types" : [ "gold" ],
 	"races" : [
 	{
-		"name" : "Spher",
+		"name" : "az",
 		"entities" : [
 		{
-			"name" : "Spher_Base",
+			"name" : "az_base",
 			"kind" : "building",
 			"resources" : { "gold" : 10000 },
-			"provides" : [ "Spher_Worker" ],
+			"provides" : [ "az_worker" ],
 			"features" : 
 			{
 				"health" : { "hp" : 1000, "regenSpeed" : 1.0 }
 			}
 		},
 		{
-			"name" : "Spher_Worker",
+			"name" : "az_worker",
 			"kind" : "unit",
 			"resources" : { "gold" : 500 },
-			"provides" : [ "Spher_Base" ],
+			"provides" : [ "az_base" ],
 			"features" : {
 				"move" : { "speed" : 3.0 },
 				"collect" : {

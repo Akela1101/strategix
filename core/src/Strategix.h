@@ -7,7 +7,7 @@
 #include <strx/entity/EntiInfo.h>
 #include <strx/entity/EntiSlot.h>
 #include <strx/kernel/Kernel.h>
-#include <strx/kernel/KernelSlot.h>
+#include <strx/kernel/Game.h>
 #include <strx/map/Map.h>
 #include <strx/player/PlayerSlot.h>
 

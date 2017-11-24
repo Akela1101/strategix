@@ -15,7 +15,7 @@ namespace strx
 	class FeatureInfoMove;
 	class FeatureInfoHealth;
 	class FeatureInfoAttack;
-	class KernelSlot;
+	class Game;
 	class Map;
 	class MapManager;
 	class Mine;

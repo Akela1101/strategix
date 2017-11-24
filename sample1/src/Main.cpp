@@ -1,8 +1,5 @@
-#include <SampleGame.h>
-#include <slots/SampleKernelSlot.h>
+#include <slots/SampleGame.h>
 #include <Strategix.h>
-#include <MapAreaWidget.h>
-#include <MapInfo.h>
 
 #include <QtPlugin>
 #include <QApplication>
@@ -86,30 +83,22 @@ int main(int argc, char* argv[])
 #endif
 	using namespace strx;
 	using namespace sample1;
-	using namespace map_info;
 	
 	QApplication app(argc, argv);
 	InitLogs();
 	
-	// initialize graphics and make slot to it
-	auto kernelSlot = new SampleKernelSlot("config/strategix.json", "maps");
-	Kernel::Configure(kernelSlot);
+	Kernel::Configure("config/strategix.json", "maps");
 	//Kernel::PrintInfo();
 
 	try // run a game
 	{
-		SampleGame::Init();
+		auto game = make_u<SampleGame>();
 		
 		// start event loop in other thread
 		Kernel::Start();
 		
 		// start graphics engine
-		MapInfo::LoadTerrainInfos();
-		MapInfo::LoadObjectInfos();
-		
-		MapAreaWidget mapArea;
-		mapArea.LoadFromFile("maps/small.map");
-		mapArea.showMaximized();
+		game->Start();
 		app.exec();
 	}
 	catch (nya::exception& e)

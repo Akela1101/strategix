@@ -16,15 +16,12 @@ class Player
 {
 	friend class FeatureCollect;  // @#~ temporary
 	
-	u_p<PlayerSlot> slot;         // Callback class
+	PlayerSlot* slot;             // Callback class
+	vector<u_p<Enti>> entis;      // owned enties
 	u_p<Resources> resources;     // available resources amount
 	u_p<Map> map;                 // local map for current player
 	const TechTree& techTree;     // link to tech tree
-	
-	using EntisType = vector<s_p<Enti>>;
-	EntisType entis; // owned enties
-	
-	vector<Enti*> entisToRemove; // entis removed at the end of Tick
+	vector<Enti*> entisToRemove;  // entis removed at the end of Tick
 
 public:
 	Player(PlayerSlot* slot);

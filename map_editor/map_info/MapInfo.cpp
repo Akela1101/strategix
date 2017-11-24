@@ -113,19 +113,26 @@ void MapInfo::LoadObjectInfos()
 	
 	for (; ;)
 	{
-		string type;
-		string imageFileName;
+		auto info = make_u<ToolInfo>();
+		string type, imageFileName, imageSubdir;
 		fin >> type >> imageFileName;
 		if (type.empty()) break;
 		
-		QPixmap pixmap;
-		if (!pixmap.load((path(mapConfigPath) / imageFileName).string().c_str()))
+		info->type = type;
+		switch (info->type)
 		{
-			nya_throw << "The image files could not be loaded from " << imageFileName;
+			case ToolType::MINE: imageSubdir = "mines/"; break;
+			case ToolType::OBJECT: imageSubdir = "objects/"; break;
+			default: nya_throw << "Cannot handle map object of type: " << type;
 		}
 		
-		auto info = make_u<ToolInfo>();
-		info->type = type;
+		QPixmap pixmap;
+		string pixmapPath = (path(mapConfigPath) / imageSubdir / imageFileName).string();
+		if (!pixmap.load(pixmapPath.c_str()))
+		{
+			nya_throw << "The image files could not be loaded from " << pixmapPath;
+		}
+		
 		info->name = path(imageFileName).stem().string();
 		info->image = pixmap;
 		objectInfos.emplace(info->name, move(info));

@@ -23,7 +23,8 @@ extern const char imagesPath[];
 	K(TERRAIN)  /* terrain */                  \
 	K(MARK)     /* player position, etc... */  \
 	K(ERASE)    /* eraser mark */              \
-	K(MINE)     /* resource mine */
+	K(MINE)     /* resource mine */            \
+	K(OBJECT)   /* other map objects */
 nya_enum(ToolType, ToolTypeDef)
 
 

@@ -26,34 +26,13 @@
         <height>16777215</height>
        </size>
       </property>
-      <property name="currentIndex">
-       <number>1</number>
-      </property>
       <widget class="QWidget" name="page_0">
        <property name="geometry">
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>98</width>
-         <height>91</height>
-        </rect>
-       </property>
-       <attribute name="label">
-        <string>Tools</string>
-       </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_3">
-        <item>
-         <widget class="QListWidget" name="toolsListWidget"/>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="page_1">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>0</y>
          <width>300</width>
-         <height>557</height>
+         <height>584</height>
         </rect>
        </property>
        <attribute name="label">
@@ -65,21 +44,21 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="page_2">
+      <widget class="QWidget" name="page_1">
        <property name="geometry">
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>98</width>
-         <height>91</height>
+         <width>300</width>
+         <height>584</height>
         </rect>
        </property>
        <attribute name="label">
-        <string>Resources</string>
+        <string>Tools</string>
        </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_2">
+       <layout class="QVBoxLayout" name="verticalLayout_3">
         <item>
-         <widget class="QListWidget" name="resourceListWidget"/>
+         <widget class="QListWidget" name="toolsListWidget"/>
         </item>
        </layout>
       </widget>
@@ -204,22 +183,6 @@
     <hint type="destinationlabel">
      <x>0</x>
      <y>108</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>resourceListWidget</sender>
-   <signal>currentItemChanged(QListWidgetItem*,QListWidgetItem*)</signal>
-   <receiver>MainForm</receiver>
-   <slot>CurrentItemChanged(QListWidgetItem*,QListWidgetItem*)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>40</x>
-     <y>139</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>0</x>
-     <y>149</y>
     </hint>
    </hints>
   </connection>

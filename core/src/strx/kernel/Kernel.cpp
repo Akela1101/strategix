@@ -13,7 +13,7 @@
 #include <strx/player/Player.h>
 
 #include "Kernel.h"
-#include "KernelSlot.h"
+#include "Game.h"
 
 
 namespace strx
@@ -23,7 +23,7 @@ using PlayersType = umap<string, u_p<Player>>;
 
 
 // Variables
-static u_p<KernelSlot> slot;                  // main event receiver
+static Game* game;                            // main event receiver
 static ConfigManager configManager;           // game configuration manager
 static u_p<MapManager> mapManager;            // has all information about the map
 static u_p<thread> kernelThread;              // main Kernel thread
@@ -36,16 +36,16 @@ static TechTreesType techTrees;               // technology trees
 static string mapsDirectory;                  // usually "maps"
 
 
-void Kernel::Configure(KernelSlot* slot)
+void Kernel::Configure(const string& configPath, const string& mapsPath)
 {
-	strx::slot.reset(slot);
-	tie(resourceInfos, techTrees) = configManager.ParseConfig(slot->GetConfigPath());
-	mapsDirectory = slot->GetMapsPath();
+	tie(resourceInfos, techTrees) = configManager.ParseConfig(configPath);
+	mapsDirectory = mapsPath;
 }
 
 void Kernel::LoadMap(const string& mapName)
 {
-	if (!slot) nya_throw << "Configure() should be run before LoadMap().";
+	if (mapsDirectory.empty())
+		nya_throw << "Configure() should be run before LoadMap().";
 	
 	mapManager = make_u<MapManager>(mapName);
 }
