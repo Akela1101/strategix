@@ -1,6 +1,9 @@
-#include <QDir>
+#include <fstream>
+#include <boost/filesystem.hpp>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QStandardPaths>
+#include <QPushButton>
 
 #include "DialogNew.h"
 #include "MainForm.h"
@@ -26,6 +29,9 @@ MainForm::MainForm()
 	MapInfo::LoadTerrainInfos();
 	MapInfo::LoadObjectInfos();
 	
+	// player marks
+	PlacePlayerMarks();
+	
 	// terrains
 	for (auto&& name_info : MapInfo::terrainInfos)
 	{
@@ -33,10 +39,7 @@ MainForm::MainForm()
 	}
 	
 	// tools
-	MapInfo::LoadMarkInfo("config/images/player_position.png");
-	MapInfo::LoadMarkInfo("config/images/delete_object.png", ToolType::ERASE);
-	ListWidgetFill(ToolType::MARK, "player_position", widget.toolsListWidget);
-	ListWidgetFill(ToolType::ERASE, "delete_object", widget.toolsListWidget);
+	ListWidgetFillMark("config/images/delete_object.png", widget.toolsListWidget);
 	
 	// resources
 	ListWidgetFill(ToolType::MINE, "gold", widget.toolsListWidget);
@@ -46,8 +49,13 @@ MainForm::MainForm()
 	ListWidgetFill(ToolType::OBJECT, "az_base", widget.toolsListWidget);
 	ListWidgetFill(ToolType::OBJECT, "az_worker", widget.toolsListWidget);
 	
+	// set current tool to delete object
+	widget.toolBox->setCurrentIndex(1);
+	widget.toolsListWidget->setCurrentRow(0);
+	
 	//
 	connect(this, &CurrentToolChanged, widget.mapArea, &MapAreaWidget::CurrentToolChanged);
+	connect(this, &CurrentPlayerChanged, widget.mapArea, &MapAreaWidget::CurrentPlayerChanged);
 	connect(widget.mapArea, &MapAreaWidget::MapChanged, this, &MapChanged);
 }
 
@@ -80,9 +88,22 @@ void MainForm::FileSave()
 
 void MainForm::FileLoad()
 {
+	using path = boost::filesystem::path;
+	
 	if (!TrySaveMap()) return;
 	
-	QString loadedFileName = QFileDialog::getOpenFileName(this, "Load the map", "", "Maps (*.map)");
+	// load location
+	string configPath = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation).toStdString();
+	string lastLocationPath = (path(configPath) / "last_path.conf").string();
+	string lastPath;
+	ifstream fin(lastLocationPath);
+	if (fin)
+		getline(fin, lastPath);
+	
+	fin.close();
+	
+	// open file
+	QString loadedFileName = QFileDialog::getOpenFileName(this, "Load the map", lastPath.c_str(), "Maps (*.map)");
 	if (loadedFileName.isEmpty()) return;
 	
 	fileName = loadedFileName;
@@ -97,6 +118,12 @@ void MainForm::FileLoad()
 	}
 	isMapOpened = true;
 	MapChanged(false);
+	
+	// save location
+	boost::filesystem::create_directories(configPath);
+	ofstream fout(lastLocationPath, ios::trunc);
+	if (fout)
+		fout << fileName.toStdString();
 }
 
 void MainForm::FileExit()
@@ -127,12 +154,56 @@ void MainForm::CurrentItemChanged(QListWidgetItem* current, QListWidgetItem* pre
 
 void MainForm::CurrentToolboxItemChanged(int index)
 {
-	const QListWidget* listWidget = dynamic_cast<QListWidget*>(widget.toolBox->widget(index)->children().last());
-	
-	CurrentItemChanged(listWidget->currentItem(), nullptr);
+	if (auto listWidget = dynamic_cast<QListWidget*>(widget.toolBox->widget(index)->children().last()))
+	{
+		CurrentItemChanged(listWidget->currentItem(), nullptr);
+	}
 }
 
-//------------------------------------------------------------------------------
+void MainForm::PlayerButtonToggled(bool on)
+{
+	int playerNumber = playerNumbers[(QPushButton*)sender()];
+	emit CurrentPlayerChanged(playerNumber);
+}
+
+void MainForm::PlacePlayerMarks()
+{
+	auto layout = new QHBoxLayout();
+	layout->setMargin(0);
+	
+	QPushButton* firstButton = nullptr;
+	int i = 0;
+	for (auto&& playerMark : MapInfo::playerMarks)
+	{
+		auto button = new QPushButton();
+		button->setIcon(QIcon(playerMark));
+		button->setCheckable(true);
+		button->setAutoExclusive(true);
+		button->setFlat(true);
+		
+		layout->addWidget(button);
+		if (!firstButton)
+		{
+			firstButton = button;
+			button->setChecked(true);
+		}
+		playerNumbers.emplace(button, i++);
+		connect(button, &QPushButton::toggled, this, &PlayerButtonToggled);
+	}
+	widget.playersGroupBox->setLayout(layout);
+}
+
+void MainForm::ListWidgetFillMark(const string& filePath, QListWidget* listWidget)
+{
+	using path = boost::filesystem::path;
+	
+	string name = path(filePath).stem().string();
+	QPixmap pixmap = MapInfo::LoadPixmap(filePath);
+	
+	QListWidgetItem* newItem = AddToListWidget(name, pixmap, listWidget);
+	infoFromItem.emplace(newItem, nullptr);
+}
+
 void MainForm::ListWidgetFill(ToolType type, const std::string& name, QListWidget* listWidget)
 {
 	ToolInfo* info = nullptr;
@@ -143,12 +214,6 @@ void MainForm::ListWidgetFill(ToolType type, const std::string& name, QListWidge
 			info = MapInfo::terrainInfos[name].get();
 			break;
 		}
-		case ToolType::MARK:
-		case ToolType::ERASE:
-		{
-			info = MapInfo::markInfos[name].get();
-			break;
-		}
 		case ToolType::MINE:
 		case ToolType::OBJECT:
 		{
@@ -156,13 +221,17 @@ void MainForm::ListWidgetFill(ToolType type, const std::string& name, QListWidge
 			break;
 		}
 	}
-	// Add List entry
-	QString title = QString(name.c_str()).replace('_', ' ');
-	QListWidgetItem* newItem = new QListWidgetItem(QIcon(info->image), title);
-	listWidget->addItem(newItem);
 	
-	// Add link: ListItem - ToolInfo
+	QListWidgetItem* newItem = AddToListWidget(name, info->image, listWidget);
 	infoFromItem.emplace(newItem, info);
+}
+
+QListWidgetItem* MainForm::AddToListWidget(const string& name, const QPixmap& pixmap, QListWidget* listWidget)
+{
+	QString title = QString(name.c_str()).replace('_', ' ');
+	QListWidgetItem* newItem = new QListWidgetItem(QIcon(pixmap), title);
+	listWidget->addItem(newItem);
+	return newItem;
 }
 
 bool MainForm::TrySaveMap()

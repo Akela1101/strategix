@@ -17,6 +17,7 @@ Q_OBJECT
 	bool isMapOpened, isMapSaved;
 	QString fileName;
 	umap<const QListWidgetItem*, ToolInfo*> infoFromItem;
+	umap<const QPushButton*, int> playerNumbers;
 
 public:
 	MainForm();
@@ -33,14 +34,19 @@ private slots:
 	
 	void CurrentItemChanged(QListWidgetItem* current, QListWidgetItem* previous);
 	void CurrentToolboxItemChanged(int index);
+	void PlayerButtonToggled(bool on);
 
 private:
-	void ListWidgetFill(ToolType type, const std::string& name, QListWidget* listWidget);
+	void PlacePlayerMarks();
+	void ListWidgetFillMark(const string& filePath, QListWidget* listWidget);
+	void ListWidgetFill(ToolType type, const string& name, QListWidget* listWidget);
+	QListWidgetItem* AddToListWidget(const string& name, const QPixmap& pixmap, QListWidget* listWidget);
 	bool TrySaveMap();
 	QString SaveMap();
 
 signals:
 	void CurrentToolChanged(ToolInfo* tool);
+	void CurrentPlayerChanged(int playerNumber);
 };
 
 }

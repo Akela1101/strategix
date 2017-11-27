@@ -21,10 +21,8 @@ extern const char imagesPath[];
 
 #define ToolTypeDef(K, V)                      \
 	K(TERRAIN)  /* terrain */                  \
-	K(MARK)     /* player position, etc... */  \
-	K(ERASE)    /* eraser mark */              \
-	K(MINE)     /* resource mine */            \
-	K(OBJECT)   /* other map objects */
+	K(OBJECT)   /* map objects */              \
+	K(MINE)     /* resource mine */
 nya_enum(ToolType, ToolTypeDef)
 
 
@@ -48,16 +46,36 @@ struct TerrainInfo : ToolInfo
 
 struct MapInfo
 {
-	static umap<string, u_p<TerrainInfo>> terrainInfos;
-	static umap<string, u_p<ToolInfo>> markInfos;
-	static umap<string, u_p<ToolInfo>> objectInfos;
+	struct Object
+	{
+		ToolInfo& info;
+		
+		Object(ToolInfo& info) : info(info) {}
+		virtual ~Object() {}
+	};
+	struct PlayerObject : Object
+	{
+		int owner;        // owner player id
+		
+		PlayerObject(ToolInfo& info, int owner) : Object(info), owner(owner) {}
+	};
+	struct MineObject : Object
+	{
+		int amount;       // resource amount
+		
+		MineObject(ToolInfo& info, int amount) : Object(info), amount(amount) {}
+	};
 	
 	struct Tile
 	{
 		ToolInfo* terrain;
-		ToolInfo* object;     // can be null
+		u_p<Object> object; // can be null
 	};
 	
+	static umap<string, u_p<TerrainInfo>> terrainInfos;
+	static umap<string, u_p<ToolInfo>> objectInfos;
+	static vector<QPixmap> playerMarks;
+
 	QString name;
 	int width, height;
 	vector<vector<Tile>> tiles;
@@ -66,10 +84,11 @@ struct MapInfo
 	MapInfo(const QString& name, int width, int height);
 	MapInfo(const QString& fileName);
 	
-	static TerrainInfo* GetTerrainById(int id);
+	static TerrainInfo* GetTerrainById(int id) noexcept;
+	static const QPixmap& GetPlayerMark(int playerNumber);
 	static void LoadTerrainInfos();
 	static void LoadObjectInfos();
-	static void LoadMarkInfo(const string& filePath, ToolType type = ToolType::MARK);
+	static QPixmap LoadPixmap(const string& path);
 	
 	void SaveToFile(const QString& fileName) const;
 	

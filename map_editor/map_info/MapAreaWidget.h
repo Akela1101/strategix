@@ -32,6 +32,7 @@ protected:
 
 public slots:
 	void CurrentToolChanged(ToolInfo* tool);
+	void CurrentPlayerChanged(int playerNumber);
 
 signals:
 	void MapChanged(bool yes);

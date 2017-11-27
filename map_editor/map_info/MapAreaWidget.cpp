@@ -16,26 +16,26 @@ class MapAreaWidgetImpl : public QWidget
 Q_OBJECT
 	friend class MapAreaWidget;
 	
-	QScrollArea* scrollArea;
-	ToolInfo* tool;
-	u_p<MapInfo> mapInfo;
-	u_p<QPixmap> groundPixmap;
-	u_p<QPixmap> frontPixmap;
+	QScrollArea* scrollArea;      // back link to scroll area
+	ToolInfo* tool = nullptr;     // current tool
+	int playerNumber = 0;         // current player
+	int tileLen = 0;              // tile width | height
+	bool isHighlight = false;     // highlight tile under cursor
+	
+	u_p<MapInfo> mapInfo;         // map related operations
+	u_p<QPixmap> groundPixmap;    // terrain pixmap
+	u_p<QPixmap> frontPixmap;     // objects pixmap
+	
 	QRect rectBase;
 	QRect rectScaled;
 	QPoint lastPos;
 	QPoint globalPos;
 	QPoint lastGlobalPos;
-	int tileLen;
-	bool isHighlight;
 
 public:
 	MapAreaWidgetImpl(QScrollArea* parent)
 			: QWidget(parent)
 			, scrollArea(parent)
-			, tool(nullptr)
-			, tileLen(0)
-			, isHighlight(false)
 	{
 		setMouseTracking(true);
 	}
@@ -124,23 +124,27 @@ protected:
 		rectBase = QRect(pos.x() * tileLenBase, pos.y() * tileLenBase, tileLenBase, tileLenBase);
 		
 		// Draw objects, if LMB and current item is valid.
-		if (tool && (event->buttons() & Qt::LeftButton))
+		if (event->buttons() & Qt::LeftButton)
 		{
 			isHighlight = false;
 			
-			auto& tile = mapInfo->tiles[pos.y()][pos.x()]; // On map
-			if (tool->type == ToolType::TERRAIN)
+			auto& tile = mapInfo->tiles[pos.y()][pos.x()];
+			if (tool && tool->type == ToolType::TERRAIN)
 			{
-				ReplaceObject(*groundPixmap, rectBase, tool, tile.terrain);
+				if (tile.terrain != tool)
+				{
+					tile.terrain = tool;
+					DrawTerrain(tool, rectBase, tile);
+				}
 			}
-			else if (tool->type == ToolType::ERASE)
+			else
 			{
-				ReplaceObject(*frontPixmap, rectBase, nullptr, tile.object);
+				MapInfo::Object* object = CreateObject();
+				tile.object.reset(object);
+				DrawObject(object, rectBase, tile);
 			}
-			else // replace object
-			{
-				ReplaceObject(*frontPixmap, rectBase, tool, tile.object);
-			}
+			update(rectBase);
+			emit MapChanged();
 		}
 		else // Highlight current rectangle
 		{
@@ -173,30 +177,53 @@ protected:
 		mouseMoveEvent(event); // for single mouse click processing
 	}
 	
-	void mouseReleaseEvent(QMouseEvent* event) override
+	void mouseReleaseEvent(QMouseEvent*) override
 	{
-		Q_UNUSED(event);
-		
 		releaseMouse();
 	}
 
 private:
-	void ReplaceObject(QPixmap& pixmap, const QRect& rc, ToolInfo* object, ToolInfo*& currentObject)
+	void DrawTerrain(ToolInfo* tool, const QRect& rc, MapInfo::Tile& tile)
 	{
-		if (currentObject == object) return;
-		
-		currentObject = object;
+		QPainter painter(groundPixmap.get());
+		painter.setCompositionMode(QPainter::CompositionMode_Source);
+		painter.drawPixmap(rc, tool->image);
+	}
+	
+	void DrawObject(MapInfo::Object* object, const QRect& rc, MapInfo::Tile& tile)
+	{
+		QPainter painter(frontPixmap.get());
+		painter.setCompositionMode(QPainter::CompositionMode_Source);
+		if (!object)
 		{
-			QPainter painter(&pixmap);
-			painter.setCompositionMode(QPainter::CompositionMode_Source);
-			if (object)
-				painter.drawPixmap(rc, object->image);
-			else
-				painter.fillRect(rc, QColor(0, 0, 0, 0));
+			painter.fillRect(rc, QColor(0, 0, 0, 0));
+			return;
 		}
-		update(rc);
 		
-		emit MapChanged();
+		painter.drawPixmap(rc, object->info.image);
+		if (object->info.type == ToolType::OBJECT)
+		{
+			auto playerObject = (MapInfo::PlayerObject*)object;
+			int w = rc.width(), h = rc.height();
+			QRect markRc = rc.adjusted(0, 0, -w / 2, -h / 2);
+			
+			painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
+			painter.drawPixmap(markRc, MapInfo::GetPlayerMark(playerObject->owner));
+		}
+	}
+	
+	MapInfo::Object* CreateObject()
+	{
+		if (!tool) return nullptr;
+		
+		switch (tool->type)
+		{
+			case ToolType::OBJECT:
+				return new MapInfo::PlayerObject{ *tool, playerNumber };
+			case ToolType::MINE:
+				return new MapInfo::MineObject{ *tool, 1000 };
+		}
+		return nullptr;
 	}
 	
 	void SetMap(MapInfo* mapInfo)
@@ -211,24 +238,17 @@ private:
 		frontPixmap->fill(QColor(0, 0, 0, 0)); // Necessary clear!
 		
 		// Draw ground and objects
-		QPainter groundPainter, frontPainter;
-		groundPainter.begin(groundPixmap.get());
-		frontPainter.begin(frontPixmap.get());
 		for (int row = 0; row < height; ++row)
 		{
 			for (int col = 0; col < width; ++col)
 			{
 				const QRect& rc = QRect(col * tileLenBase, row * tileLenBase, tileLenBase, tileLenBase);
 				auto&& tile = mapInfo->tiles[row][col];
-				groundPainter.drawPixmap(rc, tile.terrain->image);
-				if (tile.object)
-				{
-					frontPainter.drawPixmap(rc, tile.object->image);
-				}
+				
+				DrawTerrain(tile.terrain, rc, tile);
+				DrawObject(tile.object.get(), rc, tile);
 			}
 		}
-		groundPainter.end();
-		frontPainter.end();
 		
 		tileLen = tileLenBase / 2;
 		setFixedSize(groundSize * tileLen / tileLenBase);
@@ -286,6 +306,11 @@ void MapAreaWidget::wheelEvent(QWheelEvent* event)
 void MapAreaWidget::CurrentToolChanged(ToolInfo* tool)
 {
 	impl->CurrentToolChanged(tool);
+}
+
+void MapAreaWidget::CurrentPlayerChanged(int playerNumber)
+{
+	impl->playerNumber = playerNumber;
 }
 
 }

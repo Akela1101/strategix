@@ -23,6 +23,8 @@ MapManager::MapManager(const string& mapName)
 {
 	const string& fileName = GetFilePath(mapName);
 	ifstream fin(fileName.c_str());
+	if (!fin)
+		nya_throw << "Unable to open map file " << fileName;
 	
 	string cString;
 	getline(fin, cString); // top string

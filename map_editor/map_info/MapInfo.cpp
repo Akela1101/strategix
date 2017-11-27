@@ -5,6 +5,7 @@
 #include <boost/range/algorithm.hpp>
 #include <boost/range/irange.hpp>
 #include <boost/filesystem.hpp>
+#include <QBitmap>
 
 #include "MapInfo.h"
 
@@ -20,8 +21,8 @@ const char imagesPath[] = "config/images/";
 const char mapConfigPath[] = "config/map/";
 
 umap<string, u_p<TerrainInfo>> MapInfo::terrainInfos;
-umap<string, u_p<ToolInfo>> MapInfo::markInfos;
 umap<string, u_p<ToolInfo>> MapInfo::objectInfos;
+vector<QPixmap> MapInfo::playerMarks;
 
 
 MapInfo::MapInfo(const QString& name, int width, int height)
@@ -46,7 +47,7 @@ MapInfo::MapInfo(const QString& fileName)
 	LoadFromFile(fileName);
 }
 
-TerrainInfo* MapInfo::GetTerrainById(int id)
+TerrainInfo* MapInfo::GetTerrainById(int id) noexcept
 {
 	using namespace boost;
 	using namespace boost::adaptors;
@@ -54,6 +55,14 @@ TerrainInfo* MapInfo::GetTerrainById(int id)
 	auto&& range = terrainInfos | map_values;
 	auto it = find_if(range, [id](auto&& info) { return info ? info->id == id : false; });
 	return it != range.end() ? it->get() : nullptr;
+}
+
+const QPixmap& MapInfo::GetPlayerMark(int playerNumber)
+{
+	if (playerMarks.empty())
+		nya_throw << "Call LoadObjectInfos() first.";
+	
+	return playerMarks[playerNumber < playerMarks.size() ? playerNumber : 0];
 }
 
 void MapInfo::LoadTerrainInfos()
@@ -65,7 +74,7 @@ void MapInfo::LoadTerrainInfos()
 	// definition
 	path fileName = path(mapConfigPath) / terrainsDefFileName;
 	ifstream fin(fileName.string());
-	if (!fin.good())
+	if (!fin)
 	{
 		nya_throw << "%s could not be loaded."s % fileName;
 	}
@@ -106,55 +115,64 @@ void MapInfo::LoadObjectInfos()
 	
 	path fileName = path(mapConfigPath) / objectsDefFileName;
 	ifstream fin(fileName.string());
-	if (!fin.good())
+	if (!fin)
 	{
 		nya_throw << "%s could not be loaded."s % fileName;
 	}
 	
-	for (; ;)
+	for (;;)
 	{
-		auto info = make_u<ToolInfo>();
 		string type, imageFileName, imageSubdir;
 		fin >> type >> imageFileName;
 		if (type.empty()) break;
 		
-		info->type = type;
-		switch (info->type)
+		ToolType objectType = type;
+		switch (objectType)
 		{
-			case ToolType::MINE: imageSubdir = "mines/"; break;
-			case ToolType::OBJECT: imageSubdir = "objects/"; break;
-			default: nya_throw << "Cannot handle map object of type: " << type;
+			case ToolType::MINE:
+				imageSubdir = "mines/";
+				break;
+			case ToolType::OBJECT:
+				imageSubdir = "objects/";
+				break;
+			default:
+				nya_throw << "Cannot handle map object of type: " << type;
 		}
 		
-		QPixmap pixmap;
 		string pixmapPath = (path(mapConfigPath) / imageSubdir / imageFileName).string();
-		if (!pixmap.load(pixmapPath.c_str()))
-		{
-			nya_throw << "The image files could not be loaded from " << pixmapPath;
-		}
+		QPixmap pixmap = LoadPixmap(pixmapPath);
 		
+		auto info = make_u<ToolInfo>();
+		info->type = objectType;
 		info->name = path(imageFileName).stem().string();
 		info->image = pixmap;
 		objectInfos.emplace(info->name, move(info));
 	}
 	fin.close();
+	
+	// player marks
+	string pixmapPath = (path(mapConfigPath) / "player_mark.png").string();
+	QPixmap pixmap = LoadPixmap(pixmapPath);
+	playerMarks.push_back(pixmap);
+	
+	QBitmap mask = pixmap.createMaskFromColor(Qt::transparent);
+	for (int color = Qt::red; color < Qt::darkRed; ++color)
+	{
+		QPixmap playerMark(pixmap.size());
+		playerMark.fill((Qt::GlobalColor)color);
+		playerMark.setMask(mask);
+		playerMarks.push_back(playerMark);
+	}
 }
 
-void MapInfo::LoadMarkInfo(const string& filePath, ToolType type)
+QPixmap MapInfo::LoadPixmap(const string& path)
 {
-	using path = boost::filesystem::path;
-	
 	QPixmap pixmap;
-	if (!pixmap.load(filePath.c_str()))
+	if (!pixmap.load(path.c_str()))
 	{
-		nya_throw << "The image files could not be loaded from " << filePath;
+		nya_throw << "The image files could not be loaded from " << path;
 	}
-	
-	auto info = make_u<ToolInfo>();
-	info->type = type;
-	info->name = path(filePath).stem().string();
-	info->image = pixmap;
-	markInfos.emplace(info->name, move(info));
+	return pixmap;
 }
 
 void MapInfo::SaveToFile(const QString& fileName) const
@@ -163,14 +181,16 @@ void MapInfo::SaveToFile(const QString& fileName) const
 	if (!fout)
 		nya_throw << "Unable to save to " << fileName.toStdString();
 	
+	stringstream sout;
+	
 	// top string and version
-	fout << mapFileTopString << "\n"
+	sout << mapFileTopString << "\n"
 	     << editorVersion << "\n"
 	     << "\n";
-		
+	
 	uset<TerrainInfo*> uniqueTerrains;
-	vector<QPoint> playerPositions;
-	vector<pair<QPoint, ToolInfo*>> mines;
+	vector<pair<QPoint, PlayerObject*>> objects;
+	vector<pair<QPoint, MineObject*>> mines;
 	
 	// prepare terrain
 	stringstream terrainStream;
@@ -187,13 +207,13 @@ void MapInfo::SaveToFile(const QString& fileName) const
 			
 			if (tile.object)
 			{
-				if (tile.object->type == ToolType::MARK)
+				if (tile.object->info.type == ToolType::OBJECT)
 				{
-					playerPositions.emplace_back(col, row);
+					objects.emplace_back(QPoint(col, row), (PlayerObject*) tile.object.get());
 				}
-				else if (tile.object->type == ToolType::MINE)
+				else if (tile.object->info.type == ToolType::MINE)
 				{
-					mines.emplace_back(QPoint(col, row), tile.object);
+					mines.emplace_back(QPoint(col, row), (MineObject*) tile.object.get());
 				}
 			}
 		}
@@ -202,38 +222,39 @@ void MapInfo::SaveToFile(const QString& fileName) const
 	terrainStream << "\n";
 	
 	// terrain descriptions
-	fout << uniqueTerrains.size() << "\n";
+	sout << uniqueTerrains.size() << "\n";
 	for (TerrainInfo* terrain : uniqueTerrains)
 	{
 		int id = terrain->id;
 		string name = terrain->name;
 		float retard = terrain->retard;
-		fout << id << " " << name << " " << retard << "\n";
+		sout << id << " " << name << " " << retard << "\n";
 	}
-	fout << "\n";
+	sout << "\n";
 	
 	// terrain map
 	// dimensions
-	fout << width << " " << height << "\n"
+	sout << width << " " << height << "\n"
 	     << terrainStream.str();
 	
-	// player initial positions
-	fout << playerPositions.size() << "\n";
-	for (auto&& pos : playerPositions)
+	// objects
+	sout << objects.size() << "\n";
+	for (auto&& pos_info : objects)
 	{
-		fout << pos.x() << " " << pos.y() << "\n";
+		sout << pos_info.first.x() << " " << pos_info.first.y() << " "
+		     << pos_info.second->info.name << " " << pos_info.second->owner << "\n";
 	}
-	fout << "\n";
+	sout << "\n";
 	
 	// mines
-	fout << mines.size() << "\n";
+	sout << mines.size() << "\n";
 	for (auto&& pos_info : mines)
 	{
-		fout << pos_info.first.x() << " " << pos_info.first.y() << " "
-		     << pos_info.second->name << " " << 100000 << "\n";
+		sout << pos_info.first.x() << " " << pos_info.first.y() << " "
+		     << pos_info.second->info.name << " " << pos_info.second->amount << "\n";
 	}
 	
-	fout.close();
+	fout << sout.rdbuf();
 }
 
 void MapInfo::LoadFromFile(const QString& fileName)
@@ -294,14 +315,16 @@ void MapInfo::LoadFromFile(const QString& fileName)
 		}
 	}
 	
-	// player initial positions
+	// objects
 	int n;
 	fin >> n;
 	for (int i = 0; i < n; ++i)
 	{
-		int row, col;
-		fin >> col >> row;
-		tiles[row][col].object = markInfos["player_position"].get();
+		int row, col, owner;
+		string name;
+		fin >> col >> row >> name >> owner;
+		
+		tiles[row][col].object.reset(new PlayerObject{ *objectInfos[name], owner });
 	}
 	
 	// resources
@@ -311,7 +334,8 @@ void MapInfo::LoadFromFile(const QString& fileName)
 		int row, col, amount;
 		string name;
 		fin >> col >> row >> name >> amount;
-		tiles[row][col].object = objectInfos[name].get();
+		
+		tiles[row][col].object.reset(new MineObject{ *objectInfos[name], amount });
 	}
 	
 	if (!fin.good())
