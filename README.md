@@ -4,17 +4,17 @@ The main aim of this project is a base library for common Real-Time Strategy gam
 ## Contents
 * core — strategix core library
 * map_editor — qt application for map editing
-* sample\#i — samples of games \[ outdated ]
+* sample1 — sample of game based on map_editor \[ in progress... ]
 
 ## Dependencies
 * boost
 * qt5
-* [easylogging++](github.com/muflihun/easyloggingpp)
-* [nya](github.com/Akela1101/nya)
+* [easylogging++](https://github.com/muflihun/easyloggingpp)
+* [nya](https://github.com/Akela1101/nya)
 
 ## Build
 Probably any popular C++17 compiler can be used. 
-But tested on **mingw64 gcc 7.2**.
+But tested on **mingw64 gcc 7.2** from [msys2](http://www.msys2.org/).
 ```sh
 cd <your projects dir>
 git clone git@github.com:muflihun/easyloggingpp.git
