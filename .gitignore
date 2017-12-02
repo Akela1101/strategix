@@ -29,5 +29,3 @@ _debug/
 _release/
 ipch/
 .idea/
-
-!*.ts

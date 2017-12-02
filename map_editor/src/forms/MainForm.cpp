@@ -4,6 +4,8 @@
 #include <QMessageBox>
 #include <QStandardPaths>
 #include <QPushButton>
+#include <MapInfo.h>
+#include <strx/map/BaseMap.h>
 
 #include "DialogNew.h"
 #include "MainForm.h"
@@ -11,6 +13,7 @@
 
 namespace map_editor
 {
+using namespace strx;
 using namespace map_info;
 
 static const char editorTitle[] = "Strategix Map Editor";
@@ -26,14 +29,14 @@ MainForm::MainForm()
 	setWindowTitle(editorTitle);
 	widget.actionSave->setEnabled(false);
 	
-	MapInfo::LoadTerrainInfos();
-	MapInfo::LoadObjectInfos();
+	MapInfo::LoadTerrainTools();
+	MapInfo::LoadObjectTools();
 	
 	// player marks
 	PlacePlayerMarks();
 	
 	// terrains
-	for (auto&& name_info : MapInfo::terrainInfos)
+	for (auto&& name_info : MapInfo::terrainTools)
 	{
 		ListWidgetFill(ToolType::TERRAIN, name_info.first, widget.terrainListWidget);
 	}
@@ -59,6 +62,8 @@ MainForm::MainForm()
 	connect(widget.mapArea, &MapAreaWidget::MapChanged, this, &MapChanged);
 }
 
+MainForm::~MainForm() = default;
+
 void MainForm::FileNew()
 {
 	if (!TrySaveMap())
@@ -70,7 +75,8 @@ void MainForm::FileNew()
 		QString name = dialogNew.mapName;
 		try
 		{
-			widget.mapArea->SetMap(name, dialogNew.mapWidth, dialogNew.mapHeight);
+			map.reset(new BaseMap(name.toStdString(), dialogNew.mapWidth, dialogNew.mapHeight));
+			widget.mapArea->SetMap(map.get());
 		}
 		catch (exception& e)
 		{
@@ -103,17 +109,18 @@ void MainForm::FileLoad()
 	fin.close();
 	
 	// open file
-	QString loadedFileName = QFileDialog::getOpenFileName(this, "Load the map", lastPath.c_str(), "Maps (*.map)");
-	if (loadedFileName.isEmpty()) return;
+	QString loadedMapPath = QFileDialog::getOpenFileName(this, "Load the map", lastPath.c_str(), "Maps (*.map)");
+	if (loadedMapPath.isEmpty()) return;
 	
-	fileName = loadedFileName;
+	mapPath = loadedMapPath;
 	try
 	{
-		widget.mapArea->LoadFromFile(fileName);
+		map.reset(new BaseMap(mapPath.toStdString()));
+		widget.mapArea->SetMap(map.get());
 	}
 	catch (exception& e)
 	{
-		QMessageBox::critical(nullptr, QString("Error while reading the file: %1").arg(fileName), e.what());
+		QMessageBox::critical(nullptr, QString("Error while reading the file: %1").arg(mapPath), e.what());
 		return;
 	}
 	isMapOpened = true;
@@ -123,7 +130,7 @@ void MainForm::FileLoad()
 	boost::filesystem::create_directories(configPath);
 	ofstream fout(lastLocationPath, ios::trunc);
 	if (fout)
-		fout << fileName.toStdString();
+		fout << mapPath.toStdString();
 }
 
 void MainForm::FileExit()
@@ -135,7 +142,7 @@ void MainForm::FileExit()
 void MainForm::HelpAbout()
 {
 	QMessageBox::about(this, editorTitle, QString("Version: %1 \n(C) 2010-%2 %3")
-			.arg(editorVersion)
+			.arg(mapFormatVersion)
 			.arg(__DATE__ + 7)
 			.arg("Akela1101"));
 }
@@ -149,7 +156,7 @@ void MainForm::CurrentItemChanged(QListWidgetItem* current, QListWidgetItem* pre
 	else
 		this->statusBar()->showMessage("***");
 	
-	emit CurrentToolChanged(infoFromItem[current]);
+	emit CurrentToolChanged(toolFromItem[current]);
 }
 
 void MainForm::CurrentToolboxItemChanged(int index)
@@ -201,29 +208,34 @@ void MainForm::ListWidgetFillMark(const string& filePath, QListWidget* listWidge
 	QPixmap pixmap = MapInfo::LoadPixmap(filePath);
 	
 	QListWidgetItem* newItem = AddToListWidget(name, pixmap, listWidget);
-	infoFromItem.emplace(newItem, nullptr);
+	toolFromItem.emplace(newItem, nullptr);
 }
 
 void MainForm::ListWidgetFill(ToolType type, const std::string& name, QListWidget* listWidget)
 {
-	ToolInfo* info = nullptr;
+	ToolInfo* tool = nullptr;
 	switch (type)
 	{
 		case ToolType::TERRAIN:
 		{
-			info = MapInfo::terrainInfos[name].get();
+			tool = &MapInfo::terrainTools[name];
 			break;
 		}
 		case ToolType::MINE:
 		case ToolType::OBJECT:
 		{
-			info = MapInfo::objectInfos[name].get();
+			tool = &MapInfo::objectTools[name];
 			break;
+		}
+		default:
+		{
+			error_log << "Unable to handle %s tool"s % type.c_str();
+			return;
 		}
 	}
 	
-	QListWidgetItem* newItem = AddToListWidget(name, info->image, listWidget);
-	infoFromItem.emplace(newItem, info);
+	QListWidgetItem* newItem = AddToListWidget(name, tool->image, listWidget);
+	toolFromItem.emplace(newItem, tool);
 }
 
 QListWidgetItem* MainForm::AddToListWidget(const string& name, const QPixmap& pixmap, QListWidget* listWidget)
@@ -252,42 +264,42 @@ bool MainForm::TrySaveMap()
 		}
 		// else user don't want to save map
 	}
-	fileName.clear(); // !!! allow open save dialog for new map
+	mapPath.clear(); // !!! allow open save dialog for new map
 	return true;
 }
 
 QString MainForm::SaveMap()
 {
-	if (fileName.isEmpty())
+	if (mapPath.isEmpty())
 	{
-		QString fileNameHint = widget.mapArea->GetMapName();
-		fileName = QFileDialog::getSaveFileName(this, "Save the map", fileNameHint, "Maps (*.map)");
+		QString fileNameHint = map->GetName().c_str();
+		mapPath = QFileDialog::getSaveFileName(this, "Save the map", fileNameHint, "Maps (*.map)");
 		
-		statusBar()->showMessage(fileName, 3000);
+		statusBar()->showMessage(mapPath, 3000);
 		
 		// if user reconsider saving
-		if (fileName.isEmpty())
-			return fileName;
+		if (mapPath.isEmpty())
+			return mapPath;
 	}
 	// Write file
 	try
 	{
-		widget.mapArea->SaveToFile(fileName);
+		map->SaveToFile(mapPath.toStdString());
 		MapChanged(false);
 	}
 	catch (exception& ex)
 	{
-		fileName.clear();
+		mapPath.clear();
 		QMessageBox::critical(this, "Unable to save map", ex.what());
 	}
-	return fileName;
+	return mapPath;
 }
 
 void MainForm::MapChanged(bool yes)
 {
 	isMapSaved = !yes;
 	widget.actionSave->setEnabled(yes);
-	auto&& mapName = widget.mapArea->GetMapName();
+	QString mapName = map->GetName().c_str();
 	setWindowTitle(QString("%1 %2- %3")
 			.arg(mapName)
 			.arg(yes ? "(*) " : "")

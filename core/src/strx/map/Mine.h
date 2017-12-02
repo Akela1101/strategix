@@ -3,7 +3,7 @@
 
 #include "strx/kernel/Kernel.h"
 #include "strx/common/Resource.h"
-#include "strx/common/Strategix_Forward.h"
+#include "Strategix_Forward.h"
 
 
 namespace strx

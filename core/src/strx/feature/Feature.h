@@ -1,7 +1,7 @@
 #ifndef _FEATURE_H
 #define    _FEATURE_H
 
-#include "strx/common/Strategix_Forward.h"
+#include "Strategix_Forward.h"
 
 
 namespace strx

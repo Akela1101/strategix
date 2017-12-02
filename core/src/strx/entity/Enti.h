@@ -5,11 +5,7 @@
 #include <list>
 #include <typeinfo>
 
-#include <strx/feature/FeatureMove.h>
-#include <strx/feature/FeatureCollect.h>
-#include <strx/feature/FeatureHealth.h>
-#include <strx/feature/FeatureAttack.h>
-#include <strx/common/Strategix_Forward.h>
+#include <Strategix_Forward.h>
 
 
 namespace strx

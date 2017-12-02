@@ -6,7 +6,7 @@
 
 #include <strx/map/Mine.h>
 #include <strx/player/PlayerSlot.h>
-#include <strx/common/Strategix_Forward.h>
+#include <Strategix_Forward.h>
 
 
 namespace strx

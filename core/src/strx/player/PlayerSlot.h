@@ -1,7 +1,7 @@
 #ifndef _PLAYERSLOT_H
 #define    _PLAYERSLOT_H
 
-#include "strx/common/Strategix_Forward.h"
+#include "Strategix_Forward.h"
 
 
 namespace strx

@@ -4,8 +4,6 @@
 #include "Feature.h"
 #include "Interfaces.h"
 
-#include "strx/common/Strategix_Forward.h"
-
 
 namespace strx
 {

@@ -2,7 +2,7 @@
 #define    _ENTISLOT_H
 
 #include <strx/feature/Interfaces.h>
-#include <strx/common/Strategix_Forward.h>
+#include <Strategix_Forward.h>
 
 
 namespace strx

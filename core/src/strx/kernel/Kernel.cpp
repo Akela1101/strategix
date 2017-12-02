@@ -23,7 +23,7 @@ using PlayersType = umap<string, u_p<Player>>;
 
 
 // Variables
-static Game* game;                            // main event receiver
+static Game* game = nullptr;                  // main event receiver
 static ConfigManager configManager;           // game configuration manager
 static u_p<MapManager> mapManager;            // has all information about the map
 static u_p<thread> kernelThread;              // main Kernel thread
@@ -31,23 +31,23 @@ nya::event_loop Kernel::eventLoop;            // asio::io_service event loop
 static u_p<nya::event_loop::work> dummyWork;  // work for io_service
 
 static PlayersType players;                   // players by name
+static Player* humanPlayer = nullptr;         // human player
 static ResourceInfosType resourceInfos;       // resource descriptions
 static TechTreesType techTrees;               // technology trees
-static string mapsDirectory;                  // usually "maps"
 
 
-void Kernel::Configure(const string& configPath, const string& mapsPath)
+void Kernel::Configure(const string& configPath, const string& mapsDirectory)
 {
 	tie(resourceInfos, techTrees) = configManager.ParseConfig(configPath);
-	mapsDirectory = mapsPath;
+	mapManager = make_u<MapManager>(mapsDirectory);
 }
 
 void Kernel::LoadMap(const string& mapName)
 {
-	if (mapsDirectory.empty())
+	if (!mapManager)
 		nya_throw << "Configure() should be run before LoadMap().";
 	
-	mapManager = make_u<MapManager>(mapName);
+	mapManager->LoadMap(mapName);
 }
 
 void Kernel::AddPlayer(PlayerSlot* playerSlot)
@@ -55,9 +55,14 @@ void Kernel::AddPlayer(PlayerSlot* playerSlot)
 	if (!mapManager) nya_throw << "LoadMap() should be run before AddPlayer().";
 	
 	auto player = new Player(playerSlot);
+	players.emplace(player->GetName(), player);
+	
 	player->Init(mapManager->CreateMap(*player));
 	
-	players.emplace(player->GetName(), player);
+	if (playerSlot->GetType() == PlayerType::HUMAN)
+	{
+		humanPlayer = player;
+	}
 }
 
 void Kernel::Start()
@@ -73,7 +78,7 @@ void Kernel::Start()
 void Kernel::Stop()
 {
 	dummyWork.reset();
-	kernelThread->join();
+	if (kernelThread) kernelThread->join();
 }
 
 void Kernel::Tick(float seconds)
@@ -99,13 +104,16 @@ void Kernel::PrintInfo()
 	}
 }
 
-const string& Kernel::GetMapsDir() { return mapsDirectory; }
-
-MapManager& Kernel::GetMap() { return *mapManager; }
-
 bool Kernel::CheckResource(const string& name)
 {
 	return find(all_(resourceInfos), name) != resourceInfos.end();
+}
+
+Player& Kernel::GetHumanPlayer()
+{
+	if (humanPlayer) return *humanPlayer;
+	
+	nya_throw << "Human player wasn't created.";
 }
 
 const TechTree& Kernel::GetTechTree(const string& raceName)
@@ -118,7 +126,7 @@ vector<string> Kernel::GetMapNames()
 	vector<string> mapNames;
 	try
 	{
-		fs::recursive_directory_iterator it(mapsDirectory), eod;
+		fs::recursive_directory_iterator it(mapManager->GetMapsDirectory()), eod;
 		for (; it != eod; ++it)
 		{
 			const fs::path& p = *it;

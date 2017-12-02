@@ -4,7 +4,6 @@
 #include <strx/kernel/Game.h>
 #include <Sample_Forward.h>
 
-
 namespace sample1
 {
 using namespace strx;
@@ -21,9 +20,6 @@ public:
 	~SampleGame() override;
 	
 	void Start();
-	
-private:
-	void PlaceEntis();
 };
 
 }

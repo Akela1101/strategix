@@ -3,8 +3,6 @@
 
 #include "Feature.h"
 
-#include "strx/common/Strategix_Forward.h"
-
 
 namespace strx
 {

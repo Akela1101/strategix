@@ -71,7 +71,7 @@ u_p<MapsPath> MapsPathsFinder::FindPath(const MapCoord from, const MapCoord till
 			if (map.IsCell(checking_mc) && !GetByCoord(closed, checking_mc).get() && IsAccessible(checking_mc))
 			{
 				// map(current->mc) @#~
-				Price new_G = current->G + ((i % 2) ? 10 : 14) * map.GetCell(current->mc).retard; // sqrt(2)*10, 10
+				Price new_G = current->G + ((i % 2) ? 10 : 14) * map.GetCell(current->mc).terrain->retard; // sqrt(2)*10, 10
 				
 				s_p<CellPrice> openedCell = GetByCoord(opened, checking_mc);
 				if (!openedCell.get())
@@ -109,7 +109,7 @@ s_p<MapsPathsFinder::CellPrice> MapsPathsFinder::GetByCoord(list<s_p<CellPrice>>
 
 bool MapsPathsFinder::IsAccessible(const MapCoord& mc) const
 {
-	return map.GetCell(mc).retard > 0;
+	return map.GetCell(mc).terrain->retard > 0;
 }
 
 //void OObjectEntiSlot::AddWayTo_Debug(Vector3 &pos)

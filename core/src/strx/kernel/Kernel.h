@@ -1,7 +1,7 @@
 #ifndef _KERNEL_H
 #define _KERNEL_H
 
-#include <strx/common/Strategix_Forward.h>
+#include <Strategix_Forward.h>
 #include <nya/signal.hpp>
 
 /**
@@ -15,7 +15,7 @@ class Kernel
 
 public:
 	// keep this calling order
-	static void Configure(const string& configPath, const string& mapsPath);
+	static void Configure(const string& configPath, const string& mapsDirectory);
 	static void LoadMap(const string& mapName);
 	static void AddPlayer(PlayerSlot* playerSlot);
 	
@@ -24,9 +24,8 @@ public:
 	static void Tick(float seconds);
 	static void PrintInfo();
 	
-	static const string& GetMapsDir();
-	static MapManager& GetMap();
 	static bool CheckResource(const string& name);
+	static Player& GetHumanPlayer();
 	static const TechTree& GetTechTree(const string& raceName);
 	static vector <string> GetMapNames();
 	static vector <string> GetRaceNames();

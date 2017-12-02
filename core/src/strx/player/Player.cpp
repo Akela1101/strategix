@@ -54,7 +54,7 @@ void Player::AddEnti(EntiSlot* entiSlot)
 {
 	const string& entiName = entiSlot->GetName();
 	auto&& entiInfo = techTree.GetNode(entiName);
-	auto enti = new Enti(entiInfo, map->GetInitialPostion());
+	auto enti = new Enti(entiInfo, RealCoord(5, 5)); //TODO: coord
 	
 	entis.emplace_back(enti);
 	enti->player = this;

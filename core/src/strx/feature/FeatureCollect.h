@@ -1,9 +1,9 @@
 #ifndef _FEATURECOLLECT_H
 #define    _FEATURECOLLECT_H
 
-#include <strx/feature/Feature.h>
-#include <strx/feature/Interfaces.h>
-#include <strx/map/Map.h>
+#include "Feature.h"
+#include "Interfaces.h"
+
 
 
 namespace strx

@@ -7,16 +7,22 @@ The main aim of this project is a base library for common Real-Time Strategy gam
 * sample\#i — samples of games \[ outdated ]
 
 ## Dependencies
-* nya
 * boost
-* qt5 (map_editor)
+* qt5
+* [easylogging++](github.com/muflihun/easyloggingpp)
+* [nya](github.com/Akela1101/nya)
 
 ## Build
 Probably any popular C++17 compiler can be used. 
 But tested on **mingw64 gcc 7.2**.
 ```sh
+cd <your projects dir>
+git clone git@github.com:muflihun/easyloggingpp.git
+git clone git@github.com:Akela1101/nya.git
+git clone git@github.com:Akela1101/strategix.git
+cd strategix
 mkdir build && cd build
-cmake ..
+cmake .. # see below
 make
 ```
 cmake might ask for some options like the prefix to QT

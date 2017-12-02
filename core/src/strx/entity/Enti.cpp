@@ -1,6 +1,10 @@
+#include <strx/feature/FeatureMove.h>
+#include <strx/feature/FeatureCollect.h>
+#include <strx/feature/FeatureHealth.h>
+#include <strx/feature/FeatureAttack.h>
+
 #include "EntiInfo.h"
 #include "EntiSlot.h"
-
 #include "Enti.h"
 
 

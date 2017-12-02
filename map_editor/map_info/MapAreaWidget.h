@@ -1,8 +1,9 @@
 #ifndef _MAPAREA_H
 #define    _MAPAREA_H
 
-#include <QScrollArea>
 #include <nya.hpp>
+#include <Strategix_Forward.h>
+#include <QScrollArea>
 
 
 class QWheelEvent;
@@ -22,10 +23,7 @@ public:
 	MapAreaWidget(QWidget* parent = nullptr);
 	~MapAreaWidget() override;
 	
-	QString GetMapName() const;
-	void SetMap(const QString& name, size_t width, size_t height);
-	void LoadFromFile(const QString& fileName);
-	void SaveToFile(const QString& fileName) const;
+	void SetMap(strx::BaseMap* map);
 
 protected:
 	void wheelEvent(QWheelEvent* event);

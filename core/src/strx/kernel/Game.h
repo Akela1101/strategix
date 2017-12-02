@@ -2,7 +2,7 @@
 #define _GAME_H
 
 #include <nya/signal.hpp>
-#include <strx/common/Strategix_Forward.h>
+#include <Strategix_Forward.h>
 
 
 namespace strx

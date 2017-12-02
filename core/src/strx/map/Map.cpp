@@ -9,10 +9,9 @@
 
 namespace strx
 {
-Map::Map(const BaseMap& map, Player& player, MapCoord initialPosition)
+Map::Map(const BaseMap& map, Player& player)
 		: BaseMap(map)
 		, player(player)
-		, initialPosition(initialPosition)
 		, pathsFinder(new MapsPathsFinder(*this)) {}
 
 Map::~Map() = default;

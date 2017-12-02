@@ -2,27 +2,30 @@
 #include <QScrollBar>
 #include <MapInfo.h>
 
+#include <strx/common/StrategixCommon.h>
 #include "MapAreaWidget.h"
 
 
 namespace map_info
 {
+using namespace strx;
+
 static constexpr int minZoom = 4;
 static constexpr int maxZoom = 64;
-static constexpr int tileLenBase = 64; // size of tile pixmap
+static constexpr int tileLenBase = 64; // size of cell pixmap
 
 class MapAreaWidgetImpl : public QWidget
 {
 Q_OBJECT
 	friend class MapAreaWidget;
 	
+	BaseMap* map;                 // map related operations
 	QScrollArea* scrollArea;      // back link to scroll area
 	ToolInfo* tool = nullptr;     // current tool
 	int playerNumber = 0;         // current player
-	int tileLen = 0;              // tile width | height
-	bool isHighlight = false;     // highlight tile under cursor
+	int tileLen = 0;              // cell width | height
+	bool isHighlight = false;     // highlight cell under cursor
 	
-	u_p<MapInfo> mapInfo;         // map related operations
 	u_p<QPixmap> groundPixmap;    // terrain pixmap
 	u_p<QPixmap> frontPixmap;     // objects pixmap
 	
@@ -46,7 +49,7 @@ public:
 protected:
 	void paintEvent(QPaintEvent*) override
 	{
-		if (!mapInfo) return;
+		if (!map) return;
 		
 		qreal scale = (qreal) tileLen / tileLenBase;
 		
@@ -65,7 +68,7 @@ protected:
 	
 	void wheelEvent(QWheelEvent* event) override
 	{
-		if (!mapInfo) return;
+		if (!map) return;
 		
 		tileLen += copysign(4, event->delta());
 		if (tileLen < minZoom)
@@ -87,14 +90,14 @@ protected:
 		// Move sliders to mouse center
 		QScrollBar* hSB = scrollArea->horizontalScrollBar();
 		int tilesNumberX = hSB->pageStep() / maxZoom;      // number of tiles on screen for max zoom
-		int centralWidth = mapInfo->width - tilesNumberX;  // number of tiles in the center of screen
+		int centralWidth = map->GetWidth() - tilesNumberX;  // number of tiles in the center of screen
 		int centralX = lastPos.x() - tilesNumberX / 2;     // position in central coordinates
 		if (centralWidth < 1) centralWidth = 1;
 		hSB->setSliderPosition(hSB->maximum() * centralX / centralWidth);
 		
 		QScrollBar* vSB = scrollArea->verticalScrollBar();
 		int tilesNumberY = vSB->pageStep() / maxZoom;
-		int centralHeight = mapInfo->height - tilesNumberY;
+		int centralHeight = map->GetLength() - tilesNumberY;
 		int centralY = lastPos.y() - tilesNumberY / 2;
 		if (centralHeight < 1) centralHeight = 1;
 		vSB->setSliderPosition(vSB->maximum() * centralY / centralHeight);
@@ -102,7 +105,7 @@ protected:
 	
 	void mouseMoveEvent(QMouseEvent* event) override
 	{
-		if (!mapInfo) return;
+		if (!map) return;
 		
 		const QPoint& point = event->pos();
 		if (!this->rect().contains(point)) return;
@@ -128,20 +131,21 @@ protected:
 		{
 			isHighlight = false;
 			
-			auto& tile = mapInfo->tiles[pos.y()][pos.x()];
+			auto& cell = map->GetCell(pos.x(), pos.y());
 			if (tool && tool->type == ToolType::TERRAIN)
 			{
-				if (tile.terrain != tool)
+				if (cell.terrain->name != tool->name)
 				{
-					tile.terrain = tool;
-					DrawTerrain(tool, rectBase, tile);
+					map->ChangeTerrain(cell, tool->name);
+					DrawTerrain(tool->image, rectBase);
 				}
 			}
 			else
 			{
-				MapInfo::Object* object = CreateObject();
-				tile.object.reset(object);
-				DrawObject(object, rectBase, tile);
+				auto&& object = CreateObject(pos.x(), pos.y());
+				
+				map->ChangeObject(cell, object);
+				DrawObject(object, rectBase);
 			}
 			update(rectBase);
 			emit MapChanged();
@@ -183,14 +187,14 @@ protected:
 	}
 
 private:
-	void DrawTerrain(ToolInfo* tool, const QRect& rc, MapInfo::Tile& tile)
+	void DrawTerrain(const QPixmap& pixmap, const QRect& rc)
 	{
 		QPainter painter(groundPixmap.get());
 		painter.setCompositionMode(QPainter::CompositionMode_Source);
-		painter.drawPixmap(rc, tool->image);
+		painter.drawPixmap(rc, pixmap);
 	}
 	
-	void DrawObject(MapInfo::Object* object, const QRect& rc, MapInfo::Tile& tile)
+	void DrawObject(BaseMap::Object* object, const QRect& rc)
 	{
 		QPainter painter(frontPixmap.get());
 		painter.setCompositionMode(QPainter::CompositionMode_Source);
@@ -200,10 +204,11 @@ private:
 			return;
 		}
 		
-		painter.drawPixmap(rc, object->info.image);
-		if (object->info.type == ToolType::OBJECT)
+		auto&& tool = MapInfo::objectTools[object->name];
+		painter.drawPixmap(rc, tool.image);
+		if (tool.type == ToolType::OBJECT)
 		{
-			auto playerObject = (MapInfo::PlayerObject*)object;
+			auto playerObject = (BaseMap::PlayerObject*)object;
 			int w = rc.width(), h = rc.height();
 			QRect markRc = rc.adjusted(0, 0, -w / 2, -h / 2);
 			
@@ -212,26 +217,27 @@ private:
 		}
 	}
 	
-	MapInfo::Object* CreateObject()
+	BaseMap::Object* CreateObject(int x, int y)
 	{
 		if (!tool) return nullptr;
 		
+		MapCoord coord(x, y);
 		switch (tool->type)
 		{
 			case ToolType::OBJECT:
-				return new MapInfo::PlayerObject{ *tool, playerNumber };
+				return new BaseMap::PlayerObject{ tool->name, coord, playerNumber };
 			case ToolType::MINE:
-				return new MapInfo::MineObject{ *tool, 1000 };
+				return new BaseMap::MineObject{ tool->name, coord, 1000 };
 		}
 		return nullptr;
 	}
 	
-	void SetMap(MapInfo* mapInfo)
+	void SetMap(BaseMap* map)
 	{
-		this->mapInfo.reset(mapInfo);
-		size_t width = mapInfo->width;
-		size_t height = mapInfo->height;
-		QSize groundSize((int) width * tileLenBase, (int) height * tileLenBase);
+		this->map = map;
+		int width = map->GetWidth();
+		int height = map->GetLength();
+		QSize groundSize(width * tileLenBase, height * tileLenBase);
 		
 		groundPixmap.reset(new QPixmap(groundSize));
 		frontPixmap.reset(new QPixmap(groundSize));
@@ -243,10 +249,11 @@ private:
 			for (int col = 0; col < width; ++col)
 			{
 				const QRect& rc = QRect(col * tileLenBase, row * tileLenBase, tileLenBase, tileLenBase);
-				auto&& tile = mapInfo->tiles[row][col];
+				auto&& cell = map->GetCell(col, row);
 				
-				DrawTerrain(tile.terrain, rc, tile);
-				DrawObject(tile.object.get(), rc, tile);
+				auto&& tool = MapInfo::terrainTools[cell.terrain->name];
+				DrawTerrain(tool.image, rc);
+				DrawObject(cell.object.get(), rc);
 			}
 		}
 		
@@ -278,24 +285,9 @@ MapAreaWidget::MapAreaWidget(QWidget* parent)
 
 MapAreaWidget::~MapAreaWidget() = default;
 
-QString MapAreaWidget::GetMapName() const
+void MapAreaWidget::SetMap(BaseMap* map)
 {
-	return impl->mapInfo ? impl->mapInfo->name : "";
-}
-
-void MapAreaWidget::SetMap(const QString& name, size_t width, size_t height)
-{
-	impl->SetMap(new MapInfo(name, width, height));
-}
-
-void MapAreaWidget::LoadFromFile(const QString& fileName)
-{
-	impl->SetMap(new MapInfo(fileName));
-}
-
-void MapAreaWidget::SaveToFile(const QString& fileName) const
-{
-	if (impl->mapInfo) impl->mapInfo->SaveToFile(fileName);
+	impl->SetMap(map);
 }
 
 void MapAreaWidget::wheelEvent(QWheelEvent* event)
