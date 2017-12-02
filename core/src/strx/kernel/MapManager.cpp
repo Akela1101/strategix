@@ -10,12 +10,12 @@ MapManager::~MapManager() = default;
 void MapManager::LoadMap(const string& mapName)
 {
 	string path = GetFilePath(mapName);
-	baseMap.reset(new BaseMap(path, mapName));
+	map.reset(new Map(path, mapName));
 }
 
-u_p<Map> MapManager::CreateMap(Player& player)
+u_p<Map> MapManager::CreateMap(int playerId)
 {
-	return make_u<Map>(*baseMap, player);
+	return make_u<Map>(*map);
 }
 
 string MapManager::GetFilePath(const string& name) const

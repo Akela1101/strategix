@@ -92,13 +92,12 @@ int main(int argc, char* argv[])
 
 	try // run a game
 	{
-		auto game = make_u<SampleGame>();
-		
+		auto game = make_s<SampleGame>();
+
 		// start event loop in other thread
-		Kernel::Start();
+		Kernel::Start(game);
 		
-		// start graphics engine
-		game->Start();
+		// start graphics
 		app.exec();
 	}
 	catch (nya::exception& e)

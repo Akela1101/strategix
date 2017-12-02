@@ -19,7 +19,9 @@ public:
 	SampleGame();
 	~SampleGame() override;
 	
-	void Start();
+	void Start() override;
+	
+	void PlayerAdded(Player* player) override;
 };
 
 }

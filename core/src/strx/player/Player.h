@@ -1,11 +1,6 @@
 #ifndef _PLAYER_H
 #define    _PLAYER_H
 
-#include <vector>
-#include <unordered_set>
-
-#include <strx/map/Mine.h>
-#include <strx/player/PlayerSlot.h>
 #include <Strategix_Forward.h>
 
 
@@ -17,6 +12,11 @@ class Player
 	friend class FeatureCollect;  // @#~ temporary
 	
 	PlayerSlot* slot;             // Callback class
+	const string name;
+	const PlayerType type;
+	const int id;
+	const string raceName;
+	
 	vector<u_p<Enti>> entis;      // owned enties
 	u_p<Resources> resources;     // available resources amount
 	u_p<Map> map;                 // local map for current player
@@ -24,24 +24,24 @@ class Player
 	vector<Enti*> entisToRemove;  // entis removed at the end of Tick
 
 public:
-	Player(PlayerSlot* slot);
+	Player(const string& name, PlayerType type, int id, const string& raceName, u_p<Map> map);
 	~Player();
 	Player(const Player& orig) = delete;
 	Player& operator=(const Player& _c) = delete;
 	
-	const string& GetName() const { return slot->GetName(); }
-	PlayerType GetType() const { return slot->GetType(); }
-	int GetId() const { return slot->GetId(); }
+	const string& GetName() const { return name; }
+	PlayerType GetType() const { return type; }
+	int GetId() const { return id; }
 	Map& GetMap() const { return *map; }
 	const TechTree& GetTechTree() const { return techTree; }
 	
-	void Init(u_p<Map> map);
+	void Start();
 	void Tick(float seconds);
-	void AddEnti(EntiSlot* entiSlot);
-	void QueueEntiToRemove(Enti* enti);
-	void AddMine(Mine* mine);
-	void RemoveMine(Mine* mine);
+	void AddEnti(Enti* enti);
+	void RemoveEnti(Enti* enti);
 	bool AddResource(const Resource& deltaResource);
+	
+	// signals
 };
 }
 

@@ -21,7 +21,7 @@ Q_OBJECT
 	QString mapPath;
 	umap<const QListWidgetItem*, ToolInfo*> toolFromItem;
 	umap<const QPushButton*, int> playerNumbers;
-	u_p<strx::BaseMap> map;
+	u_p<strx::Map> map;
 
 public:
 	MainForm();

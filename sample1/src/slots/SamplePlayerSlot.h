@@ -19,13 +19,9 @@ class SamplePlayerSlot : public PlayerSlot
 	vector<u_p<SampleEntiSlot>> entiSlots;
 	
 public:
-	void AddEnti(SampleEntiSlot* enti);
-	
-	void OnAddEnti(EntiSlot* enti) override {}
-	void OnRemoveEnti(EntiSlot* enti) override {}
-	void OnAddMine(Mine* mine) override {}
-	void OnRemoveMine(Mine* mine) override {}
-	void OnChangeResources(Resources* newResources) override {}
+	void EntiAdded(Enti* enti) override;
+	void EntiRemoved(Enti* enti) override {}
+	void ResourcesChanged(Resources* newResources) override {}
 };
 }
 

@@ -9,15 +9,15 @@ namespace strx
 {
 class EntiSlot : public ITick, public IMove, public ICollect, public IHealth, public IAttack
 {
-	const string name;
+	Enti* enti;
 	
 public:
-	EntiSlot(const string& name) : name(name) {}
+	EntiSlot(Enti* enti) : enti(enti) {}
 	virtual ~EntiSlot() = 0;
 	EntiSlot(const EntiSlot& _c) = delete;
 	EntiSlot& operator=(const EntiSlot& _c) = delete;
 	
-	const string& GetName() const { return name; }
+	//const string& GetName() const { return name; }
 };
 }
 

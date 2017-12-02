@@ -23,7 +23,7 @@ using PlayersType = umap<string, u_p<Player>>;
 
 
 // Variables
-static Game* game = nullptr;                  // main event receiver
+static s_p<Game> game;                        // main event receiver
 static ConfigManager configManager;           // game configuration manager
 static u_p<MapManager> mapManager;            // has all information about the map
 static u_p<thread> kernelThread;              // main Kernel thread
@@ -31,7 +31,6 @@ nya::event_loop Kernel::eventLoop;            // asio::io_service event loop
 static u_p<nya::event_loop::work> dummyWork;  // work for io_service
 
 static PlayersType players;                   // players by name
-static Player* humanPlayer = nullptr;         // human player
 static ResourceInfosType resourceInfos;       // resource descriptions
 static TechTreesType techTrees;               // technology trees
 
@@ -50,23 +49,23 @@ void Kernel::LoadMap(const string& mapName)
 	mapManager->LoadMap(mapName);
 }
 
-void Kernel::AddPlayer(PlayerSlot* playerSlot)
+void Kernel::AddPlayer(const string& name, PlayerType type, int playerId, const string& raceName)
 {
 	if (!mapManager) nya_throw << "LoadMap() should be run before AddPlayer().";
 	
-	auto player = new Player(playerSlot);
+	auto&& map = mapManager->CreateMap(playerId);
+	auto player = new Player(name, type, playerId, raceName, move(map));
 	players.emplace(player->GetName(), player);
+	game->PlayerAdded(player);
 	
-	player->Init(mapManager->CreateMap(*player));
-	
-	if (playerSlot->GetType() == PlayerType::HUMAN)
-	{
-		humanPlayer = player;
-	}
+	player->Start();
 }
 
-void Kernel::Start()
+void Kernel::Start(s_p<Game> game)
 {
+	strx::game = game;
+	game->Start();
+	
 	dummyWork.reset(new nya::event_loop::work(eventLoop));
 	kernelThread.reset(new thread([]
 	{
@@ -79,6 +78,8 @@ void Kernel::Stop()
 {
 	dummyWork.reset();
 	if (kernelThread) kernelThread->join();
+	
+	game.reset();
 }
 
 void Kernel::Tick(float seconds)
@@ -107,13 +108,6 @@ void Kernel::PrintInfo()
 bool Kernel::CheckResource(const string& name)
 {
 	return find(all_(resourceInfos), name) != resourceInfos.end();
-}
-
-Player& Kernel::GetHumanPlayer()
-{
-	if (humanPlayer) return *humanPlayer;
-	
-	nya_throw << "Human player wasn't created.";
 }
 
 const TechTree& Kernel::GetTechTree(const string& raceName)

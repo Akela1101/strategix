@@ -3,7 +3,7 @@
 #include <boost/range/irange.hpp>
 #include <boost/filesystem.hpp>
 #include <QBitmap>
-#include <strx/map/BaseMap.h>
+#include <strx/map/Map.h>
 
 #include "MapInfo.h"
 
@@ -68,7 +68,7 @@ void MapInfo::LoadTerrainTools()
 		fin >> retard >> name;
 		if (name.empty()) break;
 		
-		BaseMap::AddTerrain(make_u<BaseMap::Terrain>(i, name, retard));
+		Map::AddTerrain(make_u<Map::Terrain>(i, name, retard));
 		
 		int col = i % divs, row = i / divs;
 		QPixmap image = pixmap.copy(col * tileSize, row * tileSize, tileSize, tileSize);

@@ -10,7 +10,7 @@ namespace strx
 class MapManager
 {
 	const string mapsDirectory;    /// usually "maps"
-	u_p<BaseMap> baseMap;          /// global map
+	u_p<Map> map;          /// global map
 	
 public:
 	MapManager(string mapsDirectory) : mapsDirectory(mapsDirectory) {}
@@ -20,7 +20,7 @@ public:
 	
 	const string& GetMapsDirectory() const { return mapsDirectory; }
 	void LoadMap(const string& mapName);
-	u_p<Map> CreateMap(Player& player);
+	u_p<Map> CreateMap(int playerId);
 	
 private:
 	string GetFilePath(const string& name) const;

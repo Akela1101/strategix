@@ -8,10 +8,10 @@ namespace sample1
 using namespace std;
 using namespace strx;
 
-void SamplePlayerSlot::AddEnti(SampleEntiSlot* enti)
+void SamplePlayerSlot::EntiAdded(Enti* enti)
 {
-	PlayerSlot::AddEnti(enti);
-	entiSlots.emplace_back(enti);
+	auto entiSlot = new SampleEntiSlot(enti);
+	entiSlots.emplace_back(entiSlot);
 }
 
 }

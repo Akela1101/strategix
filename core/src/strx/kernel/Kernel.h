@@ -17,15 +17,14 @@ public:
 	// keep this calling order
 	static void Configure(const string& configPath, const string& mapsDirectory);
 	static void LoadMap(const string& mapName);
-	static void AddPlayer(PlayerSlot* playerSlot);
+	static void AddPlayer(const string& name, PlayerType type, int playerId, const string& raceName);
 	
-	static void Start();
+	static void Start(s_p<Game> game);
 	static void Stop();
 	static void Tick(float seconds);
 	static void PrintInfo();
 	
 	static bool CheckResource(const string& name);
-	static Player& GetHumanPlayer();
 	static const TechTree& GetTechTree(const string& raceName);
 	static vector <string> GetMapNames();
 	static vector <string> GetRaceNames();

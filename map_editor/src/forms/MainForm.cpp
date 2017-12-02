@@ -5,7 +5,7 @@
 #include <QStandardPaths>
 #include <QPushButton>
 #include <MapInfo.h>
-#include <strx/map/BaseMap.h>
+#include <strx/map/Map.h>
 
 #include "DialogNew.h"
 #include "MainForm.h"
@@ -75,7 +75,7 @@ void MainForm::FileNew()
 		QString name = dialogNew.mapName;
 		try
 		{
-			map.reset(new BaseMap(name.toStdString(), dialogNew.mapWidth, dialogNew.mapHeight));
+			map.reset(new Map(name.toStdString(), dialogNew.mapWidth, dialogNew.mapHeight));
 			widget.mapArea->SetMap(map.get());
 		}
 		catch (exception& e)
@@ -115,7 +115,7 @@ void MainForm::FileLoad()
 	mapPath = loadedMapPath;
 	try
 	{
-		map.reset(new BaseMap(mapPath.toStdString()));
+		map.reset(new Map(mapPath.toStdString()));
 		widget.mapArea->SetMap(map.get());
 	}
 	catch (exception& e)

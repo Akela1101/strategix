@@ -23,7 +23,7 @@ public:
 	MapAreaWidget(QWidget* parent = nullptr);
 	~MapAreaWidget() override;
 	
-	void SetMap(strx::BaseMap* map);
+	void SetMap(strx::Map* map);
 
 protected:
 	void wheelEvent(QWheelEvent* event);

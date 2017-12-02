@@ -3,6 +3,7 @@
 #include <strx/entity/EntiSlot.h>
 #include <strx/feature/FeatureMove.h>
 #include <strx/map/Map.h>
+#include <strx/map/Mine.h>
 #include <strx/player/Player.h>
 #include <strx/common/TechTree.h>
 

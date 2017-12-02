@@ -10,7 +10,7 @@ using namespace strx;
 class SampleEntiSlot : public EntiSlot
 {
 public:
-	SampleEntiSlot(const string& name);
+	SampleEntiSlot(Enti* enti);
 	
 	void OnMove() override {}
 };

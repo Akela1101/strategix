@@ -3,10 +3,9 @@
 
 namespace sample1
 {
-SampleEntiSlot::SampleEntiSlot(const std::string& name)
-		: EntiSlot(name)
+SampleEntiSlot::SampleEntiSlot(Enti* enti)
+		: EntiSlot(enti)
 {
-
 }
 
 }

@@ -1,5 +1,3 @@
-#include <utility>
-
 #include <strx/entity/Enti.h>
 #include <strx/entity/EntiInfo.h>
 #include <strx/entity/EntiSlot.h>
@@ -14,22 +12,37 @@
 namespace strx
 {
 
-Player::Player(PlayerSlot* slot)
-		: slot(slot)
+Player::Player(const string& name, PlayerType type, int id, const string& raceName, u_p<Map> map)
+		: name(name)
+		, type(type)
+		, id(id)
+		, raceName(raceName)
+		, map(move(map))
 		, resources(Kernel::MakeResources())
-		, techTree(Kernel::GetTechTree(slot->GetRaceName()))
+		, techTree(Kernel::GetTechTree(raceName))
 {
-	slot->player = this;
+	// available resources
+	AddResource(*Kernel::MakeResource("gold", 1000));
 }
 
 Player::~Player() = default;
 
-void Player::Init(u_p<Map> map)
+void Player::Start()
 {
-	this->map = move(map);
-	
-	// available resources
-	AddResource(*Kernel::MakeResource("gold", 1000));
+	for (int y : boost::irange(0, map->GetLength()))
+	{
+		for (int x : boost::irange(0, map->GetWidth()))
+		{
+			auto object = map->GetCell(x, y).object.get();
+			if (auto playerObject = dynamic_cast<Map::PlayerObject*>(object))
+			{
+				auto& entiName = playerObject->name;
+				auto& entiInfo = techTree.GetNode(entiName);
+				
+				AddEnti(new Enti(entiInfo, MapCoord(x, y)));
+			}
+		}
+	}
 }
 
 void Player::Tick(float seconds)
@@ -44,37 +57,23 @@ void Player::Tick(float seconds)
 	{
 		for (auto it = entisToRemove.rbegin(); it != entisToRemove.rend(); ++it)
 		{
-			//RemoveEnti(*it);
+			// @#~
 		}
 		entisToRemove.clear();
 	}
 }
 
-void Player::AddEnti(EntiSlot* entiSlot)
+void Player::AddEnti(Enti* enti)
 {
-	const string& entiName = entiSlot->GetName();
-	auto&& entiInfo = techTree.GetNode(entiName);
-	auto enti = new Enti(entiInfo, RealCoord(5, 5)); //TODO: coord
-	
 	entis.emplace_back(enti);
 	enti->player = this;
 	
-	slot->OnAddEnti(entiSlot);
+	//TODO: EntiAdded(enti);
 }
 
-void Player::QueueEntiToRemove(Enti* enti)
+void Player::RemoveEnti(Enti* enti)
 {
 	entisToRemove.push_back(enti);
-}
-
-void Player::AddMine(Mine* mine)
-{
-	slot->OnAddMine(mine);
-}
-
-void Player::RemoveMine(Mine* mine)
-{
-	slot->OnRemoveMine(mine);
 }
 
 bool Player::AddResource(const Resource& deltaResource)

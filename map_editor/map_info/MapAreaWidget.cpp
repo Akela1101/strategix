@@ -19,7 +19,7 @@ class MapAreaWidgetImpl : public QWidget
 Q_OBJECT
 	friend class MapAreaWidget;
 	
-	BaseMap* map;                 // map related operations
+	Map* map;                 // map related operations
 	QScrollArea* scrollArea;      // back link to scroll area
 	ToolInfo* tool = nullptr;     // current tool
 	int playerNumber = 0;         // current player
@@ -194,7 +194,7 @@ private:
 		painter.drawPixmap(rc, pixmap);
 	}
 	
-	void DrawObject(BaseMap::Object* object, const QRect& rc)
+	void DrawObject(Map::Object* object, const QRect& rc)
 	{
 		QPainter painter(frontPixmap.get());
 		painter.setCompositionMode(QPainter::CompositionMode_Source);
@@ -208,7 +208,7 @@ private:
 		painter.drawPixmap(rc, tool.image);
 		if (tool.type == ToolType::OBJECT)
 		{
-			auto playerObject = (BaseMap::PlayerObject*)object;
+			auto playerObject = (Map::PlayerObject*)object;
 			int w = rc.width(), h = rc.height();
 			QRect markRc = rc.adjusted(0, 0, -w / 2, -h / 2);
 			
@@ -217,7 +217,7 @@ private:
 		}
 	}
 	
-	BaseMap::Object* CreateObject(int x, int y)
+	Map::Object* CreateObject(int x, int y)
 	{
 		if (!tool) return nullptr;
 		
@@ -225,14 +225,14 @@ private:
 		switch (tool->type)
 		{
 			case ToolType::OBJECT:
-				return new BaseMap::PlayerObject{ tool->name, coord, playerNumber };
+				return new Map::PlayerObject{ tool->name, coord, playerNumber };
 			case ToolType::MINE:
-				return new BaseMap::MineObject{ tool->name, coord, 1000 };
+				return new Map::MineObject{ tool->name, coord, 1000 };
 		}
 		return nullptr;
 	}
 	
-	void SetMap(BaseMap* map)
+	void SetMap(Map* map)
 	{
 		this->map = map;
 		int width = map->GetWidth();
@@ -285,7 +285,7 @@ MapAreaWidget::MapAreaWidget(QWidget* parent)
 
 MapAreaWidget::~MapAreaWidget() = default;
 
-void MapAreaWidget::SetMap(BaseMap* map)
+void MapAreaWidget::SetMap(Map* map)
 {
 	impl->SetMap(map);
 }

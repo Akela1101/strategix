@@ -1,4 +1,3 @@
-#include <boost/range/irange.hpp>
 #include <graphics/GameWidget.h>
 #include <strx/player/Player.h>
 #include <slots/SampleEntiSlot.h>
@@ -20,30 +19,28 @@ SampleGame::SampleGame()
 {
 	MapInfo::LoadTerrainTools();
 	MapInfo::LoadObjectTools();
-	
-	// initialize map and players
-	Kernel::LoadMap("small");
-	
-	auto inu = new SamplePlayerSlot("Inu", PlayerType::HUMAN, 0, "az");
-	playerSlots.emplace(inu->GetName(), inu);
-	
-	auto saru = new SamplePlayerSlot("Saru", PlayerType::AI, 1, "az");
-	playerSlots.emplace(saru->GetName(), saru);
-	
-	for (auto&& playerSlot : playerSlots | map_values)
-	{
-		Kernel::AddPlayer(playerSlot.get());
-	}
 }
 
 SampleGame::~SampleGame() = default;
 
 void SampleGame::Start()
 {
-	gameWidget.reset(new GameWidget());
-	gameWidget->SetMap(&Kernel::GetHumanPlayer().GetMap());
+	Kernel::LoadMap("small");
+	Kernel::AddPlayer("Inu", PlayerType::HUMAN, 1, "az");
+	Kernel::AddPlayer("Saru", PlayerType::AI, 3, "az");
+}
+
+void SampleGame::PlayerAdded(Player* player)
+{
+	auto playerSlot = new SamplePlayerSlot(player);
+	playerSlots.emplace(player->GetName(), playerSlot);
 	
-	gameWidget->showMaximized();
+	if (player->GetType() == PlayerType::HUMAN)
+	{
+		gameWidget.reset(new GameWidget());
+		gameWidget->SetMap(&player->GetMap());
+		gameWidget->showMaximized();
+	}
 }
 
 }

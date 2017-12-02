@@ -2,10 +2,10 @@
 #define	STRATEGIX_FORWARD_H
 
 #include <nya/api.hpp>
+#include <boost/range/irange.hpp>
 
 namespace strx
 {
-	class BaseMap;
 	class Enti;
 	class EntiInfo;	
 	class EntiSlot;	
