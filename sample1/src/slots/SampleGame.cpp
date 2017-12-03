@@ -1,9 +1,9 @@
-#include <graphics/GameWidget.h>
+#include <graphics/SampleGameWidget.h>
 #include <strx/player/Player.h>
 #include <slots/SampleEntiSlot.h>
 #include <slots/SamplePlayerSlot.h>
 #include <Strategix.h>
-#include <MapAreaWidget.h>
+#include <GameWidget.h>
 #include <MapInfo.h>
 
 #include "SampleGame.h"
@@ -37,7 +37,7 @@ void SampleGame::PlayerAdded(Player* player)
 	
 	if (player->GetType() == PlayerType::HUMAN)
 	{
-		gameWidget.reset(new GameWidget());
+		gameWidget.reset(new SampleGameWidget());
 		gameWidget->SetMap(&player->GetMap());
 		gameWidget->showMaximized();
 	}

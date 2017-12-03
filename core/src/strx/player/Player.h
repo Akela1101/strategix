@@ -11,7 +11,7 @@ class Player
 {
 	friend class FeatureCollect;  // @#~ temporary
 	
-	PlayerSlot* slot;             // Callback class
+	PlayerSlot* slot = nullptr;   // Callback class
 	const string name;
 	const PlayerType type;
 	const int id;
@@ -34,6 +34,7 @@ public:
 	int GetId() const { return id; }
 	Map& GetMap() const { return *map; }
 	const TechTree& GetTechTree() const { return techTree; }
+	void SetSlot(PlayerSlot* slot);
 	
 	void Start();
 	void Tick(float seconds);

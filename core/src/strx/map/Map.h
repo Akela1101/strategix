@@ -3,7 +3,6 @@
 
 #include <Strategix_Forward.h>
 
-
 namespace strx
 {
 extern const char mapFormatVersion[];
@@ -20,42 +19,14 @@ public:
 		Terrain(int id, string name, float retard) : id(id), name(move(name)), retard(retard) {}
 	};
 	
-	struct Object
-	{
-		string name;
-		MapCoord coord;
-		
-		Object(string name, MapCoord coord) : name(move(name)), coord(coord) {}
-		Object(const Object& other) : name(other.name), coord(other.coord) {}
-		virtual ~Object() {}
-		
-		virtual Object* clone() = 0;
-	};
-	struct PlayerObject : Object
-	{
-		int owner;        // owner player id
-		
-		PlayerObject(string name, MapCoord coord, int owner) : Object(move(name), coord), owner(owner) {}
-		PlayerObject(const PlayerObject& other) : Object(other), owner(other.owner) {}
-		Object* clone() override { return new PlayerObject(*this); }
-	};
-	struct MineObject : Object
-	{
-		int amount;       // resource amount
-		
-		MineObject(string name, MapCoord coord, int amount) : Object(move(name), coord), amount(amount) {}
-		MineObject(const MineObject& other) : Object(other), amount(other.amount) {}
-		Object* clone() override { return new MineObject(*this); }
-	};
-	
 	struct Cell
 	{
 		Terrain* terrain;
-		u_p<Object> object;  // can be null
+		u_p<MapObject> object;  // can be null
 		
 		Cell() = default;
-		Cell(Terrain* terrain, Object* object) : terrain(terrain), object(object) {}
-		Cell(const Cell& other) : terrain(other.terrain), object(other.object ? other.object->clone() : nullptr) {}
+		Cell(Terrain* terrain, MapObject* object);
+		Cell(const Cell& other);
 	};
 
 protected:
@@ -90,7 +61,7 @@ public:
 	ResourceUnit PickResource(Mine* mine, ResourceUnit amount);
 	
 	void ChangeTerrain(Cell& cell, const string& terrainName);
-	void ChangeObject(Cell& cell, Object* object);
+	void ChangeObject(Cell& cell, MapObject* object);
 	void SaveToFile(const string& path) const;
 
 private:

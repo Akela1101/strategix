@@ -8,12 +8,12 @@ namespace sample1
 {
 using namespace strx;
 
-class GameWidget;
+class SampleGameWidget;
 
 class SampleGame : public Game
 {
 	umap<string, u_p<SamplePlayerSlot>> playerSlots;
-	u_p<GameWidget> gameWidget;
+	u_p<SampleGameWidget> gameWidget;
 
 public:
 	SampleGame();

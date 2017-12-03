@@ -12,7 +12,7 @@ class EntiSlot : public ITick, public IMove, public ICollect, public IHealth, pu
 	Enti* enti;
 	
 public:
-	EntiSlot(Enti* enti) : enti(enti) {}
+	EntiSlot(Enti* enti);
 	virtual ~EntiSlot() = 0;
 	EntiSlot(const EntiSlot& _c) = delete;
 	EntiSlot& operator=(const EntiSlot& _c) = delete;

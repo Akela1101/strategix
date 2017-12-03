@@ -7,9 +7,10 @@
 #include <boost/range/iterator_range.hpp>
 
 #include <strx/kernel/Kernel.h>
-#include <strx/map/Mine.h>
+#include <strx/map/MapObject.h>
 #include <strx/map/MapsPath.h>
 #include <strx/map/MapsPathsFinder.h>
+#include <strx/map/Mine.h>
 #include <strx/player/Player.h>
 
 #include "Map.h"
@@ -21,6 +22,15 @@ const char mapFileTopString[] = "Strategix Map";
 const char mapFormatVersion[] = "0.0.1";
 
 umap<string, u_p<Map::Terrain>> Map::terrains;
+
+
+Map::Cell::Cell(Map::Terrain* terrain, MapObject* object)
+		: terrain(terrain)
+		, object(object) {}
+
+Map::Cell::Cell(const Map::Cell& other)
+		: terrain(other.terrain)
+		, object(other.object ? other.object->clone() : nullptr) {}
 
 
 void Map::AddTerrain(u_p<Terrain> terrain)
@@ -83,7 +93,7 @@ void Map::ChangeTerrain(Cell& cell, const string& terrainName)
 	cell.terrain = terrains[terrainName].get();
 }
 
-void Map::ChangeObject(Cell& cell, Object* object)
+void Map::ChangeObject(Cell& cell, MapObject* object)
 {
 	cell.object.reset(object);
 }

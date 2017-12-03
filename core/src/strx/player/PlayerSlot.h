@@ -14,6 +14,7 @@ namespace strx
  */
 class PlayerSlot
 {
+	friend class Player;
 	Player* player;
 	
 public:

@@ -97,7 +97,7 @@
      </layout>
     </item>
     <item>
-     <widget class="map_info::MapAreaWidget" name="mapArea" native="true">
+     <widget class="map_editor::EditorGameWidget" name="gameWidget" native="true">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
         <horstretch>0</horstretch>
@@ -184,9 +184,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>map_info::MapAreaWidget</class>
+   <class>map_editor::EditorGameWidget</class>
    <extends>QWidget</extends>
-   <header location="global">MapAreaWidget.h</header>
+   <header location="global">EditorGameWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

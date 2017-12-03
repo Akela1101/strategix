@@ -43,6 +43,11 @@ void Enti::AddFeature(const string& name, const FeatureInfo* featureInfo)
 	// else ?
 }
 
+void Enti::SetSlot(EntiSlot* slot)
+{
+	this->slot = slot;
+}
+
 void Enti::Tick(float seconds)
 {
 	for (auto itFeature = passiveTickFeatures.begin(); itFeature != passiveTickFeatures.end();)

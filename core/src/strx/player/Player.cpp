@@ -3,6 +3,7 @@
 #include <strx/entity/EntiSlot.h>
 #include <strx/kernel/Kernel.h>
 #include <strx/map/Map.h>
+#include <strx/map/MapObject.h>
 #include <strx/player/PlayerSlot.h>
 #include <strx/common/TechTree.h>
 
@@ -27,6 +28,11 @@ Player::Player(const string& name, PlayerType type, int id, const string& raceNa
 
 Player::~Player() = default;
 
+void Player::SetSlot(PlayerSlot* slot)
+{
+	this->slot = slot;
+}
+
 void Player::Start()
 {
 	for (int y : boost::irange(0, map->GetLength()))
@@ -34,7 +40,7 @@ void Player::Start()
 		for (int x : boost::irange(0, map->GetWidth()))
 		{
 			auto object = map->GetCell(x, y).object.get();
-			if (auto playerObject = dynamic_cast<Map::PlayerObject*>(object))
+			if (auto playerObject = dynamic_cast<PlayerObject*>(object))
 			{
 				auto& entiName = playerObject->name;
 				auto& entiInfo = techTree.GetNode(entiName);
@@ -68,7 +74,7 @@ void Player::AddEnti(Enti* enti)
 	entis.emplace_back(enti);
 	enti->player = this;
 	
-	//TODO: EntiAdded(enti);
+	slot->EntiAdded(enti);
 }
 
 void Player::RemoveEnti(Enti* enti)

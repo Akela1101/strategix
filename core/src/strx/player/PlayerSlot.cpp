@@ -5,7 +5,10 @@
 
 namespace strx
 {
-PlayerSlot::PlayerSlot(Player* player) : player(player) {}
+PlayerSlot::PlayerSlot(Player* player) : player(player)
+{
+	player->SetSlot(this);
+}
 
 PlayerSlot::~PlayerSlot() = default;
 

@@ -16,7 +16,7 @@ class Enti
 	friend class EntiSlot;
 	friend class Player;
 	
-	EntiSlot* slot;           // Link to slot
+	EntiSlot* slot = nullptr; // Link to slot
 	Player* player;           // Link to owner
 	const EntiInfo& entiInfo; // Link to tree
 	RealCoord coord;          // real coordinate
@@ -39,6 +39,7 @@ public:
 	Player& GetPlayer() const { return *player; }
 	const EntiInfo& GetInfo() const { return entiInfo; }
 	RealCoord GetCoord() const { return coord; }
+	void SetSlot(EntiSlot* slot);
 	
 	void Tick(float seconds);
 	void AssignTickFeature(Feature* feature, bool isPassive = false);
@@ -52,8 +53,7 @@ public:
 		{
 			return dynamic_cast<F*>(iFeature->second.get());
 		}
-		nya_throw << "There is no feature named: ";
-		nya_throw << featureName;
+		nya_throw << "There is no feature named: " << featureName;
 	}
 
 private:

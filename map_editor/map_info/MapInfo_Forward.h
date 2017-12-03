@@ -7,6 +7,7 @@
 namespace map_info
 {
 class MapInfo;
+class MapWidget;
 class ToolInfo;
 
 

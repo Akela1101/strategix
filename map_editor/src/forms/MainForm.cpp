@@ -57,9 +57,9 @@ MainForm::MainForm()
 	widget.toolsListWidget->setCurrentRow(0);
 	
 	//
-	connect(this, &CurrentToolChanged, widget.mapArea, &MapAreaWidget::CurrentToolChanged);
-	connect(this, &CurrentPlayerChanged, widget.mapArea, &MapAreaWidget::CurrentPlayerChanged);
-	connect(widget.mapArea, &MapAreaWidget::MapChanged, this, &MapChanged);
+	connect(this, &CurrentToolChanged, widget.gameWidget, &EditorGameWidget::CurrentToolChanged);
+	connect(this, &CurrentPlayerChanged, widget.gameWidget, &EditorGameWidget::CurrentPlayerChanged);
+	connect(widget.gameWidget, &EditorGameWidget::MapChanged, this, &MapChanged);
 }
 
 MainForm::~MainForm() = default;
@@ -76,7 +76,7 @@ void MainForm::FileNew()
 		try
 		{
 			map.reset(new Map(name.toStdString(), dialogNew.mapWidth, dialogNew.mapHeight));
-			widget.mapArea->SetMap(map.get());
+			widget.gameWidget->SetMap(map.get());
 		}
 		catch (exception& e)
 		{
@@ -116,7 +116,7 @@ void MainForm::FileLoad()
 	try
 	{
 		map.reset(new Map(mapPath.toStdString()));
-		widget.mapArea->SetMap(map.get());
+		widget.gameWidget->SetMap(map.get());
 	}
 	catch (exception& e)
 	{

@@ -18,9 +18,10 @@ namespace strx
 	class Game;
 	class Map;
 	class MapManager;
-	class Mine;
+	class MapObject;
 	class MapsPath;
 	class MapsPathsFinder;
+	class Mine;
 	class Player;
 	class PlayerSlot;
 	class Resources;
