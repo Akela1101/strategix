@@ -49,8 +49,8 @@ MainForm::MainForm()
 	ListWidgetFill(ToolType::MINE, "tree", widget.toolsListWidget);
 	
 	// objects
-	ListWidgetFill(ToolType::OBJECT, "az_base", widget.toolsListWidget);
-	ListWidgetFill(ToolType::OBJECT, "az_worker", widget.toolsListWidget);
+	ListWidgetFill(ToolType::ENTITY, "az_base", widget.toolsListWidget);
+	ListWidgetFill(ToolType::ENTITY, "az_worker", widget.toolsListWidget);
 	
 	// set current tool to delete object
 	widget.toolBox->setCurrentIndex(1);
@@ -222,7 +222,7 @@ void MainForm::ListWidgetFill(ToolType type, const std::string& name, QListWidge
 			break;
 		}
 		case ToolType::MINE:
-		case ToolType::OBJECT:
+		case ToolType::ENTITY:
 		{
 			tool = &MapInfo::objectTools[name];
 			break;

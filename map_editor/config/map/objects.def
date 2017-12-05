@@ -1,4 +1,4 @@
 MINE gold.png
 MINE tree.png
-OBJECT az_base.png
-OBJECT az_worker.png
+ENTITY az_base.png
+ENTITY az_worker.png

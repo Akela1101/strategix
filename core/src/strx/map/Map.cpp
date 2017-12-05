@@ -112,7 +112,7 @@ void Map::SaveToFile(const string& path) const
 	     << "\n";
 	
 	uset<Terrain*> uniqueTerrains;
-	vector<pair<MapCoord, PlayerObject*>> objects;
+	vector<pair<MapCoord, EntityObject*>> objects;
 	vector<pair<MapCoord, MineObject*>> mines;
 	
 	// prepare terrain
@@ -129,9 +129,9 @@ void Map::SaveToFile(const string& path) const
 			
 			if (cell.object)
 			{
-				if (dynamic_cast<PlayerObject*>(cell.object.get()))
+				if (dynamic_cast<EntityObject*>(cell.object.get()))
 				{
-					objects.emplace_back(MapCoord(col, row), (PlayerObject*) cell.object.get());
+					objects.emplace_back(MapCoord(col, row), (EntityObject*) cell.object.get());
 				}
 				else if (dynamic_cast<MineObject*>(cell.object.get()))
 				{
@@ -243,8 +243,8 @@ void Map::LoadFromFile(const string& path)
 		string name;
 		fin >> col >> row >> name >> owner;
 		
-		MapCoord coord(row, col);
-		GetCell(col, row).object.reset(new PlayerObject{ name, coord, owner });
+		MapCoord coord(col, row);
+		GetCell(col, row).object.reset(new EntityObject{ name, coord, owner });
 	}
 	if (!fin.good()) nya_throw << "map objects are wrong";
 	
@@ -256,7 +256,7 @@ void Map::LoadFromFile(const string& path)
 		string name;
 		fin >> col >> row >> name >> amount;
 		
-		MapCoord coord(row, col);
+		MapCoord coord(col, row);
 		GetCell(col, row).object.reset(new MineObject{ name, coord, amount });
 	}
 	if (!fin.good()) nya_throw << "map resources are wrong";

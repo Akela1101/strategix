@@ -40,7 +40,7 @@ void Player::Start()
 		for (int x : boost::irange(0, map->GetWidth()))
 		{
 			auto object = map->GetCell(x, y).object.get();
-			if (auto playerObject = dynamic_cast<PlayerObject*>(object))
+			if (auto playerObject = dynamic_cast<EntityObject*>(object))
 			{
 				auto& entiName = playerObject->name;
 				auto& entiInfo = techTree.GetNode(entiName);

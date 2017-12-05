@@ -19,22 +19,30 @@ MapWidget::MapWidget(QScrollArea* parent)
 	setMouseTracking(true);
 }
 
-void MapWidget::paintEvent(QPaintEvent*)
+void MapWidget::paintEvent(QPaintEvent* event)
 {
 	if (!map) return;
 	
-	qreal scale = (qreal) tileLen / tileLenBase;
+	qreal scale = (qreal) tileLen / baseTileLen;
 	
+	// update terrain
 	QPainter painter(this);
 	painter.scale(scale, scale);
 	painter.drawPixmap(0, 0, *groundPixmap);
-	painter.drawPixmap(0, 0, *frontPixmap);
 	
-	if (isHighlight)
+	// update affected objects;
+	QRect rc = event->rect();
+	int fromX = rc.left() / tileLen;
+	int fromY = rc.top() / tileLen;
+	int tillX = rc.right() / tileLen;
+	int tillY = rc.bottom() / tileLen;
+	for (int row = fromY; row <= tillY; ++row)
 	{
-		painter.setBrush(QColor(250, 250, 100, 150));
-		painter.setPen(Qt::NoPen);
-		painter.drawRect(rectBase);
+		for (int col = fromX; col <= tillX; ++col)
+		{
+			MapObject* object = map->GetCell(col, row).object.get();
+			DrawObject(object, painter);
+		}
 	}
 }
 
@@ -55,8 +63,7 @@ void MapWidget::wheelEvent(QWheelEvent* event)
 	}
 	
 	// Update view
-	isHighlight = false;
-	setFixedSize(groundPixmap->size() * tileLen / tileLenBase);
+	setFixedSize(groundPixmap->size() * tileLen / baseTileLen);
 	update();
 	
 	// Move sliders to mouse center
@@ -80,7 +87,7 @@ void MapWidget::mouseMoveEvent(QMouseEvent* event)
 	// Move sliders
 	if (event->buttons() & Qt::RightButton)
 	{
-		globalPos = event->globalPos();
+		QPoint globalPos = event->globalPos();
 		
 		QScrollBar* hSB = scrollArea->horizontalScrollBar();
 		hSB->setSliderPosition(hSB->sliderPosition() - globalPos.x() + lastGlobalPos.x());
@@ -112,26 +119,23 @@ void MapWidget::DrawTerrain(const QPixmap& pixmap, const QRect& rc)
 	painter.drawPixmap(rc, pixmap);
 }
 
-void MapWidget::DrawObject(MapObject* object, const QRect& rc)
+void MapWidget::DrawObject(MapObject* object, QPainter& painter)
 {
-	QPainter painter(frontPixmap.get());
-	painter.setCompositionMode(QPainter::CompositionMode_Source);
-	if (!object)
-	{
-		painter.fillRect(rc, QColor(0, 0, 0, 0));
-		return;
-	}
+	if (!object) return;
 	
 	auto&& tool = MapInfo::objectTools[object->name];
+	RealCoord coord = object->coord;
+	QRect rc(baseTileLen * (coord.x - 0.5), baseTileLen * (coord.y - 0.5), baseTileLen, baseTileLen);
 	painter.drawPixmap(rc, tool.image);
-	if (tool.type == ToolType::OBJECT)
+	
+	if (tool.type == ToolType::ENTITY)
 	{
-		auto playerObject = (PlayerObject*) object;
+		auto entityObject = (EntityObject*) object;
 		int w = rc.width(), h = rc.height();
 		QRect markRc = rc.adjusted(0, 0, -w / 2, -h / 2);
 		
 		painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
-		painter.drawPixmap(markRc, MapInfo::GetPlayerMark(playerObject->owner));
+		painter.drawPixmap(markRc, MapInfo::GetPlayerMark(entityObject->owner));
 	}
 }
 
@@ -142,8 +146,8 @@ MapObject* MapWidget::CreateObject(int x, int y)
 	MapCoord coord(x, y);
 	switch (tool->type)
 	{
-		case ToolType::OBJECT:
-			return new PlayerObject{ tool->name, coord, playerNumber };
+		case ToolType::ENTITY:
+			return new EntityObject{ tool->name, coord, playerNumber };
 		case ToolType::MINE:
 			return new MineObject{ tool->name, coord, 1000 };
 	}
@@ -155,28 +159,24 @@ void MapWidget::SetMap(Map* map)
 	this->map = map;
 	int width = map->GetWidth();
 	int height = map->GetLength();
-	QSize groundSize(width * tileLenBase, height * tileLenBase);
-	
+	QSize groundSize(width * baseTileLen, height * baseTileLen);
 	groundPixmap.reset(new QPixmap(groundSize));
-	frontPixmap.reset(new QPixmap(groundSize));
-	frontPixmap->fill(QColor(0, 0, 0, 0)); // Necessary clear!
 	
 	// Draw ground and objects
 	for (int row = 0; row < height; ++row)
 	{
 		for (int col = 0; col < width; ++col)
 		{
-			auto rc = QRect(col * tileLenBase, row * tileLenBase, tileLenBase, tileLenBase);
+			auto rc = QRect(col * baseTileLen, row * baseTileLen, baseTileLen, baseTileLen);
 			auto&& cell = map->GetCell(col, row);
 			
 			auto&& tool = MapInfo::terrainTools[cell.terrain->name];
 			DrawTerrain(tool.image, rc);
-			DrawObject(cell.object.get(), rc);
 		}
 	}
 	
-	tileLen = tileLenBase / 2;
-	setFixedSize(groundSize * tileLen / tileLenBase);
+	tileLen = baseTileLen / 2;
+	setFixedSize(groundSize * tileLen / baseTileLen);
 	update();
 }
 

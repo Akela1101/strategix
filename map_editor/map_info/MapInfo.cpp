@@ -100,7 +100,7 @@ void MapInfo::LoadObjectTools()
 			case ToolType::MINE:
 				imageSubdir = "mines/";
 				break;
-			case ToolType::OBJECT:
+			case ToolType::ENTITY:
 				imageSubdir = "objects/";
 				break;
 			default:

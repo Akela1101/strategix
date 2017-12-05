@@ -20,23 +20,17 @@ Q_OBJECT
 protected:
 	static constexpr int minZoom = 4;
 	static constexpr int maxZoom = 64;
-	static constexpr int tileLenBase = 64; // size of cell pixmap
+	static constexpr int baseTileLen = 64; // size of cell pixmap
 	
 	Map* map;                     // map related operations
 	QScrollArea* scrollArea;      // back link to scroll area
 	ToolInfo* tool = nullptr;     // current tool
 	int playerNumber = 0;         // current player
-	int tileLen = 0;              // cell width | height
-	bool isHighlight = false;     // highlight cell under cursor
 	
 	u_p<QPixmap> groundPixmap;    // terrain pixmap
-	u_p<QPixmap> frontPixmap;     // objects pixmap
-	
-	QRect rectBase;
-	QRect rectScaled;
-	QPoint lastPos;
-	QPoint globalPos;
-	QPoint lastGlobalPos;
+	int tileLen = 0;              // cell width | height
+	QPoint lastPos;               // last cursor position in map coords
+	QPoint lastGlobalPos;         // global position used for scrolling
 
 public:
 	MapWidget(QScrollArea* parent);
@@ -51,7 +45,7 @@ protected:
 	void mouseReleaseEvent(QMouseEvent*) override;
 	
 	void DrawTerrain(const QPixmap& pixmap, const QRect& rc);
-	void DrawObject(MapObject* object, const QRect& rc);
+	void DrawObject(MapObject* object, QPainter& painter);
 	MapObject* CreateObject(int x, int y);
 	
 private:

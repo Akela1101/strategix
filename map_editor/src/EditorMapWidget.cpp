@@ -8,15 +8,59 @@
 
 namespace map_editor
 {
+void EditorMapWidget::paintEvent(QPaintEvent* event)
+{
+	MapWidget::paintEvent(event);
+	
+	if (!map) return;
+	
+	qreal scale = (qreal) tileLen / baseTileLen;
+	
+	QPainter painter(this);
+	painter.scale(scale, scale);
+	if (isHighlight)
+	{
+		QPoint point = mapFromGlobal(QCursor::pos());
+		QRect baseRc = GetBaseRect(QPoint(point.x() / tileLen, point.y() / tileLen));
+		
+		painter.setBrush(QColor(250, 250, 100, 150));
+		painter.setPen(Qt::NoPen);
+		painter.drawRect(baseRc);
+	}
+}
+
 void EditorMapWidget::mouseMoveEvent(QMouseEvent* event)
+{
+	UpdateUnderMouse(event);
+	
+	MapWidget::mouseMoveEvent(event);
+}
+
+void EditorMapWidget::mousePressEvent(QMouseEvent* event)
+{
+	if (event->buttons() & Qt::LeftButton)
+	{
+		grabMouse();
+	}
+	UpdateUnderMouse(event); // single mouse click
+	
+	MapWidget::mousePressEvent(event);
+}
+
+QRect EditorMapWidget::GetBaseRect(QPoint pos)
+{
+	return QRect(pos.x() * baseTileLen, pos.y() * baseTileLen, baseTileLen, baseTileLen);
+}
+
+void EditorMapWidget::UpdateUnderMouse(QMouseEvent* event)
 {
 	if (!map) return;
 	
-	const QPoint& point = event->pos();
+	QPoint point = event->pos();
 	if (!this->rect().contains(point)) return;
 	
 	QPoint pos(point.x() / tileLen, point.y() / tileLen);
-	rectBase = QRect(pos.x() * tileLenBase, pos.y() * tileLenBase, tileLenBase, tileLenBase);
+	QRect rc = QRect(pos.x() * tileLen, pos.y() * tileLen, tileLen, tileLen);
 	
 	// Draw objects, if LMB and current item is valid.
 	if (event->buttons() & Qt::LeftButton)
@@ -29,17 +73,15 @@ void EditorMapWidget::mouseMoveEvent(QMouseEvent* event)
 			if (cell.terrain->name != tool->name)
 			{
 				map->ChangeTerrain(cell, tool->name);
-				DrawTerrain(tool->image, rectBase);
+				DrawTerrain(tool->image, GetBaseRect(pos));
 			}
 		}
 		else
 		{
 			auto&& object = CreateObject(pos.x(), pos.y());
-			
 			map->ChangeObject(cell, object);
-			DrawObject(object, rectBase);
 		}
-		update(rectBase);
+		update(rc);
 		emit MapChanged();
 	}
 	else // Highlight current rectangle
@@ -48,27 +90,14 @@ void EditorMapWidget::mouseMoveEvent(QMouseEvent* event)
 	}
 	
 	// Update rects
-	QRect newRectScaled = QRect(pos.x() * tileLen, pos.y() * tileLen, tileLen, tileLen);
 	if (lastPos != pos)
 	{
-		update(rectScaled);
-		update(newRectScaled);
-		rectScaled = newRectScaled;
+		update(lastRc);
+		update(rc);
+		lastRc = rc;
 		lastPos = pos;
 	}
-	
-	MapWidget::mouseMoveEvent(event);
 }
 
-void EditorMapWidget::mousePressEvent(QMouseEvent* event)
-{
-	if (event->buttons() & Qt::LeftButton)
-	{
-		grabMouse();
-	}
-	mouseMoveEvent(event); // for single mouse click processing
-	
-	MapWidget::mousePressEvent(event);
-}
 }
 
