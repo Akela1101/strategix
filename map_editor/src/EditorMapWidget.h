@@ -10,7 +10,12 @@ using namespace map_info;
 
 class EditorMapWidget : public MapWidget
 {
+	friend class EditorGameWidget;
+	
 	using MapWidget::MapWidget;
+	
+	ToolInfo* tool = nullptr;     // current tool
+	int playerId = 0;             // current player
 	
 	bool isHighlight = false;     // highlight cell under cursor
 	QRect lastRc;                 // last rect under cursor
@@ -21,8 +26,8 @@ protected:
 	void mousePressEvent(QMouseEvent* event) override;
 	
 private:
-	static QRect GetBaseRect(QPoint pos);
 	void UpdateUnderMouse(QMouseEvent* event);
+	MapObject* CreateObject(int x, int y);
 };
 }
 

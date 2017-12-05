@@ -19,6 +19,32 @@ MapWidget::MapWidget(QScrollArea* parent)
 	setMouseTracking(true);
 }
 
+void MapWidget::SetMap(Map* map)
+{
+	this->map = map;
+	int width = map->GetWidth();
+	int height = map->GetLength();
+	QSize groundSize(width * baseTileLen, height * baseTileLen);
+	groundPixmap.reset(new QPixmap(groundSize));
+	
+	// Draw ground and objects
+	for (int row = 0; row < height; ++row)
+	{
+		for (int col = 0; col < width; ++col)
+		{
+			auto rc = QRect(col * baseTileLen, row * baseTileLen, baseTileLen, baseTileLen);
+			auto&& cell = map->GetCell(col, row);
+			
+			auto&& tool = MapInfo::terrainTools[cell.terrain->name];
+			DrawTerrain(tool.image, rc);
+		}
+	}
+	
+	tileLen = baseTileLen / 2;
+	setFixedSize(groundSize * tileLen / baseTileLen);
+	update();
+}
+
 void MapWidget::paintEvent(QPaintEvent* event)
 {
 	if (!map) return;
@@ -68,16 +94,16 @@ void MapWidget::wheelEvent(QWheelEvent* event)
 	
 	// Move sliders to mouse center
 	QScrollBar* hSB = scrollArea->horizontalScrollBar();
-	int tilesNumberX = hSB->pageStep() / maxZoom;      // number of tiles on screen for max zoom
+	int tilesNumberX = hSB->pageStep() / maxZoom;       // number of tiles on screen for max zoom
 	int centralWidth = map->GetWidth() - tilesNumberX;  // number of tiles in the center of screen
-	int centralX = lastPos.x() - tilesNumberX / 2;     // position in central coordinates
+	int centralX = lastCoord.x - tilesNumberX / 2;      // position in central coordinates
 	if (centralWidth < 1) centralWidth = 1;
 	hSB->setSliderPosition(hSB->maximum() * centralX / centralWidth);
 	
 	QScrollBar* vSB = scrollArea->verticalScrollBar();
 	int tilesNumberY = vSB->pageStep() / maxZoom;
 	int centralHeight = map->GetLength() - tilesNumberY;
-	int centralY = lastPos.y() - tilesNumberY / 2;
+	int centralY = lastCoord.y - tilesNumberY / 2;
 	if (centralHeight < 1) centralHeight = 1;
 	vSB->setSliderPosition(vSB->maximum() * centralY / centralHeight);
 }
@@ -124,8 +150,7 @@ void MapWidget::DrawObject(MapObject* object, QPainter& painter)
 	if (!object) return;
 	
 	auto&& tool = MapInfo::objectTools[object->name];
-	RealCoord coord = object->coord;
-	QRect rc(baseTileLen * (coord.x - 0.5), baseTileLen * (coord.y - 0.5), baseTileLen, baseTileLen);
+	QRect rc = GetBaseRect(object->coord);
 	painter.drawPixmap(rc, tool.image);
 	
 	if (tool.type == ToolType::ENTITY)
@@ -139,50 +164,14 @@ void MapWidget::DrawObject(MapObject* object, QPainter& painter)
 	}
 }
 
-MapObject* MapWidget::CreateObject(int x, int y)
+QRect MapWidget::GetRect(MapCoord coord)
 {
-	if (!tool) return nullptr;
-	
-	MapCoord coord(x, y);
-	switch (tool->type)
-	{
-		case ToolType::ENTITY:
-			return new EntityObject{ tool->name, coord, playerNumber };
-		case ToolType::MINE:
-			return new MineObject{ tool->name, coord, 1000 };
-	}
-	return nullptr;
+	return QRect(coord.x * tileLen, coord.y * tileLen, tileLen, tileLen);
 }
 
-void MapWidget::SetMap(Map* map)
+QRect MapWidget::GetBaseRect(MapCoord coord)
 {
-	this->map = map;
-	int width = map->GetWidth();
-	int height = map->GetLength();
-	QSize groundSize(width * baseTileLen, height * baseTileLen);
-	groundPixmap.reset(new QPixmap(groundSize));
-	
-	// Draw ground and objects
-	for (int row = 0; row < height; ++row)
-	{
-		for (int col = 0; col < width; ++col)
-		{
-			auto rc = QRect(col * baseTileLen, row * baseTileLen, baseTileLen, baseTileLen);
-			auto&& cell = map->GetCell(col, row);
-			
-			auto&& tool = MapInfo::terrainTools[cell.terrain->name];
-			DrawTerrain(tool.image, rc);
-		}
-	}
-	
-	tileLen = baseTileLen / 2;
-	setFixedSize(groundSize * tileLen / baseTileLen);
-	update();
-}
-
-void MapWidget::CurrentToolChanged(ToolInfo* tool)
-{
-	this->tool = tool;
+	return QRect(coord.x * baseTileLen, coord.y * baseTileLen, baseTileLen, baseTileLen);
 }
 
 }

@@ -15,8 +15,6 @@ using namespace strx;
 class MapWidget : public QWidget
 {
 Q_OBJECT
-	friend class GameWidget;
-
 protected:
 	static constexpr int minZoom = 4;
 	static constexpr int maxZoom = 64;
@@ -24,18 +22,17 @@ protected:
 	
 	Map* map;                     // map related operations
 	QScrollArea* scrollArea;      // back link to scroll area
-	ToolInfo* tool = nullptr;     // current tool
-	int playerNumber = 0;         // current player
 	
 	u_p<QPixmap> groundPixmap;    // terrain pixmap
 	int tileLen = 0;              // cell width | height
-	QPoint lastPos;               // last cursor position in map coords
+	MapCoord lastCoord;           // last cursor position in map coords
 	QPoint lastGlobalPos;         // global position used for scrolling
 
 public:
 	MapWidget(QScrollArea* parent);
 	~MapWidget() = default;
-
+	
+	void SetMap(Map* map);
 
 protected:
 	void paintEvent(QPaintEvent*) override;
@@ -46,12 +43,9 @@ protected:
 	
 	void DrawTerrain(const QPixmap& pixmap, const QRect& rc);
 	void DrawObject(MapObject* object, QPainter& painter);
-	MapObject* CreateObject(int x, int y);
+	QRect GetRect(MapCoord coord);
+	static QRect GetBaseRect(MapCoord coord);
 	
-private:
-	void SetMap(Map* map);
-	void CurrentToolChanged(ToolInfo* tool);
-
 signals:
 	void MapChanged(bool yes = true);
 };

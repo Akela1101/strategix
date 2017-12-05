@@ -8,7 +8,8 @@ namespace strx
 {
 	class Enti;
 	class EntiInfo;	
-	class EntiSlot;	
+	class EntiSlot;
+	class EntityObject;
 	class Feature;
 	class FeatureInfo;
 	class FeatureInfoCollect;
@@ -22,6 +23,7 @@ namespace strx
 	class MapsPath;
 	class MapsPathsFinder;
 	class Mine;
+	class MineObject;
 	class Player;
 	class PlayerSlot;
 	class Resources;

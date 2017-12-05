@@ -27,14 +27,4 @@ void GameWidget::wheelEvent(QWheelEvent* event)
 	event->ignore();
 }
 
-void GameWidget::CurrentToolChanged(ToolInfo* tool)
-{
-	impl->CurrentToolChanged(tool);
-}
-
-void GameWidget::CurrentPlayerChanged(int playerNumber)
-{
-	impl->playerNumber = playerNumber;
-}
-
 }

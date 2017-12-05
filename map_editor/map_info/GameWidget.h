@@ -14,6 +14,7 @@ namespace map_info
 class GameWidget : public QScrollArea
 {
 Q_OBJECT
+protected:
 	MapWidget* impl;
 
 public:
@@ -26,11 +27,7 @@ protected:
 	virtual MapWidget* CreateMapWidget() = 0;
 	
 	void wheelEvent(QWheelEvent* event);
-
-public slots:
-	void CurrentToolChanged(ToolInfo* tool);
-	void CurrentPlayerChanged(int playerNumber);
-
+	
 signals:
 	void MapChanged(bool yes);
 };

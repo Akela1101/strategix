@@ -21,7 +21,7 @@ void EditorMapWidget::paintEvent(QPaintEvent* event)
 	if (isHighlight)
 	{
 		QPoint point = mapFromGlobal(QCursor::pos());
-		QRect baseRc = GetBaseRect(QPoint(point.x() / tileLen, point.y() / tileLen));
+		QRect baseRc = GetBaseRect(MapCoord(point.x() / tileLen, point.y() / tileLen));
 		
 		painter.setBrush(QColor(250, 250, 100, 150));
 		painter.setPen(Qt::NoPen);
@@ -47,11 +47,6 @@ void EditorMapWidget::mousePressEvent(QMouseEvent* event)
 	MapWidget::mousePressEvent(event);
 }
 
-QRect EditorMapWidget::GetBaseRect(QPoint pos)
-{
-	return QRect(pos.x() * baseTileLen, pos.y() * baseTileLen, baseTileLen, baseTileLen);
-}
-
 void EditorMapWidget::UpdateUnderMouse(QMouseEvent* event)
 {
 	if (!map) return;
@@ -59,26 +54,26 @@ void EditorMapWidget::UpdateUnderMouse(QMouseEvent* event)
 	QPoint point = event->pos();
 	if (!this->rect().contains(point)) return;
 	
-	QPoint pos(point.x() / tileLen, point.y() / tileLen);
-	QRect rc = QRect(pos.x() * tileLen, pos.y() * tileLen, tileLen, tileLen);
+	MapCoord coord(point.x() / tileLen, point.y() / tileLen);
+	QRect rc = QRect(coord.x * tileLen, coord.y * tileLen, tileLen, tileLen);
 	
 	// Draw objects, if LMB and current item is valid.
 	if (event->buttons() & Qt::LeftButton)
 	{
 		isHighlight = false;
 		
-		auto& cell = map->GetCell(pos.x(), pos.y());
+		auto& cell = map->GetCell(coord.x, coord.y);
 		if (tool && tool->type == ToolType::TERRAIN)
 		{
 			if (cell.terrain->name != tool->name)
 			{
 				map->ChangeTerrain(cell, tool->name);
-				DrawTerrain(tool->image, GetBaseRect(pos));
+				DrawTerrain(tool->image, GetBaseRect(coord));
 			}
 		}
 		else
 		{
-			auto&& object = CreateObject(pos.x(), pos.y());
+			auto&& object = CreateObject(coord.x, coord.y);
 			map->ChangeObject(cell, object);
 		}
 		update(rc);
@@ -90,13 +85,28 @@ void EditorMapWidget::UpdateUnderMouse(QMouseEvent* event)
 	}
 	
 	// Update rects
-	if (lastPos != pos)
+	if (lastCoord != coord)
 	{
 		update(lastRc);
 		update(rc);
 		lastRc = rc;
-		lastPos = pos;
+		lastCoord = coord;
 	}
+}
+
+MapObject* EditorMapWidget::CreateObject(int x, int y)
+{
+	if (!tool) return nullptr;
+	
+	MapCoord coord(x, y);
+	switch (tool->type)
+	{
+		case ToolType::ENTITY:
+			return new EntityObject{ tool->name, coord, playerId };
+		case ToolType::MINE:
+			return new MineObject{ tool->name, coord, 1000 };
+	}
+	return nullptr;
 }
 
 }

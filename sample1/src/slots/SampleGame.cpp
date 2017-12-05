@@ -37,7 +37,7 @@ void SampleGame::PlayerAdded(Player* player)
 	
 	if (player->GetType() == PlayerType::HUMAN)
 	{
-		gameWidget.reset(new SampleGameWidget());
+		gameWidget.reset(new SampleGameWidget(player->GetId()));
 		gameWidget->SetMap(&player->GetMap());
 		gameWidget->showMaximized();
 	}

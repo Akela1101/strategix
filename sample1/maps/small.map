@@ -2,8 +2,8 @@ Strategix Map
 0.0.1
 
 3
-6 grass
 3 water
+6 grass
 5 rubble
 
 40 25
@@ -33,8 +33,9 @@ Strategix Map
  6  6  6  6  6  6  6  6  6  6  6  6  6  6  5  5  5  5  5  5  6  6  6  6  6  6  6  6  6  6  6  6  6  6  6  6  6  6  6  6 
  6  6  6  6  6  6  6  6  6  6  6  6  6  6  6  6  6  6  6  6  6  6  6  6  6  6  6  6  6  6  6  6  6  6  6  6  6  6  6  6 
 
-2
-6 7 az_worker 1
+3
+5 6 az_worker 1
+4 7 az_base 1
 30 19 az_worker 3
 
 140
