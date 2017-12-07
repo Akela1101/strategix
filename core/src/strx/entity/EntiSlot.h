@@ -16,8 +16,6 @@ public:
 	virtual ~EntiSlot() = 0;
 	EntiSlot(const EntiSlot& _c) = delete;
 	EntiSlot& operator=(const EntiSlot& _c) = delete;
-	
-	//const string& GetName() const { return name; }
 };
 }
 

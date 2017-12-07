@@ -26,8 +26,14 @@ public:
 	/// @return unique name
 	const string& GetName() const;
 	
+	/// @return player id
+	int GetId() const;
+	
 	/// @return [human | ai | net]
 	PlayerType GetType() const;
+	
+	/// @return map
+	Map& GetMap() const;
 
 protected:
 // Callbacks:

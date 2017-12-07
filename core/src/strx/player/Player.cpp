@@ -40,12 +40,14 @@ void Player::Start()
 		for (int x : boost::irange(0, map->GetWidth()))
 		{
 			auto object = map->GetCell(x, y).object.get();
-			if (auto playerObject = dynamic_cast<EntityObject*>(object))
+			auto playerObject = dynamic_cast<EntityObject*>(object);
+			if (playerObject && playerObject->owner == id)
 			{
+				int objectId = playerObject->id;
 				auto& entiName = playerObject->name;
 				auto& entiInfo = techTree.GetNode(entiName);
 				
-				AddEnti(new Enti(entiInfo, MapCoord(x, y)));
+				AddEnti(new Enti(entiInfo, objectId, MapCoord(x, y), this));
 			}
 		}
 	}
@@ -72,7 +74,6 @@ void Player::Tick(float seconds)
 void Player::AddEnti(Enti* enti)
 {
 	entis.emplace_back(enti);
-	enti->player = this;
 	
 	slot->EntiAdded(enti);
 }

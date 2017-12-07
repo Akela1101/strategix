@@ -1,6 +1,7 @@
 #include <future>
 #include <thread>
 #include <boost/filesystem.hpp>
+#include <boost/asio/steady_timer.hpp>
 #include <nya/signal.hpp>
 
 #include <strx/common/Resources.h>
@@ -20,7 +21,11 @@ namespace strx
 {
 namespace fs = boost::filesystem;
 using PlayersType = umap<string, u_p<Player>>;
+using st_timer = boost::asio::steady_timer;
+using st_clock = chrono::steady_clock;
 
+// Constants
+static const auto minTick = 500ms;
 
 // Variables
 static s_p<Game> game;                        // main event receiver
@@ -28,7 +33,8 @@ static ConfigManager configManager;           // game configuration manager
 static u_p<MapManager> mapManager;            // has all information about the map
 static u_p<thread> kernelThread;              // main Kernel thread
 nya::event_loop Kernel::eventLoop;            // asio::io_service event loop
-static u_p<nya::event_loop::work> dummyWork;  // work for io_service
+//static u_p<nya::event_loop::work> dummyWork;  // work for io_service
+static u_p<st_timer> timer;
 
 static PlayersType players;                   // players by name
 static ResourceInfosType resourceInfos;       // resource descriptions
@@ -61,22 +67,50 @@ void Kernel::AddPlayer(const string& name, PlayerType type, int playerId, const 
 	player->Start();
 }
 
+void TimerHandler(const boost::system::error_code& error)
+{
+	static st_clock::time_point lastTime = st_clock::now();
+	if (!error)
+	{
+		if (timer) timer->expires_from_now(minTick);
+		
+		using namespace chrono;
+		auto now = st_clock::now();
+		auto dms = duration_cast<milliseconds>(now - lastTime);
+		lastTime = now;
+		
+		Kernel::Tick((double)dms.count() / 1000);
+		
+		if (timer) timer->async_wait(TimerHandler);
+	}
+}
+
 void Kernel::Start(s_p<Game> game)
 {
 	strx::game = game;
 	game->Start();
 	
-	dummyWork.reset(new nya::event_loop::work(eventLoop));
+	timer.reset(new st_timer(eventLoop));
+	timer->async_wait(TimerHandler);
+	
 	kernelThread.reset(new thread([]
 	{
 		nya::SetThreadName("strategix");
-		eventLoop.run();
+		try
+		{
+			eventLoop.run();
+		}
+		catch (exception& e)
+		{
+			error_log << "Unexpected error in strategix: " << e.what();
+			// @#~ should call game to stop
+		}
 	}));
 }
 
 void Kernel::Stop()
 {
-	dummyWork.reset();
+	timer.reset();
 	if (kernelThread) kernelThread->join();
 	
 	game.reset();

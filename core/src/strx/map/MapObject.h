@@ -8,11 +8,14 @@ namespace strx
 {
 struct MapObject
 {
+	static int lastId;
+	
+	int id;
 	string name;
 	RealCoord coord;
 	
-	MapObject(string name, RealCoord coord) : name(move(name)), coord(coord) {}
-	MapObject(const MapObject& other) : name(other.name), coord(other.coord) {}
+	MapObject(string name, RealCoord coord) : id(++lastId), name(move(name)), coord(coord) {}
+	MapObject(const MapObject& other) : id(other.id), name(other.name), coord(other.coord) {}
 	virtual ~MapObject() {}
 	
 	virtual MapObject* clone() = 0;

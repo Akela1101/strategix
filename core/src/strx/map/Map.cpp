@@ -21,6 +21,7 @@ namespace strx
 const char mapFileTopString[] = "Strategix Map";
 const char mapFormatVersion[] = "0.0.1";
 
+int MapObject::lastId = 0;
 umap<string, u_p<Map::Terrain>> Map::terrains;
 
 
@@ -246,7 +247,7 @@ void Map::LoadFromFile(const string& path)
 		MapCoord coord(col, row);
 		GetCell(col, row).object.reset(new EntityObject{ name, coord, owner });
 	}
-	if (!fin.good()) nya_throw << "map objects are wrong";
+	if (!fin.good()) nya_throw << "map entities are wrong";
 	
 	// resources
 	fin >> n;
@@ -259,7 +260,7 @@ void Map::LoadFromFile(const string& path)
 		MapCoord coord(col, row);
 		GetCell(col, row).object.reset(new MineObject{ name, coord, amount });
 	}
-	if (!fin.good()) nya_throw << "map resources are wrong";
+	if (!fin.good()) nya_throw << "map resource mines are wrong";
 	
 	fin.close();
 }

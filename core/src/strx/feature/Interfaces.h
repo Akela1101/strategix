@@ -1,6 +1,9 @@
 #ifndef _INTERFACES_H
 #define	_INTERFACES_H
 
+#include <nya/signal.hpp>
+#include <Strategix_Forward.h>
+
 namespace strx
 {
 struct ICommand
@@ -15,8 +18,10 @@ struct ITick
 
 struct IMove
 {
+	nya::sig<void(MapCoord coord)> DoMove;
+	
 	virtual void OnMoveStart() {}
-	virtual void OnMove() = 0;
+	virtual void OnMove(RealCoord coord) = 0;
 	virtual void OnMoveStop() {}
 };
 

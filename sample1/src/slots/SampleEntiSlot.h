@@ -12,7 +12,7 @@ class SampleEntiSlot : public EntiSlot
 public:
 	SampleEntiSlot(Enti* enti);
 	
-	void OnMove() override {}
+	void OnMove(RealCoord coord) override;
 };
 }
 

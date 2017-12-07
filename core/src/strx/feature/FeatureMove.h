@@ -18,20 +18,19 @@ protected:
 private:
 	float distance;
 	RealCoord direction, finish;
-	s_p<MapsPath> mapsPath;
+	u_p<MapsPath> mapsPath;
 	
 	ICommand* iCommand; // someone who started moving
 
 public:
 	FeatureMove(const FeatureInfo* featureInfo, Enti* enti);
+	FeatureMove(const FeatureMove&) = delete;
+	FeatureMove& operator=(const FeatureMove&) = delete;
+	~FeatureMove();
 	
-	bool Move(RealCoord newCoord, ICommand* iCommand = 0);
-	virtual bool Tick(float seconds);
-	virtual void Stop();
-
-private:
-	FeatureMove(const FeatureMove& _c);
-	FeatureMove& operator=(const FeatureMove& _c);
+	bool Move(MapCoord coord, ICommand* iCommand = nullptr);
+	bool Tick(float seconds) override;
+	void Stop() override;
 };
 }
 

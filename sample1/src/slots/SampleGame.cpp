@@ -1,4 +1,5 @@
 #include <graphics/SampleGameWidget.h>
+#include <graphics/SampleMapWidget.h>
 #include <strx/player/Player.h>
 #include <slots/SampleEntiSlot.h>
 #include <slots/SamplePlayerSlot.h>
@@ -16,7 +17,10 @@ using namespace map_info;
 using namespace boost::adaptors;
 
 SampleGame::SampleGame()
+		: gameWidget(new SampleGameWidget())
+		, mapWidget(gameWidget->CreateMapWidget<SampleMapWidget>())
 {
+	// @#~ static call
 	MapInfo::LoadTerrainTools();
 	MapInfo::LoadObjectTools();
 }
@@ -28,6 +32,8 @@ void SampleGame::Start()
 	Kernel::LoadMap("small");
 	Kernel::AddPlayer("Inu", PlayerType::HUMAN, 1, "az");
 	Kernel::AddPlayer("Saru", PlayerType::AI, 3, "az");
+	
+	gameWidget->showMaximized();
 }
 
 void SampleGame::PlayerAdded(Player* player)
@@ -35,12 +41,7 @@ void SampleGame::PlayerAdded(Player* player)
 	auto playerSlot = new SamplePlayerSlot(player);
 	playerSlots.emplace(player->GetName(), playerSlot);
 	
-	if (player->GetType() == PlayerType::HUMAN)
-	{
-		gameWidget.reset(new SampleGameWidget(player->GetId()));
-		gameWidget->SetMap(&player->GetMap());
-		gameWidget->showMaximized();
-	}
+	mapWidget->AddPlayer(playerSlot);
 }
 
 }

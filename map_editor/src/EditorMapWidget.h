@@ -20,6 +20,10 @@ class EditorMapWidget : public MapWidget
 	bool isHighlight = false;     // highlight cell under cursor
 	QRect lastRc;                 // last rect under cursor
 
+public slots:
+	void CurrentToolChanged(ToolInfo* tool);
+	void CurrentPlayerChanged(int playerId);
+
 protected:
 	void paintEvent(QPaintEvent*) override;
 	void mouseMoveEvent(QMouseEvent* event) override;

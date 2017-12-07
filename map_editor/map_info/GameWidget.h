@@ -13,23 +13,19 @@ namespace map_info
 {
 class GameWidget : public QScrollArea
 {
-Q_OBJECT
-protected:
-	MapWidget* impl;
-
 public:
 	GameWidget(QWidget* parent = nullptr);
 	~GameWidget() override;
 	
-	void SetMap(strx::Map* map);
+	template<typename T> T* CreateMapWidget()
+	{
+		auto mapWidget = new T(this);
+		setWidget(mapWidget);
+		return mapWidget;
+	}
 
 protected:
-	virtual MapWidget* CreateMapWidget() = 0;
-	
 	void wheelEvent(QWheelEvent* event);
-	
-signals:
-	void MapChanged(bool yes);
 };
 
 }

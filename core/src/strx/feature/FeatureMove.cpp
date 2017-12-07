@@ -19,11 +19,13 @@ FeatureMove::FeatureMove(const FeatureInfo* featureInfo, Enti* enti)
 		, isMoving(false)
 {}
 
-bool FeatureMove::Move(const RealCoord newCoord, ICommand* iCommand)
+FeatureMove::~FeatureMove() = default;
+
+bool FeatureMove::Move(MapCoord coord, ICommand* iCommand)
 {
 	this->iCommand = iCommand;
 	distance = 0;
-	mapsPath = enti->GetPlayer().GetMap().FindPath(enti->GetCoord(), newCoord);
+	mapsPath = enti->GetPlayer().GetMap().FindPath(enti->GetCoord(), coord);
 	
 	if (!mapsPath)
 		return false;
@@ -40,12 +42,14 @@ bool FeatureMove::Move(const RealCoord newCoord, ICommand* iCommand)
 
 bool FeatureMove::Tick(float seconds)
 {
+	info_raw << "Move";
 	if (distance > 0) // Moving
 	{
 		float moving = seconds * speed;
 		distance = (distance > moving) ? (distance - moving) : 0;
-		enti->GetCoord() = finish - direction * distance;
-		enti->GetSlot().OnMove();
+		auto coord = finish - direction * distance;
+		enti->GetCoord() = coord;
+		enti->GetSlot().OnMove(coord);
 	}
 	else
 	{

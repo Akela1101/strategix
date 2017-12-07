@@ -1,9 +1,8 @@
 #ifndef _ENTI_H
 #define _ENTI_H
 
-#include <map>
 #include <list>
-#include <typeinfo>
+#include <typeindex>
 
 #include <Strategix_Forward.h>
 
@@ -13,16 +12,14 @@ namespace strx
 
 class Enti
 {
-	friend class EntiSlot;
-	friend class Player;
-	
 	EntiSlot* slot = nullptr; // Link to slot
-	Player* player;           // Link to owner
+	Player* const player;     // Link to owner
 	const EntiInfo& entiInfo; // Link to tree
+	const int id;             // unique id
 	RealCoord coord;          // real coordinate
 	
-	using FeaturesType = map<string, s_p<Feature>>;
-	FeaturesType features;    // map[typeid.name]
+	using FeaturesType = umap<type_index, u_p<Feature>>;
+	FeaturesType features;    // set of features
 	
 	Feature* tickFeature;     // current active feature getting Tick
 	list<Feature*> passiveTickFeatures; // features not interfering with tickFeature
@@ -31,13 +28,15 @@ class Enti
 	bool isLastFeature;       // check if there is no new tickFeature before remove it
 
 public:
-	Enti(const EntiInfo& entiInfo, const RealCoord& coord);
+	Enti(const EntiInfo& entiInfo, int id, const RealCoord& coord, Player* player);
 	Enti(const Enti& _c) = delete;
 	Enti& operator=(const Enti& _c) = delete;
+	~Enti();
 	
 	EntiSlot& GetSlot() const { return *slot; }
 	Player& GetPlayer() const { return *player; }
 	const EntiInfo& GetInfo() const { return entiInfo; }
+	int GetId() const { return id; }
 	RealCoord GetCoord() const { return coord; }
 	void SetSlot(EntiSlot* slot);
 	
@@ -45,18 +44,10 @@ public:
 	void AssignTickFeature(Feature* feature, bool isPassive = false);
 	
 	template<typename F>
-	F* Do() // get feature with type F
-	{
-		const string featureName = typeid(F).name();
-		FeaturesType::iterator iFeature = features.find(featureName);
-		if (iFeature != features.end())
-		{
-			return dynamic_cast<F*>(iFeature->second.get());
-		}
-		nya_throw << "There is no feature named: " << featureName;
-	}
+	F* Do() { return dynamic_cast<F*>(GetFeature(typeid(F))); }
 
 private:
+	Feature* GetFeature(type_index type) const;
 	void AddFeature(const string& name, const FeatureInfo* featureInfo);
 };
 }

@@ -2,6 +2,7 @@
 #define _SampleMapWidget_H
 
 #include <Strategix_Forward.h>
+#include <Sample_Forward.h>
 #include <MapWidget.h>
 
 
@@ -11,15 +12,23 @@ using namespace strx;
 
 class SampleMapWidget : public map_info::MapWidget
 {
-	int playerId;
+	u_p<Map> mapCopy;
+	int humanPlayerId = 0;
 	EntityObject* currentEntity = nullptr;
+	SamplePlayerSlot* humanPlayer = nullptr;
 	
 public:
-	SampleMapWidget(QScrollArea* parent, int playerId);
+	SampleMapWidget(QScrollArea* parent);
+	~SampleMapWidget();
+	
+	void AddPlayer(SamplePlayerSlot* playerSlot);
 
 protected:
 	void paintEvent(QPaintEvent*) override;
 	void mousePressEvent(QMouseEvent* event) override;
+
+private:
+	void ChangeSelection(EntityObject* entity);
 };
 
 }

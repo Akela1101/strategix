@@ -1,3 +1,4 @@
+#include <strx/entity/Enti.h>
 #include <slots/SampleEntiSlot.h>
 
 #include "SamplePlayerSlot.h"
@@ -11,7 +12,7 @@ using namespace strx;
 void SamplePlayerSlot::EntiAdded(Enti* enti)
 {
 	auto entiSlot = new SampleEntiSlot(enti);
-	entiSlots.emplace_back(entiSlot);
+	entiSlots.emplace(enti->GetId(), entiSlot);
 }
 
 }

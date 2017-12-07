@@ -11,11 +11,14 @@ namespace map_editor
 using namespace std;
 using namespace map_info;
 
+class EditorMapWidget;
+
 class MainForm : public QMainWindow
 {
 Q_OBJECT
 	
 	Ui::MainForm widget;
+	EditorMapWidget* mapWidget;
 	
 	bool isMapOpened, isMapSaved;
 	QString mapPath;

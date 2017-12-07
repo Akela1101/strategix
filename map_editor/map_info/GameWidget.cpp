@@ -14,14 +14,6 @@ GameWidget::GameWidget(QWidget* parent)
 
 GameWidget::~GameWidget() = default;
 
-void GameWidget::SetMap(Map* map)
-{
-	setWidget(impl = CreateMapWidget());
-	impl->SetMap(map);
-	
-	connect(impl, &MapWidget::MapChanged, this, &MapChanged);
-}
-
 void GameWidget::wheelEvent(QWheelEvent* event)
 {
 	event->ignore();

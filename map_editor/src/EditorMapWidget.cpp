@@ -8,6 +8,16 @@
 
 namespace map_editor
 {
+void EditorMapWidget::CurrentToolChanged(ToolInfo* tool)
+{
+	this->tool = tool;
+}
+
+void EditorMapWidget::CurrentPlayerChanged(int playerId)
+{
+	this->playerId = playerId;
+}
+
 void EditorMapWidget::paintEvent(QPaintEvent* event)
 {
 	MapWidget::paintEvent(event);

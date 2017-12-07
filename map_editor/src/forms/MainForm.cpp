@@ -1,11 +1,12 @@
 #include <fstream>
 #include <boost/filesystem.hpp>
+#include <EditorMapWidget.h>
+#include <MapInfo.h>
+#include <strx/map/Map.h>
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QStandardPaths>
 #include <QPushButton>
-#include <MapInfo.h>
-#include <strx/map/Map.h>
 
 #include "DialogNew.h"
 #include "MainForm.h"
@@ -57,9 +58,10 @@ MainForm::MainForm()
 	widget.toolsListWidget->setCurrentRow(0);
 	
 	//
-	connect(this, &CurrentToolChanged, widget.gameWidget, &EditorGameWidget::CurrentToolChanged);
-	connect(this, &CurrentPlayerChanged, widget.gameWidget, &EditorGameWidget::CurrentPlayerChanged);
-	connect(widget.gameWidget, &EditorGameWidget::MapChanged, this, &MapChanged);
+	mapWidget = widget.gameWidget->CreateMapWidget<EditorMapWidget>();
+	connect(this, &CurrentToolChanged, mapWidget, &EditorMapWidget::CurrentToolChanged);
+	connect(this, &CurrentPlayerChanged, mapWidget, &EditorMapWidget::CurrentPlayerChanged);
+	connect(mapWidget, &EditorMapWidget::MapChanged, this, &MapChanged);
 }
 
 MainForm::~MainForm() = default;
@@ -76,7 +78,7 @@ void MainForm::FileNew()
 		try
 		{
 			map.reset(new Map(name.toStdString(), dialogNew.mapWidth, dialogNew.mapHeight));
-			widget.gameWidget->SetMap(map.get());
+			mapWidget->SetMap(map.get());
 		}
 		catch (exception& e)
 		{
@@ -116,7 +118,7 @@ void MainForm::FileLoad()
 	try
 	{
 		map.reset(new Map(mapPath.toStdString()));
-		widget.gameWidget->SetMap(map.get());
+		mapWidget->SetMap(map.get());
 	}
 	catch (exception& e)
 	{
@@ -169,7 +171,7 @@ void MainForm::CurrentToolboxItemChanged(int index)
 
 void MainForm::PlayerButtonToggled(bool on)
 {
-	int playerNumber = playerNumbers[(QPushButton*)sender()];
+	int playerNumber = playerNumbers[(QPushButton*) sender()];
 	emit CurrentPlayerChanged(playerNumber);
 }
 

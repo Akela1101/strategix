@@ -10,8 +10,10 @@
 
 namespace strx
 {
-Enti::Enti(const EntiInfo& entiInfo, const RealCoord& coord)
-		: entiInfo(entiInfo)
+Enti::Enti(const EntiInfo& entiInfo, int id, const RealCoord& coord, Player* player)
+		: player(player)
+		, entiInfo(entiInfo)
+		, id(id)
 		, coord(coord)
 		, tickFeature(nullptr)
 		, isLastFeature(true)
@@ -22,23 +24,36 @@ Enti::Enti(const EntiInfo& entiInfo, const RealCoord& coord)
 	}
 }
 
+Enti::~Enti() = default;
+
+Feature* Enti::GetFeature(type_index type) const
+{
+	auto iFeature = features.find(type);
+	if (iFeature == features.end())
+	{
+		info_log << "%s has no feature %s"s % entiInfo.name % type.name();
+		return nullptr;
+	}
+	return iFeature->second.get();
+}
+
 void Enti::AddFeature(const string& name, const FeatureInfo* featureInfo)
 {
 	if (name == "move")
 	{
-		features[typeid(FeatureMove).name()].reset(new FeatureMove(featureInfo, this));
+		features[typeid(FeatureMove)].reset(new FeatureMove(featureInfo, this));
 	}
 	else if (name == "collect")
 	{
-		features[typeid(FeatureCollect).name()].reset(new FeatureCollect(featureInfo, this));
+		features[typeid(FeatureCollect)].reset(new FeatureCollect(featureInfo, this));
 	}
 	else if (name == "health")
 	{
-		features[typeid(FeatureHealth).name()].reset(new FeatureHealth(featureInfo, this));
+		features[typeid(FeatureHealth)].reset(new FeatureHealth(featureInfo, this));
 	}
 	else if (name == "attack")
 	{
-		features[typeid(FeatureAttack).name()].reset(new FeatureAttack(featureInfo, this));
+		features[typeid(FeatureAttack)].reset(new FeatureAttack(featureInfo, this));
 	}
 	// else ?
 }

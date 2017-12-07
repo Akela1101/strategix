@@ -9,6 +9,9 @@ namespace sample1
 	class SampleEntiSlot;
 	class SampleGame;
 	class SamplePlayerSlot;
+
+	class SampleGameWidget;
+	class SampleMapWidget;
 }
 
 #endif	/* _SAMPLE1_FORWARD_H */

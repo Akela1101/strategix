@@ -16,9 +16,10 @@ class SamplePlayerSlot : public PlayerSlot
 {
 	using PlayerSlot::PlayerSlot;
 	
-	vector<u_p<SampleEntiSlot>> entiSlots;
+	umap<int, u_p<SampleEntiSlot>> entiSlots;
 	
 public:
+	SampleEntiSlot& GetEntity(int id) { return *entiSlots[id].get(); }
 	void EntiAdded(Enti* enti) override;
 	void EntiRemoved(Enti* enti) override {}
 	void ResourcesChanged(Resources* newResources) override {}
