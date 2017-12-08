@@ -18,6 +18,7 @@ class EditorMapWidget : public MapWidget
 	int playerId = 0;             // current player
 	
 	bool isHighlight = false;     // highlight cell under cursor
+	MapCoord lastCoord;           // last cursor position in map coords
 	QRect lastRc;                 // last rect under cursor
 
 public slots:

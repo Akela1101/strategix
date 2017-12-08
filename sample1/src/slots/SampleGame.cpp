@@ -16,13 +16,17 @@ using namespace strx;
 using namespace map_info;
 using namespace boost::adaptors;
 
+void SampleGame::Configure()
+{
+	MapInfo::QRegisterTypes();
+	MapInfo::LoadTerrainTools();
+	MapInfo::LoadObjectTools();
+}
+
 SampleGame::SampleGame()
 		: gameWidget(new SampleGameWidget())
 		, mapWidget(gameWidget->CreateMapWidget<SampleMapWidget>())
 {
-	// @#~ static call
-	MapInfo::LoadTerrainTools();
-	MapInfo::LoadObjectTools();
 }
 
 SampleGame::~SampleGame() = default;

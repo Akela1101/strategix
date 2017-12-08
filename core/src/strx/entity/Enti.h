@@ -25,8 +25,6 @@ class Enti
 	list<Feature*> passiveTickFeatures; // features not interfering with tickFeature
 	/* ex.: regeneration, taking damage, etc. */
 	
-	bool isLastFeature;       // check if there is no new tickFeature before remove it
-
 public:
 	Enti(const EntiInfo& entiInfo, int id, const RealCoord& coord, Player* player);
 	Enti(const Enti& _c) = delete;
@@ -37,7 +35,8 @@ public:
 	Player& GetPlayer() const { return *player; }
 	const EntiInfo& GetInfo() const { return entiInfo; }
 	int GetId() const { return id; }
-	RealCoord GetCoord() const { return coord; }
+	const RealCoord GetCoord() const { return coord; }
+	RealCoord& GetCoord() { return coord; }
 	void SetSlot(EntiSlot* slot);
 	
 	void Tick(float seconds);

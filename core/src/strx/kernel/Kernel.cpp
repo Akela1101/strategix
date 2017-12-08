@@ -25,7 +25,7 @@ using st_timer = boost::asio::steady_timer;
 using st_clock = chrono::steady_clock;
 
 // Constants
-static const auto minTick = 500ms;
+static const auto minTick = 100ms;
 
 // Variables
 static s_p<Game> game;                        // main event receiver

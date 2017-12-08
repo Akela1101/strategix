@@ -14,6 +14,8 @@ SampleMapWidget::~SampleMapWidget() {}
 
 void SampleMapWidget::AddPlayer(SamplePlayerSlot* playerSlot)
 {
+	playerSlot->SetMapWidget(this);
+
 	if (playerSlot->GetType() == PlayerType::HUMAN)
 	{
 		humanPlayerId = playerSlot->GetId();
@@ -24,11 +26,39 @@ void SampleMapWidget::AddPlayer(SamplePlayerSlot* playerSlot)
 	}
 }
 
+void SampleMapWidget::OnEntityMoved(int entityId, RealCoord coord)
+{
+	//info_raw << "%d to %.2f, %.2f"s % entityId % coord.x % coord.y;
+	if (!in_(entityId, mapObjects))
+	{
+		error_log << "Entity [%d] is not found on map."s % entityId;
+		return;
+	}
+	
+	MapObject* object = mapObjects.at(entityId);
+	MapCoord mapCoord = object->coord;
+	MapCoord currentMapCoord = coord;
+	if (mapCoord != currentMapCoord)
+	{
+		auto&& uObject = map->GetCell(mapCoord).object;
+		map->GetCell(currentMapCoord).object = std::move(uObject);
+		
+		update(GetRect(currentMapCoord));
+	}
+	object->coord = coord;
+	update(GetRect(mapCoord));
+}
+
+void SampleMapWidget::ObjectAdded(MapObject* object)
+{
+	mapObjects.emplace(object->id, object);
+}
+
 void SampleMapWidget::paintEvent(QPaintEvent* event)
 {
 	MapWidget::paintEvent(event);
 	
-	if (currentEntity)
+	if (currentEntity) // selection box
 	{
 		QPainter painter(this);
 		painter.setPen(QPen(Qt::green));
@@ -55,7 +85,7 @@ void SampleMapWidget::mousePressEvent(QMouseEvent* event)
 	MapObject* object = map->GetCell(coord).object.get();
 	if (!object)
 	{
-		auto& entity = humanPlayer->GetEntity(currentEntity->id);
+		auto& entity = humanPlayer->GetEntitySlot(currentEntity->id);
 		entity.DoMove(coord);
 		return;
 	}

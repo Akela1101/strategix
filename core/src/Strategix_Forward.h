@@ -20,8 +20,8 @@ namespace strx
 	class Map;
 	class MapManager;
 	class MapObject;
-	class MapsPath;
-	class MapsPathsFinder;
+	class MapPath;
+	class MapPathFinder;
 	class Mine;
 	class MineObject;
 	class Player;

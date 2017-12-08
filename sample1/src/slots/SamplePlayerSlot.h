@@ -16,10 +16,13 @@ class SamplePlayerSlot : public PlayerSlot
 {
 	using PlayerSlot::PlayerSlot;
 	
+	SampleMapWidget* mapWidget = nullptr;
 	umap<int, u_p<SampleEntiSlot>> entiSlots;
 	
 public:
-	SampleEntiSlot& GetEntity(int id) { return *entiSlots[id].get(); }
+	SampleEntiSlot& GetEntitySlot(int id) { return *entiSlots[id].get(); }
+	void SetMapWidget(SampleMapWidget* mapWidget) { this->mapWidget = mapWidget; }
+	
 	void EntiAdded(Enti* enti) override;
 	void EntiRemoved(Enti* enti) override {}
 	void ResourcesChanged(Resources* newResources) override {}

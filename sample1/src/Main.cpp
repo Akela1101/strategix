@@ -1,10 +1,9 @@
 #include <slots/SampleGame.h>
 #include <Strategix.h>
-
-#include <QtPlugin>
 #include <QApplication>
 
-#ifdef Q_OS_WIN
+#if defined(Q_OS_WIN) && defined(QT_STATIC_LINK)
+#include <QtPlugin>
 Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin)
 #endif
 
@@ -89,6 +88,7 @@ int main(int argc, char* argv[])
 	
 	Kernel::Configure("config/strategix.json", "maps");
 	//Kernel::PrintInfo();
+	SampleGame::Configure();
 
 	try // run a game
 	{

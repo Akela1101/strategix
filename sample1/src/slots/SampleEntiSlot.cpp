@@ -1,3 +1,5 @@
+#include <strx/entity/Enti.h>
+
 #include "SampleEntiSlot.h"
 
 
@@ -10,7 +12,7 @@ SampleEntiSlot::SampleEntiSlot(Enti* enti)
 
 void SampleEntiSlot::OnMove(RealCoord coord)
 {
-	info_raw << "to %.2f, %.2f"s % coord.x % coord.y;
+	emit DoEntityMoved(enti->GetId(), coord);
 }
 
 }

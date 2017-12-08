@@ -37,6 +37,11 @@ void MapWidget::SetMap(Map* map)
 			
 			auto&& tool = MapInfo::terrainTools[cell.terrain->name];
 			DrawTerrain(tool.image, rc);
+			
+			if (cell.object)
+			{
+				ObjectAdded(cell.object.get());
+			}
 		}
 	}
 	
@@ -92,18 +97,20 @@ void MapWidget::wheelEvent(QWheelEvent* event)
 	setFixedSize(groundPixmap->size() * tileLen / baseTileLen);
 	update();
 	
+	QPoint point = event->pos() / tileLen;
+	
 	// Move sliders to mouse center
 	QScrollBar* hSB = scrollArea->horizontalScrollBar();
 	int tilesNumberX = hSB->pageStep() / maxZoom;       // number of tiles on screen for max zoom
 	int centralWidth = map->GetWidth() - tilesNumberX;  // number of tiles in the center of screen
-	int centralX = lastCoord.x - tilesNumberX / 2;      // position in central coordinates
+	int centralX = point.x() - tilesNumberX / 2;      // position in central coordinates
 	if (centralWidth < 1) centralWidth = 1;
 	hSB->setSliderPosition(hSB->maximum() * centralX / centralWidth);
 	
 	QScrollBar* vSB = scrollArea->verticalScrollBar();
 	int tilesNumberY = vSB->pageStep() / maxZoom;
 	int centralHeight = map->GetLength() - tilesNumberY;
-	int centralY = lastCoord.y - tilesNumberY / 2;
+	int centralY = point.y() - tilesNumberY / 2;
 	if (centralHeight < 1) centralHeight = 1;
 	vSB->setSliderPosition(vSB->maximum() * centralY / centralHeight);
 }

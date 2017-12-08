@@ -16,7 +16,6 @@ Enti::Enti(const EntiInfo& entiInfo, int id, const RealCoord& coord, Player* pla
 		, id(id)
 		, coord(coord)
 		, tickFeature(nullptr)
-		, isLastFeature(true)
 {
 	for (auto&& pa : entiInfo.featureInfos)
 	{
@@ -55,7 +54,10 @@ void Enti::AddFeature(const string& name, const FeatureInfo* featureInfo)
 	{
 		features[typeid(FeatureAttack)].reset(new FeatureAttack(featureInfo, this));
 	}
-	// else ?
+	else
+	{
+		error_log << "Unable to handle feature " << name;
+	}
 }
 
 void Enti::SetSlot(EntiSlot* slot)
@@ -76,15 +78,10 @@ void Enti::Tick(float seconds)
 			++itFeature;
 		}
 	}
-	if (tickFeature)
+	
+	if (tickFeature && !tickFeature->Tick(seconds))
 	{
-		if (!tickFeature->Tick(seconds))
-		{
-			if (isLastFeature)
-				tickFeature = nullptr;
-			else
-				isLastFeature = true;
-		}
+		tickFeature = nullptr;
 	}
 	slot->OnTick(seconds);
 }
@@ -97,11 +94,9 @@ void Enti::AssignTickFeature(Feature* feature, bool isPassive)
 	}
 	else
 	{
-		if (tickFeature)
-			tickFeature->Stop();
+		if (tickFeature) tickFeature->Stop();
 		
 		tickFeature = feature;
-		isLastFeature = false; // do not remove tickFeature
 	}
 }
 

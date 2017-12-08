@@ -36,6 +36,7 @@ public:
 	
 public:
 	static const QPixmap& GetPlayerMark(int playerNumber);
+	static void QRegisterTypes();
 	static void LoadTerrainTools();
 	static void LoadObjectTools();
 	static QPixmap LoadPixmap(const string& path);

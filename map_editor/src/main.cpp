@@ -1,12 +1,11 @@
 #include <exception>
-#include <QtPlugin>
 #include <QApplication>
 #include <QMessageBox>
 
 #include <forms/MainForm.h>
 
-
-#ifdef Q_OS_WIN
+#if defined(Q_OS_WIN) && defined(QT_STATIC_LINK)
+#include <QtPlugin>
 Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin)
 #endif
 

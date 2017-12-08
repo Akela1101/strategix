@@ -6,6 +6,13 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
 # Boost
 find_package(Boost COMPONENTS system filesystem REQUIRED)
 
+# Qt
+find_package(Qt5Widgets)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
 
 file(GLOB_RECURSE SOURCES *.cpp *.h)
 add_executable(${PROJECT_NAME} ${SOURCES})
@@ -18,9 +25,6 @@ target_link_libraries(${PROJECT_NAME}
         map_info
         ${Boost_SYSTEM_LIBRARY}
         ${Boost_FILESYSTEM_LIBRARY})
-if(MINGW)
-    target_link_libraries(${PROJECT_NAME} ws2_32) # boost::asio
-endif()
 
 
 file(COPY config/ DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/config)

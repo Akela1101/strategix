@@ -33,6 +33,12 @@ const QPixmap& MapInfo::GetPlayerMark(int playerNumber)
 	return playerMarks[playerNumber < playerMarks.size() ? playerNumber : 0];
 }
 
+#define Q_REG_TYPE(type) qRegisterMetaType<type>(#type);
+void MapInfo::QRegisterTypes()
+{
+	Q_REG_TYPE(RealCoord);
+}
+
 void MapInfo::LoadTerrainTools()
 {
 	using namespace boost;

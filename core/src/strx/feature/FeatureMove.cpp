@@ -2,7 +2,7 @@
 #include <strx/entity/EntiSlot.h>
 #include <strx/feature/FeatureInfo.h>
 #include <strx/map/Map.h>
-#include <strx/map/MapsPath.h>
+#include <strx/map/MapPath.h>
 #include <strx/player/Player.h>
 
 #include "FeatureMove.h"
@@ -36,22 +36,12 @@ bool FeatureMove::Move(MapCoord coord, ICommand* iCommand)
 		enti->GetSlot().OnMoveStart();
 		enti->AssignTickFeature(this); // adding to Tick queue
 	}
-	
 	return true;
 }
 
 bool FeatureMove::Tick(float seconds)
 {
-	info_raw << "Move";
-	if (distance > 0) // Moving
-	{
-		float moving = seconds * speed;
-		distance = (distance > moving) ? (distance - moving) : 0;
-		auto coord = finish - direction * distance;
-		enti->GetCoord() = coord;
-		enti->GetSlot().OnMove(coord);
-	}
-	else
+	if (distance == 0)
 	{
 		if (mapsPath->IsEmpty()) // Stopping
 		{
@@ -61,14 +51,22 @@ bool FeatureMove::Tick(float seconds)
 			
 			return false;
 		}
-		else // Selecting next point
-		{
-			finish = mapsPath->PickFront();
-			const RealCoord delta = finish - enti->GetCoord();
-			direction = delta.Norm();
-			distance = delta.Len();
-		}
+		
+		// Selecting next point
+		auto next = mapsPath->TakeNext();
+		finish = next;
+		RealCoord delta = finish - enti->GetCoord();
+		direction = delta.Norm();
+		distance = delta.Len();
 	}
+	
+	// Moving
+	float step = seconds * speed;
+	distance = (distance > step) ? (distance - step) : 0;
+	
+	RealCoord coord = finish - direction * distance;
+	enti->GetCoord() = coord;
+	enti->GetSlot().OnMove(coord);
 	return true;
 }
 

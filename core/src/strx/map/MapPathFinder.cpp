@@ -1,16 +1,16 @@
-#include "MapsPath.h"
+#include "MapPath.h"
 #include "Map.h"
 
-#include "MapsPathsFinder.h"
+#include "MapPathFinder.h"
 
 
 namespace strx
 {
 
-MapsPathsFinder::MapsPathsFinder(const Map& map)
+MapPathFinder::MapPathFinder(const Map& map)
 		: map(map) {}
 
-u_p<MapsPath> MapsPathsFinder::FindPath(const MapCoord from, const MapCoord till) const
+u_p<MapPath> MapPathFinder::FindPath(const MapCoord from, const MapCoord till) const
 {
 	// Cannot be achieved
 	if (!IsAccessible(till))
@@ -19,7 +19,7 @@ u_p<MapsPath> MapsPathsFinder::FindPath(const MapCoord from, const MapCoord till
 	}
 	
 	// Already on place
-	auto mapsPath = make_u<MapsPath>();
+	auto mapsPath = make_u<MapPath>();
 	if (from.x == till.x && from.y == till.y)
 		return mapsPath;
 	
@@ -58,9 +58,9 @@ u_p<MapsPath> MapsPathsFinder::FindPath(const MapCoord from, const MapCoord till
 			// Return list
 			for (CellPrice* cellPrice = current.get(); cellPrice; cellPrice = cellPrice->parent)
 			{
-				mapsPath->PushFront(cellPrice->mc);
+				mapsPath->AddPoint(cellPrice->mc);
 			}
-			mapsPath->PickFront(); // remove first
+			mapsPath->TakeNext(); // remove first
 			break;
 		}
 		
@@ -97,7 +97,7 @@ u_p<MapsPath> MapsPathsFinder::FindPath(const MapCoord from, const MapCoord till
 	return mapsPath;
 }
 
-s_p<MapsPathsFinder::CellPrice> MapsPathsFinder::GetByCoord(list<s_p<CellPrice>>& list, MapCoord checking_mc) const
+s_p<MapPathFinder::CellPrice> MapPathFinder::GetByCoord(list<s_p<CellPrice>>& list, MapCoord checking_mc) const
 {
 	for (auto&& cellPrice : list)
 	{
@@ -107,7 +107,7 @@ s_p<MapsPathsFinder::CellPrice> MapsPathsFinder::GetByCoord(list<s_p<CellPrice>>
 	return s_p<CellPrice>();
 }
 
-bool MapsPathsFinder::IsAccessible(const MapCoord& mc) const
+bool MapPathFinder::IsAccessible(const MapCoord& mc) const
 {
 	return map.GetCell(mc).terrain->retard > 0;
 }

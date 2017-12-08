@@ -28,7 +28,6 @@ target_link_libraries(${LIB_NAME}
         ${Boost_FILESYSTEM_LIBRARY}
         Qt5::Widgets)
 
-
 # application
 file(GLOB_RECURSE SOURCES src/*.cpp src/*.h)
 add_executable(${PROJECT_NAME} ${SOURCES})

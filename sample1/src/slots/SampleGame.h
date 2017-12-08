@@ -15,6 +15,8 @@ class SampleGame : public Game
 	SampleMapWidget* mapWidget;
 
 public:
+	static void Configure();
+	
 	SampleGame();
 	~SampleGame() override;
 	

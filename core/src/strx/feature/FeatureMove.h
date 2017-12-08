@@ -18,7 +18,7 @@ protected:
 private:
 	float distance;
 	RealCoord direction, finish;
-	u_p<MapsPath> mapsPath;
+	u_p<MapPath> mapsPath;
 	
 	ICommand* iCommand; // someone who started moving
 

@@ -1,5 +1,5 @@
-#ifndef _MAPSPATHSFINDER_H
-#define    _MAPSPATHSFINDER_H
+#ifndef _MAPPATHFINDER_H
+#define _MAPPATHFINDER_H
 
 #include <list>
 
@@ -8,7 +8,7 @@
 
 namespace strx
 {
-class MapsPathsFinder
+class MapPathFinder
 {
 	typedef int Price;
 	
@@ -26,15 +26,14 @@ public:
 	const Map& map;
 
 public:
-	MapsPathsFinder(const Map& map);
+	MapPathFinder(const Map& map);
+	virtual ~MapPathFinder() = default;
 	
-	virtual ~MapsPathsFinder() = default;
-	
-	virtual u_p<MapsPath> FindPath(MapCoord from, MapCoord till) const;
+	virtual u_p<MapPath> FindPath(MapCoord from, MapCoord till) const;
 
 private:
-	MapsPathsFinder(const MapsPathsFinder& _c);
-	MapsPathsFinder& operator =(const MapsPathsFinder& _c);
+	MapPathFinder(const MapPathFinder& _c);
+	MapPathFinder& operator =(const MapPathFinder& _c);
 	
 	s_p<CellPrice> GetByCoord(list <s_p<CellPrice>>& list, MapCoord checking_mc) const;
 	bool IsAccessible(const MapCoord& mc) const;
@@ -43,5 +42,5 @@ private:
 	int Distance(const MapCoord& a, const MapCoord& b) const { return (abs(a.x - b.x) + abs(a.y - b.y)) * 10; }
 };
 }
-#endif    /* _MAPSPATHSFINDER_H */
+#endif //_MAPPATHFINDER_H
 

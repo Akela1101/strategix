@@ -9,6 +9,7 @@ namespace strx
 {
 class EntiSlot : public ITick, public IMove, public ICollect, public IHealth, public IAttack
 {
+protected:
 	Enti* enti;
 	
 public:

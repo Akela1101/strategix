@@ -25,7 +25,6 @@ protected:
 	
 	u_p<QPixmap> groundPixmap;    // terrain pixmap
 	int tileLen = 0;              // cell width | height
-	MapCoord lastCoord;           // last cursor position in map coords
 	QPoint lastGlobalPos;         // global position used for scrolling
 
 public:
@@ -35,6 +34,8 @@ public:
 	void SetMap(Map* map);
 
 protected:
+	virtual void ObjectAdded(MapObject* object) {}
+	
 	void paintEvent(QPaintEvent*) override;
 	void wheelEvent(QWheelEvent* event) override;
 	void mouseMoveEvent(QMouseEvent* event) override;

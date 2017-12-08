@@ -12,10 +12,13 @@ using namespace strx;
 
 class SampleMapWidget : public map_info::MapWidget
 {
+Q_OBJECT
 	u_p<Map> mapCopy;
 	int humanPlayerId = 0;
 	EntityObject* currentEntity = nullptr;
 	SamplePlayerSlot* humanPlayer = nullptr;
+	
+	umap<int, MapObject*> mapObjects;
 	
 public:
 	SampleMapWidget(QScrollArea* parent);
@@ -23,7 +26,12 @@ public:
 	
 	void AddPlayer(SamplePlayerSlot* playerSlot);
 
+public slots:
+	void OnEntityMoved(int entityId, RealCoord coord);
+	
 protected:
+	void ObjectAdded(MapObject* object) override;
+	
 	void paintEvent(QPaintEvent*) override;
 	void mousePressEvent(QMouseEvent* event) override;
 
