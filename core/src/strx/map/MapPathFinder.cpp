@@ -6,59 +6,62 @@
 
 namespace strx
 {
+static const int epsilon = 3;
+static const int straight = 10;
+static const int diagonal = straight * M_SQRT2;
+static const MapCoord around[8] =
+		{
+				MapCoord(-1,  1), MapCoord(0,  1), MapCoord(1,  1),
+				MapCoord(-1,  0), MapCoord(1, -1), MapCoord(1,  0),
+				MapCoord(-1, -1), MapCoord(0, -1)  // i % 2 ? straight : diagonal
+		};
 
+using Price = int;
+struct CellPrice
+{
+	MapCoord coord;
+	CellPrice* parent;
+	Price F, G, H;
+	
+	CellPrice(MapCoord coord, CellPrice* parent, Price G, Price H)
+			: coord(coord), parent(parent), F(G + H), G(G), H(H) {}
+};
+
+Price Distance(const MapCoord& a, const MapCoord& b)
+{
+	return (abs(a.x - b.x) + abs(a.y - b.y)) * epsilon;
+}
+
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 MapPathFinder::MapPathFinder(const Map& map)
 		: map(map) {}
 
 u_p<MapPath> MapPathFinder::FindPath(const MapCoord from, const MapCoord till) const
 {
-	// Cannot be achieved
-	if (!IsAccessible(till))
-	{
-		return nullptr;
-	}
+	// cannot be achieved
+	if (!IsAccessible(till)) return nullptr;
 	
-	// Already on place
+	// already on place
+	if (from.x == till.x && from.y == till.y) return nullptr;
+	
+	umap<MapCoord, u_p<CellPrice>> opened, closed;
+	opened.emplace(from, new CellPrice(from, nullptr, 0, 0));
+	
 	auto mapsPath = make_u<MapPath>();
-	if (from.x == till.x && from.y == till.y)
-		return mapsPath;
-	
-	static const MapCoord around[8] =
-			{
-					MapCoord(-1, 1), MapCoord(0, 1), MapCoord(1, 1),
-					MapCoord(-1, 0), MapCoord(1, -1), MapCoord(1, 0),
-					MapCoord(-1, -1), MapCoord(0, -1) // <^ done for ability % 2
-			};
-	
-	list<s_p<CellPrice>> opened, closed;
-	s_p<CellPrice> current = make_s<CellPrice>(from, nullptr, 0, 0);
-	
-	opened.push_back(current);
-	
 	while (!opened.empty())
 	{
-		list<s_p<CellPrice>>::iterator it_min, it = opened.begin();
-		it_min = it++; // it_min == begin, it == begin + 1
-		Price F_min = (*it_min)->F;
+		auto itMin = min_element(all_(opened), [](auto& a, auto& b) { return a.second->F < b.second->F; });
+		CellPrice* current = itMin->second.get();
 		
-		for (; it != opened.end(); ++it)
-		{
-			if (F_min > (*it)->F)
-			{
-				it_min = it;
-				F_min = (*it)->F;
-			}
-		}
-		current = *it_min;
-		opened.erase(it_min);
-		closed.push_front(current);
+		closed.emplace(current->coord, move(itMin->second));
+		opened.erase(itMin);
 		
-		if (current->mc == till) // Way's found !
+		if (current->coord == till) // way found !
 		{
-			// Return list
-			for (CellPrice* cellPrice = current.get(); cellPrice; cellPrice = cellPrice->parent)
+			for (CellPrice* cellPrice = current; cellPrice; cellPrice = cellPrice->parent)
 			{
-				mapsPath->AddPoint(cellPrice->mc);
+				mapsPath->AddPoint(cellPrice->coord);
 			}
 			mapsPath->TakeNext(); // remove first
 			break;
@@ -66,98 +69,36 @@ u_p<MapPath> MapPathFinder::FindPath(const MapCoord from, const MapCoord till) c
 		
 		for (int i = 0; i < 8; ++i)
 		{
-			MapCoord checking_mc = current->mc + around[i];
+			MapCoord coord = current->coord + around[i];
 			
-			if (map.IsCell(checking_mc) && !GetByCoord(closed, checking_mc).get() && IsAccessible(checking_mc))
+			if (IsAccessible(coord) && !in_(coord, closed))
 			{
-				// map(current->mc) @#~
-				Price new_G = current->G + ((i % 2) ? 10 : 14) * map.GetCell(current->mc).terrain->retard; // sqrt(2)*10, 10
+				Price nextG = current->G + (i % 2 ? straight : diagonal) / map.GetCell(coord).terrain->quality;
 				
-				s_p<CellPrice> openedCell = GetByCoord(opened, checking_mc);
-				if (!openedCell.get())
+				auto it = opened.find(coord);
+				if (it == opened.end())
 				{
-					int new_H = Distance(checking_mc, till);
-					openedCell.reset(new CellPrice(checking_mc, current.get(), new_G, new_H));
-					opened.push_back(openedCell);
+					Price nextH = Distance(coord, till);
+					CellPrice* next = new CellPrice(coord, current, nextG, nextH);
+					opened.emplace(coord, next);
 				}
-				else
+				else if (it->second->G > nextG) // in open list & current distance > new distance
 				{
-					// in open list & mark < old mark
-					if (openedCell->G > new_G)
-					{
-						openedCell->parent = current.get();
-						openedCell->G = new_G;
-						openedCell->F = openedCell->G + openedCell->H;
-					}
+					CellPrice* next = it->second.get();
+					next->parent = current;
+					next->G = nextG;
+					next->F = next->G + next->H;
 				}
 			}
 		}
 	}
-	
+	//trace_log << "Checked tiles: " << closed.size();
 	return mapsPath;
 }
 
-s_p<MapPathFinder::CellPrice> MapPathFinder::GetByCoord(list<s_p<CellPrice>>& list, MapCoord checking_mc) const
+bool MapPathFinder::IsAccessible(const MapCoord& coord) const
 {
-	for (auto&& cellPrice : list)
-	{
-		if (cellPrice->mc == checking_mc)
-			return cellPrice;
-	}
-	return s_p<CellPrice>();
+	return map.IsCell(coord) && map.GetCell(coord).terrain->quality > 0;
 }
-
-bool MapPathFinder::IsAccessible(const MapCoord& mc) const
-{
-	return map.GetCell(mc).terrain->retard > 0;
-}
-
-//void OObjectEntiSlot::AddWayTo_Debug(Vector3 &pos)
-//{
-//	static MapCoord oldMapCoord = MapCoord(-1, -1);
-//	MapCoord newMapCoord = GetMapCoord(pos);
-//
-//	typedef std::deque< MapCoord> MapCoordDeque;
-//	static MapCoordDeque *saved_moveList;
-//
-//	// First time mouse click => Draw path
-//	if( oldMapCoord != newMapCoord )
-//	{
-//		oldMapCoord = newMapCoord;
-//
-//		typedef std::list< Map::Cell*> CellList;
-//		CellList *p_closed = 0;
-//
-//		// !!!!!!!!!!!!!!!
-//		// saved_moveList =  kernel->GetMap().FindPath_Debug(mapCoord, newMapCoord, p_closed);
-//
-//		//
-//		labelVector.clear();
-//		labelVector.reserve(p_closed->size());
-//
-//		for( CellList::iterator at = p_closed->begin(); at != p_closed->end(); ++at)
-//		{
-//			stringstream title;
-//			title << "\n" << (*at)->G << " + " << (*at)->H << "\n = " << (*at)->F ;
-//			s_p<OObjectLabel> labelEntiSlot(new OObjectLabel((*at)->mc, title.str().c_str()));
-//
-//			if( saved_moveList->end() != find(saved_moveList->begin(), saved_moveList->end(), (*at)->mc) )
-//				labelEntiSlot->SetColor(ColourValue(1.0, 1.0, 1.0, 1.0));
-//			else
-//				labelEntiSlot->SetColor(ColourValue(5.0, 0.0, 0.8, 1.0));
-//
-//			labelVector.push_back(labelEntiSlot);
-//		}
-//
-//		delete p_closed;
-//	}
-//	else // Second time mouse click => Go
-//	{
-//		if( moveList != saved_moveList )
-//			delete moveList;
-//		moveList = saved_moveList;
-//	}
-//}
-
 
 }

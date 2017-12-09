@@ -14,9 +14,9 @@ public:
 	{
 		int id;
 		string name;
-		float retard;
+		float quality;
 		
-		Terrain(int id, string name, float retard) : id(id), name(move(name)), retard(retard) {}
+		Terrain(int id, string name, float quality) : id(id), name(move(name)), quality(quality) {}
 	};
 	
 	struct Cell

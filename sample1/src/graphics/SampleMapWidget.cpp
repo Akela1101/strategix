@@ -28,7 +28,6 @@ void SampleMapWidget::AddPlayer(SamplePlayerSlot* playerSlot)
 
 void SampleMapWidget::OnEntityMoved(int entityId, RealCoord coord)
 {
-	//info_raw << "%d to %.2f, %.2f"s % entityId % coord.x % coord.y;
 	if (!in_(entityId, mapObjects))
 	{
 		error_log << "Entity [%d] is not found on map."s % entityId;
@@ -41,7 +40,13 @@ void SampleMapWidget::OnEntityMoved(int entityId, RealCoord coord)
 	if (mapCoord != currentMapCoord)
 	{
 		auto&& uObject = map->GetCell(mapCoord).object;
-		map->GetCell(currentMapCoord).object = std::move(uObject);
+		auto& currentObject = map->GetCell(currentMapCoord).object;
+		if (currentObject)
+		{
+			error_log << "Trying to replace %s on map."s % currentObject->name;
+			return;
+		}
+		currentObject = std::move(uObject);
 	}
 	update(GetUpdateRect(coord));
 	update(GetUpdateRect(object->coord));
@@ -73,15 +78,15 @@ void SampleMapWidget::paintEvent(QPaintEvent* event)
 void SampleMapWidget::mousePressEvent(QMouseEvent* event)
 {
 	MapWidget::mousePressEvent(event);
-	if (!(event->buttons() & Qt::LeftButton))
-	{
-		return;
-	}
+	if (!(event->buttons() & Qt::LeftButton)) return;
 	
 	QPoint point = event->pos();
 	MapCoord coord(point.x() / tileLen, point.y() / tileLen);
 	
 	MapObject* object = map->GetCell(coord).object.get();
+	if (object == currentEntity) return;
+	
+	// click to empty place -> move
 	if (!object)
 	{
 		auto& entity = humanPlayer->GetEntitySlot(currentEntity->id);
@@ -89,25 +94,23 @@ void SampleMapWidget::mousePressEvent(QMouseEvent* event)
 		return;
 	}
 	
+	// click on mine -> collect
 	EntityObject* entity = dynamic_cast<EntityObject*>(object);
 	if (!entity)
 	{
-		// Collect
+		// @#~
 		return;
 	}
 	
-	if (entity == currentEntity)
-	{
-		return;
-	}
-	
+	// click on own entity -> select
 	if (entity->owner == humanPlayerId)
 	{
 		ChangeSelection(entity);
 		return;
 	}
 	
-	// Attack
+	// click on enemy entity -> attack
+	// @#~
 }
 
 void SampleMapWidget::ChangeSelection(EntityObject* entity)

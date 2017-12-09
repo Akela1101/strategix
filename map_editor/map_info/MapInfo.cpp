@@ -70,11 +70,11 @@ void MapInfo::LoadTerrainTools()
 	for (int i : irange(0, divs * divs))
 	{
 		string name;
-		float retard;
-		fin >> retard >> name;
+		float quality;
+		fin >> quality >> name;
 		if (name.empty()) break;
 		
-		Map::AddTerrain(make_u<Map::Terrain>(i, name, retard));
+		Map::AddTerrain(make_u<Map::Terrain>(i, name, quality));
 		
 		int col = i % divs, row = i / divs;
 		QPixmap image = pixmap.copy(col * tileSize, row * tileSize, tileSize, tileSize);

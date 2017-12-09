@@ -10,53 +10,56 @@ struct Coord
 	T x, y;
 	
 	Coord() {}
-	
-	Coord(const Coord& _c) : x(_c.x), y(_c.y) {}
-	
-	Coord(const T x, const T y) : x(x), y(y) {}
+	Coord(const Coord& other) : x(other.x), y(other.y) {}
+	Coord(T x, T y) : x(x), y(y) {}
 	
 	operator Coord<Y, T>() const
 	{
 		return Coord<Y, T>(x, y);
 	}
 	
-	bool operator==(const Coord& _r) const
+	bool operator ==(const Coord& other) const
 	{
-		return x == _r.x && y == _r.y;
+		return x == other.x && y == other.y;
 	}
 	
-	bool operator!=(const Coord& _r) const
+	bool operator !=(const Coord& other) const
 	{
-		return x != _r.x || y != _r.y;
+		return x != other.x || y != other.y;
 	}
 	
-	Coord operator+(const Coord& _r) const
+	Coord operator +(const Coord& other) const
 	{
-		return Coord(x + _r.x, y + _r.y);
+		return Coord(x + other.x, y + other.y);
 	}
 	
-	Coord operator-(const Coord& _r) const
+	Coord operator -(const Coord& other) const
 	{
-		return Coord(x - _r.x, y - _r.y);
+		return Coord(x - other.x, y - other.y);
 	}
 	
-	Coord& operator+=(const Coord& _r)
+	Coord& operator +=(const Coord& other)
 	{
-		x += _r.x;
-		y += _r.y;
+		x += other.x;
+		y += other.y;
 		return *this;
 	}
 	
-	Coord& operator-=(const Coord& _r)
+	Coord& operator -=(const Coord& other)
 	{
-		x -= _r.x;
-		y -= _r.y;
+		x -= other.x;
+		y -= other.y;
 		return *this;
 	}
 	
-	Coord operator*(float _v)
+	Coord operator *(float value)
 	{
-		return Coord(_v * x, _v * y);
+		return Coord(value * x, value * y);
+	}
+	
+	bool operator <(const Coord& other)
+	{
+		return x != other.x ? x < other.x : y < other.y;
 	}
 	
 	T Len() const
@@ -66,7 +69,7 @@ struct Coord
 	
 	Coord Norm() const
 	{
-		T invLen = 1.0 / Len();
+		float invLen = 1.0 / Len();
 		return Coord(x * invLen, y * invLen);
 	}
 };
@@ -85,6 +88,19 @@ template<>
 MapCoord::operator RealCoord() const;
 #endif
 
+}
+
+namespace std
+{
+template<> struct hash<strx::MapCoord>
+{
+	static constexpr int shift = sizeof(size_t) * 8 / 2;
+	
+	size_t operator()(const strx::MapCoord& coord) const noexcept
+	{
+		return coord.x ^ ((size_t)coord.y << shift);
+	}
+};
 }
 
 #endif    /* _COORDSTRUCTS_H */
