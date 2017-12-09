@@ -44,8 +44,8 @@ protected:
 	
 	void DrawTerrain(const QPixmap& pixmap, const QRect& rc);
 	void DrawObject(MapObject* object, QPainter& painter);
-	QRect GetRect(MapCoord coord);
-	static QRect GetBaseRect(MapCoord coord);
+	QRect GetUpdateRect(RealCoord coord);
+	static QRect GetBaseRect(RealCoord coord);
 	
 signals:
 	void MapChanged(bool yes = true);

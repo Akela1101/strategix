@@ -160,7 +160,7 @@ void MapWidget::DrawObject(MapObject* object, QPainter& painter)
 	QRect rc = GetBaseRect(object->coord);
 	painter.drawPixmap(rc, tool.image);
 	
-	if (tool.type == ToolType::ENTITY)
+	if (tool.type == ToolType::ENTITY) // player geo-tag
 	{
 		auto entityObject = (EntityObject*) object;
 		int w = rc.width(), h = rc.height();
@@ -171,14 +171,14 @@ void MapWidget::DrawObject(MapObject* object, QPainter& painter)
 	}
 }
 
-QRect MapWidget::GetRect(MapCoord coord)
+QRect MapWidget::GetUpdateRect(RealCoord coord)
 {
-	return QRect(coord.x * tileLen, coord.y * tileLen, tileLen, tileLen);
+	return QRect(tileLen * (coord.x - 0.55), tileLen * (coord.y - 0.55), tileLen * 1.1, tileLen * 1.1);
 }
 
-QRect MapWidget::GetBaseRect(MapCoord coord)
+QRect MapWidget::GetBaseRect(RealCoord coord)
 {
-	return QRect(coord.x * baseTileLen, coord.y * baseTileLen, baseTileLen, baseTileLen);
+	return QRect((coord.x - 0.5) * baseTileLen, (coord.y - 0.5) * baseTileLen, baseTileLen, baseTileLen);
 }
 
 }

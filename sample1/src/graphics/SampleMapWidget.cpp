@@ -42,11 +42,10 @@ void SampleMapWidget::OnEntityMoved(int entityId, RealCoord coord)
 	{
 		auto&& uObject = map->GetCell(mapCoord).object;
 		map->GetCell(currentMapCoord).object = std::move(uObject);
-		
-		update(GetRect(currentMapCoord));
 	}
+	update(GetUpdateRect(coord));
+	update(GetUpdateRect(object->coord));
 	object->coord = coord;
-	update(GetRect(mapCoord));
 }
 
 void SampleMapWidget::ObjectAdded(MapObject* object)
@@ -62,11 +61,11 @@ void SampleMapWidget::paintEvent(QPaintEvent* event)
 	{
 		QPainter painter(this);
 		painter.setPen(QPen(Qt::green));
-		
+
 		auto coord = currentEntity->coord;
 		int len = tileLen - painter.pen().width();
 		auto rc = QRect(tileLen * coord.x - len * 0.5, tileLen * coord.y - len * 0.5, len, len);
-		
+
 		painter.drawRect(rc);
 	}
 }
@@ -115,10 +114,10 @@ void SampleMapWidget::ChangeSelection(EntityObject* entity)
 {
 	if (currentEntity)
 	{
-		update(GetRect(currentEntity->coord));
+		update(GetUpdateRect(currentEntity->coord));
 	}
 	currentEntity = entity;
-	update(GetRect(entity->coord));
+	update(GetUpdateRect(entity->coord));
 }
 
 }
