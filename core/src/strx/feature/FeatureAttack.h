@@ -13,7 +13,7 @@ protected:
 	const FeatureInfoAttack* featureInfoAttack; // Link to tree
 
 private:
-	s_p<Enti> target; // @#~ weak ptr - better ???
+	s_p<Enti> target;
 	HpType hitProgress;
 
 public:
@@ -22,14 +22,7 @@ public:
 	bool Attack(s_p<Enti> target);
 	virtual bool Tick(float seconds);
 	virtual void Stop();
-	
 	virtual void OnComplete(bool isComplete); // Moving Complete
-
-protected:
-
-private:
-	FeatureAttack(const FeatureAttack& _c);
-	FeatureAttack& operator=(const FeatureAttack& _c);
 };
 }
 

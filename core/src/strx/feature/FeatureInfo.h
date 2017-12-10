@@ -10,16 +10,11 @@ namespace strx
 {
 // Global feature properties
 
-struct FeatureInfo
+struct FeatureInfo : boost::noncopyable
 {
 	FeatureInfo() = default;
-	
 	virtual ~FeatureInfo() = default;
-	
 	virtual FeatureInfo* clone() = 0;
-	
-	FeatureInfo(const FeatureInfo& _c) = delete;
-	FeatureInfo& operator=(const FeatureInfo& _c) = delete;
 };
 
 struct FeatureInfoMove : FeatureInfo

@@ -24,8 +24,6 @@ private:
 
 public:
 	FeatureMove(const FeatureInfo* featureInfo, Enti* enti);
-	FeatureMove(const FeatureMove&) = delete;
-	FeatureMove& operator=(const FeatureMove&) = delete;
 	~FeatureMove();
 	
 	bool Move(MapCoord coord, ICommand* iCommand = nullptr);

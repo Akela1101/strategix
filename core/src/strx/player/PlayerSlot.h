@@ -12,7 +12,7 @@ namespace strx
  *
  * This class belongs to strategix, so shouldn't be deleted by user.
  */
-class PlayerSlot
+class PlayerSlot : boost::noncopyable
 {
 	friend class Player;
 	Player* player;
@@ -20,8 +20,6 @@ class PlayerSlot
 public:
 	PlayerSlot(Player* player);
 	virtual ~PlayerSlot();
-	PlayerSlot(const PlayerSlot& _c) = delete;
-	PlayerSlot& operator=(const PlayerSlot& _c) = delete;
 	
 	/// @return unique name
 	const string& GetName() const;

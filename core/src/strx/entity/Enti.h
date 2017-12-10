@@ -10,7 +10,7 @@
 namespace strx
 {
 
-class Enti
+class Enti : boost::noncopyable
 {
 	EntiSlot* slot = nullptr; // Link to slot
 	Player* const player;     // Link to owner
@@ -27,8 +27,6 @@ class Enti
 	
 public:
 	Enti(const EntiInfo& entiInfo, int id, const RealCoord& coord, Player* player);
-	Enti(const Enti& _c) = delete;
-	Enti& operator=(const Enti& _c) = delete;
 	~Enti();
 	
 	EntiSlot& GetSlot() const { return *slot; }

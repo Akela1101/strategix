@@ -6,21 +6,17 @@
 
 namespace strx
 {
-class Feature
+class Feature : boost::noncopyable
 {
 protected:
 	Enti* enti; // Link to enti
 
 public:
 	Feature(Enti* enti) : enti(enti) {}
-	
 	virtual ~Feature() = default;
 	
 	virtual bool Tick(float seconds) = 0; // stop tick, if false.
 	virtual void Stop() = 0;
-
-	Feature(const Feature& _c) = delete;
-	Feature& operator=(const Feature& _c) = delete;
 };
 }
 

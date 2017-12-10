@@ -32,10 +32,6 @@ public:
 protected:
 	const Enti* FindCollector(); // resource collector
 	void MoveToCollector(); // going back to base(or other collector)
-
-private:
-	FeatureCollect(const FeatureCollect& _c);
-	FeatureCollect& operator=(const FeatureCollect& _c);
 };
 }
 

@@ -1,77 +1,33 @@
 #ifndef _COORDSTRUCTS_H
 #define    _COORDSTRUCTS_H
 
+#include <boost/operators.hpp>
 
 namespace strx
 {
 template<typename T, typename Y>
 struct Coord
+		: boost::totally_ordered<Coord<T, Y>
+		, boost::additive<Coord<T, Y>
+		, boost::multiplicative<Coord<T, Y>, float>>>
 {
 	T x, y;
 	
 	Coord() {}
-	Coord(const Coord& other) : x(other.x), y(other.y) {}
 	Coord(T x, T y) : x(x), y(y) {}
+	Coord(const Coord& other) = default;
+	Coord& operator =(const Coord& other) = default;
 	
-	operator Coord<Y, T>() const
-	{
-		return Coord<Y, T>(x, y);
-	}
+	operator Coord<Y, T>() const { return Coord<Y, T>(x, y); }
 	
-	bool operator ==(const Coord& other) const
-	{
-		return x == other.x && y == other.y;
-	}
+	bool operator ==(const Coord& other) const { return x == other.x && y == other.y; }
+	bool operator <(const Coord& other) const { return x != other.x ? x < other.x : y < other.y; }
+	Coord& operator +=(const Coord& other) { x += other.x, y += other.y; return *this; }
+	Coord& operator -=(const Coord& other) { x -= other.x, y -= other.y; return *this; }
+	Coord& operator *=(float value) { x *= value, y *= value; return *this; }
 	
-	bool operator !=(const Coord& other) const
-	{
-		return x != other.x || y != other.y;
-	}
-	
-	Coord operator +(const Coord& other) const
-	{
-		return Coord(x + other.x, y + other.y);
-	}
-	
-	Coord operator -(const Coord& other) const
-	{
-		return Coord(x - other.x, y - other.y);
-	}
-	
-	Coord& operator +=(const Coord& other)
-	{
-		x += other.x;
-		y += other.y;
-		return *this;
-	}
-	
-	Coord& operator -=(const Coord& other)
-	{
-		x -= other.x;
-		y -= other.y;
-		return *this;
-	}
-	
-	Coord operator *(float value)
-	{
-		return Coord(value * x, value * y);
-	}
-	
-	bool operator <(const Coord& other)
-	{
-		return x != other.x ? x < other.x : y < other.y;
-	}
-	
-	T Len() const
-	{
-		return x * x + y * y;
-	}
-	
-	Coord Norm() const
-	{
-		float invLen = 1.0 / Len();
-		return Coord(x * invLen, y * invLen);
-	}
+	T Len() const { return x * x + y * y; }
+	Coord Norm() const { float invLen = 1.0 / Len(); return Coord(x * invLen, y * invLen); }
 };
 
 using MapCoord  = Coord<int, float>; // used in Maps

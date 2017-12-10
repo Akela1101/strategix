@@ -16,8 +16,6 @@ private:
 
 public:
 	FeatureHealth(const FeatureInfo* featureInfo, Enti* enti);
-	FeatureHealth(const FeatureHealth& _c) = delete;
-	FeatureHealth& operator=(const FeatureHealth& _c) = delete;
 	
 	bool Tick(float seconds) override;
 	void Stop() override;

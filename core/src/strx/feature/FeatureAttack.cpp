@@ -17,7 +17,7 @@ bool FeatureAttack::Attack(s_p<Enti> target)
 {
 	if (target.get() == enti)
 	{
-		// Log ( do not attak yourself ) :-)
+		error_log << "Do not attack yourself :-)";
 		return false;
 	}
 	

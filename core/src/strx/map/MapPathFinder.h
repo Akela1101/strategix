@@ -9,7 +9,7 @@ namespace strx
 /**
  * Simple A* implementation.
  */
-class MapPathFinder : public boost::noncopyable
+class MapPathFinder : boost::noncopyable
 {
 	const Map& map;
 

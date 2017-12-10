@@ -1,3 +1,4 @@
+#include <boost/core/demangle.hpp>
 #include <strx/feature/FeatureMove.h>
 #include <strx/feature/FeatureCollect.h>
 #include <strx/feature/FeatureHealth.h>
@@ -30,7 +31,7 @@ Feature* Enti::GetFeature(type_index type) const
 	auto iFeature = features.find(type);
 	if (iFeature == features.end())
 	{
-		info_log << "%s has no feature %s"s % entiInfo.name % type.name();
+		info_log << "%s has no feature %s"s % entiInfo.name % boost::core::demangle(type.name());
 		return nullptr;
 	}
 	return iFeature->second.get();

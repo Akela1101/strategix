@@ -6,14 +6,12 @@
 
 namespace strx
 {
-class MapPath
+class MapPath : boost::noncopyable
 {
 	vector<MapCoord> path;
 
 public:
 	MapPath() = default;
-	MapPath(const MapPath&) = delete;
-	MapPath& operator=(const MapPath&) = delete;
 	
 	bool IsEmpty() { return path.empty(); }
 	

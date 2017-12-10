@@ -2,7 +2,7 @@
 #define    _RESOURCE_H
 
 #include <Strategix_Forward.h>
-
+#include <boost/operators.hpp>
 
 namespace strx
 {
@@ -12,6 +12,7 @@ using ResourcesType = umap<string, ResourceUnit>;
 using ResourceType = ResourcesType::value_type;
 
 struct Resource : public ResourceType
+		, boost::additive<Resource, ResourceUnit>
 {
 	using ResourceType::ResourceType;
 	Resource(const ResourceType& other) : ResourceType(other) {}
@@ -21,27 +22,8 @@ struct Resource : public ResourceType
 	operator ResourceUnit() const { return second; }
 	
 	// With no resource type check !!!
-	const Resource operator+(ResourceUnit amount) const
-	{
-		return Resource(first, second + amount);
-	}
-	
-	const Resource operator-(ResourceUnit amount) const
-	{
-		return Resource(first, second - amount);
-	}
-	
-	Resource& operator+=(ResourceUnit amount)
-	{
-		second += amount;
-		return *this;
-	}
-	
-	Resource& operator-=(ResourceUnit amount)
-	{
-		second -= amount;
-		return *this;
-	}
+	Resource& operator +=(ResourceUnit amount) { second += amount; return *this; }
+	Resource& operator -=(ResourceUnit amount) { second -= amount; return *this; }
 };
 }
 

@@ -7,7 +7,8 @@
 
 namespace strx
 {
-class EntiSlot : public ITick, public IMove, public ICollect, public IHealth, public IAttack
+class EntiSlot : boost::noncopyable
+		, public ITick, public IMove, public ICollect, public IHealth, public IAttack
 {
 protected:
 	Enti* enti;
@@ -15,8 +16,6 @@ protected:
 public:
 	EntiSlot(Enti* enti);
 	virtual ~EntiSlot() = 0;
-	EntiSlot(const EntiSlot& _c) = delete;
-	EntiSlot& operator=(const EntiSlot& _c) = delete;
 };
 }
 

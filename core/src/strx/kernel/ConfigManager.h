@@ -10,7 +10,7 @@ namespace strx
 {
 
 /// Reusable configuration manager.
-class ConfigManager
+class ConfigManager : boost::noncopyable
 {
 	struct ConfigurationManagerImpl;
 	u_p<ConfigurationManagerImpl> impl;

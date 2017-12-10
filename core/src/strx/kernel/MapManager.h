@@ -7,15 +7,13 @@
 namespace strx
 {
 
-class MapManager
+class MapManager : boost::noncopyable
 {
 	const string mapsDirectory;    /// usually "maps"
 	u_p<Map> map;          /// global map
 	
 public:
 	MapManager(string mapsDirectory) : mapsDirectory(mapsDirectory) {}
-	MapManager(const MapManager& _c) = delete;
-	MapManager& operator=(const MapManager& _c) = delete;
 	~MapManager();
 	
 	const string& GetMapsDirectory() const { return mapsDirectory; }

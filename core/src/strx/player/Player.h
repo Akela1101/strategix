@@ -7,7 +7,7 @@
 namespace strx
 {
 
-class Player
+class Player : boost::noncopyable
 {
 	friend class FeatureCollect;  // @#~ temporary
 	
@@ -26,8 +26,6 @@ class Player
 public:
 	Player(const string& name, PlayerType type, int id, const string& raceName, u_p<Map> map);
 	~Player();
-	Player(const Player& orig) = delete;
-	Player& operator=(const Player& _c) = delete;
 	
 	const string& GetName() const { return name; }
 	PlayerType GetType() const { return type; }
@@ -41,8 +39,6 @@ public:
 	void AddEnti(Enti* enti);
 	void RemoveEnti(Enti* enti);
 	bool AddResource(const Resource& deltaResource);
-	
-	// signals
 };
 }
 

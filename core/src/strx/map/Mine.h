@@ -8,7 +8,7 @@
 
 namespace strx
 {
-class Mine
+class Mine : boost::noncopyable
 {
 	friend class MapManager;
 	

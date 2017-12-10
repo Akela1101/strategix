@@ -6,7 +6,7 @@
 
 namespace strx
 {
-class Game
+class Game : boost::noncopyable
 {
 public:
 	virtual ~Game() = default;
