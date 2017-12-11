@@ -5,6 +5,7 @@ The main aim of this project is a base library for common Real-Time Strategy gam
 * core — strategix core library
 * map_editor — qt application for map editing
 * sample1 — sample of game based on map_editor \[ in progress... ]
+![screenshot1](docs/screenshots/2017_12_11.png)
 
 ## Dependencies
 * boost
