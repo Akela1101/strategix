@@ -26,7 +26,7 @@ struct Coord
 	Coord& operator -=(const Coord& other) { x -= other.x, y -= other.y; return *this; }
 	Coord& operator *=(float value) { x *= value, y *= value; return *this; }
 	
-	T Len() const { return x * x + y * y; }
+	float Len() const { return sqrtf(x * x + y * y); }
 	Coord Norm() const { float invLen = 1.0 / Len(); return Coord(x * invLen, y * invLen); }
 };
 

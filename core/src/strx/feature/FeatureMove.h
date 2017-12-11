@@ -9,15 +9,12 @@ namespace strx
 {
 class FeatureMove : public Feature
 {
-protected:
 	const FeatureInfoMove* featureInfoMove; // Link to tree
-	float speed;
-	
 	bool isMoving;
-
-private:
+	float speed;
 	float distance;
-	RealCoord direction, finish;
+	float terrainQuality;
+	RealCoord direction, next;
 	u_p<MapPath> mapsPath;
 	
 	ICommand* iCommand; // someone who started moving

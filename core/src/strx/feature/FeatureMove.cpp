@@ -14,9 +14,10 @@ namespace strx
 FeatureMove::FeatureMove(const FeatureInfo* featureInfo, Enti* enti)
 		: Feature(enti)
 		, featureInfoMove(dynamic_cast<const FeatureInfoMove*>(featureInfo))
-		, speed(featureInfoMove->speed)
-		, finish(enti->GetCoord())
 		, isMoving(false)
+		, speed(featureInfoMove->speed)
+		, distance(0)
+		, next(enti->GetCoord())
 {}
 
 FeatureMove::~FeatureMove() = default;
@@ -27,8 +28,7 @@ bool FeatureMove::Move(MapCoord coord, ICommand* iCommand)
 	distance = 0;
 	mapsPath = enti->GetPlayer().GetMap().FindPath(enti->GetCoord(), coord);
 	
-	if (!mapsPath)
-		return false;
+	if (mapsPath->IsEmpty()) return false;
 	
 	if (!isMoving)
 	{
@@ -53,18 +53,21 @@ bool FeatureMove::Tick(float seconds)
 		}
 		
 		// Selecting next point
-		auto next = mapsPath->TakeNext();
-		finish = next;
-		RealCoord delta = finish - enti->GetCoord();
+		auto current = enti->GetCoord();
+		next = mapsPath->TakeNext();
+		RealCoord delta = (RealCoord)next - current;
 		direction = delta.Norm();
 		distance = delta.Len();
+		
+		auto map = enti->GetPlayer().GetMap();
+		terrainQuality = 0.5 * (map.GetCell(current).terrain->quality + map.GetCell(next).terrain->quality);
 	}
 	
 	// Moving
-	float step = seconds * speed;
+	float step = seconds * speed * terrainQuality;
 	distance = (distance > step) ? (distance - step) : 0;
 	
-	RealCoord coord = finish - direction * distance;
+	RealCoord coord = next - direction * distance;
 	enti->GetCoord() = coord;
 	enti->GetSlot().OnMove(coord);
 	return true;

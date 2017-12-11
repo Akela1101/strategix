@@ -1,3 +1,8 @@
+#include <boost/multi_index_container.hpp>
+#include <boost/multi_index/hashed_index.hpp>
+#include <boost/multi_index/ordered_index.hpp>
+#include <boost/multi_index/member.hpp>
+
 #include "MapPath.h"
 #include "Map.h"
 
@@ -6,7 +11,8 @@
 
 namespace strx
 {
-static const int epsilon = 3;
+static const int maxCheckedTiles = 300;
+static const int epsilon = 4;
 static const int straight = 10;
 static const int diagonal = straight * M_SQRT2;
 static const MapCoord around[8] =
@@ -17,13 +23,13 @@ static const MapCoord around[8] =
 		};
 
 using Price = int;
-struct CellPrice
+struct PricedCell
 {
 	MapCoord coord;
-	CellPrice* parent;
+	PricedCell* parent;
 	Price F, G, H;
 	
-	CellPrice(MapCoord coord, CellPrice* parent, Price G, Price H)
+	PricedCell(MapCoord coord, PricedCell* parent, Price G, Price H)
 			: coord(coord), parent(parent), F(G + H), G(G), H(H) {}
 };
 
@@ -32,6 +38,12 @@ Price Distance(const MapCoord& a, const MapCoord& b)
 	return (abs(a.x - b.x) + abs(a.y - b.y)) * epsilon;
 }
 
+// opened cells are retrievable by coordinate and sorted by price
+using namespace boost::multi_index;
+using OpenedCellsType = multi_index_container<u_p<PricedCell>, indexed_by
+		< hashed_unique<member<PricedCell, MapCoord, &PricedCell::coord>, hash<MapCoord>>
+		, ordered_non_unique<tag<Price>, member<PricedCell, Price, &PricedCell::F>>
+		>>;
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 MapPathFinder::MapPathFinder(const Map& map)
@@ -39,66 +51,82 @@ MapPathFinder::MapPathFinder(const Map& map)
 
 u_p<MapPath> MapPathFinder::FindPath(const MapCoord from, const MapCoord till) const
 {
-	// cannot be achieved
-	if (!IsAccessible(till)) return nullptr;
-	
 	// already on place
-	if (from.x == till.x && from.y == till.y) return nullptr;
+	if (from.x == till.x && from.y == till.y) return make_u<MapPath>();
 	
-	umap<MapCoord, u_p<CellPrice>> opened, closed;
-	opened.emplace(from, new CellPrice(from, nullptr, 0, 0));
+	OpenedCellsType opened;
+	umap<MapCoord, u_p<PricedCell>> closed;
 	
-	auto mapsPath = make_u<MapPath>();
-	while (!opened.empty())
+	PricedCell* closest = new PricedCell(from, nullptr, 0, Distance(from, till)); // closest to till by heuristic
+	opened.emplace(closest);
+	for (int k = 0; k < maxCheckedTiles && !opened.empty(); ++k)
 	{
-		auto itMin = min_element(all_(opened), [](auto& a, auto& b) { return a.second->F < b.second->F; });
-		CellPrice* current = itMin->second.get();
+		auto& openedByPrice = opened.get<Price>();
+		auto itMin = openedByPrice.begin(); // get cell with minimum Price
+		PricedCell* current = itMin->get();
 		
-		closed.emplace(current->coord, move(itMin->second));
-		opened.erase(itMin);
+		// move this cell from opened to closed
+		closed.emplace(current->coord, move(const_cast<u_p<PricedCell>&>(*itMin)));
+		openedByPrice.erase(itMin);
 		
 		if (current->coord == till) // way found !
 		{
-			for (CellPrice* cellPrice = current; cellPrice; cellPrice = cellPrice->parent)
-			{
-				mapsPath->AddPoint(cellPrice->coord);
-			}
-			mapsPath->TakeNext(); // remove first
+			closest = current;
 			break;
 		}
 		
 		for (int i = 0; i < 8; ++i)
 		{
 			MapCoord coord = current->coord + around[i];
+			float currentQuality = map.GetCell(current->coord).terrain->quality;
 			
 			if (IsAccessible(coord) && !in_(coord, closed))
 			{
-				Price nextG = current->G + (i % 2 ? straight : diagonal) / map.GetCell(coord).terrain->quality;
+				float quality = 0.5 * (currentQuality + map.GetCell(coord).terrain->quality);
+				Price nextG = current->G + (i % 2 ? straight : diagonal) / quality;
 				
 				auto it = opened.find(coord);
 				if (it == opened.end())
 				{
 					Price nextH = Distance(coord, till);
-					CellPrice* next = new CellPrice(coord, current, nextG, nextH);
-					opened.emplace(coord, next);
+					PricedCell* next = new PricedCell(coord, current, nextG, nextH);
+					if (nextH < closest->H) closest = next;
+					
+					opened.emplace(next);
 				}
-				else if (it->second->G > nextG) // in open list & current distance > new distance
+				else if ((*it)->G > nextG) // in open list & current distance > new distance
 				{
-					CellPrice* next = it->second.get();
-					next->parent = current;
-					next->G = nextG;
-					next->F = next->G + next->H;
+					opened.modify(it, [current, nextG](auto& next)
+					{
+						next->parent = current;
+						next->G = nextG;
+						next->F = nextG + next->H;
+					});
 				}
 			}
 		}
 	}
 	//trace_log << "Checked tiles: " << closed.size();
-	return mapsPath;
+	return GetWay(closest);
 }
 
 bool MapPathFinder::IsAccessible(const MapCoord& coord) const
 {
-	return map.IsCell(coord) && map.GetCell(coord).terrain->quality > 0;
+	if (!map.IsCell(coord)) return false;
+	
+	auto& cell = map.GetCell(coord);
+	return cell.terrain->quality > 0 && !cell.object;
+}
+
+u_p<MapPath> MapPathFinder::GetWay(PricedCell* cell) const
+{
+	auto mapsPath = make_u<MapPath>();
+	for (; cell; cell = cell->parent)
+	{
+		mapsPath->AddPoint(cell->coord);
+	}
+	mapsPath->TakeNext(); // remove first
+	return mapsPath;
 }
 
 }
