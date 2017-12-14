@@ -28,8 +28,7 @@ public:
 	static const TechTree& GetTechTree(const string& raceName);
 	static vector <string> GetMapNames();
 	static vector <string> GetRaceNames();
-	static u_p<Resource> MakeResource(const string& name, ResourceUnit amount);
-	static u_p<Resources> MakeResources(); // filled with zero
+	static u_p<Resources> MakeResources();
 	
 	template<typename ...Args, typename Slot>
 	static void Connect(nya::sig<void(Args...)>& signalFunc, Slot&& slotFunc)

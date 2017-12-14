@@ -36,10 +36,10 @@ public:
 protected:
 // Callbacks:
 	/// on adding entity to map
-	virtual void EntiAdded(Enti* enti) = 0;
+	virtual void EntiAdded(Entity* entity) = 0;
 	
 	/// on removing entity from map
-	virtual void EntiRemoved(Enti* enti) = 0;
+	virtual void EntiRemoved(Entity* entity) = 0;
 	
 	/// on holding resources change
 	virtual void ResourcesChanged(Resources* newResources) = 0;

@@ -23,8 +23,8 @@ public:
 	SampleEntiSlot& GetEntitySlot(int id) { return *entiSlots[id].get(); }
 	void SetMapWidget(SampleMapWidget* mapWidget) { this->mapWidget = mapWidget; }
 	
-	void EntiAdded(Enti* enti) override;
-	void EntiRemoved(Enti* enti) override {}
+	void EntiAdded(Entity* entity) override;
+	void EntiRemoved(Entity* entity) override {}
 	void ResourcesChanged(Resources* newResources) override {}
 };
 }

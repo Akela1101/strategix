@@ -1,5 +1,5 @@
-#include <strx/entity/Enti.h>
-#include <strx/entity/EntiSlot.h>
+#include <strx/entity/Entity.h>
+#include <strx/entity/EntitySlot.h>
 #include <strx/feature/FeatureInfo.h>
 #include <strx/feature/FeatureHealth.h>
 #include <strx/feature/FeatureMove.h>
@@ -9,32 +9,32 @@
 namespace strx
 {
 
-FeatureAttack::FeatureAttack(const FeatureInfo* featureInfo, Enti* enti)
-		: Feature(enti), featureInfoAttack(dynamic_cast<const FeatureInfoAttack*>(featureInfo)), hitProgress(0)
+FeatureAttack::FeatureAttack(const FeatureInfo* featureInfo, Entity* entity)
+		: Feature(entity), featureInfoAttack(dynamic_cast<const FeatureInfoAttack*>(featureInfo)), hitProgress(0)
 {}
 
-bool FeatureAttack::Attack(s_p<Enti> target)
+bool FeatureAttack::Attack(s_p<Entity> target)
 {
-	if (target.get() == enti)
+	if (target.get() == entity)
 	{
 		error_log << "Do not attack yourself :-)";
 		return false;
 	}
 	
 	// Try move and set OnComplete for this
-	if (!enti->Do<FeatureMove>()->Move(target->GetCoord(), this))
+	if (!entity->Do<FeatureMove>()->Move(target->GetCoord(), this))
 		return false;
 	
 	this->target = target;
 	return true;
 }
 
-bool FeatureAttack::Tick(float seconds)
+void FeatureAttack::Tick(float seconds)
 {
 	if (hitProgress < 1) // Preparing for 1 hit
 	{
 		hitProgress += seconds * featureInfoAttack->speed;
-		enti->GetSlot().OnAttack();
+		entity->GetSlot().OnAttack();
 	}
 	else // Inflict damage
 	{
@@ -46,15 +46,13 @@ bool FeatureAttack::Tick(float seconds)
 		else // Dead
 		{
 			Stop();
-			return false;
 		}
 	}
-	return true;
 }
 
 void FeatureAttack::Stop()
 {
-	enti->GetSlot().OnAttackStop();
+	entity->GetSlot().OnAttackStop();
 	target.reset();
 }
 
@@ -63,8 +61,8 @@ void FeatureAttack::OnComplete(bool isComplete)
 	if (!isComplete)
 		return;
 	
-	enti->GetSlot().OnAttackStart();
-	enti->AssignTickFeature(this);
+	entity->GetSlot().OnAttackStart();
+	entity->AssignTask(this);
 }
 
 }

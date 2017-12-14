@@ -31,7 +31,7 @@ struct Coord
 };
 
 using MapCoord  = Coord<int, float>; // used in Maps
-using RealCoord = Coord<float, int>; // used in Enti and everywhere
+using RealCoord = Coord<float, int>; // used in Entity and everywhere
 
 #ifdef MSCC
 template<>

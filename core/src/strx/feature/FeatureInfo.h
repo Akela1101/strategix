@@ -29,7 +29,7 @@ struct FeatureInfoMove : FeatureInfo
 struct FeatureInfoCollect : FeatureInfo
 {
 	float speed; // Res/sec
-	float radius; // radius Enti is able to collect from
+	float radius; // radius Entity is able to collect from
 	s_p<Resources> capacities; // Maximum amout of each resource, creature can bear
 	
 	FeatureInfoCollect(float speed, float radius, s_p<Resources> capacities)

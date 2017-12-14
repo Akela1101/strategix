@@ -1,6 +1,6 @@
-#include <strx/entity/Enti.h>
-#include <strx/entity/EntiInfo.h>
-#include <strx/entity/EntiSlot.h>
+#include <strx/entity/Entity.h>
+#include <strx/common/EntityInfo.h>
+#include <strx/entity/EntitySlot.h>
 #include <strx/kernel/Kernel.h>
 #include <strx/map/Map.h>
 #include <strx/map/MapObject.h>
@@ -23,7 +23,7 @@ Player::Player(const string& name, PlayerType type, int id, const string& raceNa
 		, techTree(Kernel::GetTechTree(raceName))
 {
 	// available resources
-	AddResource(*Kernel::MakeResource("gold", 1000));
+	AddResource(Resource("gold", 1000));
 }
 
 Player::~Player() = default;
@@ -40,14 +40,14 @@ void Player::Start()
 		for (int x : boost::irange(0, map->GetWidth()))
 		{
 			auto object = map->GetCell(x, y).object.get();
-			auto entityObject = dynamic_cast<EntityObject*>(object);
+			auto entityObject = dynamic_cast<MapEntity*>(object);
 			if (entityObject && entityObject->owner == id)
 			{
 				int objectId = entityObject->id;
 				auto& entiName = entityObject->name;
 				auto& entiInfo = techTree.GetNode(entiName);
 				
-				AddEnti(new Enti(entiInfo, objectId, MapCoord(x, y), this));
+				AddEnti(new Entity(entiInfo, objectId, MapCoord(x, y), this));
 			}
 		}
 	}
@@ -55,9 +55,9 @@ void Player::Start()
 
 void Player::Tick(float seconds)
 {
-	for (auto&& enti : entis)
+	for (auto&& entity : entis)
 	{
-		enti->Tick(seconds);
+		entity->Tick(seconds);
 	}
 	
 	// Remove queued entis if there are ones
@@ -71,22 +71,21 @@ void Player::Tick(float seconds)
 	}
 }
 
-void Player::AddEnti(Enti* enti)
+void Player::AddEnti(Entity* entity)
 {
-	entis.emplace_back(enti);
+	entis.emplace_back(entity);
 	
-	slot->EntiAdded(enti);
+	slot->EntiAdded(entity);
 }
 
-void Player::RemoveEnti(Enti* enti)
+void Player::RemoveEnti(Entity* entity)
 {
-	entisToRemove.push_back(enti);
+	entisToRemove.push_back(entity);
 }
 
-bool Player::AddResource(const Resource& deltaResource)
+void Player::AddResource(const Resource& deltaResource)
 {
 	*resources += deltaResource;
-	return true;
 }
 
 }

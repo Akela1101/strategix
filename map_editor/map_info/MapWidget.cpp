@@ -162,7 +162,7 @@ void MapWidget::DrawObject(MapObject* object, QPainter& painter)
 	
 	if (tool.type == ToolType::ENTITY) // player geo-tag
 	{
-		auto entityObject = (EntityObject*) object;
+		auto entityObject = (MapEntity*) object;
 		int w = rc.width(), h = rc.height();
 		QRect markRc = rc.adjusted(0, 0, -w / 2, -h / 2);
 		

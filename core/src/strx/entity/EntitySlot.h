@@ -7,15 +7,15 @@
 
 namespace strx
 {
-class EntiSlot : boost::noncopyable
+class EntitySlot : boost::noncopyable
 		, public ITick, public IMove, public ICollect, public IHealth, public IAttack
 {
 protected:
-	Enti* enti;
+	Entity* entity;
 	
 public:
-	EntiSlot(Enti* enti);
-	virtual ~EntiSlot() = 0;
+	EntitySlot(Entity* entity);
+	virtual ~EntitySlot() = 0;
 };
 }
 

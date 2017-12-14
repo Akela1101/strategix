@@ -4,19 +4,19 @@
 #include <strx/feature/FeatureHealth.h>
 #include <strx/feature/FeatureAttack.h>
 
-#include "EntiInfo.h"
-#include "EntiSlot.h"
-#include "Enti.h"
+#include "strx/common/EntityInfo.h"
+#include "EntitySlot.h"
+#include "Entity.h"
 
 
 namespace strx
 {
-Enti::Enti(const EntiInfo& entiInfo, int id, const RealCoord& coord, Player* player)
+Entity::Entity(const EntityInfo& entiInfo, int id, const RealCoord& coord, Player* player)
 		: player(player)
 		, entiInfo(entiInfo)
 		, id(id)
 		, coord(coord)
-		, tickFeature(nullptr)
+		, task(nullptr)
 {
 	for (auto&& pa : entiInfo.featureInfos)
 	{
@@ -24,9 +24,9 @@ Enti::Enti(const EntiInfo& entiInfo, int id, const RealCoord& coord, Player* pla
 	}
 }
 
-Enti::~Enti() = default;
+Entity::~Entity() = default;
 
-Feature* Enti::GetFeature(type_index type) const
+Feature* Entity::GetFeature(type_index type) const
 {
 	auto iFeature = features.find(type);
 	if (iFeature == features.end())
@@ -37,7 +37,7 @@ Feature* Enti::GetFeature(type_index type) const
 	return iFeature->second.get();
 }
 
-void Enti::AddFeature(const string& name, const FeatureInfo* featureInfo)
+void Entity::AddFeature(const string& name, const FeatureInfo* featureInfo)
 {
 	if (name == "move")
 	{
@@ -61,44 +61,33 @@ void Enti::AddFeature(const string& name, const FeatureInfo* featureInfo)
 	}
 }
 
-void Enti::SetSlot(EntiSlot* slot)
+void Entity::SetSlot(EntitySlot* slot)
 {
 	this->slot = slot;
 }
 
-void Enti::Tick(float seconds)
+void Entity::Tick(float seconds)
 {
-	for (auto itFeature = passiveTickFeatures.begin(); itFeature != passiveTickFeatures.end();)
+	for (auto&& feature : passiveTasks)
 	{
-		if (!(*itFeature)->Tick(seconds))
-		{
-			passiveTickFeatures.erase(itFeature++); // removing from Tick queue
-		}
-		else
-		{
-			++itFeature;
-		}
+		feature->Tick(seconds);
 	}
 	
-	if (tickFeature && !tickFeature->Tick(seconds))
-	{
-		tickFeature = nullptr;
-	}
+	if (task) task->Tick(seconds);
+	
 	slot->OnTick(seconds);
 }
 
-void Enti::AssignTickFeature(Feature* feature, bool isPassive)
+void Entity::AssignTask(Feature* feature)
 {
-	if (isPassive)
-	{
-		passiveTickFeatures.push_back(feature);
-	}
-	else
-	{
-		if (tickFeature) tickFeature->Stop();
-		
-		tickFeature = feature;
-	}
+	if (task) task->Stop();
+	
+	task = feature;
+}
+
+void Entity::AssignPassiveTask(Feature* feature)
+{
+	passiveTasks.push_back(feature);
 }
 
 }

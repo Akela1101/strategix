@@ -1,6 +1,7 @@
 #include <slots/SampleEntiSlot.h>
 #include <slots/SamplePlayerSlot.h>
 #include <strx/map/MapObject.h>
+#include <strx/map/MapMine.h>
 #include <MapInfo.h>
 #include <QtGui>
 
@@ -95,25 +96,28 @@ void SampleMapWidget::mousePressEvent(QMouseEvent* event)
 	}
 	
 	// click on mine -> collect
-	EntityObject* entity = dynamic_cast<EntityObject*>(object);
-	if (!entity)
+	if (MapMine* mine = dynamic_cast<MapMine*>(object))
 	{
-		// @#~
+		auto& entity = humanPlayer->GetEntitySlot(currentEntity->id);
+		entity.DoCollect(coord, mine->name);
 		return;
 	}
 	
 	// click on own entity -> select
-	if (entity->owner == humanPlayerId)
+	if (MapEntity* entity = dynamic_cast<MapEntity*>(object))
 	{
-		ChangeSelection(entity);
-		return;
+		if (entity->owner == humanPlayerId)
+		{
+			ChangeSelection(entity);
+			return;
+		}
+		
+		// click on enemy entity -> attack
+		// @#~
 	}
-	
-	// click on enemy entity -> attack
-	// @#~
 }
 
-void SampleMapWidget::ChangeSelection(EntityObject* entity)
+void SampleMapWidget::ChangeSelection(MapEntity* entity)
 {
 	if (currentEntity)
 	{

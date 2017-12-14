@@ -15,7 +15,7 @@ class SampleMapWidget : public map_info::MapWidget
 Q_OBJECT
 	u_p<Map> mapCopy;
 	int humanPlayerId = 0;
-	EntityObject* currentEntity = nullptr;
+	MapEntity* currentEntity = nullptr;
 	SamplePlayerSlot* humanPlayer = nullptr;
 	
 	umap<int, MapObject*> mapObjects;
@@ -36,7 +36,7 @@ protected:
 	void mousePressEvent(QMouseEvent* event) override;
 
 private:
-	void ChangeSelection(EntityObject* entity);
+	void ChangeSelection(MapEntity* entity);
 };
 
 }

@@ -1,15 +1,15 @@
 digraph G 
 {
-	Человек -> Enti [label = "Обработка действий мышью"] 
-	Enti -> FeatureCollect [label = "Collect (собирать ресурсы)"] 
-	FeatureCollect -> EntiSlot [label = OnCollect]
+	Человек -> Entity [label = "Обработка действий мышью"]
+	Entity -> FeatureCollect [label = "Collect (собирать ресурсы)"]
+	FeatureCollect -> EntitySlot [label = OnCollect]
 	FeatureCollect -> FeatureMove [label = "Move (перемещать сущность)"]	
-	FeatureMove -> EntiSlot [label = OnMove]	
+	FeatureMove -> EntitySlot [label = OnMove]
 	
-	Enti [color = red]
+	Entity [color = red]
 	FeatureCollect [color = green]
 	FeatureMove [color = green]
-	EntiSlot [color = yellow]
+	EntitySlot [color = yellow]
 	
 	// {rank = same; FeatureMove; Map}
 	

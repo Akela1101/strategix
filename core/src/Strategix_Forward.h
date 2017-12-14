@@ -6,10 +6,10 @@
 
 namespace strx
 {
-	class Enti;
-	class EntiInfo;	
-	class EntiSlot;
-	class EntityObject;
+	class Entity;
+	class EntityInfo;
+	class EntitySlot;
+	class MapEntity;
 	class Feature;
 	class FeatureInfo;
 	class FeatureInfoCollect;
@@ -22,8 +22,7 @@ namespace strx
 	class MapObject;
 	class MapPath;
 	class MapPathFinder;
-	class Mine;
-	class MineObject;
+	class MapMine;
 	class Player;
 	class PlayerSlot;
 	class Resources;

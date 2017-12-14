@@ -13,14 +13,14 @@ protected:
 	const FeatureInfoAttack* featureInfoAttack; // Link to tree
 
 private:
-	s_p<Enti> target;
+	s_p<Entity> target;
 	HpType hitProgress;
 
 public:
-	FeatureAttack(const FeatureInfo* featureInfo, Enti* enti);
+	FeatureAttack(const FeatureInfo* featureInfo, Entity* entity);
 	
-	bool Attack(s_p<Enti> target);
-	virtual bool Tick(float seconds);
+	bool Attack(s_p<Entity> target);
+	virtual void Tick(float seconds);
 	virtual void Stop();
 	virtual void OnComplete(bool isComplete); // Moving Complete
 };

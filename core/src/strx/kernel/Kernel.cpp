@@ -6,8 +6,8 @@
 
 #include <strx/common/Resources.h>
 #include <strx/common/TechTree.h>
-#include <strx/entity/Enti.h>
-#include <strx/entity/EntiInfo.h>
+#include <strx/entity/Entity.h>
+#include <strx/common/EntityInfo.h>
 #include <strx/kernel/ConfigManager.h>
 #include <strx/kernel/MapManager.h>
 #include <strx/map/Map.h>
@@ -179,15 +179,6 @@ vector<string> Kernel::GetRaceNames()
 		raceNames.push_back(name_tree.second->GetRaceName());
 	}
 	return raceNames;
-}
-
-u_p<Resource> Kernel::MakeResource(const string& name, ResourceUnit amount)
-{
-	if (!CheckResource(name))
-	{
-		nya_throw << "There is no resource named: " << name;
-	}
-	return make_u<Resource>(name, amount);
 }
 
 u_p<Resources> Kernel::MakeResources()

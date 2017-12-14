@@ -58,7 +58,7 @@ public:
 	bool IsCell(const MapCoord& mc) const { return !(mc.x < 0 || mc.x >= width || mc.y < 0 || mc.y >= length); }
 	
 	u_p<MapPath> FindPath(MapCoord from, MapCoord till) const;
-	ResourceUnit PickResource(Mine* mine, ResourceUnit amount);
+	ResourceUnit PickResource(MapMine* mine, ResourceUnit amount);
 	
 	void ChangeTerrain(Cell& cell, const string& terrainName);
 	void ChangeObject(Cell& cell, MapObject* object);

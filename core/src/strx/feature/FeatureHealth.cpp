@@ -1,5 +1,5 @@
-#include <strx/entity/Enti.h>
-#include <strx/entity/EntiSlot.h>
+#include <strx/entity/Entity.h>
+#include <strx/entity/EntitySlot.h>
 #include <strx/feature/FeatureInfo.h>
 #include <strx/player/Player.h>
 
@@ -8,15 +8,14 @@
 namespace strx
 {
 
-FeatureHealth::FeatureHealth(const FeatureInfo* featureInfo, Enti* enti)
-		: Feature(enti), featureInfoHealth(dynamic_cast<const FeatureInfoHealth*>(featureInfo))
+FeatureHealth::FeatureHealth(const FeatureInfo* featureInfo, Entity* entity)
+		: Feature(entity), featureInfoHealth(dynamic_cast<const FeatureInfoHealth*>(featureInfo))
 		, hp(featureInfoHealth->hp)
 {}
 
-bool FeatureHealth::Tick(float seconds)
+void FeatureHealth::Tick(float seconds)
 {
 	// regeneration. if integer value changes -> OnHpChange
-	return true;
 }
 
 void FeatureHealth::Stop()
@@ -37,8 +36,8 @@ bool FeatureHealth::HpChange(HpType deltaHp)
 	{
 		// Dead
 		hp = 0;
-		enti->GetSlot().OnHpChange();
-		enti->GetPlayer().RemoveEnti(enti);
+		entity->GetSlot().OnHpChange();
+		entity->GetPlayer().RemoveEnti(entity);
 		return false;
 	}
 	else if (hp > featureInfoHealth->hp)
@@ -46,7 +45,7 @@ bool FeatureHealth::HpChange(HpType deltaHp)
 		// Stop healing|repair
 		hp = featureInfoHealth->hp;
 	}
-	enti->GetSlot().OnHpChange();
+	entity->GetSlot().OnHpChange();
 	return true;
 }
 

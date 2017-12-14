@@ -10,27 +10,24 @@ namespace strx
 {
 class FeatureCollect : public Feature, public ICommand
 {
-protected:
-	const FeatureInfoCollect* featureInfoCollect; // Link to tree
-	float capacity; // amount of resource Enti can hold
-	string resourceName;
-
-private:
-	float load; // amount of resource Enti is holding
-	Mine* mine; // target
-	bool isMovingToCollector;
+	const FeatureInfoCollect* featureInfoCollect; /// Link to tree
+	MapCoord coord;             /// coordinate to search for resources
+	string resourceName;        /// resource name
+	float capacity;             /// amount of resource Enti can hold
+	float load;                 /// amount of resource Enti is holding
+	bool isMovingToCollector;   /// to collector | from collector
 
 public:
-	FeatureCollect(const FeatureInfo* featureInfo, Enti* enti);
+	FeatureCollect(const FeatureInfo* featureInfo, Entity* entity);
 	
-	bool Collect(Mine* mine);
-	virtual bool Tick(float seconds);
+	bool Collect(MapCoord coord, const string& resourceName);
+	
+	virtual void Tick(float seconds);
 	virtual void Stop();
-	
-	virtual void OnComplete(bool isComplete); // Moving Complete
+	virtual void OnComplete(bool isComplete); // moving complete
 
-protected:
-	const Enti* FindCollector(); // resource collector
+private:
+	const Entity* FindCollector(); // resource collector
 	void MoveToCollector(); // going back to base(or other collector)
 };
 }

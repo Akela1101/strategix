@@ -1,5 +1,5 @@
-#include <strx/entity/Enti.h>
-#include <strx/entity/EntiSlot.h>
+#include <strx/entity/Entity.h>
+#include <strx/entity/EntitySlot.h>
 #include <strx/feature/FeatureInfo.h>
 #include <strx/map/Map.h>
 #include <strx/map/MapPath.h>
@@ -11,13 +11,13 @@
 namespace strx
 {
 
-FeatureMove::FeatureMove(const FeatureInfo* featureInfo, Enti* enti)
-		: Feature(enti)
+FeatureMove::FeatureMove(const FeatureInfo* featureInfo, Entity* entity)
+		: Feature(entity)
 		, featureInfoMove(dynamic_cast<const FeatureInfoMove*>(featureInfo))
 		, isMoving(false)
 		, speed(featureInfoMove->speed)
 		, distance(0)
-		, next(enti->GetCoord())
+		, next(entity->GetCoord())
 {}
 
 FeatureMove::~FeatureMove() = default;
@@ -26,40 +26,35 @@ bool FeatureMove::Move(MapCoord coord, ICommand* iCommand)
 {
 	this->iCommand = iCommand;
 	distance = 0;
-	mapsPath = enti->GetPlayer().GetMap().FindPath(enti->GetCoord(), coord);
+	mapsPath = entity->GetPlayer().GetMap().FindPath(entity->GetCoord(), coord);
 	
 	if (mapsPath->IsEmpty()) return false;
 	
-	if (!isMoving)
-	{
-		isMoving = true;
-		enti->GetSlot().OnMoveStart();
-		enti->AssignTickFeature(this); // adding to Tick queue
-	}
+	entity->GetSlot().OnMoveStart();
+	entity->AssignTask(this);
 	return true;
 }
 
-bool FeatureMove::Tick(float seconds)
+void FeatureMove::Tick(float seconds)
 {
 	if (distance == 0)
 	{
 		if (mapsPath->IsEmpty()) // Stopping
 		{
-			Stop();
-			if (iCommand)
-				iCommand->OnComplete(true);
+			entity->AssignTask(nullptr);
+			if (iCommand) iCommand->OnComplete(true);
 			
-			return false;
+			return;
 		}
 		
 		// Selecting next point
-		auto current = enti->GetCoord();
+		auto current = entity->GetCoord();
 		next = mapsPath->TakeNext();
 		RealCoord delta = (RealCoord)next - current;
 		direction = delta.Norm();
 		distance = delta.Len();
 		
-		auto map = enti->GetPlayer().GetMap();
+		auto map = entity->GetPlayer().GetMap();
 		terrainQuality = 0.5 * (map.GetCell(current).terrain->quality + map.GetCell(next).terrain->quality);
 	}
 	
@@ -68,18 +63,13 @@ bool FeatureMove::Tick(float seconds)
 	distance = (distance > step) ? (distance - step) : 0;
 	
 	RealCoord coord = next - direction * distance;
-	enti->GetCoord() = coord;
-	enti->GetSlot().OnMove(coord);
-	return true;
+	entity->GetCoord() = coord;
+	entity->GetSlot().OnMove(coord);
 }
 
 void FeatureMove::Stop()
 {
-	if (isMoving)
-	{
-		isMoving = false;
-		enti->GetSlot().OnMoveStop();
-	}
+	entity->GetSlot().OnMoveStop();
 }
 
 }

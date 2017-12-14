@@ -1,4 +1,4 @@
-#include <strx/entity/Enti.h>
+#include <strx/entity/Entity.h>
 #include <graphics/SampleMapWidget.h>
 #include <slots/SampleEntiSlot.h>
 
@@ -10,10 +10,10 @@ namespace sample1
 using namespace std;
 using namespace strx;
 
-void SamplePlayerSlot::EntiAdded(Enti* enti)
+void SamplePlayerSlot::EntiAdded(Entity* entity)
 {
-	auto entiSlot = new SampleEntiSlot(enti);
-	entiSlots.emplace(enti->GetId(), entiSlot);
+	auto entiSlot = new SampleEntiSlot(entity);
+	entiSlots.emplace(entity->GetId(), entiSlot);
 	
 	QObject::connect(entiSlot, &SampleEntiSlot::DoEntityMoved, mapWidget, &SampleMapWidget::OnEntityMoved);
 }

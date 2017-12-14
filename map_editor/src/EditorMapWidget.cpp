@@ -112,9 +112,9 @@ MapObject* EditorMapWidget::CreateObject(int x, int y)
 	switch (tool->type)
 	{
 		case ToolType::ENTITY:
-			return new EntityObject{ tool->name, coord, playerId };
+			return new MapEntity{ tool->name, coord, playerId };
 		case ToolType::MINE:
-			return new MineObject{ tool->name, coord, 1000 };
+			return new MapMine{ tool->name, coord, 1000 };
 	}
 	return nullptr;
 }

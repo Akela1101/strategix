@@ -27,6 +27,8 @@ struct IMove
 
 struct ICollect
 {
+	nya::sig<void(MapCoord coord, const string& resourceName)> DoCollect;
+	
 	virtual void OnCollectStart() {}
 	virtual void OnCollect() {}
 	virtual void OnCollectStop() {}

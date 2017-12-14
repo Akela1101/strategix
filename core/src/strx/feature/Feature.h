@@ -9,13 +9,13 @@ namespace strx
 class Feature : boost::noncopyable
 {
 protected:
-	Enti* enti; // Link to enti
+	Entity* entity; // Link to entity
 
 public:
-	Feature(Enti* enti) : enti(enti) {}
+	Feature(Entity* entity) : entity(entity) {}
 	virtual ~Feature() = default;
 	
-	virtual bool Tick(float seconds) = 0; // stop tick, if false.
+	virtual void Tick(float seconds) = 0; // stop tick, if false.
 	virtual void Stop() = 0;
 };
 }

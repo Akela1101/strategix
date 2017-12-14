@@ -9,7 +9,7 @@
 namespace strx
 {
 
-struct EntiInfo
+struct EntityInfo
 {
 	string name;
 	string kind; // building or entity
@@ -21,9 +21,9 @@ struct EntiInfo
 	FeatureInfosType featureInfos;
 	
 	
-	EntiInfo() : resources(new Resources()) {}
+	EntityInfo() : resources(new Resources()) {}
 	
-	EntiInfo(const EntiInfo& other)
+	EntityInfo(const EntityInfo& other)
 			: name(other.name)
 			, kind(other.kind)
 			, resources(new Resources(*other.resources))
@@ -36,9 +36,9 @@ struct EntiInfo
 		}
 	}
 	
-	EntiInfo& operator=(const EntiInfo&) = delete;
+	EntityInfo& operator=(const EntityInfo&) = delete;
 	
-	u_p<EntiInfo> clone() const { return make_u<EntiInfo>(*this); }
+	u_p<EntityInfo> clone() const { return make_u<EntityInfo>(*this); }
 };
 }
 

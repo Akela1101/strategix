@@ -20,11 +20,11 @@ class FeatureMove : public Feature
 	ICommand* iCommand; // someone who started moving
 
 public:
-	FeatureMove(const FeatureInfo* featureInfo, Enti* enti);
+	FeatureMove(const FeatureInfo* featureInfo, Entity* entity);
 	~FeatureMove();
 	
 	bool Move(MapCoord coord, ICommand* iCommand = nullptr);
-	bool Tick(float seconds) override;
+	void Tick(float seconds) override;
 	void Stop() override;
 };
 }

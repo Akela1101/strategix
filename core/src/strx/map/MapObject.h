@@ -8,9 +8,11 @@ namespace strx
 {
 struct MapObject
 {
-	static int lastId;
+private:
+	static IdType lastId;
 	
-	int id;
+public:
+	IdType id;
 	string name;
 	RealCoord coord;
 	
@@ -21,22 +23,13 @@ struct MapObject
 	virtual MapObject* clone() = 0;
 };
 
-struct EntityObject : MapObject
+struct MapEntity : MapObject
 {
 	int owner;        // owner player id
 	
-	EntityObject(string name, RealCoord coord, int owner) : MapObject(move(name), coord), owner(owner) {}
-	EntityObject(const EntityObject& other) : MapObject(other), owner(other.owner) {}
-	MapObject* clone() override { return new EntityObject(*this); }
-};
-
-struct MineObject : MapObject
-{
-	int amount;       // resource amount
-	
-	MineObject(string name, RealCoord coord, int amount) : MapObject(move(name), coord), amount(amount) {}
-	MineObject(const MineObject& other) : MapObject(other), amount(other.amount) {}
-	MapObject* clone() override { return new MineObject(*this); }
+	MapEntity(string name, RealCoord coord, int owner) : MapObject(move(name), coord), owner(owner) {}
+	MapEntity(const MapEntity& other) : MapObject(other), owner(other.owner) {}
+	MapObject* clone() override { return new MapEntity(*this); }
 };
 
 }

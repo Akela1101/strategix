@@ -15,9 +15,9 @@ private:
 	HpType hp;
 
 public:
-	FeatureHealth(const FeatureInfo* featureInfo, Enti* enti);
+	FeatureHealth(const FeatureInfo* featureInfo, Entity* entity);
 	
-	bool Tick(float seconds) override;
+	void Tick(float seconds) override;
 	void Stop() override;
 	
 	const HpType GetHp() const { return hp; }

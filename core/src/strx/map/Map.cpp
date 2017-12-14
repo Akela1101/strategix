@@ -10,7 +10,7 @@
 #include <strx/map/MapObject.h>
 #include <strx/map/MapPath.h>
 #include <strx/map/MapPathFinder.h>
-#include <strx/map/Mine.h>
+#include <strx/map/MapMine.h>
 #include <strx/player/Player.h>
 
 #include "Map.h"
@@ -84,7 +84,7 @@ u_p<MapPath> Map::FindPath(MapCoord from, MapCoord till) const
 	return pathsFinder.FindPath(from, till);
 }
 
-ResourceUnit Map::PickResource(Mine* mine, ResourceUnit amount)
+ResourceUnit Map::PickResource(MapMine* mine, ResourceUnit amount)
 {
 	return mine->PickResource(amount);
 }
@@ -113,8 +113,8 @@ void Map::SaveToFile(const string& path) const
 	     << "\n";
 	
 	uset<Terrain*> uniqueTerrains;
-	vector<pair<MapCoord, EntityObject*>> objects;
-	vector<pair<MapCoord, MineObject*>> mines;
+	vector<pair<MapCoord, MapEntity*>> objects;
+	vector<pair<MapCoord, MapMine*>> mines;
 	
 	// prepare terrain
 	stringstream terrainStream;
@@ -130,13 +130,13 @@ void Map::SaveToFile(const string& path) const
 			
 			if (cell.object)
 			{
-				if (dynamic_cast<EntityObject*>(cell.object.get()))
+				if (dynamic_cast<MapEntity*>(cell.object.get()))
 				{
-					objects.emplace_back(MapCoord(col, row), (EntityObject*) cell.object.get());
+					objects.emplace_back(MapCoord(col, row), (MapEntity*) cell.object.get());
 				}
-				else if (dynamic_cast<MineObject*>(cell.object.get()))
+				else if (dynamic_cast<MapMine*>(cell.object.get()))
 				{
-					mines.emplace_back(MapCoord(col, row), (MineObject*) cell.object.get());
+					mines.emplace_back(MapCoord(col, row), (MapMine*) cell.object.get());
 				}
 			}
 		}
@@ -245,7 +245,7 @@ void Map::LoadFromFile(const string& path)
 		fin >> col >> row >> name >> owner;
 		
 		MapCoord coord(col, row);
-		GetCell(col, row).object.reset(new EntityObject{ name, coord, owner });
+		GetCell(col, row).object.reset(new MapEntity{ name, coord, owner });
 	}
 	if (!fin.good()) nya_throw << "map entities are wrong";
 	
@@ -258,7 +258,7 @@ void Map::LoadFromFile(const string& path)
 		fin >> col >> row >> name >> amount;
 		
 		MapCoord coord(col, row);
-		GetCell(col, row).object.reset(new MineObject{ name, coord, amount });
+		GetCell(col, row).object.reset(new MapMine{ name, coord, amount });
 	}
 	if (!fin.good()) nya_throw << "map resource mines are wrong";
 	

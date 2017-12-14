@@ -1,4 +1,4 @@
-#include <strx/entity/EntiInfo.h>
+#include <strx/common/EntityInfo.h>
 #include <strx/common/TechTree.h>
 
 #include <boost/range/adaptors.hpp>
@@ -42,11 +42,11 @@ struct ConfigManager::ConfigurationManagerImpl
 		}
 	}
 	
-	u_p<EntiInfo> ParseEntity(const pt::ptree& entityPropTree)
+	u_p<EntityInfo> ParseEntity(const pt::ptree& entityPropTree)
 	{
 		try
 		{
-			u_p<EntiInfo> eim(new EntiInfo);
+			u_p<EntityInfo> eim(new EntityInfo);
 			
 			eim->name = entityPropTree.get<string>("name");
 			eim->kind = entityPropTree.get<string>("kind");

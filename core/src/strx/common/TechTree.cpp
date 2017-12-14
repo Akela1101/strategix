@@ -1,4 +1,4 @@
-#include <strx/entity/EntiInfo.h>
+#include <strx/common/EntityInfo.h>
 
 #include "TechTree.h"
 
@@ -7,7 +7,7 @@ namespace strx
 {
 
 
-const EntiInfo& TechTree::GetNode(const string& name) const
+const EntityInfo& TechTree::GetNode(const string& name) const
 {
 	auto it = techMap.find(name);
 	if (it == techMap.end())
@@ -17,12 +17,12 @@ const EntiInfo& TechTree::GetNode(const string& name) const
 	return *it->second;
 }
 
-void TechTree::AddNode(u_p<EntiInfo> entiInfo)
+void TechTree::AddNode(u_p<EntityInfo> entiInfo)
 {
 	auto iter_ok = techMap.emplace(entiInfo->name, move(entiInfo));
 	if (!iter_ok.second)
 	{
-		nya_throw << "More than one EntiInfo with name: " << entiInfo->name;
+		nya_throw << "More than one EntityInfo with name: " << entiInfo->name;
 	}
 }
 
