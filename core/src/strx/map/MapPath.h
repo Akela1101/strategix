@@ -8,12 +8,14 @@ namespace strx
 {
 class MapPath : boost::noncopyable
 {
-	vector<MapCoord> path;
+	bool isWhole;           /// if false, path does not reach the finish point
+	vector<MapCoord> path;  /// list of path coordinates without the first one
 
 public:
-	MapPath() = default;
+	MapPath(bool isWhole = true) : isWhole(isWhole) {}
 	
-	bool IsEmpty() { return path.empty(); }
+	bool IsWhole() const { return isWhole; }
+	bool IsEmpty() const { return path.empty(); }
 	
 	MapCoord TakeNext()
 	{

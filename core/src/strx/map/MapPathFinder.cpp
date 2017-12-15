@@ -49,16 +49,17 @@ using OpenedCellsType = multi_index_container<u_p<PricedCell>, indexed_by
 MapPathFinder::MapPathFinder(const Map& map)
 		: map(map) {}
 
-u_p<MapPath> MapPathFinder::FindPath(const MapCoord from, const MapCoord till) const
+u_p<MapPath> MapPathFinder::FindPath(MapCoord from, MapCoord till, float radius) const
 {
 	// already on place
-	if (from.x == till.x && from.y == till.y) return make_u<MapPath>();
+	if ((from - till).Len() <= radius) return make_u<MapPath>();
 	
 	OpenedCellsType opened;
 	umap<MapCoord, u_p<PricedCell>> closed;
 	
 	PricedCell* closest = new PricedCell(from, nullptr, 0, Distance(from, till)); // closest to till by heuristic
 	opened.emplace(closest);
+	bool isFound = false;
 	for (int k = 0; k < maxCheckedTiles && !opened.empty(); ++k)
 	{
 		auto& openedByPrice = opened.get<Price>();
@@ -69,9 +70,10 @@ u_p<MapPath> MapPathFinder::FindPath(const MapCoord from, const MapCoord till) c
 		closed.emplace(current->coord, move(const_cast<u_p<PricedCell>&>(*itMin)));
 		openedByPrice.erase(itMin);
 		
-		if (current->coord == till) // way found !
+		if ((current->coord - till).Len() <= radius) // way found !
 		{
 			closest = current;
+			isFound = true;
 			break;
 		}
 		
@@ -106,8 +108,8 @@ u_p<MapPath> MapPathFinder::FindPath(const MapCoord from, const MapCoord till) c
 			}
 		}
 	}
-	//trace_log << "Checked tiles: " << closed.size();
-	return GetWay(closest);
+	trace_log << "Checked tiles: " << closed.size();
+	return GetWay(closest, isFound);
 }
 
 bool MapPathFinder::IsAccessible(const MapCoord& coord) const
@@ -118,9 +120,9 @@ bool MapPathFinder::IsAccessible(const MapCoord& coord) const
 	return cell.terrain->quality > 0 && !cell.object;
 }
 
-u_p<MapPath> MapPathFinder::GetWay(PricedCell* cell) const
+u_p<MapPath> MapPathFinder::GetWay(PricedCell* cell, bool isFound) const
 {
-	auto mapsPath = make_u<MapPath>();
+	auto mapsPath = make_u<MapPath>(isFound);
 	for (; cell; cell = cell->parent)
 	{
 		mapsPath->AddPoint(cell->coord);

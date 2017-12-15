@@ -21,11 +21,11 @@ public:
 	/**
 	 * @return non-null path to the point closest to till
 	 */
-	u_p<MapPath> FindPath(MapCoord from, MapCoord till) const;
+	u_p<MapPath> FindPath(MapCoord from, MapCoord till, float radius = 0) const;
 
 private:
 	bool IsAccessible(const MapCoord& coord) const;
-	u_p<MapPath> GetWay(PricedCell* cell) const;
+	u_p<MapPath> GetWay(PricedCell* cell, bool isFound) const;
 };
 }
 #endif //_MAPPATHFINDER_H

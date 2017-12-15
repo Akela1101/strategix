@@ -15,7 +15,7 @@ EntitySlot::EntitySlot(Entity* entity) : entity(entity)
 	
 	Kernel::Connect(DoMove, [entity] (MapCoord coord)
 	{
-		if (auto f = entity->Do<FeatureMove>()) f->Move(coord);
+		if (auto f = entity->Do<FeatureMove>()) f->Move(coord, 0, nullptr);
 	});
 	Kernel::Connect(DoCollect, [entity] (MapCoord coord, const string& resourceName)
 	{

@@ -23,7 +23,7 @@ public:
 	FeatureMove(const FeatureInfo* featureInfo, Entity* entity);
 	~FeatureMove();
 	
-	bool Move(MapCoord coord, ICommand* iCommand = nullptr);
+	bool Move(MapCoord coord, float radius, ICommand* iCommand);
 	void Tick(float seconds) override;
 	void Stop() override;
 };

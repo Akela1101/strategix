@@ -78,10 +78,10 @@ Map::Map(const Map& other)
 
 Map::~Map() = default;
 
-u_p<MapPath> Map::FindPath(MapCoord from, MapCoord till) const
+u_p<MapPath> Map::FindPath(MapCoord from, MapCoord till, float radius) const
 {
 	MapPathFinder pathsFinder(*this);
-	return pathsFinder.FindPath(from, till);
+	return pathsFinder.FindPath(from, till, radius);
 }
 
 ResourceUnit Map::PickResource(MapMine* mine, ResourceUnit amount)

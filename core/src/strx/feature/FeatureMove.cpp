@@ -22,17 +22,16 @@ FeatureMove::FeatureMove(const FeatureInfo* featureInfo, Entity* entity)
 
 FeatureMove::~FeatureMove() = default;
 
-bool FeatureMove::Move(MapCoord coord, ICommand* iCommand)
+bool FeatureMove::Move(MapCoord coord, float radius, ICommand* iCommand)
 {
 	this->iCommand = iCommand;
 	distance = 0;
-	mapsPath = entity->GetPlayer().GetMap().FindPath(entity->GetCoord(), coord);
-	
-	if (mapsPath->IsEmpty()) return false;
+	mapsPath = entity->GetPlayer().GetMap().FindPath(entity->GetCoord(), coord, radius);
 	
 	entity->GetSlot().OnMoveStart();
 	entity->AssignTask(this);
-	return true;
+	
+	return mapsPath->IsWhole();
 }
 
 void FeatureMove::Tick(float seconds)
@@ -42,7 +41,7 @@ void FeatureMove::Tick(float seconds)
 		if (mapsPath->IsEmpty()) // Stopping
 		{
 			entity->AssignTask(nullptr);
-			if (iCommand) iCommand->OnComplete(true);
+			if (iCommand) iCommand->OnComplete(mapsPath->IsWhole());
 			
 			return;
 		}

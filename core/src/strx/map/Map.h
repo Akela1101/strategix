@@ -57,7 +57,7 @@ public:
 	const Cell& GetCell(const MapCoord mc) const { return cells[mc.y][mc.x]; }
 	bool IsCell(const MapCoord& mc) const { return !(mc.x < 0 || mc.x >= width || mc.y < 0 || mc.y >= length); }
 	
-	u_p<MapPath> FindPath(MapCoord from, MapCoord till) const;
+	u_p<MapPath> FindPath(MapCoord from, MapCoord till, float radius) const;
 	ResourceUnit PickResource(MapMine* mine, ResourceUnit amount);
 	
 	void ChangeTerrain(Cell& cell, const string& terrainName);

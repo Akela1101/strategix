@@ -25,7 +25,7 @@ bool FeatureCollect::Collect(MapCoord coord, const string& resourceName)
 	if (!in_(resourceName, *info->capacities)) return false;
 	
 	// try move and set OnComplete for this
-	if (!entity->Do<FeatureMove>()->Move(coord, this)) return false;
+	if (!entity->Do<FeatureMove>()->Move(coord, info->radius, this)) return false;
 	
 	// setting target resource
 	this->coord = coord;
@@ -95,7 +95,7 @@ void FeatureCollect::MoveToCollector()
 {
 	Entity* collector = entity->GetPlayer().FindCollector(entity->GetCoord());
 	
-	if (collector && entity->Do<FeatureMove>()->Move(collector->GetCoord(), this))
+	if (collector && entity->Do<FeatureMove>()->Move(collector->GetCoord(), info->radius, this))
 	{
 		isMovingToCollector = true;
 	}
