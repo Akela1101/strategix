@@ -10,7 +10,7 @@ namespace strx
 {
 class FeatureCollect : public Feature, public ICommand
 {
-	const FeatureInfoCollect* featureInfoCollect; /// Link to tree
+	const FeatureInfoCollect* const info; /// Link to tree
 	MapCoord coord;             /// coordinate to search for resources
 	string resourceName;        /// resource name
 	float capacity;             /// amount of resource Enti can hold
@@ -27,7 +27,6 @@ public:
 	virtual void OnComplete(bool isComplete); // moving complete
 
 private:
-	const Entity* FindCollector(); // resource collector
 	void MoveToCollector(); // going back to base(or other collector)
 };
 }

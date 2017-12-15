@@ -8,8 +8,6 @@
 
 namespace sample1
 {
-using namespace strx;
-
 class SampleMapWidget : public map_info::MapWidget
 {
 Q_OBJECT

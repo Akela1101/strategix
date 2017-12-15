@@ -28,6 +28,7 @@ public:
 	static const TechTree& GetTechTree(const string& raceName);
 	static vector <string> GetMapNames();
 	static vector <string> GetRaceNames();
+	static const ResourceInfosType& GetResourceInfos();
 	static u_p<Resources> MakeResources();
 	
 	template<typename ...Args, typename Slot>

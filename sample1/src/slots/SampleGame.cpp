@@ -12,7 +12,6 @@
 
 namespace sample1
 {
-using namespace strx;
 using namespace map_info;
 using namespace boost::adaptors;
 
@@ -46,6 +45,19 @@ void SampleGame::PlayerAdded(Player* player)
 	playerSlots.emplace(player->GetName(), playerSlot);
 	
 	mapWidget->AddPlayer(playerSlot);
+	if (player->GetType() == PlayerType::HUMAN)
+	{
+		InitHuman(playerSlot);
+	}
+	
+	// available resources
+	player->AddResource(Resource("gold", 1000));
+}
+
+void SampleGame::InitHuman(SamplePlayerSlot* playerSlot)
+{
+	QObject::connect(playerSlot, SamplePlayerSlot::DoResourcesChanged
+			, gameWidget.get(), SampleGameWidget::OnResourcesChanged);
 }
 
 }

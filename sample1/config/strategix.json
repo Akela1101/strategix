@@ -1,5 +1,5 @@
 {
-	"resource_types" : [ "gold" ],
+	"resource_types" : [ "gold", "tree" ],
 	"races" : [
 	{
 		"name" : "az",
@@ -24,7 +24,7 @@
 				"collect" : {
 					"speed" : 50,
 					"radius" : 0.5,
-					"capacities" : { "gold" : 200 }
+					"capacities" : { "gold" : 200, "tree" : 200 }
 				},
 				"health" : { "hp" : 50, "regenSpeed" : 0.1 },
 				"attack" : { "damage" : 20, "speed" : 1.0 }

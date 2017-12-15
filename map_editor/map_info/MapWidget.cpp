@@ -9,9 +9,6 @@
 
 namespace map_info
 {
-using namespace strx;
-
-
 MapWidget::MapWidget(QScrollArea* parent)
 		: QWidget(parent)
 		, scrollArea(parent)

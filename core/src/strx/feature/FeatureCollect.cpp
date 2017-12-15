@@ -14,21 +14,26 @@ namespace strx
 {
 
 FeatureCollect::FeatureCollect(const FeatureInfo* featureInfo, Entity* entity)
-		: Feature(entity), featureInfoCollect(dynamic_cast<const FeatureInfoCollect*>(featureInfo)), load(0)
+		: Feature(entity)
+		, info(dynamic_cast<const FeatureInfoCollect*>(featureInfo))
+		, load(0)
 		, isMovingToCollector(false) {}
 
 bool FeatureCollect::Collect(MapCoord coord, const string& resourceName)
 {
+	// check if entity can bear this resource
+	if (!in_(resourceName, *info->capacities)) return false;
+	
 	// try move and set OnComplete for this
 	if (!entity->Do<FeatureMove>()->Move(coord, this)) return false;
 	
 	// setting target resource
 	this->coord = coord;
 	this->resourceName = resourceName;
-	capacity = featureInfoCollect->capacities->at(resourceName);
+	capacity = info->capacities->at(resourceName);
 	isMovingToCollector = false;
 	
-	info_log << "start collect: [%s, %d] (%d, %d)"s % resourceName % capacity % coord.x % coord.y;
+	//info_log << "start collect: [%s, %d] (%d, %d)"s % resourceName % capacity % coord.x % coord.y;
 	return true;
 }
 
@@ -40,7 +45,7 @@ void FeatureCollect::Tick(float seconds)
 	
 	if (load < capacity && mine)
 	{
-		float piece = seconds * featureInfoCollect->speed;
+		float piece = seconds * info->speed;
 		if (piece > capacity - load)
 		{
 			piece = capacity - load; // all it can bring
@@ -57,7 +62,7 @@ void FeatureCollect::Tick(float seconds)
 
 void FeatureCollect::Stop()
 {
-	info_log << "stop collect";
+	//info_log << "stop collect";
 	entity->GetSlot().OnCollectStop();
 }
 
@@ -86,24 +91,9 @@ void FeatureCollect::OnComplete(bool isComplete)
 	MoveToCollector();
 }
 
-const Entity* FeatureCollect::FindCollector()
-{
-	// @#~ Check if there is path to Collector and also select nearest
-	// @#~ Check out the case when there are no collectors or more than one
-	
-	for (auto&& entity : entity->GetPlayer().entis)
-	{
-		if (entity->GetInfo().kind == "building") // @#~ should be building type check
-		{
-			return entity.get();
-		}
-	}
-	return nullptr;
-}
-
 void FeatureCollect::MoveToCollector()
 {
-	const Entity* collector = FindCollector();
+	Entity* collector = entity->GetPlayer().FindCollector(entity->GetCoord());
 	
 	if (collector && entity->Do<FeatureMove>()->Move(collector->GetCoord(), this))
 	{

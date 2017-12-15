@@ -20,11 +20,7 @@ Player::Player(const string& name, PlayerType type, int id, const string& raceNa
 		, raceName(raceName)
 		, map(move(map))
 		, resources(Kernel::MakeResources())
-		, techTree(Kernel::GetTechTree(raceName))
-{
-	// available resources
-	AddResource(Resource("gold", 1000));
-}
+		, techTree(Kernel::GetTechTree(raceName)) {}
 
 Player::~Player() = default;
 
@@ -55,12 +51,12 @@ void Player::Start()
 
 void Player::Tick(float seconds)
 {
-	for (auto&& entity : entis)
+	for (auto&& entity : entities)
 	{
 		entity->Tick(seconds);
 	}
 	
-	// Remove queued entis if there are ones
+	// Remove queued entities if there are ones
 	if (!entisToRemove.empty())
 	{
 		for (auto it = entisToRemove.rbegin(); it != entisToRemove.rend(); ++it)
@@ -73,7 +69,7 @@ void Player::Tick(float seconds)
 
 void Player::AddEnti(Entity* entity)
 {
-	entis.emplace_back(entity);
+	entities.emplace_back(entity);
 	
 	slot->EntiAdded(entity);
 }
@@ -86,6 +82,22 @@ void Player::RemoveEnti(Entity* entity)
 void Player::AddResource(const Resource& deltaResource)
 {
 	*resources += deltaResource;
+	slot->ResourcesChanged(*resources);
+}
+
+Entity* Player::FindCollector(MapCoord coord)
+{
+	// @#~ Check if there is path to Collector and also select nearest
+	// @#~ Check out the case when there are no collectors or more than one
+	
+	for (auto&& entity : entities)
+	{
+		if (entity->GetInfo().kind == "building") // @#~ should be building type check
+		{
+			return entity.get();
+		}
+	}
+	return nullptr;
 }
 
 }

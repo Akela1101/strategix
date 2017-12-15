@@ -7,9 +7,6 @@
 
 namespace sample1
 {
-using namespace std;
-using namespace strx;
-
 void SamplePlayerSlot::EntiAdded(Entity* entity)
 {
 	auto entiSlot = new SampleEntiSlot(entity);
@@ -17,5 +14,4 @@ void SamplePlayerSlot::EntiAdded(Entity* entity)
 	
 	QObject::connect(entiSlot, &SampleEntiSlot::DoEntityMoved, mapWidget, &SampleMapWidget::OnEntityMoved);
 }
-
 }

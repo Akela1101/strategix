@@ -82,8 +82,8 @@ struct ConfigManager::ConfigurationManagerImpl
 			{
 				auto speed = feature.get<float>("speed");
 				auto radius = feature.get<float>("radius");
-				s_p<Resources> capacities = ParseResources(feature.get_child("capacities"));
-				return make_u<FeatureInfoCollect>(speed, radius, capacities);
+				u_p<Resources> capacities = ParseResources(feature.get_child("capacities"));
+				return make_u<FeatureInfoCollect>(speed, radius, move(capacities));
 			}
 			else if (name == "health")
 			{

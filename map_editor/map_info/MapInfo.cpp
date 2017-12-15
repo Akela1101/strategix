@@ -10,7 +10,6 @@
 
 namespace map_info
 {
-using namespace strx;
 namespace fs = boost::filesystem;
 
 
@@ -37,6 +36,7 @@ const QPixmap& MapInfo::GetPlayerMark(int playerNumber)
 void MapInfo::QRegisterTypes()
 {
 	Q_REG_TYPE(RealCoord);
+	Q_REG_TYPE(Resources);
 }
 
 void MapInfo::LoadTerrainTools()

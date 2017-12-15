@@ -9,19 +9,17 @@ namespace strx
 
 class Player : boost::noncopyable
 {
-	friend class FeatureCollect;  // @#~ temporary
-	
-	PlayerSlot* slot = nullptr;   // Callback class
+	PlayerSlot* slot = nullptr;    /// Callback class
 	const string name;
 	const PlayerType type;
 	const int id;
 	const string raceName;
 	
-	vector<u_p<Entity>> entis;      // owned enties
-	u_p<Resources> resources;     // available resources amount
-	u_p<Map> map;                 // local map for current player
-	const TechTree& techTree;     // link to tech tree
-	vector<Entity*> entisToRemove;  // entis removed at the end of Tick
+	vector<u_p<Entity>> entities;  /// owned enties
+	u_p<Resources> resources;      /// available resources amount
+	u_p<Map> map;                  /// local map for current player
+	const TechTree& techTree;      /// link to tech tree
+	vector<Entity*> entisToRemove; /// entis removed at the end of Tick
 
 public:
 	Player(const string& name, PlayerType type, int id, const string& raceName, u_p<Map> map);
@@ -39,6 +37,7 @@ public:
 	void AddEnti(Entity* entity);
 	void RemoveEnti(Entity* entity);
 	void AddResource(const Resource& deltaResource);
+	Entity* FindCollector(MapCoord coord);
 };
 }
 

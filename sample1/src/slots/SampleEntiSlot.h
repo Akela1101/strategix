@@ -1,14 +1,13 @@
 #ifndef _SAMPLEENTISLOT_H
 #define _SAMPLEENTISLOT_H
 
+#include <Sample_Forward.h>
 #include <strx/entity/EntitySlot.h>
 #include <QObject>
 
 
 namespace sample1
 {
-using namespace strx;
-
 class SampleEntiSlot : public QObject, public EntitySlot
 {
 Q_OBJECT

@@ -13,10 +13,6 @@
 
 namespace map_info
 {
-using namespace std;
-using namespace strx;
-
-
 struct ToolInfo
 {
 	ToolType type;

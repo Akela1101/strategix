@@ -3,6 +3,7 @@
 
 #include <nya/enum.hpp>
 
+namespace strx {}
 
 namespace map_info
 {
@@ -18,5 +19,6 @@ class ToolInfo;
 nya_enum(ToolType, ToolTypeDef
 )
 
+using namespace strx;
 }
 #endif //_MapInfo_Forward_H

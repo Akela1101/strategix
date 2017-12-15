@@ -10,8 +10,6 @@ class QScrollArea;
 
 namespace map_info
 {
-using namespace strx;
-
 class MapWidget : public QWidget
 {
 Q_OBJECT

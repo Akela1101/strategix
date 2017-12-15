@@ -3,17 +3,15 @@
 
 #include <strx/player/PlayerSlot.h>
 #include <Sample_Forward.h>
-
+#include <QObject>
 
 namespace sample1
 {
-using namespace std;
-using namespace strx;
-
 class SampleEntiSlot;
 
-class SamplePlayerSlot : public PlayerSlot
+class SamplePlayerSlot : public QObject, public PlayerSlot
 {
+Q_OBJECT
 	using PlayerSlot::PlayerSlot;
 	
 	SampleMapWidget* mapWidget = nullptr;
@@ -22,10 +20,14 @@ class SamplePlayerSlot : public PlayerSlot
 public:
 	SampleEntiSlot& GetEntitySlot(int id) { return *entiSlots[id].get(); }
 	void SetMapWidget(SampleMapWidget* mapWidget) { this->mapWidget = mapWidget; }
-	
+
+protected:
 	void EntiAdded(Entity* entity) override;
 	void EntiRemoved(Entity* entity) override {}
-	void ResourcesChanged(Resources* newResources) override {}
+	void ResourcesChanged(const Resources& newResources) override { emit DoResourcesChanged(newResources); }
+	
+signals:
+	void DoResourcesChanged(Resources newResources);
 };
 }
 

@@ -42,7 +42,7 @@ protected:
 	virtual void EntiRemoved(Entity* entity) = 0;
 	
 	/// on holding resources change
-	virtual void ResourcesChanged(Resources* newResources) = 0;
+	virtual void ResourcesChanged(const Resources& newResources) {}
 };
 }
 

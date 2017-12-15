@@ -6,8 +6,6 @@
 
 namespace sample1
 {
-using namespace strx;
-
 class SampleGame : public Game
 {
 	umap<string, u_p<SamplePlayerSlot>> playerSlots;
@@ -23,6 +21,9 @@ public:
 	void Start() override;
 	
 	void PlayerAdded(Player* player) override;
+
+private:
+	void InitHuman(SamplePlayerSlot* playerSlot);
 };
 
 }

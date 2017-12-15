@@ -1,4 +1,5 @@
 #include <strx/map/MapObject.h>
+#include <strx/map/MapMine.h>
 #include <MapInfo.h>
 #include <QtGui>
 #include <QScrollArea>

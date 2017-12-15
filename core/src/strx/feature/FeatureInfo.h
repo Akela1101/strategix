@@ -30,12 +30,12 @@ struct FeatureInfoCollect : FeatureInfo
 {
 	float speed; // Res/sec
 	float radius; // radius Entity is able to collect from
-	s_p<Resources> capacities; // Maximum amout of each resource, creature can bear
+	u_p<Resources> capacities; // Maximum amout of each resource, creature can bear
 	
-	FeatureInfoCollect(float speed, float radius, s_p<Resources> capacities)
-			: speed(speed), radius(radius), capacities(capacities) {}
+	FeatureInfoCollect(float speed, float radius, u_p<Resources> capacities)
+			: speed(speed), radius(radius), capacities(move(capacities)) {}
 	
-	FeatureInfoCollect* clone() override { return new FeatureInfoCollect(speed, radius, capacities); }
+	FeatureInfoCollect* clone() override { return new FeatureInfoCollect(speed, radius, make_u<Resources>(*capacities)); }
 };
 
 struct FeatureInfoHealth : FeatureInfo

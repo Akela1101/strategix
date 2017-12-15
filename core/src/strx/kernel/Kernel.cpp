@@ -181,6 +181,11 @@ vector<string> Kernel::GetRaceNames()
 	return raceNames;
 }
 
+const ResourceInfosType& Kernel::GetResourceInfos()
+{
+	return resourceInfos;
+}
+
 u_p<Resources> Kernel::MakeResources()
 {
 	auto resources = make_u<Resources>();

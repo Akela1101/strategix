@@ -80,7 +80,6 @@ INT WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR strCmdLine, INT)
 int main(int argc, char* argv[])
 {
 #endif
-	using namespace strx;
 	using namespace sample1;
 	
 	QApplication app(argc, argv);

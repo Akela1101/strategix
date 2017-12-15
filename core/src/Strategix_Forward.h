@@ -25,7 +25,6 @@ namespace strx
 	class MapMine;
 	class Player;
 	class PlayerSlot;
-	class Resources;
 	class TechTree;
 	class TechTreesBuilder;
 
@@ -33,7 +32,7 @@ namespace strx
 }
 
 #include <strx/common/CoordStructs.h>
-#include <strx/common/Resource.h>
+#include <strx/common/Resources.h>
 #include <strx/common/StrategixCommon.h>
 
 #endif	/* STRATEGIX_FORWARD_H */

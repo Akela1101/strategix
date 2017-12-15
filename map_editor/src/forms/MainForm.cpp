@@ -14,7 +14,6 @@
 
 namespace map_editor
 {
-using namespace strx;
 using namespace map_info;
 
 static const char editorTitle[] = "Strategix Map Editor";
