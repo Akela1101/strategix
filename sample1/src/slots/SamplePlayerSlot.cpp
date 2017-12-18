@@ -12,6 +12,9 @@ void SamplePlayerSlot::EntiAdded(Entity* entity)
 	auto entiSlot = new SampleEntiSlot(entity);
 	entiSlots.emplace(entity->GetId(), entiSlot);
 	
-	QObject::connect(entiSlot, &SampleEntiSlot::DoEntityMoved, mapWidget, &SampleMapWidget::OnEntityMoved);
+	QObject::connect(entiSlot, &SampleEntiSlot::DoMoved
+			, mapWidget, &SampleMapWidget::OnEntityMoved, Qt::QueuedConnection);
+	QObject::connect(entiSlot, &SampleEntiSlot::DoMapMoved
+			, mapWidget, &SampleMapWidget::OnEntityMapMoved, Qt::QueuedConnection);
 }
 }

@@ -56,8 +56,9 @@ void SampleGame::PlayerAdded(Player* player)
 
 void SampleGame::InitHuman(SamplePlayerSlot* playerSlot)
 {
+	// same qt thread affinity, so connection must be Qt::QueuedConnection
 	QObject::connect(playerSlot, SamplePlayerSlot::DoResourcesChanged
-			, gameWidget.get(), SampleGameWidget::OnResourcesChanged);
+			, gameWidget.get(), SampleGameWidget::OnResourcesChanged, Qt::QueuedConnection);
 }
 
 }

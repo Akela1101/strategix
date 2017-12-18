@@ -1,5 +1,5 @@
-#ifndef _MAPPATHFINDER_H
-#define _MAPPATHFINDER_H
+#ifndef _PATHFINDER_H
+#define _PATHFINDER_H
 
 #include "Strategix_Forward.h"
 
@@ -11,12 +11,12 @@ struct PricedCell;
 /**
  * Simple A* implementation.
  */
-class MapPathFinder : boost::noncopyable
+class PathFinder : boost::noncopyable
 {
 	const Map& map;
 
 public:
-	MapPathFinder(const Map& map);
+	PathFinder(const Map& map);
 	
 	/**
 	 * @return non-null path to the point closest to till
@@ -28,5 +28,5 @@ private:
 	u_p<MapPath> GetWay(PricedCell* cell, bool isFound) const;
 };
 }
-#endif //_MAPPATHFINDER_H
+#endif //_PATHFINDER_H
 

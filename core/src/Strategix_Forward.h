@@ -21,7 +21,7 @@ namespace strx
 	class MapManager;
 	class MapObject;
 	class MapPath;
-	class MapPathFinder;
+	class PathFinder;
 	class MapMine;
 	class Player;
 	class PlayerSlot;

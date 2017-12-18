@@ -22,6 +22,7 @@ struct IMove
 	
 	virtual void OnMoveStart() {}
 	virtual void OnMove(RealCoord coord) = 0;
+	virtual void OnMapMove(MapCoord from, MapCoord to) {}
 	virtual void OnMoveStop() {}
 };
 

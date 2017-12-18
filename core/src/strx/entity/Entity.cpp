@@ -1,21 +1,25 @@
 #include <boost/core/demangle.hpp>
+#include <strx/common/EntityInfo.h>
 #include <strx/feature/FeatureMove.h>
 #include <strx/feature/FeatureCollect.h>
 #include <strx/feature/FeatureHealth.h>
 #include <strx/feature/FeatureAttack.h>
+#include <strx/map/Map.h>
+#include <strx/map/MapObject.h>
+#include <strx/player/Player.h>
 
-#include "strx/common/EntityInfo.h"
 #include "EntitySlot.h"
 #include "Entity.h"
 
 
 namespace strx
 {
-Entity::Entity(const EntityInfo& entiInfo, int id, const RealCoord& coord, Player* player)
+Entity::Entity(const EntityInfo& entiInfo, int id, RealCoord coord, Player* player)
 		: player(player)
 		, entiInfo(entiInfo)
 		, id(id)
 		, coord(coord)
+		, mapCoord(coord)
 		, task(nullptr)
 {
 	for (auto&& pa : entiInfo.featureInfos)
@@ -59,6 +63,25 @@ void Entity::AddFeature(const string& name, const FeatureInfo* featureInfo)
 	{
 		error_log << "Unable to handle feature " << name;
 	}
+}
+
+bool Entity::SetMapCoord(MapCoord newCoord)
+{
+	if (mapCoord != newCoord)
+	{
+		Map& map = player->GetMap();
+		auto& currentObject = map.GetCell(mapCoord).object;
+		auto& object = map.GetCell(newCoord).object;
+		if (object)
+		{
+			return currentObject == object;
+		}
+		object = move(currentObject);
+		
+		slot->OnMapMove(mapCoord, newCoord);
+		mapCoord = newCoord;
+	}
+	return true;
 }
 
 void Entity::SetSlot(EntitySlot* slot)

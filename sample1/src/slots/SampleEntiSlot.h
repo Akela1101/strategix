@@ -13,11 +13,14 @@ class SampleEntiSlot : public QObject, public EntitySlot
 Q_OBJECT
 public:
 	SampleEntiSlot(Entity* entity);
-	
+
+protected:
 	void OnMove(RealCoord coord) override;
+	void OnMapMove(MapCoord from, MapCoord to) override;
 
 signals:
-	void DoEntityMoved(int entityId, RealCoord coord);
+	void DoMoved(int entityId, RealCoord coord);
+	void DoMapMoved(MapCoord from, MapCoord to);
 };
 }
 

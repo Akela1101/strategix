@@ -26,6 +26,7 @@ public:
 
 public slots:
 	void OnEntityMoved(int entityId, RealCoord coord);
+	void OnEntityMapMoved(MapCoord from, MapCoord to);
 	
 protected:
 	void ObjectAdded(MapObject* object) override;

@@ -14,9 +14,7 @@ namespace strx
 FeatureMove::FeatureMove(const FeatureInfo* featureInfo, Entity* entity)
 		: Feature(entity)
 		, featureInfoMove(dynamic_cast<const FeatureInfoMove*>(featureInfo))
-		, isMoving(false)
 		, speed(featureInfoMove->speed)
-		, distance(0)
 		, next(entity->GetCoord())
 {}
 
@@ -24,51 +22,69 @@ FeatureMove::~FeatureMove() = default;
 
 bool FeatureMove::Move(MapCoord coord, float radius, ICommand* iCommand)
 {
+	this->coord = coord;
+	this->radius = radius;
 	this->iCommand = iCommand;
+	
+	RebuildPath();
 	distance = 0;
-	mapsPath = entity->GetPlayer().GetMap().FindPath(entity->GetCoord(), coord, radius);
+	terrainQuality = 0;
 	
 	entity->GetSlot().OnMoveStart();
 	entity->AssignTask(this);
 	
-	return mapsPath->IsWhole();
+	return path->IsWhole();
 }
 
 void FeatureMove::Tick(float seconds)
 {
-	if (distance == 0)
+	distance -= seconds * speed * terrainQuality;
+	bool isStop = distance <= 0 && !NextPoint();
+	
+	RealCoord newCoord = distance > 0 ? next - direction * distance : next;
+	entity->SetCoord(newCoord);
+	entity->GetSlot().OnMove(newCoord);
+	
+	if (isStop)
 	{
-		if (mapsPath->IsEmpty()) // Stopping
-		{
-			entity->AssignTask(nullptr);
-			if (iCommand) iCommand->OnComplete(mapsPath->IsWhole());
-			
-			return;
-		}
-		
-		// Selecting next point
-		auto current = entity->GetCoord();
-		next = mapsPath->TakeNext();
-		RealCoord delta = (RealCoord)next - current;
-		direction = delta.Norm();
-		distance = delta.Len();
-		
-		auto map = entity->GetPlayer().GetMap();
-		terrainQuality = 0.5 * (map.GetCell(current).terrain->quality + map.GetCell(next).terrain->quality);
+		entity->AssignTask(nullptr);
+		if (iCommand) iCommand->OnComplete(path->IsWhole());
 	}
-	
-	// Moving
-	float step = seconds * speed * terrainQuality;
-	distance = (distance > step) ? (distance - step) : 0;
-	
-	RealCoord coord = next - direction * distance;
-	entity->GetCoord() = coord;
-	entity->GetSlot().OnMove(coord);
 }
 
 void FeatureMove::Stop()
 {
 	entity->GetSlot().OnMoveStop();
+}
+
+bool FeatureMove::NextPoint()
+{
+	if (path->IsEmpty()) return false;
+	
+	RebuildPath();
+	if (path->IsEmpty()) return false;
+	
+	next = path->TakeNext();
+	if (!entity->SetMapCoord(next)) nya_throw << "The first point of the new path is occupied.";
+	
+	auto current = entity->GetCoord();
+	auto map = entity->GetPlayer().GetMap();
+	
+	RealCoord delta = (RealCoord)next - current;
+	direction = delta.Norm();
+	distance += delta.Len();
+	terrainQuality = 0.5 * (map.GetCell(current).terrain->quality + map.GetCell(next).terrain->quality);
+	return true;
+}
+
+void FeatureMove::RebuildPath()
+{
+	path = entity->GetPlayer().GetMap().FindPath(entity->GetMapCoord(), coord, radius);
+	if (distance > 0)
+	{
+		// first point shouldn't be removed, if it's still moving there
+		path->AddPoint(entity->GetMapCoord());
+	}
 }
 
 }

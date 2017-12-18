@@ -13,9 +13,9 @@ void MapManager::LoadMap(const string& mapName)
 	map.reset(new Map(path, mapName));
 }
 
-u_p<Map> MapManager::CreateMap(int playerId)
+Map& MapManager::CreateMap(int playerId)
 {
-	return make_u<Map>(*map);
+	return *map;
 }
 
 string MapManager::GetFilePath(const string& name) const

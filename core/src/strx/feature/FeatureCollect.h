@@ -13,8 +13,8 @@ class FeatureCollect : public Feature, public ICommand
 	const FeatureInfoCollect* const info; /// Link to tree
 	MapCoord coord;             /// coordinate to search for resources
 	string resourceName;        /// resource name
-	float capacity;             /// amount of resource Enti can hold
-	float load;                 /// amount of resource Enti is holding
+	float capacity;             /// amount of resource Entity can hold
+	float load;                 /// amount of resource Entity is holding
 	bool isMovingToCollector;   /// to collector | from collector
 
 public:

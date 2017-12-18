@@ -35,6 +35,7 @@ const QPixmap& MapInfo::GetPlayerMark(int playerNumber)
 #define Q_REG_TYPE(type) qRegisterMetaType<type>(#type);
 void MapInfo::QRegisterTypes()
 {
+	Q_REG_TYPE(MapCoord);
 	Q_REG_TYPE(RealCoord);
 	Q_REG_TYPE(Resources);
 }

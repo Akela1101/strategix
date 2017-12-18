@@ -58,12 +58,12 @@ void MapWidget::paintEvent(QPaintEvent* event)
 	painter.scale(scale, scale);
 	painter.drawPixmap(0, 0, *groundPixmap);
 	
-	// update affected objects;
+	// update affected objects
 	QRect rc = event->rect();
-	int fromX = rc.left() / tileLen;
-	int fromY = rc.top() / tileLen;
-	int tillX = rc.right() / tileLen;
-	int tillY = rc.bottom() / tileLen;
+	int fromX = max(0, rc.left() / tileLen - 1);
+	int fromY = max(0, rc.top() / tileLen - 1);
+	int tillX = min(map->GetWidth() - 1, rc.right() / tileLen + 1);
+	int tillY = min(map->GetLength() - 1, rc.bottom() / tileLen + 1);
 	for (int row = fromY; row <= tillY; ++row)
 	{
 		for (int col = fromX; col <= tillX; ++col)

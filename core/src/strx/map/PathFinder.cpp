@@ -6,12 +6,12 @@
 #include "MapPath.h"
 #include "Map.h"
 
-#include "MapPathFinder.h"
+#include "PathFinder.h"
 
 
 namespace strx
 {
-static const int maxCheckedTiles = 300;
+static const int maxCheckedTiles = 256; // i.e. area of search ⇒ sqrt / 2 ~ radius
 static const int epsilon = 4;
 static const int straight = 10;
 static const int diagonal = straight * M_SQRT2;
@@ -46,10 +46,10 @@ using OpenedCellsType = multi_index_container<u_p<PricedCell>, indexed_by
 		>>;
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-MapPathFinder::MapPathFinder(const Map& map)
+PathFinder::PathFinder(const Map& map)
 		: map(map) {}
 
-u_p<MapPath> MapPathFinder::FindPath(MapCoord from, MapCoord till, float radius) const
+u_p<MapPath> PathFinder::FindPath(MapCoord from, MapCoord till, float radius) const
 {
 	// already on place
 	if ((from - till).Len() <= radius) return make_u<MapPath>();
@@ -108,11 +108,11 @@ u_p<MapPath> MapPathFinder::FindPath(MapCoord from, MapCoord till, float radius)
 			}
 		}
 	}
-	trace_log << "Checked tiles: " << closed.size();
+	//trace_log << "Checked tiles: " << closed.size();
 	return GetWay(closest, isFound);
 }
 
-bool MapPathFinder::IsAccessible(const MapCoord& coord) const
+bool PathFinder::IsAccessible(const MapCoord& coord) const
 {
 	if (!map.IsCell(coord)) return false;
 	
@@ -120,14 +120,13 @@ bool MapPathFinder::IsAccessible(const MapCoord& coord) const
 	return cell.terrain->quality > 0 && !cell.object;
 }
 
-u_p<MapPath> MapPathFinder::GetWay(PricedCell* cell, bool isFound) const
+u_p<MapPath> PathFinder::GetWay(PricedCell* cell, bool isFound) const
 {
 	auto mapsPath = make_u<MapPath>(isFound);
-	for (; cell; cell = cell->parent)
+	for (; cell->parent; cell = cell->parent)
 	{
 		mapsPath->AddPoint(cell->coord);
 	}
-	mapsPath->TakeNext(); // remove first
 	return mapsPath;
 }
 

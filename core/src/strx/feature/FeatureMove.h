@@ -9,16 +9,17 @@ namespace strx
 {
 class FeatureMove : public Feature
 {
-	const FeatureInfoMove* featureInfoMove; // Link to tree
-	bool isMoving;
+	const FeatureInfoMove* featureInfoMove; /// Link to tree
+	MapCoord coord;       /// finish coordinate
+	float radius;         /// finish point radius
+	ICommand* iCommand;   /// feature started moving (can be null)
+	
 	float speed;
 	float distance;
 	float terrainQuality;
 	RealCoord direction, next;
-	u_p<MapPath> mapsPath;
+	u_p<MapPath> path;
 	
-	ICommand* iCommand; // someone who started moving
-
 public:
 	FeatureMove(const FeatureInfo* featureInfo, Entity* entity);
 	~FeatureMove();
@@ -26,6 +27,10 @@ public:
 	bool Move(MapCoord coord, float radius, ICommand* iCommand);
 	void Tick(float seconds) override;
 	void Stop() override;
+
+private:
+	bool NextPoint();
+	void RebuildPath();
 };
 }
 

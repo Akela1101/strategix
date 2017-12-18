@@ -9,7 +9,7 @@
 #include <strx/kernel/Kernel.h>
 #include <strx/map/MapObject.h>
 #include <strx/map/MapPath.h>
-#include <strx/map/MapPathFinder.h>
+#include <strx/map/PathFinder.h>
 #include <strx/map/MapMine.h>
 #include <strx/player/Player.h>
 
@@ -80,7 +80,7 @@ Map::~Map() = default;
 
 u_p<MapPath> Map::FindPath(MapCoord from, MapCoord till, float radius) const
 {
-	MapPathFinder pathsFinder(*this);
+	PathFinder pathsFinder(*this);
 	return pathsFinder.FindPath(from, till, radius);
 }
 

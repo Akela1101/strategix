@@ -49,18 +49,17 @@ void Kernel::Configure(const string& configPath, const string& mapsDirectory)
 
 void Kernel::LoadMap(const string& mapName)
 {
-	if (!mapManager)
-		nya_throw << "Configure() should be run before LoadMap().";
+	if (!mapManager) nya_throw << "Configure() should be run before LoadMap().";
 	
 	mapManager->LoadMap(mapName);
 }
 
 void Kernel::AddPlayer(const string& name, PlayerType type, int playerId, const string& raceName)
 {
-	if (!mapManager) nya_throw << "LoadMap() should be run before AddPlayer().";
+	if (!mapManager->HasMap()) nya_throw << "LoadMap() should be run before AddPlayer().";
 	
-	auto&& map = mapManager->CreateMap(playerId);
-	auto player = new Player(name, type, playerId, raceName, move(map));
+	Map& map = mapManager->CreateMap(playerId);
+	auto player = new Player(name, type, playerId, raceName, map);
 	players.emplace(player->GetName(), player);
 	game->PlayerAdded(player);
 	
@@ -118,9 +117,16 @@ void Kernel::Stop()
 
 void Kernel::Tick(float seconds)
 {
-	for (auto& name_player : players)
+	try
 	{
-		name_player.second->Tick(seconds);
+		for (auto& name_player : players)
+		{
+			name_player.second->Tick(seconds);
+		}
+	}
+	catch (exception& e)
+	{
+		error_log << "Error during tick: " << e.what();
 	}
 }
 

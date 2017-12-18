@@ -25,7 +25,7 @@ bool FeatureCollect::Collect(MapCoord coord, const string& resourceName)
 	if (!in_(resourceName, *info->capacities)) return false;
 	
 	// try move and set OnComplete for this
-	if (!entity->Do<FeatureMove>()->Move(coord, info->radius, this)) return false;
+	entity->Do<FeatureMove>()->Move(coord, info->radius, this);
 	
 	// setting target resource
 	this->coord = coord;

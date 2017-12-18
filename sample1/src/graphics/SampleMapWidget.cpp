@@ -29,29 +29,23 @@ void SampleMapWidget::AddPlayer(SamplePlayerSlot* playerSlot)
 
 void SampleMapWidget::OnEntityMoved(int entityId, RealCoord coord)
 {
-	if (!in_(entityId, mapObjects))
+	if (MapObject* object = mapObjects[entityId])
 	{
-		error_log << "Entity [%d] is not found on map."s % entityId;
+		update(GetUpdateRect(coord));
+		update(GetUpdateRect(object->coord));
+		object->coord = coord;
+	}
+}
+
+void SampleMapWidget::OnEntityMapMoved(MapCoord from, MapCoord to)
+{
+	auto& object = map->GetCell(to).object;
+	if (object)
+	{
+		error_log << "Trying to replace %s on map."s % object->name;
 		return;
 	}
-	
-	MapObject* object = mapObjects.at(entityId);
-	MapCoord mapCoord = object->coord;
-	MapCoord currentMapCoord = coord;
-	if (mapCoord != currentMapCoord)
-	{
-		auto&& uObject = map->GetCell(mapCoord).object;
-		auto& currentObject = map->GetCell(currentMapCoord).object;
-		if (currentObject)
-		{
-			error_log << "Trying to replace %s on map."s % currentObject->name;
-			return;
-		}
-		currentObject = std::move(uObject);
-	}
-	update(GetUpdateRect(coord));
-	update(GetUpdateRect(object->coord));
-	object->coord = coord;
+	object = std::move(map->GetCell(from).object);
 }
 
 void SampleMapWidget::ObjectAdded(MapObject* object)

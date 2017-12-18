@@ -12,7 +12,12 @@ SampleEntiSlot::SampleEntiSlot(Entity* entity)
 
 void SampleEntiSlot::OnMove(RealCoord coord)
 {
-	emit DoEntityMoved(entity->GetId(), coord);
+	emit DoMoved(entity->GetId(), coord);
+}
+
+void SampleEntiSlot::OnMapMove(MapCoord from, MapCoord to)
+{
+	emit DoMapMoved(from, to);
 }
 
 }
