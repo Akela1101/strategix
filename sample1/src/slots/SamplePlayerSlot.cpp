@@ -1,6 +1,6 @@
 #include <strx/entity/Entity.h>
 #include <graphics/SampleMapWidget.h>
-#include <slots/SampleEntiSlot.h>
+#include <slots/SampleEntitySlot.h>
 
 #include "SamplePlayerSlot.h"
 
@@ -9,12 +9,15 @@ namespace sample1
 {
 void SamplePlayerSlot::EntiAdded(Entity* entity)
 {
-	auto entiSlot = new SampleEntiSlot(entity);
+	auto entiSlot = new SampleEntitySlot(entity);
 	entiSlots.emplace(entity->GetId(), entiSlot);
 	
-	QObject::connect(entiSlot, &SampleEntiSlot::DoMoved
-			, mapWidget, &SampleMapWidget::OnEntityMoved, Qt::QueuedConnection);
-	QObject::connect(entiSlot, &SampleEntiSlot::DoMapMoved
-			, mapWidget, &SampleMapWidget::OnEntityMapMoved, Qt::QueuedConnection);
+	QObject::connect(entiSlot, &SampleEntitySlot::DoMoved, mapWidget, &SampleMapWidget::OnEntityMoved);
+	QObject::connect(entiSlot, &SampleEntitySlot::DoMapMoved, mapWidget, &SampleMapWidget::OnEntityMapMoved);
+}
+
+void SamplePlayerSlot::MineRemoved(IdType id)
+{
+	QMetaObject::invokeMethod(mapWidget, [=]() { mapWidget->OnMineRemoved(id); });
 }
 }

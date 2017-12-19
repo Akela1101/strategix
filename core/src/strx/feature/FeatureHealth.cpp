@@ -37,7 +37,7 @@ bool FeatureHealth::HpChange(HpType deltaHp)
 		// Dead
 		hp = 0;
 		entity->GetSlot().OnHpChange();
-		entity->GetPlayer().RemoveEnti(entity);
+		entity->GetPlayer().RemoveEntity(entity);
 		return false;
 	}
 	else if (hp > featureInfoHealth->hp)

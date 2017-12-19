@@ -43,6 +43,12 @@ protected:
 	
 	/// on holding resources change
 	virtual void ResourcesChanged(const Resources& newResources) {}
+	
+	/// on mine amount changed
+	virtual void MineAmountChanged(IdType id, ResourceUnit amount) {}
+	
+	/// on mine removed
+	virtual void MineRemoved(IdType id) {}
 };
 }
 

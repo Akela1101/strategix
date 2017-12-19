@@ -8,18 +8,18 @@
 
 namespace sample1
 {
-class SampleEntiSlot : public QObject, public EntitySlot
+class SampleEntitySlot : public QObject, public EntitySlot
 {
 Q_OBJECT
 public:
-	SampleEntiSlot(Entity* entity);
+	SampleEntitySlot(Entity* entity);
 
 protected:
 	void OnMove(RealCoord coord) override;
-	void OnMapMove(MapCoord from, MapCoord to) override;
+	void OnMapMove(MapCoord from, MapCoord to) override { emit DoMapMoved(from, to); }
 
 signals:
-	void DoMoved(int entityId, RealCoord coord);
+	void DoMoved(IdType id, RealCoord coord);
 	void DoMapMoved(MapCoord from, MapCoord to);
 };
 }

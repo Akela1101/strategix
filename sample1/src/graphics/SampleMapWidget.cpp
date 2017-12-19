@@ -1,4 +1,4 @@
-#include <slots/SampleEntiSlot.h>
+#include <slots/SampleEntitySlot.h>
 #include <slots/SamplePlayerSlot.h>
 #include <strx/map/MapObject.h>
 #include <strx/map/MapMine.h>
@@ -27,14 +27,15 @@ void SampleMapWidget::AddPlayer(SamplePlayerSlot* playerSlot)
 	}
 }
 
-void SampleMapWidget::OnEntityMoved(int entityId, RealCoord coord)
+void SampleMapWidget::OnEntityMoved(IdType id, RealCoord coord)
 {
-	if (MapObject* object = mapObjects[entityId])
+	if (MapObject* object = mapObjects[id])
 	{
 		update(GetUpdateRect(coord));
 		update(GetUpdateRect(object->coord));
 		object->coord = coord;
 	}
+	else error_log << "Entity with id %d does not exist."s % id;
 }
 
 void SampleMapWidget::OnEntityMapMoved(MapCoord from, MapCoord to)
@@ -46,6 +47,18 @@ void SampleMapWidget::OnEntityMapMoved(MapCoord from, MapCoord to)
 		return;
 	}
 	object = std::move(map->GetCell(from).object);
+}
+
+void SampleMapWidget::OnMineRemoved(IdType id)
+{
+	if (MapMine* mine = dynamic_cast<MapMine*>(mapObjects[id]))
+	{
+		MapCoord coord = mine->coord;
+		map->ChangeObject(map->GetCell(coord), nullptr);
+		mapObjects.erase(id);
+		update(GetUpdateRect(coord));
+	}
+	else error_log << "Mine with id %d does not exist."s % id;
 }
 
 void SampleMapWidget::ObjectAdded(MapObject* object)
@@ -77,6 +90,7 @@ void SampleMapWidget::mousePressEvent(QMouseEvent* event)
 	
 	QPoint point = event->pos();
 	MapCoord coord(point.x() / tileLen, point.y() / tileLen);
+	if (!map->IsCell(coord)) return;
 	
 	MapObject* object = map->GetCell(coord).object.get();
 	if (object == currentEntity) return;

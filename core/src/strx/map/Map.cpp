@@ -8,8 +8,6 @@
 
 #include <strx/kernel/Kernel.h>
 #include <strx/map/MapObject.h>
-#include <strx/map/MapPath.h>
-#include <strx/map/PathFinder.h>
 #include <strx/map/MapMine.h>
 #include <strx/player/Player.h>
 
@@ -22,10 +20,10 @@ const char mapFileTopString[] = "Strategix Map";
 const char mapFormatVersion[] = "0.0.1";
 
 int MapObject::lastId = 0;
-umap<string, u_p<Map::Terrain>> Map::terrains;
+umap<string, u_p<Terrain>> Map::terrains;
 
 
-Map::Cell::Cell(Map::Terrain* terrain, MapObject* object)
+Map::Cell::Cell(Terrain* terrain, MapObject* object)
 		: terrain(terrain)
 		, object(object) {}
 
@@ -78,15 +76,9 @@ Map::Map(const Map& other)
 
 Map::~Map() = default;
 
-u_p<MapPath> Map::FindPath(MapCoord from, MapCoord till, float radius) const
+bool Map::IsCell(MapCoord coord) const
 {
-	PathFinder pathsFinder(*this);
-	return pathsFinder.FindPath(from, till, radius);
-}
-
-ResourceUnit Map::PickResource(MapMine* mine, ResourceUnit amount)
-{
-	return mine->PickResource(amount);
+	return !(coord.x < 0 || coord.x >= width || coord.y < 0 || coord.y >= length);
 }
 
 void Map::ChangeTerrain(Cell& cell, const string& terrainName)

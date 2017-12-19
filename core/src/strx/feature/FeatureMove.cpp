@@ -20,7 +20,7 @@ FeatureMove::FeatureMove(const FeatureInfo* featureInfo, Entity* entity)
 
 FeatureMove::~FeatureMove() = default;
 
-bool FeatureMove::Move(MapCoord coord, float radius, ICommand* iCommand)
+void FeatureMove::Move(MapCoord coord, float radius, ICommand* iCommand)
 {
 	this->coord = coord;
 	this->radius = radius;
@@ -32,8 +32,6 @@ bool FeatureMove::Move(MapCoord coord, float radius, ICommand* iCommand)
 	
 	entity->GetSlot().OnMoveStart();
 	entity->AssignTask(this);
-	
-	return path->IsWhole();
 }
 
 void FeatureMove::Tick(float seconds)
@@ -68,18 +66,18 @@ bool FeatureMove::NextPoint()
 	if (!entity->SetMapCoord(next)) nya_throw << "The first point of the new path is occupied.";
 	
 	auto current = entity->GetCoord();
-	auto map = entity->GetPlayer().GetMap();
+	Player& player = entity->GetPlayer();
 	
 	RealCoord delta = (RealCoord)next - current;
 	direction = delta.Norm();
 	distance += delta.Len();
-	terrainQuality = 0.5 * (map.GetCell(current).terrain->quality + map.GetCell(next).terrain->quality);
+	terrainQuality = 0.5 * (player.GetTerrain(current)->quality + player.GetTerrain(next)->quality);
 	return true;
 }
 
 void FeatureMove::RebuildPath()
 {
-	path = entity->GetPlayer().GetMap().FindPath(entity->GetMapCoord(), coord, radius);
+	path = entity->GetPlayer().FindPath(entity->GetMapCoord(), coord, radius);
 	if (distance > 0)
 	{
 		// first point shouldn't be removed, if it's still moving there

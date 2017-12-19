@@ -16,6 +16,8 @@ void InitLogs()
 	el::Configurations conf;
 	conf.parseFromText("*GLOBAL:\n FORMAT = %msg", el::Loggers::getLogger("default")->configurations());
 	el::Loggers::getLogger("raw")->configure(conf);
+	
+	nya::SetThreadName("_main_");
 }
 
 
@@ -88,7 +90,7 @@ int main(int argc, char* argv[])
 	Kernel::Configure("config/strategix.json", "maps");
 	//Kernel::PrintInfo();
 	SampleGame::Configure();
-
+	
 	try // run a game
 	{
 		auto game = make_s<SampleGame>();

@@ -69,9 +69,8 @@ bool Entity::SetMapCoord(MapCoord newCoord)
 {
 	if (mapCoord != newCoord)
 	{
-		Map& map = player->GetMap();
-		auto& currentObject = map.GetCell(mapCoord).object;
-		auto& object = map.GetCell(newCoord).object;
+		auto& currentObject = player->GetMapObject(mapCoord);
+		auto& object = player->GetMapObject(newCoord);
 		if (object)
 		{
 			return currentObject == object;

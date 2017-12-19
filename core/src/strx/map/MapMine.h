@@ -16,7 +16,6 @@ public:
 	MapMine(const MapMine& other) : MapObject(other), amount(other.amount) {}
 	MapMine* clone() override { return new MapMine(*this); }
 	
-	Resource GetResource() const { return Resource(name, amount); }
 	ResourceUnit PickResource(ResourceUnit amountChange);
 };
 }

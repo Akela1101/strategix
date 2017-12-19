@@ -22,7 +22,7 @@
 			"features" : {
 				"move" : { "speed" : 3.0 },
 				"collect" : {
-					"speed" : 50,
+					"speed" : 100,
 					"radius" : 1.1,
 					"capacities" : { "gold" : 200, "tree" : 200 }
 				},

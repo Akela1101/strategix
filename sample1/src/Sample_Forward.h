@@ -8,7 +8,7 @@ namespace strx {}
 
 namespace sample1
 {
-class SampleEntiSlot;
+class SampleEntitySlot;
 class SampleGame;
 class SamplePlayerSlot;
 

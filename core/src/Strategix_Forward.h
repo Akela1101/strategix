@@ -27,6 +27,7 @@ namespace strx
 	class PlayerSlot;
 	class TechTree;
 	class TechTreesBuilder;
+	class Terrain;
 
 	using namespace std; // only in my namespace, so it won't affect foreign headers
 }

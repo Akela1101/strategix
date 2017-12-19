@@ -25,8 +25,9 @@ public:
 	void AddPlayer(SamplePlayerSlot* playerSlot);
 
 public slots:
-	void OnEntityMoved(int entityId, RealCoord coord);
+	void OnEntityMoved(IdType id, RealCoord coord);
 	void OnEntityMapMoved(MapCoord from, MapCoord to);
+	void OnMineRemoved(IdType id);
 	
 protected:
 	void ObjectAdded(MapObject* object) override;

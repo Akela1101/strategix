@@ -38,7 +38,7 @@ protected:
 	void wheelEvent(QWheelEvent* event) override;
 	void mouseMoveEvent(QMouseEvent* event) override;
 	void mousePressEvent(QMouseEvent* event) override;
-	void mouseReleaseEvent(QMouseEvent*) override;
+	void mouseReleaseEvent(QMouseEvent* event) override;
 	
 	void DrawTerrain(const QPixmap& pixmap, const QRect& rc);
 	void DrawObject(MapObject* object, QPainter& painter);

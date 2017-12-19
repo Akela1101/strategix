@@ -7,7 +7,7 @@
 
 namespace sample1
 {
-class SampleEntiSlot;
+class SampleEntitySlot;
 
 class SamplePlayerSlot : public QObject, public PlayerSlot
 {
@@ -15,16 +15,17 @@ Q_OBJECT
 	using PlayerSlot::PlayerSlot;
 	
 	SampleMapWidget* mapWidget = nullptr;
-	umap<int, u_p<SampleEntiSlot>> entiSlots;
+	umap<int, u_p<SampleEntitySlot>> entiSlots;
 	
 public:
-	SampleEntiSlot& GetEntitySlot(int id) { return *entiSlots[id].get(); }
+	SampleEntitySlot& GetEntitySlot(int id) { return *entiSlots[id].get(); }
 	void SetMapWidget(SampleMapWidget* mapWidget) { this->mapWidget = mapWidget; }
 
 protected:
 	void EntiAdded(Entity* entity) override;
 	void EntiRemoved(Entity* entity) override {}
 	void ResourcesChanged(const Resources& newResources) override { emit DoResourcesChanged(newResources); }
+	void MineRemoved(IdType id) override;
 	
 signals:
 	void DoResourcesChanged(Resources newResources);

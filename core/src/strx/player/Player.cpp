@@ -3,7 +3,10 @@
 #include <strx/entity/EntitySlot.h>
 #include <strx/kernel/Kernel.h>
 #include <strx/map/Map.h>
+#include <strx/map/MapMine.h>
 #include <strx/map/MapObject.h>
+#include <strx/map/MapPath.h>
+#include <strx/map/PathFinder.h>
 #include <strx/player/PlayerSlot.h>
 #include <strx/common/TechTree.h>
 
@@ -19,10 +22,27 @@ Player::Player(const string& name, PlayerType type, int id, const string& raceNa
 		, id(id)
 		, raceName(raceName)
 		, map(map)
+		, pathFinder(new PathFinder(map))
 		, resources(Kernel::MakeResources())
 		, techTree(Kernel::GetTechTree(raceName)) {}
 
 Player::~Player() = default;
+
+Terrain* Player::GetTerrain(MapCoord coord) const
+{
+	return map.GetCell(coord).terrain;
+}
+
+u_p<MapObject>& Player::GetMapObject(MapCoord coord) const
+{
+	return map.GetCell(coord).object;
+}
+
+MapMine* Player::GetMine(MapCoord coord, string resourceName) const
+{
+	auto mine = dynamic_cast<MapMine*>(GetMapObject(coord).get());
+	return mine && mine->name == resourceName ? mine : nullptr;
+}
 
 void Player::SetSlot(PlayerSlot* slot)
 {
@@ -74,7 +94,7 @@ void Player::AddEntity(Entity* entity)
 	slot->EntiAdded(entity);
 }
 
-void Player::RemoveEnti(Entity* entity)
+void Player::RemoveEntity(Entity* entity)
 {
 	entisToRemove.push_back(entity);
 }
@@ -85,7 +105,7 @@ void Player::AddResource(const Resource& deltaResource)
 	slot->ResourcesChanged(*resources);
 }
 
-Entity* Player::FindCollector(MapCoord coord)
+Entity* Player::FindCollector(MapCoord coord) const
 {
 	// @#~ Check if there is path to Collector and also select nearest
 	// @#~ Check out the case when there are no collectors or more than one
@@ -100,4 +120,30 @@ Entity* Player::FindCollector(MapCoord coord)
 	return nullptr;
 }
 
+MapMine* Player::FindMine(MapCoord coord, string resourceName, float radius) const
+{
+	if (radius == 0) GetMine(coord, resourceName);
+	
+	return nullptr;
+}
+
+u_p<MapPath> Player::FindPath(MapCoord from, MapCoord till, float radius) const
+{
+	return pathFinder->FindPath(from, till, radius);
+}
+
+ResourceUnit Player::PickResource(MapMine* mine, ResourceUnit amount)
+{
+	ResourceUnit picked = mine->PickResource(amount);
+	slot->MineAmountChanged(mine->id, mine->amount);
+	
+	if (!mine->amount)
+	{
+		// remove empty mine
+		IdType mineId = mine->id;
+		map.ChangeObject(map.GetCell(mine->coord), nullptr);
+		slot->MineRemoved(mineId);
+	}
+	return picked;
+}
 }

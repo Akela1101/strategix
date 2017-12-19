@@ -94,7 +94,7 @@ void Kernel::Start(s_p<Game> game)
 	
 	kernelThread.reset(new thread([]
 	{
-		nya::SetThreadName("strategix");
+		nya::SetThreadName("_strx_");
 		try
 		{
 			eventLoop.run();

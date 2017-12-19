@@ -21,9 +21,8 @@ bool FeatureAttack::Attack(s_p<Entity> target)
 		return false;
 	}
 	
-	// Try move and set OnComplete for this
-	if (!entity->Do<FeatureMove>()->Move(target->GetCoord(), 0, this))
-		return false;
+	// move and set OnComplete for this
+	entity->Do<FeatureMove>()->Move(target->GetCoord(), 0, this);
 	
 	this->target = target;
 	return true;

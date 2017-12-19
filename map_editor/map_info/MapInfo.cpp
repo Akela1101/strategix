@@ -35,6 +35,7 @@ const QPixmap& MapInfo::GetPlayerMark(int playerNumber)
 #define Q_REG_TYPE(type) qRegisterMetaType<type>(#type);
 void MapInfo::QRegisterTypes()
 {
+	Q_REG_TYPE(IdType);
 	Q_REG_TYPE(MapCoord);
 	Q_REG_TYPE(RealCoord);
 	Q_REG_TYPE(Resources);
@@ -75,7 +76,7 @@ void MapInfo::LoadTerrainTools()
 		fin >> quality >> name;
 		if (name.empty()) break;
 		
-		Map::AddTerrain(make_u<Map::Terrain>(i, name, quality));
+		Map::AddTerrain(make_u<Terrain>(i, name, quality));
 		
 		int col = i % divs, row = i / divs;
 		QPixmap image = pixmap.copy(col * tileSize, row * tileSize, tileSize, tileSize);

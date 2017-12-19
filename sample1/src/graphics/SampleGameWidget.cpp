@@ -18,6 +18,7 @@ SampleGameWidget::SampleGameWidget()
 		: GameWidget()
 		, resourcesWidget(new QWidget(this))
 {
+	resize(1200, 600);
 	resourcesWidget->setMaximumHeight(len + 4);
 	resourcesWidget->setContentsMargins(8, 2, 8, 2);
 	resourcesWidget->setStyleSheet(".QWidget { background-color : rgba(100, 100, 100, 0.3) }");
@@ -49,4 +50,5 @@ void SampleGameWidget::OnResourcesChanged(Resources newResources)
 	}
 	resourcesWidget->adjustSize();
 }
+
 }

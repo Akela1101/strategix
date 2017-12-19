@@ -7,18 +7,18 @@ namespace strx
 {
 extern const char mapFormatVersion[];
 
+struct Terrain
+{
+	int id;
+	string name;
+	float quality;
+	
+	Terrain(int id, string name, float quality) : id(id), name(move(name)), quality(quality) {}
+};
+
 class Map
 {
 public:
-	struct Terrain
-	{
-		int id;
-		string name;
-		float quality;
-		
-		Terrain(int id, string name, float quality) : id(id), name(move(name)), quality(quality) {}
-	};
-	
 	struct Cell
 	{
 		Terrain* terrain;
@@ -28,12 +28,10 @@ public:
 		Cell(Terrain* terrain, MapObject* object);
 		Cell(const Cell& other);
 	};
-
-protected:
-	static umap<string, u_p<Terrain>> terrains;  /// all terrain types
-	
-private:
 	using CellsType = vector<vector<Cell>>;
+
+private:
+	static umap<string, u_p<Terrain>> terrains;  /// all terrain types
 	
 	string name;
 	int width;
@@ -52,14 +50,11 @@ public:
 	int GetWidth() const { return width; }
 	int GetLength() const { return length; }
 	Cell& GetCell(int x, int y) { return cells[y][x]; }
-	Cell& GetCell(const MapCoord mc) { return cells[mc.y][mc.x]; }
+	Cell& GetCell(MapCoord coord) { return cells[coord.y][coord.x]; }
 	const Cell& GetCell(int x, int y) const { return cells[y][x]; }
-	const Cell& GetCell(const MapCoord mc) const { return cells[mc.y][mc.x]; }
-	bool IsCell(const MapCoord& mc) const { return !(mc.x < 0 || mc.x >= width || mc.y < 0 || mc.y >= length); }
+	const Cell& GetCell(MapCoord coord) const { return cells[coord.y][coord.x]; }
 	
-	u_p<MapPath> FindPath(MapCoord from, MapCoord till, float radius) const;
-	ResourceUnit PickResource(MapMine* mine, ResourceUnit amount);
-	
+	bool IsCell(MapCoord coord) const;
 	void ChangeTerrain(Cell& cell, const string& terrainName);
 	void ChangeObject(Cell& cell, MapObject* object);
 	void SaveToFile(const string& path) const;

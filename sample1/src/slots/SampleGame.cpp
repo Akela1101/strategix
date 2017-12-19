@@ -1,7 +1,7 @@
 #include <graphics/SampleGameWidget.h>
 #include <graphics/SampleMapWidget.h>
 #include <strx/player/Player.h>
-#include <slots/SampleEntiSlot.h>
+#include <slots/SampleEntitySlot.h>
 #include <slots/SamplePlayerSlot.h>
 #include <Strategix.h>
 #include <GameWidget.h>
@@ -56,9 +56,8 @@ void SampleGame::PlayerAdded(Player* player)
 
 void SampleGame::InitHuman(SamplePlayerSlot* playerSlot)
 {
-	// same qt thread affinity, so connection must be Qt::QueuedConnection
 	QObject::connect(playerSlot, SamplePlayerSlot::DoResourcesChanged
-			, gameWidget.get(), SampleGameWidget::OnResourcesChanged, Qt::QueuedConnection);
+			, gameWidget.get(), SampleGameWidget::OnResourcesChanged);
 }
 
 }

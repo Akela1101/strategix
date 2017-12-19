@@ -137,9 +137,14 @@ void MapWidget::mousePressEvent(QMouseEvent* event)
 	}
 }
 
-void MapWidget::mouseReleaseEvent(QMouseEvent*)
+#include <QApplication>
+void MapWidget::mouseReleaseEvent(QMouseEvent* event)
 {
-	releaseMouse();
+	if (!(event->buttons() & Qt::RightButton))
+	{
+		releaseMouse();
+		QApplication::setOverrideCursor(QCursor(Qt::ArrowCursor)); // @#~ should do it automatically on releaseMouse() < qt-5.10 bug? >
+	}
 }
 
 void MapWidget::DrawTerrain(const QPixmap& pixmap, const QRect& rc)

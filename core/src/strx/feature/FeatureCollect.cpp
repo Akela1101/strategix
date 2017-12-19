@@ -40,17 +40,13 @@ bool FeatureCollect::Collect(MapCoord coord, const string& resourceName)
 void FeatureCollect::Tick(float seconds)
 {
 	// If Entity is not full and resource still exists
-	Map& map = entity->GetPlayer().GetMap();
-	auto mine = dynamic_cast<MapMine*>(map.GetCell(coord).object.get());
+	Player& player = entity->GetPlayer();
+	auto mine = player.GetMine(coord, resourceName);
 	
 	if (load < capacity && mine)
 	{
-		float piece = seconds * info->speed;
-		if (piece > capacity - load)
-		{
-			piece = capacity - load; // all it can bring
-		}
-		load += map.PickResource(mine, piece);
+		ResourceUnit piece = min(ResourceUnit(seconds * info->speed), capacity - load);
+		load += player.PickResource(mine, piece);
 		
 		entity->GetSlot().OnCollect();
 		return;
@@ -83,20 +79,22 @@ void FeatureCollect::OnComplete(bool isComplete)
 	
 	if (load < capacity) // near the resource, so collect
 	{
-		entity->GetSlot().OnCollectStart();
-		entity->AssignTask(this);
+		if (entity->GetPlayer().GetMine(coord, resourceName))
+		{
+			entity->GetSlot().OnCollectStart();
+			entity->AssignTask(this);
+		}
 		return;
 	}
 	
-	MoveToCollector();
+	MoveToCollector(); // load == capacity
 }
 
 void FeatureCollect::MoveToCollector()
 {
-	Entity* collector = entity->GetPlayer().FindCollector(entity->GetCoord());
-	
-	if (collector && entity->Do<FeatureMove>()->Move(collector->GetCoord(), info->radius, this))
+	if (Entity* collector = entity->GetPlayer().FindCollector(entity->GetCoord()))
 	{
+		entity->Do<FeatureMove>()->Move(collector->GetCoord(), info->radius, this);
 		isMovingToCollector = true;
 	}
 }
