@@ -1,7 +1,6 @@
 #include <strx/common/EntityInfo.h>
 #include <strx/common/TechTree.h>
 
-#include <boost/range/adaptors.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/filesystem.hpp>

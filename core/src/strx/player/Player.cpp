@@ -38,10 +38,9 @@ u_p<MapObject>& Player::GetMapObject(MapCoord coord) const
 	return map.GetCell(coord).object;
 }
 
-MapMine* Player::GetMine(MapCoord coord, string resourceName) const
+MapMine* Player::GetMine(MapCoord coord) const
 {
-	auto mine = dynamic_cast<MapMine*>(GetMapObject(coord).get());
-	return mine && mine->name == resourceName ? mine : nullptr;
+	return dynamic_cast<MapMine*>(GetMapObject(coord).get());
 }
 
 void Player::SetSlot(PlayerSlot* slot)
@@ -120,10 +119,31 @@ Entity* Player::FindCollector(MapCoord coord) const
 	return nullptr;
 }
 
-MapMine* Player::FindMine(MapCoord coord, string resourceName, float radius) const
+MapMine* Player::FindMine(MapCoord coord, string resourceName, int squareRadius) const
 {
-	if (radius == 0) GetMine(coord, resourceName);
+	if (squareRadius == 0) return GetMine(coord);
 	
+	for (int r : boost::irange(1, squareRadius))
+	{
+		MapCoord froms[] = { { -r, -r }, { -r + 1, r }, { -r, -r + 1 }, { r, -r } }; // h,h,v,v
+		for (int i : boost::irange(0, 4))
+		{
+			MapCoord from = coord + froms[i];
+			int& d = i < 2 ? from.x : from.y;
+			int dEnd = d + 2 * r;
+			for (; d < dEnd; ++d)
+			{
+				if (map.IsCell(from))
+				{
+					auto mine = dynamic_cast<MapMine*>(map.GetCell(from).object.get());
+					if (mine && mine->name == resourceName)
+					{
+						return mine;
+					}
+				}
+			}
+		}
+	}
 	return nullptr;
 }
 

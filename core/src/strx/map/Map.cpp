@@ -1,10 +1,6 @@
-#include <algorithm>
 #include <iomanip>
 #include <fstream>
 #include <sstream>
-#include <boost/format.hpp>
-#include <boost/filesystem.hpp>
-#include <boost/range/iterator_range.hpp>
 
 #include <strx/kernel/Kernel.h>
 #include <strx/map/MapObject.h>

@@ -1,6 +1,3 @@
-#include <boost/range/adaptors.hpp>
-#include <boost/range/algorithm.hpp>
-#include <boost/range/irange.hpp>
 #include <boost/filesystem.hpp>
 #include <QBitmap>
 #include <strx/map/Map.h>
@@ -44,7 +41,6 @@ void MapInfo::QRegisterTypes()
 void MapInfo::LoadTerrainTools()
 {
 	using namespace boost;
-	using namespace boost::adaptors;
 	using path = boost::filesystem::path;
 	
 	// definition

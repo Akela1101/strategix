@@ -32,7 +32,7 @@ public:
 	Map& GetMap() const { return map; } //TODO: remove
 	Terrain* GetTerrain(MapCoord coord) const;
 	u_p<MapObject>& GetMapObject(MapCoord coord) const;
-	MapMine* GetMine(MapCoord coord, string resourceName) const;
+	MapMine* GetMine(MapCoord coord) const;
 	const TechTree& GetTechTree() const { return techTree; }
 	void SetSlot(PlayerSlot* slot);
 	
@@ -54,8 +54,8 @@ public:
 	/// find nearest resource collector building
 	Entity* FindCollector(MapCoord coord) const;
 	
-	/// find nearest mine in the given radius
-	MapMine* FindMine(MapCoord coord, string resourceName, float radius) const;
+	/// find nearest mine in the given manh radius
+	MapMine* FindMine(MapCoord coord, string resourceName, int squareRadius) const;
 	
 	/// find path to a circle with the given radius
 	u_p<MapPath> FindPath(MapCoord from, MapCoord till, float radius) const;

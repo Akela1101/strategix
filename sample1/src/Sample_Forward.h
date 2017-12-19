@@ -2,7 +2,6 @@
 #define	_SAMPLE1_FORWARD_H
 
 #include <nya/api.hpp>
-#include <boost/range/adaptors.hpp>
 
 namespace strx {}
 

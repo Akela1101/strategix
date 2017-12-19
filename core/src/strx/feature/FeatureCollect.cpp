@@ -12,6 +12,7 @@
 
 namespace strx
 {
+static const float mineSelectionRadius = 10;
 
 FeatureCollect::FeatureCollect(const FeatureInfo* featureInfo, Entity* entity)
 		: Feature(entity)
@@ -23,48 +24,37 @@ bool FeatureCollect::Collect(MapCoord coord, const string& resourceName)
 {
 	// check if entity can bear this resource
 	if (!in_(resourceName, *info->capacities)) return false;
-	
-	// try move and set OnComplete for this
-	entity->Do<FeatureMove>()->Move(coord, info->radius, this);
-	
-	// setting target resource
-	this->coord = coord;
-	this->resourceName = resourceName;
-	capacity = info->capacities->at(resourceName);
-	isMovingToCollector = false;
-	
-	//info_log << "start collect: [%s, %d] (%d, %d)"s % resourceName % capacity % coord.x % coord.y;
+
+	if (this->resourceName != resourceName)
+	{
+		this->resourceName = resourceName;
+		this->capacity = info->capacities->at(resourceName);
+		
+		if (load != 0) load = 0; // throw out current resource
+	}
+	Collect(coord);
 	return true;
 }
 
 void FeatureCollect::Tick(float seconds)
 {
-	// If Entity is not full and resource still exists
-	Player& player = entity->GetPlayer();
-	auto mine = player.GetMine(coord, resourceName);
-	
-	if (load < capacity && mine)
+	if (MapMine* mine = SelectMine())
 	{
 		ResourceUnit piece = min(ResourceUnit(seconds * info->speed), capacity - load);
-		load += player.PickResource(mine, piece);
+		load += entity->GetPlayer().PickResource(mine, piece);
 		
 		entity->GetSlot().OnCollect();
-		return;
 	}
-	
-	// full load or no more resources
-	MoveToCollector();
 }
 
 void FeatureCollect::Stop()
 {
-	//info_log << "stop collect";
 	entity->GetSlot().OnCollectStop();
 }
 
 void FeatureCollect::OnComplete(bool isComplete)
 {
-	if (!isComplete) return;
+	if (!isComplete) return; // @#~ move failed — probably it needs some wakeup timer to retry move
 	
 	if (isMovingToCollector) // near the collector, so unload
 	{
@@ -73,21 +63,26 @@ void FeatureCollect::OnComplete(bool isComplete)
 		load = 0;
 		
 		// Going back to resource
-		Collect(coord, resourceName);
+		Collect(coord);
 		return;
 	}
 	
-	if (load < capacity) // near the resource, so collect
+	if (SelectMine()) // near the mine, so try to load
 	{
-		if (entity->GetPlayer().GetMine(coord, resourceName))
-		{
-			entity->GetSlot().OnCollectStart();
-			entity->AssignTask(this);
-		}
-		return;
+		entity->GetSlot().OnCollectStart();
+		entity->AssignTask(this);
 	}
+}
+
+void FeatureCollect::Collect(MapCoord coord)
+{
+	// try move and set OnComplete for this
+	entity->Do<FeatureMove>()->Move(coord, info->radius, this);
 	
-	MoveToCollector(); // load == capacity
+	this->coord = coord;
+	this->isMovingToCollector = false;
+	
+	//info_log << "start collect: [%s, %d] (%d, %d)"s % resourceName % capacity % coord.x % coord.y;
 }
 
 void FeatureCollect::MoveToCollector()
@@ -97,6 +92,24 @@ void FeatureCollect::MoveToCollector()
 		entity->Do<FeatureMove>()->Move(collector->GetCoord(), info->radius, this);
 		isMovingToCollector = true;
 	}
+}
+
+MapMine* FeatureCollect::SelectMine()
+{
+	if (load < capacity)
+	{
+		Player& player = entity->GetPlayer();
+		auto mine = player.GetMine(coord);
+		if (mine) return mine;
+		
+		if (mine = player.FindMine(entity->GetCoord(), resourceName, mineSelectionRadius))
+		{
+			Collect(mine->coord); // change current mine
+		}
+		return nullptr;
+	}
+	MoveToCollector();
+	return nullptr;
 }
 
 }

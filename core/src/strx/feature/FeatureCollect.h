@@ -27,7 +27,9 @@ public:
 	virtual void OnComplete(bool isComplete); // moving complete
 
 private:
+	void Collect(MapCoord coord);
 	void MoveToCollector(); // going back to base(or other collector)
+	MapMine* SelectMine();
 };
 }
 
