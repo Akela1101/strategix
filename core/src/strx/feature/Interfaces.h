@@ -1,7 +1,7 @@
 #pragma once
 
 #include <nya/signal.hpp>
-#include <Strategix_Forward.h>
+#include <Strategix_fwd.h>
 
 namespace strx
 {

@@ -1,7 +1,7 @@
 #pragma once
 
-#include <MapInfo_Forward.h>
-#include <Strategix_Forward.h>
+#include <MapInfo_fwd.h>
+#include <Strategix_fwd.h>
 #include <QWidget>
 
 

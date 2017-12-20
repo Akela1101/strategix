@@ -3,7 +3,7 @@
 #include <utility>
 #include <string>
 
-#include <Strategix_Forward.h>
+#include <Strategix_fwd.h>
 
 namespace strx
 {

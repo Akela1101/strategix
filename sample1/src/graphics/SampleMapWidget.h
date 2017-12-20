@@ -1,7 +1,7 @@
 #pragma once
 
-#include <Strategix_Forward.h>
-#include <Sample_Forward.h>
+#include <Strategix_fwd.h>
+#include <Sample_fwd.h>
 #include <MapWidget.h>
 
 

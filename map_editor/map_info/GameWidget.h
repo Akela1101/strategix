@@ -1,8 +1,8 @@
 #pragma once
 
 #include <nya.hpp>
-#include <Strategix_Forward.h>
-#include <MapInfo_Forward.h>
+#include <Strategix_fwd.h>
+#include <MapInfo_fwd.h>
 #include <QScrollArea>
 
 

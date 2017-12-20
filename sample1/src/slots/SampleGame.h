@@ -1,7 +1,7 @@
 #pragma once
 
 #include <strx/kernel/Game.h>
-#include <Sample_Forward.h>
+#include <Sample_fwd.h>
 
 namespace sample1
 {

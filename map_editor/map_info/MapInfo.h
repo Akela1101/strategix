@@ -5,7 +5,7 @@
 #include <nya/api.hpp>
 #include <strx/common/StrategixCommon.h>
 #include <strx/map/Map.h>
-#include <MapInfo_Forward.h>
+#include <MapInfo_fwd.h>
 #include <QPixmap>
 #include <QString>
 

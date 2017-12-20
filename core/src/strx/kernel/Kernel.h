@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Strategix_Forward.h>
+#include <Strategix_fwd.h>
 #include <nya/signal.hpp>
 
 /**

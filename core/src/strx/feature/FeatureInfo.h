@@ -2,7 +2,7 @@
 
 #include "strx/common/Resources.h"
 
-#include "Strategix_Forward.h"
+#include "Strategix_fwd.h"
 
 
 namespace strx

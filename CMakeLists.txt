@@ -24,7 +24,7 @@ add_subdirectory(server)
 add_subdirectory(map_editor)
 
 # samples
-add_subdirectory(sample1 EXCLUDE_FROM_ALL)
+add_subdirectory(sample1) #EXCLUDE_FROM_ALL
 
 
 # show all variables

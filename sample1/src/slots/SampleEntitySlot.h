@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Sample_Forward.h>
+#include <Sample_fwd.h>
 #include <strx/entity/EntitySlot.h>
 #include <QObject>
 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <typeindex>
-#include <Strategix_Forward.h>
+#include <Strategix_fwd.h>
 
 
 namespace strx
