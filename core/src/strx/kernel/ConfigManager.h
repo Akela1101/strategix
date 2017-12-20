@@ -1,5 +1,4 @@
-#ifndef _CONFIGURATIONBUILDER_H
-#define    _CONFIGURATIONBUILDER_H
+#pragma once
 
 #include <utility>
 #include <string>
@@ -26,6 +25,3 @@ public:
 };
 
 }
-
-#endif    /* _CONFIGURATIONBUILDER_H */
-

@@ -1,5 +1,4 @@
-#ifndef _GameWidget_H
-#define _GameWidget_H
+#pragma once
 
 #include <nya.hpp>
 #include <Strategix_Forward.h>
@@ -29,6 +28,3 @@ protected:
 };
 
 }
-
-#endif //_GameWidget_H
-

@@ -1,5 +1,4 @@
-#ifndef _STRATEGIXCOMMON_H
-#define    _STRATEGIXCOMMON_H
+#pragma once
 
 #include <Strategix_Forward.h>
 
@@ -19,6 +18,3 @@ enum class PlayerType
 };
 
 }
-
-#endif    /* _STRATEGIXCOMMON_H */
-

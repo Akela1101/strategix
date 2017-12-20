@@ -1,5 +1,4 @@
-#ifndef _RESOURCES_H
-#define    _RESOURCES_H
+#pragma once
 
 #include <strx/common/Resource.h>
 
@@ -26,6 +25,3 @@ struct Resources : ResourcesType
 	}
 };
 }
-
-#endif    /* _RESOURCES_H */
-

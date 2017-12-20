@@ -20,6 +20,7 @@ add_subdirectory(../easyloggingpp easyloggingpp)
 
 # strategix
 add_subdirectory(core)
+add_subdirectory(server)
 add_subdirectory(map_editor)
 
 # samples

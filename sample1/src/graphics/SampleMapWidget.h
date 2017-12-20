@@ -1,5 +1,4 @@
-#ifndef _SampleMapWidget_H
-#define _SampleMapWidget_H
+#pragma once
 
 #include <Strategix_Forward.h>
 #include <Sample_Forward.h>
@@ -40,5 +39,3 @@ private:
 };
 
 }
-
-#endif //_SampleMapWidget_H

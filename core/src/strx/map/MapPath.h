@@ -1,5 +1,4 @@
-#ifndef _MAPPATH_H
-#define _MAPPATH_H
+#pragma once
 
 #include "Strategix_Forward.h"
 
@@ -27,6 +26,3 @@ public:
 	void AddPoint(MapCoord mapCoord) { path.push_back(mapCoord); }
 };
 }
-
-#endif //_MAPPATH_H
-

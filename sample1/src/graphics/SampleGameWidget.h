@@ -1,5 +1,4 @@
-#ifndef _SampleGameWidget_H
-#define _SampleGameWidget_H
+#pragma once
 
 #include <Sample_Forward.h>
 #include <GameWidget.h>
@@ -22,5 +21,3 @@ public slots:
 	void OnResourcesChanged(Resources newResources);
 };
 }
-
-#endif //_SampleGameWidget_H

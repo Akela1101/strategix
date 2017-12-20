@@ -1,5 +1,4 @@
-#ifndef MAPINFO_H
-#define MAPINFO_H
+#pragma once
 
 #define ELPP_QT_LOGGING
 
@@ -39,5 +38,3 @@ public:
 };
 
 }
-
-#endif //MAPINFO_H

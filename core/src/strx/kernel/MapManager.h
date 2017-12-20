@@ -1,5 +1,4 @@
-#ifndef _MAPMANAGER_H
-#define _MAPMANAGER_H
+#pragma once
 
 #include <Strategix_Forward.h>
 
@@ -27,6 +26,3 @@ private:
 	string GetFilePath(const string& name) const;
 };
 }
-
-#endif // _MAPMANAGER_H
-

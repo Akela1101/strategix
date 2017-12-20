@@ -1,5 +1,4 @@
-#ifndef _PLAYERSLOT_H
-#define    _PLAYERSLOT_H
+#pragma once
 
 #include "Strategix_Forward.h"
 
@@ -51,6 +50,3 @@ protected:
 	virtual void MineRemoved(IdType id) {}
 };
 }
-
-#endif    /* _PLAYERSLOT_H */
-

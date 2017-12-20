@@ -1,5 +1,4 @@
-#ifndef _FEATUREINFO_H
-#define    _FEATUREINFO_H
+#pragma once
 
 #include "strx/common/Resources.h"
 
@@ -60,6 +59,3 @@ struct FeatureInfoAttack : FeatureInfo
 	FeatureInfoAttack* clone() override { return new FeatureInfoAttack(damage, speed); }
 };
 }
-
-#endif    /* _FEATUREINFO_H */
-

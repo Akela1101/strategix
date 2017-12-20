@@ -1,5 +1,4 @@
-#ifndef _MapMine_H
-#define _MapMine_H
+#pragma once
 
 #include <Strategix_Forward.h>
 #include "MapObject.h"
@@ -19,6 +18,3 @@ public:
 	ResourceUnit PickResource(ResourceUnit amountChange);
 };
 }
-
-#endif //_MapMine_H
-

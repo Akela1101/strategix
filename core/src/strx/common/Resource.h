@@ -1,5 +1,4 @@
-#ifndef _RESOURCE_H
-#define    _RESOURCE_H
+#pragma once
 
 #include <Strategix_Forward.h>
 #include <boost/operators.hpp>
@@ -26,6 +25,3 @@ struct Resource : public ResourceType
 	Resource& operator -=(ResourceUnit amount) { second -= amount; return *this; }
 };
 }
-
-#endif    /* _RESOURCE_H */
-

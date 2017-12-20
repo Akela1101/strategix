@@ -1,5 +1,4 @@
-#ifndef _KERNEL_H
-#define _KERNEL_H
+#pragma once
 
 #include <Strategix_Forward.h>
 #include <nya/signal.hpp>
@@ -38,6 +37,3 @@ public:
 	}
 };
 }
-
-#endif //_KERNEL_H
-

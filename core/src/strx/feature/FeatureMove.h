@@ -1,5 +1,4 @@
-#ifndef _FEATUREMOVE_H
-#define    _FEATUREMOVE_H
+#pragma once
 
 #include "Feature.h"
 #include "Interfaces.h"
@@ -33,6 +32,3 @@ private:
 	void RebuildPath();
 };
 }
-
-#endif    /* _FEATUREMOVE_H */
-

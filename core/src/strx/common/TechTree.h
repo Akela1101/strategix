@@ -1,5 +1,4 @@
-#ifndef _TECHTREE_H
-#define _TECHTREE_H
+#pragma once
 
 #include <Strategix_Forward.h>
 
@@ -23,6 +22,3 @@ public:
 	void AddNode(u_p<EntityInfo> entiInfo);
 };
 }
-
-#endif    /* _TECHTREE_H */
-

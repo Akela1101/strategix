@@ -1,5 +1,4 @@
-#ifndef _INTERFACES_H
-#define	_INTERFACES_H
+#pragma once
 
 #include <nya/signal.hpp>
 #include <Strategix_Forward.h>
@@ -48,6 +47,3 @@ struct IAttack
 	virtual void OnAttackStop() {}
 };
 }
-
-#endif	/* _INTERFACES_H */
-

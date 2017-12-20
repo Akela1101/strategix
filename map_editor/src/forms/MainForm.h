@@ -1,5 +1,4 @@
-#ifndef _MAINFORM_H
-#define _MAINFORM_H
+#pragma once
 
 #include <Strategix_Forward.h>
 #include <MapInfo_Forward.h>
@@ -58,5 +57,3 @@ signals:
 };
 
 }
-
-#endif    /* _MAINFORM_H */

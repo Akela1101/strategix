@@ -1,5 +1,4 @@
-#ifndef _DIALOGNEW_H
-#define    _DIALOGNEW_H
+#pragma once
 
 #include "ui_DialogNew.h"
 
@@ -24,5 +23,3 @@ public:
 private slots:
 	void accept();
 };
-
-#endif    /* _DIALOGNEW_H */

@@ -1,5 +1,4 @@
-#ifndef _FEATURE_H
-#define    _FEATURE_H
+#pragma once
 
 #include "Strategix_Forward.h"
 
@@ -19,6 +18,3 @@ public:
 	virtual void Stop() = 0;
 };
 }
-
-#endif    /* _FEATURE_H */
-

@@ -1,5 +1,4 @@
-#ifndef _FEATUREHEALTH_H
-#define    _FEATUREHEALTH_H
+#pragma once
 
 #include "Feature.h"
 
@@ -26,6 +25,3 @@ public:
 	bool HpChange(HpType deltaHp); // false if become dead
 };
 }
-
-#endif    /* _FEATUREHEALTH_H */
-

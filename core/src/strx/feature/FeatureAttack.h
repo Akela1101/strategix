@@ -1,5 +1,4 @@
-#ifndef _FEATUREATTACK_H
-#define    _FEATUREATTACK_H
+#pragma once
 
 #include "Feature.h"
 #include "Interfaces.h"
@@ -25,6 +24,3 @@ public:
 	virtual void OnComplete(bool isComplete); // Moving Complete
 };
 }
-
-#endif    /* _FEATUREATTACK_H */
-

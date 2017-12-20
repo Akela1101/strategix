@@ -1,5 +1,4 @@
-#ifndef _MapWidget_H
-#define _MapWidget_H
+#pragma once
 
 #include <MapInfo_Forward.h>
 #include <Strategix_Forward.h>
@@ -50,4 +49,3 @@ signals:
 };
 
 }
-#endif //_MapWidget_H

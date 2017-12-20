@@ -1,5 +1,4 @@
-#ifndef _COORDSTRUCTS_H
-#define    _COORDSTRUCTS_H
+#pragma once
 
 #include <boost/operators.hpp>
 
@@ -58,6 +57,3 @@ template<> struct hash<strx::MapCoord>
 	}
 };
 }
-
-#endif    /* _COORDSTRUCTS_H */
-

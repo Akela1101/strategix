@@ -1,5 +1,4 @@
-#ifndef _EditorGameWidget_H
-#define _EditorGameWidget_H
+#pragma once
 
 #include <GameWidget.h>
 
@@ -12,5 +11,3 @@ class EditorGameWidget : public GameWidget
 	using GameWidget::GameWidget;
 };
 }
-
-#endif //_EditorGameWidget_H

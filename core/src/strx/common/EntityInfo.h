@@ -1,5 +1,4 @@
-#ifndef _ENTIINFO_H
-#define    _ENTIINFO_H
+#pragma once
 
 #include <strx/feature/FeatureInfo.h>
 #include <strx/common/Resources.h>
@@ -41,6 +40,3 @@ struct EntityInfo
 	u_p<EntityInfo> clone() const { return make_u<EntityInfo>(*this); }
 };
 }
-
-#endif    /* _ENTIINFO_H */
-

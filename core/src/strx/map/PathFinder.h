@@ -1,5 +1,4 @@
-#ifndef _PATHFINDER_H
-#define _PATHFINDER_H
+#pragma once
 
 #include "Strategix_Forward.h"
 
@@ -28,5 +27,3 @@ private:
 	u_p<MapPath> GetWay(PricedCell* cell, bool isFound) const;
 };
 }
-#endif //_PATHFINDER_H
-

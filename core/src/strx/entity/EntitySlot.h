@@ -1,5 +1,4 @@
-#ifndef _ENTISLOT_H
-#define    _ENTISLOT_H
+#pragma once
 
 #include <strx/feature/Interfaces.h>
 #include <Strategix_Forward.h>
@@ -18,6 +17,3 @@ public:
 	virtual ~EntitySlot() = 0;
 };
 }
-
-#endif    /* _ENTISLOT_H */
-

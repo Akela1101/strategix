@@ -1,5 +1,4 @@
-#ifndef _SAMPLEPLAYERSLOT_H
-#define    _SAMPLEPLAYERSLOT_H
+#pragma once
 
 #include <strx/player/PlayerSlot.h>
 #include <Sample_Forward.h>
@@ -31,6 +30,3 @@ signals:
 	void DoResourcesChanged(Resources newResources);
 };
 }
-
-#endif    /* _SAMPLEPLAYERSLOT_H */
-

@@ -1,5 +1,4 @@
-#ifndef _MapObject_H
-#define _MapObject_H
+#pragma once
 
 #include <Strategix_Forward.h>
 
@@ -33,4 +32,3 @@ struct MapEntity : MapObject
 };
 
 }
-#endif //_MapObject_H

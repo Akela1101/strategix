@@ -1,5 +1,4 @@
-#ifndef _EditorMapWidget_H
-#define _EditorMapWidget_H
+#pragma once
 
 #include <MapWidget.h>
 
@@ -35,5 +34,3 @@ private:
 	MapObject* CreateObject(int x, int y);
 };
 }
-
-#endif //_EditorMapWidget_H

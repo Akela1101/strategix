@@ -1,5 +1,4 @@
-#ifndef STRATEGIX_FORWARD_H
-#define	STRATEGIX_FORWARD_H
+#pragma once
 
 #include <nya/api.hpp>
 
@@ -34,6 +33,3 @@ namespace strx
 #include <strx/common/CoordStructs.h>
 #include <strx/common/Resources.h>
 #include <strx/common/StrategixCommon.h>
-
-#endif	/* STRATEGIX_FORWARD_H */
-

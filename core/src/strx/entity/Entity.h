@@ -1,5 +1,4 @@
-#ifndef _ENTI_H
-#define _ENTI_H
+#pragma once
 
 #include <typeindex>
 #include <Strategix_Forward.h>
@@ -62,5 +61,3 @@ private:
 	void AddFeature(const string& name, const FeatureInfo* featureInfo);
 };
 }
-#endif    /* _ENTI_H */
-

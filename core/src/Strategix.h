@@ -1,5 +1,4 @@
-#ifndef STRATEGIX_H
-#define	STRATEGIX_H
+#pragma once
 
 // For starting point see kernel/Kernel.h
 
@@ -10,5 +9,3 @@
 #include <strx/kernel/Game.h>
 #include <strx/map/Map.h>
 #include <strx/player/PlayerSlot.h>
-
-#endif	/* STRATEGIX_H */

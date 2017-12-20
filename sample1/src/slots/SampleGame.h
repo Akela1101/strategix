@@ -1,5 +1,4 @@
-#ifndef _SAMPLEGAME_H
-#define    _SAMPLEGAME_H
+#pragma once
 
 #include <strx/kernel/Game.h>
 #include <Sample_Forward.h>
@@ -27,6 +26,3 @@ private:
 };
 
 }
-
-#endif    /* _SAMPLEGAME_H */
-

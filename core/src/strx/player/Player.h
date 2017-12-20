@@ -1,5 +1,4 @@
-#ifndef _PLAYER_H
-#define    _PLAYER_H
+#pragma once
 
 #include <Strategix_Forward.h>
 
@@ -64,6 +63,3 @@ public:
 	ResourceUnit PickResource(MapMine* mine, ResourceUnit amount);
 };
 }
-
-#endif    /* _PLAYER_H */
-

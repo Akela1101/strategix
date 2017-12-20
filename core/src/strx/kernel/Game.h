@@ -1,8 +1,6 @@
-#ifndef _GAME_H
-#define _GAME_H
+#pragma once
 
 #include <Strategix_Forward.h>
-
 
 namespace strx
 {
@@ -16,4 +14,3 @@ public:
 };
 
 }
-#endif

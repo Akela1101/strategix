@@ -1,5 +1,4 @@
-#ifndef _SAMPLEENTISLOT_H
-#define _SAMPLEENTISLOT_H
+#pragma once
 
 #include <Sample_Forward.h>
 #include <strx/entity/EntitySlot.h>
@@ -23,5 +22,3 @@ signals:
 	void DoMapMoved(MapCoord from, MapCoord to);
 };
 }
-
-#endif //_SAMPLEENTISLOT_H

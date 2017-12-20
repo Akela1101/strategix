@@ -1,5 +1,4 @@
-#ifndef _MapInfo_Forward_H
-#define _MapInfo_Forward_H
+#pragma once
 
 #include <nya/enum.hpp>
 
@@ -21,4 +20,3 @@ nya_enum(ToolType, ToolTypeDef
 
 using namespace strx;
 }
-#endif //_MapInfo_Forward_H

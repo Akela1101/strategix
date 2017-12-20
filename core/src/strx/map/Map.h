@@ -1,5 +1,4 @@
-#ifndef _MAP_H
-#define _MAP_H
+#pragma once
 
 #include <Strategix_Forward.h>
 
@@ -64,5 +63,3 @@ private:
 	void CheckDimentions();
 };
 }
-
-#endif //_MAP_H

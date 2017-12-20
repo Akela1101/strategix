@@ -1,5 +1,4 @@
-#ifndef _FEATURECOLLECT_H
-#define    _FEATURECOLLECT_H
+#pragma once
 
 #include "Feature.h"
 #include "Interfaces.h"
@@ -32,6 +31,3 @@ private:
 	MapMine* SelectMine();
 };
 }
-
-#endif    /* _FEATURECOLLECT_H */
-

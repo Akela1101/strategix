@@ -1,5 +1,4 @@
-#ifndef _SAMPLE1_FORWARD_H
-#define	_SAMPLE1_FORWARD_H
+#pragma once
 
 #include <nya/api.hpp>
 
@@ -16,6 +15,3 @@ class SampleMapWidget;
 
 using namespace strx;
 }
-
-#endif	/* _SAMPLE1_FORWARD_H */
-
