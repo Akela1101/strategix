@@ -18,10 +18,15 @@ public:
 	ConfigManager();
 	~ConfigManager();
 	/**
-	 * @param configFile path of configuration file .json
+	 * @param configFileName path of configuration file .json
 	 * @return valid resource names and technology trees
 	 */
-	pair<ResourceInfosType, TechTreesType> ParseConfig(string configFile);
+	void ParseConfig(string configFileName);
+	
+	ushort GetServerPort() const;
+	const string& GetMapsPath() const;
+	const ResourceInfosType& GetResourceInfos() const;
+	const TechTreesType& GetTechTrees() const;
 };
 
 }

@@ -4,13 +4,18 @@
 
 namespace strx
 {
+using PlayersType = umap<string, u_p<Player>>;
+
 class Game : boost::noncopyable
 {
+	PlayersType players;       /// players by name
+	
 public:
 	virtual ~Game() = default;
 	
-	virtual void Start() = 0;
-	virtual void PlayerAdded(Player* player) = 0;
+	PlayersType& GetPlayers() { return players; }
+	
+	void AddPlayer(u_p<Player> player);
 };
 
 }

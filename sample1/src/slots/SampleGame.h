@@ -1,13 +1,13 @@
 #pragma once
 
-#include <strx/kernel/Game.h>
+#include <strx/kernel/GameSlot.h>
 #include <Sample_fwd.h>
 
 namespace sample1
 {
-class SampleGame : public Game
+class SampleGame : public GameSlot
 {
-	umap<string, u_p<SamplePlayerSlot>> playerSlots;
+	umap<string, u_p<SamplePlayer>> playerSlots;
 	u_p<SampleGameWidget> gameWidget;
 	SampleMapWidget* mapWidget;
 
@@ -17,12 +17,12 @@ public:
 	SampleGame();
 	~SampleGame() override;
 	
-	void Start() override;
+	void Start();
 	
 	void PlayerAdded(Player* player) override;
 
 private:
-	void InitHuman(SamplePlayerSlot* playerSlot);
+	void InitHuman(SamplePlayer* playerSlot);
 };
 
 }

@@ -13,7 +13,7 @@ Q_OBJECT
 	u_p<Map> mapCopy;
 	int humanPlayerId = 0;
 	MapEntity* currentEntity = nullptr;
-	SamplePlayerSlot* humanPlayer = nullptr;
+	SamplePlayer* humanPlayer = nullptr;
 	
 	umap<int, MapObject*> mapObjects;
 	
@@ -21,7 +21,7 @@ public:
 	SampleMapWidget(QScrollArea* parent);
 	~SampleMapWidget();
 	
-	void AddPlayer(SamplePlayerSlot* playerSlot);
+	void AddPlayer(SamplePlayer* playerSlot);
 
 public slots:
 	void OnEntityMoved(IdType id, RealCoord coord);

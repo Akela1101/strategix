@@ -14,7 +14,7 @@ using namespace map_info;
 
 static const int len = 32;
 
-SampleGameWidget::SampleGameWidget()
+SampleGameWidget::SampleGameWidget(const ResourceInfosType& resourceInfos)
 		: GameWidget()
 		, resourcesWidget(new QWidget(this))
 {

@@ -1,5 +1,4 @@
 #include <slots/SampleGame.h>
-#include <Strategix.h>
 #include <QApplication>
 
 #if defined(Q_OS_WIN) && defined(QT_STATIC_LINK)
@@ -9,16 +8,6 @@ Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin)
 
 
 INITIALIZE_EASYLOGGINGPP
-
-void InitLogs()
-{
-	el::Loggers::configureFromGlobal("config/log.conf");
-	el::Configurations conf;
-	conf.parseFromText("*GLOBAL:\n FORMAT = %msg", el::Loggers::getLogger("default")->configurations());
-	el::Loggers::getLogger("raw")->configure(conf);
-	
-	nya::SetThreadName("_main_");
-}
 
 
 #if defined( _MSC_VER )
@@ -85,18 +74,18 @@ int main(int argc, char* argv[])
 	using namespace sample1;
 	
 	QApplication app(argc, argv);
-	InitLogs();
+	nya::init_logs("config/log.conf");
 	
-	Kernel::Configure("config/strategix.json", "maps");
-	//Kernel::PrintInfo();
 	SampleGame::Configure();
 	
 	try // run a game
 	{
-		auto game = make_s<SampleGame>();
+		// connect to server asyncronously
+		SampleGame game;
 
-		// start event loop in other thread
-		Kernel::Start(game);
+		//game->Create();
+		
+		//game->Join();
 		
 		// start graphics
 		app.exec();
@@ -109,8 +98,7 @@ int main(int argc, char* argv[])
 	{
 		error_log << "Unexpected error occurred:\n[" << e.what() << "] \nFinishing the game..." << endl;
 	}
-	Kernel::Stop();
-
+	
 #if defined( _MSC_VER )
 	getch();
 #endif

@@ -8,20 +8,23 @@
  */
 namespace strx
 {
-class Kernel
+class Kernel : public nya::event_loop_holder<Kernel>
 {
-	static nya::event_loop eventLoop;
-
+	Kernel() = delete;
+	
 public:
 	// keep this calling order
-	static void Configure(const string& configPath, const string& mapsDirectory);
+	static void Run(const string& configPath);
+	static void RunAsync(const string& configPath);
 	static void LoadMap(const string& mapName);
 	static void AddPlayer(const string& name, PlayerType type, int playerId, const string& raceName);
-	
 	static void Start(s_p<Game> game);
-	static void Stop();
+	static void Finish();
+	
 	static void Tick(float seconds);
 	static void PrintInfo();
+	
+	static void OnMessageReceived(s_p<Message> message);
 	
 	static bool CheckResource(const string& name);
 	static const TechTree& GetTechTree(const string& raceName);
@@ -30,10 +33,8 @@ public:
 	static const ResourceInfosType& GetResourceInfos();
 	static u_p<Resources> MakeResources();
 	
-	template<typename ...Args, typename Slot>
-	static void Connect(nya::sig<void(Args...)>& signalFunc, Slot&& slotFunc)
-	{
-		nya::connect_in(eventLoop, signalFunc, slotFunc);
-	}
+private:
+	static void Init(const string& configPath);
+	static void RunImpl();
 };
 }

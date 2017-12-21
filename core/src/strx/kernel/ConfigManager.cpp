@@ -17,7 +17,9 @@ namespace fs = boost::filesystem;
 
 struct ConfigManager::ConfigurationManagerImpl
 {
-	string configFile;
+	string configFileName;
+	ushort serverPort;
+	string mapsPath;
 	ResourceInfosType resourceInfos;
 	TechTreesType techTrees;
 	
@@ -115,7 +117,7 @@ struct ConfigManager::ConfigurationManagerImpl
 				if (find(all_(resourceInfos), resourceName) == resourceInfos.end())
 				{
 					info_log << "Wrong resource [%s] in configuration file: %s"s
-							% resourceName % configFile;
+							% resourceName % configFileName;
 					continue;
 				}
 				
@@ -136,14 +138,14 @@ struct ConfigManager::ConfigurationManagerImpl
 ConfigManager::ConfigManager() = default;
 ConfigManager::~ConfigManager() = default;
 
-pair<ResourceInfosType, TechTreesType> ConfigManager::ParseConfig(string configFile)
+void ConfigManager::ParseConfig(string configFileName)
 {
 	impl.reset(new ConfigurationManagerImpl);
-	impl->configFile = configFile;
+	impl->configFileName = configFileName;
 	try
 	{
 		pt::ptree propTree;
-		pt::read_json(configFile, propTree);
+		pt::read_json(configFileName, propTree);
 		
 		for (auto&& tree : propTree.get_child("resource_types") | map_values)
 		{
@@ -166,7 +168,11 @@ pair<ResourceInfosType, TechTreesType> ConfigManager::ParseConfig(string configF
 	{
 		error_log << "Unexpected error: " << e.what();
 	}
-	return make_p(move(impl->resourceInfos), move(impl->techTrees));
 }
+
+ushort ConfigManager::GetServerPort() const { return impl->serverPort; }
+const string& ConfigManager::GetMapsPath() const {return impl->mapsPath; }
+const ResourceInfosType& ConfigManager::GetResourceInfos() const { return  impl->resourceInfos; }
+const TechTreesType& ConfigManager::GetTechTrees() const { return impl->techTrees; }
 
 }

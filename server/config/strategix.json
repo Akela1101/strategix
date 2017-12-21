@@ -1,4 +1,6 @@
 {
+	"server_port" : 10101,
+	"maps_path" : "maps",
 	"resource_types" : [ "gold", "tree" ],
 	"races" : [
 	{
@@ -9,7 +11,7 @@
 			"kind" : "building",
 			"resources" : { "gold" : 10000 },
 			"provides" : [ "az_worker" ],
-			"features" : 
+			"features" :
 			{
 				"health" : { "hp" : 1000, "regenSpeed" : 1.0 }
 			}

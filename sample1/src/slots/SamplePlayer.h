@@ -6,18 +6,18 @@
 
 namespace sample1
 {
-class SampleEntitySlot;
+class SampleEntity;
 
-class SamplePlayerSlot : public QObject, public PlayerSlot
+class SamplePlayer : public QObject, public PlayerSlot
 {
 Q_OBJECT
 	using PlayerSlot::PlayerSlot;
 	
 	SampleMapWidget* mapWidget = nullptr;
-	umap<int, u_p<SampleEntitySlot>> entiSlots;
+	umap<int, u_p<SampleEntity>> entiSlots;
 	
 public:
-	SampleEntitySlot& GetEntitySlot(int id) { return *entiSlots[id].get(); }
+	SampleEntity& GetEntitySlot(int id) { return *entiSlots[id].get(); }
 	void SetMapWidget(SampleMapWidget* mapWidget) { this->mapWidget = mapWidget; }
 
 protected:

@@ -1,16 +1,16 @@
 #include <strx/entity/Entity.h>
 
-#include "SampleEntitySlot.h"
+#include "SampleEntity.h"
 
 
 namespace sample1
 {
-SampleEntitySlot::SampleEntitySlot(Entity* entity)
+SampleEntity::SampleEntity(Entity* entity)
 		: EntitySlot(entity)
 {
 }
 
-void SampleEntitySlot::OnMove(RealCoord coord)
+void SampleEntity::OnMove(RealCoord coord)
 {
 	emit DoMoved(entity->GetId(), coord);
 }

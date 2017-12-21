@@ -6,9 +6,9 @@ namespace strx {}
 
 namespace sample1
 {
-class SampleEntitySlot;
+class SampleEntity;
 class SampleGame;
-class SamplePlayerSlot;
+class SamplePlayer;
 
 class SampleGameWidget;
 class SampleMapWidget;

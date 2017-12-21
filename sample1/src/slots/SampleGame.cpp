@@ -1,8 +1,8 @@
 #include <graphics/SampleGameWidget.h>
 #include <graphics/SampleMapWidget.h>
 #include <strx/player/Player.h>
-#include <slots/SampleEntitySlot.h>
-#include <slots/SamplePlayerSlot.h>
+#include <slots/SampleEntity.h>
+#include <slots/SamplePlayer.h>
 #include <Strategix.h>
 #include <GameWidget.h>
 #include <MapInfo.h>
@@ -22,16 +22,14 @@ void SampleGame::Configure()
 	MapInfo::LoadObjectTools();
 }
 
-SampleGame::SampleGame()
-		: gameWidget(new SampleGameWidget())
-		, mapWidget(gameWidget->CreateMapWidget<SampleMapWidget>())
-{
-}
+SampleGame::SampleGame() {}
 
 SampleGame::~SampleGame() = default;
 
 void SampleGame::Start()
 {
+	//gameWidget(new SampleGameWidget());
+	//mapWidget(gameWidget->CreateMapWidget<SampleMapWidget>());
 	Kernel::LoadMap("small");
 	Kernel::AddPlayer("Inu", PlayerType::HUMAN, 1, "az");
 	Kernel::AddPlayer("Saru", PlayerType::AI, 3, "az");
@@ -41,7 +39,7 @@ void SampleGame::Start()
 
 void SampleGame::PlayerAdded(Player* player)
 {
-	auto playerSlot = new SamplePlayerSlot(player);
+	auto playerSlot = new SamplePlayer(player);
 	playerSlots.emplace(player->GetName(), playerSlot);
 	
 	mapWidget->AddPlayer(playerSlot);
@@ -54,9 +52,9 @@ void SampleGame::PlayerAdded(Player* player)
 	player->AddResource(Resource("gold", 1000));
 }
 
-void SampleGame::InitHuman(SamplePlayerSlot* playerSlot)
+void SampleGame::InitHuman(SamplePlayer* playerSlot)
 {
-	QObject::connect(playerSlot, SamplePlayerSlot::DoResourcesChanged
+	QObject::connect(playerSlot, SamplePlayer::DoResourcesChanged
 			, gameWidget.get(), SampleGameWidget::OnResourcesChanged);
 }
 

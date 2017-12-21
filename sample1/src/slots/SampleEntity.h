@@ -7,11 +7,11 @@
 
 namespace sample1
 {
-class SampleEntitySlot : public QObject, public EntitySlot
+class SampleEntity : public QObject, public EntitySlot
 {
 Q_OBJECT
 public:
-	SampleEntitySlot(Entity* entity);
+	SampleEntity(Entity* entity);
 
 protected:
 	void OnMove(RealCoord coord) override;

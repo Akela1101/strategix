@@ -23,7 +23,7 @@ string MapManager::GetFilePath(const string& name) const
 	namespace fs = boost::filesystem;
 	
 	auto fileName = boost::str(boost::format("%s.map") % name);
-	return (fs::path(mapsDirectory) / fileName).string();
+	return (fs::path(mapsPath) / fileName).string();
 }
 
 }

@@ -11,19 +11,12 @@ Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin)
 
 INITIALIZE_EASYLOGGINGPP
 
-void InitLogs()
-{
-	el::Loggers::configureFromGlobal("config/log.conf");
-	el::Configurations conf;
-	conf.parseFromText("*GLOBAL:\n FORMAT = %msg", el::Loggers::getLogger("default")->configurations());
-	el::Loggers::getLogger("raw")->configure(conf);
-}
 
 int main(int argc, char* argv[])
 {
 	using namespace map_editor;
 	
-	InitLogs();
+	nya::init_logs("config/log.conf");
 	
 	QApplication app(argc, argv);
 	try

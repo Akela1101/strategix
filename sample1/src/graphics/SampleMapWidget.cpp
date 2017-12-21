@@ -1,5 +1,5 @@
-#include <slots/SampleEntitySlot.h>
-#include <slots/SamplePlayerSlot.h>
+#include <slots/SampleEntity.h>
+#include <slots/SamplePlayer.h>
 #include <strx/map/MapObject.h>
 #include <strx/map/MapMine.h>
 #include <MapInfo.h>
@@ -13,7 +13,7 @@ namespace sample1
 SampleMapWidget::SampleMapWidget(QScrollArea* parent) : MapWidget(parent) {}
 SampleMapWidget::~SampleMapWidget() {}
 
-void SampleMapWidget::AddPlayer(SamplePlayerSlot* playerSlot)
+void SampleMapWidget::AddPlayer(SamplePlayer* playerSlot)
 {
 	playerSlot->SetMapWidget(this);
 

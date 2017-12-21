@@ -8,14 +8,14 @@ namespace strx
 
 class MapManager : boost::noncopyable
 {
-	const string mapsDirectory;  /// usually "maps"
-	u_p<Map> map;                /// global map
+	const string mapsPath;  /// usually "maps"
+	u_p<Map> map;           /// global map
 	
 public:
-	MapManager(string mapsDirectory) : mapsDirectory(mapsDirectory) {}
+	MapManager(string mapsPath) : mapsPath(mapsPath) {}
 	~MapManager();
 	
-	const string& GetMapsDirectory() const { return mapsDirectory; }
+	const string& GetMapsDirectory() const { return mapsPath; }
 	bool HasMap() const { return map.get(); }
 	void LoadMap(const string& mapName);
 	

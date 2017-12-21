@@ -15,7 +15,7 @@ Q_OBJECT
 	umap<string, QLabel*> resourceAmountLabels;
 
 public:
-	SampleGameWidget();
+	SampleGameWidget(const ResourceInfosType& resourceInfos);
 
 public slots:
 	void OnResourcesChanged(Resources newResources);

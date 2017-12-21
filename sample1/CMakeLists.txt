@@ -24,5 +24,5 @@ target_link_libraries(${PROJECT_NAME}
         ${Boost_SYSTEM_LIBRARY}
         ${Boost_FILESYSTEM_LIBRARY})
 
-
+file(COPY config/ DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/config)
 file(COPY ../map_editor/config/map/ DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/config/map)
