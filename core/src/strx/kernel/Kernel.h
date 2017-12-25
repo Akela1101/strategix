@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Strategix_fwd.h>
+#include <strx/network/NetworkCommon.h>
 #include <nya/signal.hpp>
 
 /**
@@ -24,7 +25,7 @@ public:
 	static void Tick(float seconds);
 	static void PrintInfo();
 	
-	static void OnMessageReceived(s_p<Message> message);
+	static void OnReceiveMessage(s_p<Message> message, NetId clientId);
 	
 	static bool CheckResource(const string& name);
 	static const TechTree& GetTechTree(const string& raceName);

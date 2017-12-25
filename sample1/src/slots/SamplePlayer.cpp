@@ -18,6 +18,6 @@ void SamplePlayer::EntiAdded(Entity* entity)
 
 void SamplePlayer::MineRemoved(IdType id)
 {
-	QMetaObject::invokeMethod(mapWidget, [=]() { mapWidget->OnMineRemoved(id); });
+	qInvoke(mapWidget, [=]() { mapWidget->OnMineRemoved(id); });
 }
 }

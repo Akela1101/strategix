@@ -7,7 +7,7 @@ namespace strx
 {
 GameSlot::GameSlot()
 {
-	Client::StartSession();
+	Client::StartSession(this);
 }
 
 GameSlot::~GameSlot()

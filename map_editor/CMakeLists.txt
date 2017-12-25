@@ -3,9 +3,6 @@ project(map_editor)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
 
-# Boost
-find_package(Boost COMPONENTS system filesystem REQUIRED)
-
 # Qt
 find_package(Qt5Widgets)
 set(CMAKE_AUTOMOC ON)
@@ -22,9 +19,8 @@ target_include_directories(${LIB_NAME} PUBLIC map_info)
 target_link_libraries(${LIB_NAME}
         strategix
         easyloggingpp
-        ${Boost_SYSTEM_LIBRARY}
-        ${Boost_FILESYSTEM_LIBRARY}
-        Qt5::Widgets)
+        Qt5::Widgets
+        )
 
 # application
 file(GLOB_RECURSE SOURCES src/*.cpp src/*.h)

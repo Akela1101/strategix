@@ -20,7 +20,7 @@ struct ConfigManager::ConfigurationManagerImpl
 	string configFileName;
 	ushort serverPort;
 	string mapsPath;
-	ResourceInfosType resourceInfos;
+	ResourceInfosType resourceInfos = make_s<vector<string>>();
 	TechTreesType techTrees;
 	
 	u_p<TechTree> ParseRace(const pt::ptree& raceTree)
@@ -114,7 +114,7 @@ struct ConfigManager::ConfigurationManagerImpl
 			for (auto&& name_tree : resourcesPropTree)
 			{
 				const string& resourceName = name_tree.first; // gold or something else
-				if (find(all_(resourceInfos), resourceName) == resourceInfos.end())
+				if (find(all_(*resourceInfos), resourceName) == resourceInfos->end())
 				{
 					info_log << "Wrong resource [%s] in configuration file: %s"s
 							% resourceName % configFileName;
@@ -150,7 +150,7 @@ void ConfigManager::ParseConfig(string configFileName)
 		for (auto&& tree : propTree.get_child("resource_types") | map_values)
 		{
 			const string& resourceName = tree.get_value<string>();
-			impl->resourceInfos.push_back(resourceName);
+			impl->resourceInfos->push_back(resourceName);
 		}
 		
 		for (auto&& tree : propTree.get_child("races") | map_values)

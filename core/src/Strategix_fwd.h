@@ -16,6 +16,7 @@ class FeatureInfoMove;
 class FeatureInfoHealth;
 class FeatureInfoAttack;
 class Game;
+class GameSlot;
 class Map;
 class MapManager;
 class MapObject;

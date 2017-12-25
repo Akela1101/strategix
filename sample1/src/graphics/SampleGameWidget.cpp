@@ -1,6 +1,4 @@
 #include <MapInfo.h>
-#include <strx/common/Resources.h>
-#include <strx/kernel/Kernel.h>
 #include <graphics/SampleMapWidget.h>
 #include <QLabel>
 #include <QHBoxLayout>
@@ -25,7 +23,7 @@ SampleGameWidget::SampleGameWidget(const ResourceInfosType& resourceInfos)
 	
 	auto layout = new QHBoxLayout();
 	layout->setMargin(0);
-	for (auto&& resourceInfo : Kernel::GetResourceInfos())
+	for (auto&& resourceInfo : *resourceInfos)
 	{
 		auto imageLabel = new QLabel();
 		imageLabel->setFixedSize(len, len);

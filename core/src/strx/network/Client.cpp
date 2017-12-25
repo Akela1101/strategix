@@ -1,4 +1,5 @@
 #include <boost/asio.hpp>
+#include <strx/kernel/GameSlot.h>
 
 #include "Connection.h"
 #include "Client.h"
@@ -7,34 +8,34 @@
 
 namespace strx
 {
-using boost::asio::ip::tcp;
-
+static GameSlot* game = nullptr;              // current game
 static u_p<thread> clientThread;              // client thread
 static u_p<tcp::socket> socket;               // client socket
 static u_p<tcp::resolver> resolver;           // ip resolver
 static u_p<Connection> connection;            // single client connection
 
-void Client::StartSession()
+void Client::StartSession(GameSlot* game)
 {
+	strx::game = game;
 	socket.reset(new tcp::socket(eventLoop));
 	resolver.reset(new tcp::resolver(eventLoop));
 	auto iEndpoint = resolver->resolve({ "localhost", "10101" });
-	
+
 	boost::asio::async_connect(*socket, iEndpoint, [](boost::system::error_code ec , tcp::resolver::iterator)
 	{
 		if (!ec)
 		{
-			connection.reset(new Connection(move(*socket)));
-			
+			connection.reset(new Connection(move(*socket), ReceiveMessage));
+
 			connection->Write(make_s<Message>(Message::Type::RQ_CONTEXT));
 		}
 	});
-	
+
 	clientThread.reset(new thread([]()
 	{
-		nya::SetThreadName("_clnt_");
+		nya_thread_name("_clnt_");
 		trace_log << "Starting client";
-		
+
 		bool running = true;
 		while (running)
 		{
@@ -53,6 +54,13 @@ void Client::StartSession()
 
 void Client::StopSession()
 {
+	game = nullptr;
 	if (clientThread) clientThread->join();
+}
+
+void Client::ReceiveMessage(s_p<Message> message, NetId id)
+{
+	ignore = id;
+	if (game) game->OnReceiveMessage(message);
 }
 }

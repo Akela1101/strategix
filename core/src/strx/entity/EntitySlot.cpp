@@ -13,11 +13,11 @@ EntitySlot::EntitySlot(Entity* entity) : entity(entity)
 {
 	entity->SetSlot(this);
 	
-	Kernel::Connect(DoMove, [entity] (MapCoord coord)
+	Kernel::connect(DoMove, [entity] (MapCoord coord)
 	{
 		if (auto f = entity->Do<FeatureMove>()) f->Move(coord, 0, nullptr);
 	});
-	Kernel::Connect(DoCollect, [entity] (MapCoord coord, const string& resourceName)
+	Kernel::connect(DoCollect, [entity] (MapCoord coord, const string& resourceName)
 	{
 		if (auto f = entity->Do<FeatureCollect>()) f->Collect(coord, resourceName);
 	});

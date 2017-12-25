@@ -7,11 +7,15 @@ namespace strx
 {
 class GameSlot : boost::noncopyable
 {
+	friend class Client;
+	
 	ResourceInfosType resourceInfos;
 	
 public:
 	GameSlot();
 	virtual ~GameSlot();
-	virtual void PlayerAdded(Player* player) = 0;
+	
+protected:
+	virtual void OnReceiveMessage(s_p<Message> message) = 0;
 };
 }

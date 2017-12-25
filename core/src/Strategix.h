@@ -6,6 +6,6 @@
 #include <strx/common/EntityInfo.h>
 #include <strx/entity/EntitySlot.h>
 #include <strx/kernel/GameSlot.h>
-#include <strx/kernel/Kernel.h>
 #include <strx/map/Map.h>
+#include <strx/network/Message.h>
 #include <strx/player/PlayerSlot.h>

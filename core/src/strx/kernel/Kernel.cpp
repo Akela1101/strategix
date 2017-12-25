@@ -33,7 +33,10 @@ static s_p<Game> game;                        // single game
 static ConfigManager configManager;           // game configuration manager
 static u_p<MapManager> mapManager;            // has all information about the map
 static u_p<thread> kernelThread;              // main kernel thread
-static u_p<st_timer> timer;
+static u_p<st_timer> timer;                   // tick timer
+
+// Signals
+static nya::sig<void(s_p<Message>, NetId)> DoSendMessage;
 
 
 void TimerHandler(const boost::system::error_code& error)
@@ -42,14 +45,14 @@ void TimerHandler(const boost::system::error_code& error)
 	if (!error)
 	{
 		if (timer) timer->expires_from_now(minTick);
-		
+
 		using namespace chrono;
 		auto now = st_clock::now();
 		auto dms = duration_cast<milliseconds>(now - lastTime);
 		lastTime = now;
-		
+
 		Kernel::Tick((double)dms.count() / 1000);
-		
+
 		if (timer) timer->async_wait(TimerHandler);
 	}
 }
@@ -71,16 +74,17 @@ void Kernel::Init(const string& configPath)
 {
 	configManager.ParseConfig(configPath);
 	mapManager = make_u<MapManager>(configManager.GetMapsPath());
-	
+
 	Server::Run(10101);
-	
+	Server::connect(DoSendMessage, Server::OnSendMessage);
+
 	timer.reset(new st_timer(eventLoop));
 	timer->async_wait(TimerHandler);
 }
 
 void Kernel::RunImpl()
 {
-	nya::SetThreadName("_strx_");
+	nya_thread_name("_strx_");
 	try
 	{
 		eventLoop.run();
@@ -95,14 +99,14 @@ void Kernel::RunImpl()
 void Kernel::LoadMap(const string& mapName)
 {
 	if (!mapManager) nya_throw << "Configure() should be run before LoadMap().";
-	
+
 	mapManager->LoadMap(mapName);
 }
 
 void Kernel::AddPlayer(const string& name, PlayerType type, int playerId, const string& raceName)
 {
 	if (!mapManager->HasMap()) nya_throw << "LoadMap() should be run before AddPlayer().";
-	
+
 	Map& map = mapManager->CreateMap(playerId);
 	auto player = new Player(name, type, playerId, raceName, map);
 	game->AddPlayer(u_p<Player>(player));
@@ -116,7 +120,7 @@ void Kernel::Start(s_p<Game> game)
 void Kernel::Finish()
 {
 	Server::Finish();
-	
+
 	timer.reset();
 	if (kernelThread) kernelThread->join();
 }
@@ -126,7 +130,7 @@ void Kernel::Tick(float seconds)
 	try
 	{
 		if (!game) return;
-		
+
 		for (auto& name_player : game->GetPlayers())
 		{
 			name_player.second->Tick(seconds);
@@ -145,7 +149,7 @@ void Kernel::PrintInfo()
 	{
 		cout << mapName << endl;
 	}
-	
+
 	cout << "\nRace names: " << endl;
 	for (auto&& raceName : GetRaceNames())
 	{
@@ -153,15 +157,25 @@ void Kernel::PrintInfo()
 	}
 }
 
-void Kernel::OnMessageReceived(s_p<Message> message)
+void Kernel::OnReceiveMessage(s_p<Message> message, NetId clientId)
 {
-	//info_log << "Message received " << message->type.c_str();
+	s_p<Message> outMessage;
+	switch (message->type)
+	{
+		case Message::Type::RQ_CONTEXT:
+			outMessage = make_s<ContextMessage>(configManager.GetResourceInfos());
+			break;
+		default:
+			const char* t = message->type.c_str();
+			nya_throw << "Unable to handle message with type: " << (t[0] == '!' ? message->type : t);
+	}
+	DoSendMessage(outMessage, clientId);
 }
 
 bool Kernel::CheckResource(const string& name)
 {
 	auto&& resourceInfos = configManager.GetResourceInfos();
-	return find(all_(resourceInfos), name) != resourceInfos.end();
+	return find(all_(*resourceInfos), name) != resourceInfos->end();
 }
 
 const TechTree& Kernel::GetTechTree(const string& raceName)
@@ -216,7 +230,7 @@ const ResourceInfosType& Kernel::GetResourceInfos()
 u_p<Resources> Kernel::MakeResources()
 {
 	auto resources = make_u<Resources>();
-	for (auto&& resourceName : GetResourceInfos())
+	for (auto&& resourceName : *GetResourceInfos())
 	{
 		*resources += Resource(resourceName, 0);
 	}

@@ -2,6 +2,8 @@
 
 #include <nya/api.hpp>
 
+#define qInvoke QMetaObject::invokeMethod
+
 namespace strx {}
 
 namespace sample1

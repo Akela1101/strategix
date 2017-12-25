@@ -1,3 +1,5 @@
+#include <istream>
+#include <sstream>
 #include <boost/endian/arithmetic.hpp>
 
 #include "Message.h"
@@ -6,28 +8,44 @@
 
 namespace strx
 {
-namespace asio = boost::asio;
-
-Connection::Connection(tcp::socket&& socket) : socket(move(socket))
+Connection::Connection(tcp::socket&& socket, const function<void(s_p<Message>, NetId)>& ReceiveMessage)
+		: socket(move(socket))
+		, ReceiveMessage(ReceiveMessage)
+		, id(to_netid(this->socket.remote_endpoint()))
 {
+	readBuffer.reserve(recommendedMessageLimit);
+	writeBuffer.reserve(recommendedMessageLimit);
 	Read();
 }
 
 void Connection::Write(s_p<Message> message)
 {
-	size_t messageSize = message->SerializeMessage(buffer + sizeof(int));
-	*(int*)buffer = boost::endian::native_to_little((int)messageSize);
-	
-	asio::async_write(socket, asio::buffer(buffer, messageSize + sizeof(int))
-			, [this](boost::system::error_code ec, std::size_t)
-			{
-				if (ec)
-				{
-					error_log << "socket write error: " << ec.message();
-					socket.close();
-					return;
-				}
-			});
+	writeBuffer.clear();
+	Message::Serialize(message, writeBuffer);
+	int messageSize = writeBuffer.size();
+	if (messageSize > recommendedMessageLimit)
+	{
+		info_log << "Writting very long message. Try to shrink format of " << message->type.c_str();
+	}
+
+	boost::endian::native_to_little_inplace(messageSize);
+	auto sizeBuffer = asio::buffer(&messageSize, sizeof(int));
+	boost::system::error_code ec;
+
+	asio::write(socket, sizeBuffer, ec);
+	if (ec)
+	{
+		error_log << "socket write error: " << ec.message();
+		socket.close();
+		return;
+	}
+	asio::write(socket, asio::buffer(writeBuffer.data(), writeBuffer.size()), ec);
+	if (ec)
+	{
+		error_log << "socket write error: " << ec.message();
+		socket.close();
+		return;
+	}
 }
 
 void Connection::Read()
@@ -41,19 +59,19 @@ void Connection::Read()
 					socket.close();
 					return;
 				}
-				boost::endian::little_to_native(expectedSize);
-				size_t messageSize = asio::read(socket, asio::buffer(buffer, expectedSize));
+				boost::endian::little_to_native_inplace(expectedSize);
+				readBuffer.resize(expectedSize);
+				size_t messageSize = asio::read(socket, asio::buffer(readBuffer.data(), expectedSize));
 				if (messageSize != expectedSize)
 				{
-					error_log << "unable to read the whole buffer: "
-					          << (messageSize < 100 ? buffer : string(buffer, buffer + 100));
+					error_log << "unable to read the whole buffer";
 					socket.close();
 					return;
 				}
-				
-				try { DoMessageReceived(Message::ParseMessage(buffer, messageSize)); }
+
+				try { ReceiveMessage(Message::Parse(readBuffer), id); }
 				catch (exception& e) { error_log << "Unable to parse message: " << e.what(); }
-				
+
 				Read();
 			});
 }

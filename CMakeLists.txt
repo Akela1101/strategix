@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.9)
+project(strategix_all)
 
 include(../nya/cmake/nya.cmake)
 
@@ -16,7 +17,7 @@ set_property(GLOBAL PROPERTY COTIRE_PREFIX_HEADER_IGNORE_PATH
 add_subdirectory(../nya nya)
 
 # easylogging
-add_subdirectory(../easyloggingpp easyloggingpp)
+add_subdirectory(../easyloggingpp el)
 
 # strategix
 add_subdirectory(core)
@@ -25,6 +26,9 @@ add_subdirectory(map_editor)
 
 # samples
 add_subdirectory(sample1) #EXCLUDE_FROM_ALL
+
+# sometimes does not build el — cmake bug ?
+add_dependencies(strategix easyloggingpp)
 
 
 # show all variables

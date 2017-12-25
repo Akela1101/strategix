@@ -1,12 +1,15 @@
 cmake_minimum_required(VERSION 3.9)
 project(strategix)
 
-file(GLOB_RECURSE SOURCES src/*.cpp src/*.h src/*.hpp)
+# Boost
+find_package(Boost COMPONENTS system filesystem serialization REQUIRED)
 
+
+file(GLOB_RECURSE SOURCES src/*.cpp src/*.h src/*.hpp)
 
 add_library(${PROJECT_NAME} ${SOURCES})
 target_include_directories(${PROJECT_NAME} PUBLIC src ../../easyloggingpp/src)
-target_link_libraries(${PROJECT_NAME} nya)
+target_link_libraries(${PROJECT_NAME} nya ${Boost_LIBRARIES})
 if(WIN32)
     target_link_libraries(${PROJECT_NAME} ws2_32 wsock32) # boost::asio
 endif()

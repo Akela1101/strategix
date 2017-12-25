@@ -1,5 +1,6 @@
 #include <boost/asio.hpp>
 #include <strx/kernel/Kernel.h>
+#include <strx/network/Message.h>
 
 #include "Connection.h"
 #include "Server.h"
@@ -7,27 +8,11 @@
 
 namespace strx
 {
-using boost::asio::ip::tcp;
-
 static u_p<thread> serverThread;              // server thread
 u_p<tcp::socket> socket;                      // socket for the next connection
 u_p<tcp::acceptor> acceptor;                  // connection listener
-vector<u_p<Connection>> connections;          // connections
+umap<NetId, u_p<Connection>> connections;     // connections
 
-
-void AcceptConnection()
-{
-	acceptor->async_accept(*socket, [](boost::system::error_code ec)
-	{
-		if (!ec)
-		{
-			auto connection = new Connection(move(*socket));
-			connections.emplace_back(connection);
-			Kernel::Connect(connection->DoMessageReceived, Kernel::OnMessageReceived);
-		}
-		AcceptConnection();
-	});
-}
 
 void Server::Run(ushort port)
 {
@@ -37,7 +22,7 @@ void Server::Run(ushort port)
 	
 	serverThread.reset(new thread([]()
 	{
-		nya::SetThreadName("_serv_");
+		nya_thread_name("_serv_");
 		trace_log << "Starting server";
 		
 		bool running = true;
@@ -59,5 +44,30 @@ void Server::Run(ushort port)
 void Server::Finish()
 {
 	if (serverThread) serverThread->join();
+}
+
+void Server::OnSendMessage(s_p<Message> message, NetId clientId)
+{
+	connections[clientId]->Write(message);
+}
+
+void Server::AcceptConnection()
+{
+	acceptor->async_accept(*socket, [](boost::system::error_code ec)
+	{
+		if (!ec)
+		{
+			NetId id = to_netid(socket->remote_endpoint());
+			auto connection = new Connection(move(*socket), ReceiveMessage);
+			
+			connections.emplace(id, connection);
+		}
+		AcceptConnection();
+	});
+}
+
+void Server::ReceiveMessage(s_p<Message> message, NetId id)
+{
+	Kernel::invoke(Kernel::OnReceiveMessage, message, id);
 }
 }
