@@ -1,6 +1,5 @@
 #include <boost/filesystem.hpp>
 #include <QBitmap>
-#include <strx/map/Map.h>
 
 #include "MapInfo.h"
 
@@ -16,6 +15,7 @@ const char configDir[] = "config/";
 const char imagesPath[] = "config/images/";
 const char mapConfigPath[] = "config/map/";
 
+Map::TerrainsType MapInfo::terrains;
 umap<string, ToolInfo> MapInfo::terrainTools;
 umap<string, ToolInfo> MapInfo::objectTools;
 vector<QPixmap> MapInfo::playerMarks;
@@ -25,7 +25,7 @@ const QPixmap& MapInfo::GetPlayerMark(int playerNumber)
 {
 	if (playerMarks.empty())
 		nya_throw << "Call LoadObjectTools() first.";
-	
+
 	return playerMarks[playerNumber < playerMarks.size() ? playerNumber : 0];
 }
 
@@ -42,7 +42,7 @@ void MapInfo::LoadTerrainTools()
 {
 	using namespace boost;
 	using path = boost::filesystem::path;
-	
+
 	// definition
 	path fileName = path(mapConfigPath) / terrainsDefFileName;
 	ifstream fin(fileName.string());
@@ -50,33 +50,33 @@ void MapInfo::LoadTerrainTools()
 	{
 		nya_throw << "%s could not be loaded."s % fileName;
 	}
-	
+
 	std::string terrainsImageFileName;
 	getline(fin, terrainsImageFileName);
-	
+
 	// image
 	QPixmap pixmap;
 	if (!pixmap.load((path(mapConfigPath) / terrainsImageFileName).string().c_str()))
 	{
 		nya_throw << "The image files could not be loaded from " << terrainsImageFileName;
 	}
-	
+
 	int divs;
 	fin >> divs;
 	int tileSize = pixmap.width() / divs;
-	
-	for (int i : irange(0, divs * divs))
+
+	terrains.reset(new umap<string, u_p<Terrain>>());
+	for (int id : irange(0, divs * divs))
 	{
 		string name;
 		float quality;
 		fin >> quality >> name;
 		if (name.empty()) break;
-		
-		Map::AddTerrain(make_u<Terrain>(i, name, quality));
-		
-		int col = i % divs, row = i / divs;
+
+		int col = id % divs, row = id / divs;
 		QPixmap image = pixmap.copy(col * tileSize, row * tileSize, tileSize, tileSize);
 		terrainTools.emplace(name, ToolInfo(ToolType::TERRAIN, name, image));
+		terrains->emplace(name, make_u<Terrain>(id, name, quality));
 	}
 	fin.close();
 }
@@ -84,45 +84,45 @@ void MapInfo::LoadTerrainTools()
 void MapInfo::LoadObjectTools()
 {
 	using path = boost::filesystem::path;
-	
+
 	path fileName = path(mapConfigPath) / objectsDefFileName;
 	ifstream fin(fileName.string());
 	if (!fin)
 	{
 		nya_throw << "%s could not be loaded."s % fileName;
 	}
-	
+
 	for (;;)
 	{
 		string typeName, imageFileName, imageSubdir;
 		fin >> typeName >> imageFileName;
 		if (typeName.empty()) break;
-		
+
 		ToolType type = typeName;
 		switch (type)
 		{
-			case ToolType::MINE:
-				imageSubdir = "mines/";
-				break;
-			case ToolType::ENTITY:
-				imageSubdir = "objects/";
-				break;
-			default:
-				nya_throw << "Cannot handle map object of type: " << typeName;
+		    case ToolType::MINE:
+			    imageSubdir = "mines/";
+			    break;
+		    case ToolType::ENTITY:
+			    imageSubdir = "objects/";
+			    break;
+		    default:
+			    nya_throw << "Cannot handle map object of type: " << typeName;
 		}
-		
+
 		string name = path(imageFileName).stem().string();
 		string pixmapPath = (path(mapConfigPath) / imageSubdir / imageFileName).string();
-		
+
 		objectTools.emplace(name, ToolInfo(type, name, LoadPixmap(pixmapPath)));
 	}
 	fin.close();
-	
+
 	// player marks
 	string pixmapPath = (path(mapConfigPath) / "player_mark.png").string();
 	QPixmap pixmap = LoadPixmap(pixmapPath);
 	playerMarks.push_back(pixmap);
-	
+
 	QBitmap mask = pixmap.createMaskFromColor(Qt::transparent);
 	for (int color = Qt::red; color < Qt::darkRed; ++color)
 	{

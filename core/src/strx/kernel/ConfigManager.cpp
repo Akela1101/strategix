@@ -10,7 +10,6 @@
 
 namespace strx
 {
-using namespace boost::adaptors;
 namespace pt = boost::property_tree;
 namespace fs = boost::filesystem;
 
@@ -22,15 +21,15 @@ struct ConfigManager::ConfigurationManagerImpl
 	string mapsPath;
 	ResourceInfosType resourceInfos = make_s<vector<string>>();
 	TechTreesType techTrees;
-	
+
 	u_p<TechTree> ParseRace(const pt::ptree& raceTree)
 	{
 		try
 		{
 			auto&& raceName = raceTree.get<string>("name");
 			u_p<TechTree> techTree(new TechTree(raceName));
-			
-			for (auto&& entiTree : raceTree.get_child("entities") | map_values)
+
+			for (auto&& entiTree : raceTree.get_child("entities") | nya::map_values)
 			{
 				techTree->AddNode(ParseEntity(entiTree));
 			}
@@ -42,17 +41,17 @@ struct ConfigManager::ConfigurationManagerImpl
 			return nullptr;
 		}
 	}
-	
+
 	u_p<EntityInfo> ParseEntity(const pt::ptree& entityPropTree)
 	{
 		try
 		{
 			u_p<EntityInfo> eim(new EntityInfo);
-			
+
 			eim->name = entityPropTree.get<string>("name");
 			eim->kind = entityPropTree.get<string>("kind");
 			eim->resources = ParseResources(entityPropTree.get_child("resources"));
-			
+
 			for (auto&& name_tree : entityPropTree.get_child("features", pt::ptree())) // Empty if no features
 			{
 				const string& name = name_tree.first;
@@ -69,7 +68,7 @@ struct ConfigManager::ConfigurationManagerImpl
 			return nullptr;
 		}
 	}
-	
+
 	u_p<FeatureInfo> ParseFeature(const string& name, const pt::ptree& feature)
 	{
 		try
@@ -105,7 +104,7 @@ struct ConfigManager::ConfigurationManagerImpl
 			return nullptr;
 		}
 	}
-	
+
 	u_p<Resources> ParseResources(const pt::ptree& resourcesPropTree)
 	{
 		try
@@ -117,10 +116,10 @@ struct ConfigManager::ConfigurationManagerImpl
 				if (find(all_(*resourceInfos), resourceName) == resourceInfos->end())
 				{
 					info_log << "Wrong resource [%s] in configuration file: %s"s
-							% resourceName % configFileName;
+					        % resourceName % configFileName;
 					continue;
 				}
-				
+
 				const pt::ptree& resource = name_tree.second;
 				resources->emplace(resourceName, resource.get_value<ResourceUnit>());
 			}
@@ -146,14 +145,17 @@ void ConfigManager::ParseConfig(string configFileName)
 	{
 		pt::ptree propTree;
 		pt::read_json(configFileName, propTree);
-		
-		for (auto&& tree : propTree.get_child("resource_types") | map_values)
+
+		impl->serverPort = propTree.get<ushort>("server_port");
+		impl->mapsPath = propTree.get<string>("maps_path");
+
+		for (auto&& tree : propTree.get_child("resource_types") | nya::map_values)
 		{
 			const string& resourceName = tree.get_value<string>();
 			impl->resourceInfos->push_back(resourceName);
 		}
-		
-		for (auto&& tree : propTree.get_child("races") | map_values)
+
+		for (auto&& tree : propTree.get_child("races") | nya::map_values)
 		{
 			auto&& techTree = impl->ParseRace(tree);
 			auto&& raceName = techTree->GetRaceName();

@@ -13,7 +13,9 @@ class Client : public nya::event_loop_holder<Client>
 public:
 	static void StartSession(GameSlot* game);
 	static void StopSession();
-	
+
+	static void SendMessage(s_p<Message> message);
+
 private:
 	static void ReceiveMessage(s_p<Message> message, NetId id);
 };

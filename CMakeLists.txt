@@ -27,9 +27,6 @@ add_subdirectory(map_editor)
 # samples
 add_subdirectory(sample1) #EXCLUDE_FROM_ALL
 
-# sometimes does not build el — cmake bug ?
-add_dependencies(strategix easyloggingpp)
-
 
 # show all variables
 #get_cmake_property(_variableNames VARIABLES)

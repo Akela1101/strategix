@@ -13,39 +13,34 @@ namespace strx
  */
 class PlayerSlot : boost::noncopyable
 {
-	friend class Player;
-	Player* player;
-	
+	s_p<PlayerMessage> playerMessage;
+
 public:
-	PlayerSlot(Player* player);
-	virtual ~PlayerSlot();
-	
+	PlayerSlot(s_p<PlayerMessage> playerMessage);
+	virtual ~PlayerSlot() = default;
+
 	/// @return unique name
 	const string& GetName() const;
-	
+
 	/// @return player id
 	int GetId() const;
-	
+
 	/// @return [human | ai | net]
 	PlayerType GetType() const;
-	
-	/// @return map
-	Map& GetMap() const;
 
-protected:
 // Callbacks:
 	/// on adding entity to map
 	virtual void EntiAdded(Entity* entity) = 0;
-	
+
 	/// on removing entity from map
 	virtual void EntiRemoved(Entity* entity) = 0;
-	
+
 	/// on holding resources change
 	virtual void ResourcesChanged(const Resources& newResources) {}
-	
+
 	/// on mine amount changed
 	virtual void MineAmountChanged(IdType id, ResourceUnit amount) {}
-	
+
 	/// on mine removed
 	virtual void MineRemoved(IdType id) {}
 };

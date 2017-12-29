@@ -1,28 +1,27 @@
 #include <strx/map/Map.h>
+#include <strx/network/Message.h>
 
 #include "MapManager.h"
 
 
 namespace strx
 {
-MapManager::~MapManager() = default;
-
 void MapManager::LoadMap(const string& mapName)
 {
 	string path = GetFilePath(mapName);
-	map.reset(new Map(path, mapName));
+	map.reset(new Map(path));
 }
 
-Map& MapManager::CreateMap(int playerId)
+s_p<MapMessage> MapManager::CreateMapMessage(int playerId)
 {
-	return *map;
+	return make_s<MapMessage>(map);
 }
 
 string MapManager::GetFilePath(const string& name) const
 {
 	namespace fs = boost::filesystem;
-	
-	auto fileName = boost::str(boost::format("%s.map") % name);
+
+	auto fileName = boost::str("%s.map"s % name);
 	return (fs::path(mapsPath) / fileName).string();
 }
 

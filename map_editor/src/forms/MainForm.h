@@ -15,15 +15,15 @@ class EditorMapWidget;
 class MainForm : public QMainWindow
 {
 Q_OBJECT
-	
+
 	Ui::MainForm widget;
 	EditorMapWidget* mapWidget;
-	
+
 	bool isMapOpened, isMapSaved;
 	QString mapPath;
 	umap<const QListWidgetItem*, ToolInfo*> toolFromItem;
 	umap<const QPushButton*, int> playerNumbers;
-	u_p<strx::Map> map;
+	s_p<strx::Map> map;
 
 public:
 	MainForm();
@@ -38,7 +38,7 @@ private slots:
 	void FileLoad();
 	void FileExit();
 	void HelpAbout();
-	
+
 	void CurrentItemChanged(QListWidgetItem* current, QListWidgetItem* previous);
 	void CurrentToolboxItemChanged(int index);
 	void PlayerButtonToggled(bool on);

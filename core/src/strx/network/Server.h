@@ -14,8 +14,9 @@ class Server : public nya::event_loop_holder<Server>
 public:
 	static void Run(ushort port);
 	static void Finish();
-	
+
 	static void OnSendMessage(s_p<Message> message, NetId clientId);
+	static void OnSendMessageAll(s_p<Message> message);
 
 private:
 	static void AcceptConnection();

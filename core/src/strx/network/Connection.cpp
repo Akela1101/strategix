@@ -25,7 +25,7 @@ void Connection::Write(s_p<Message> message)
 	int messageSize = writeBuffer.size();
 	if (messageSize > recommendedMessageLimit)
 	{
-		info_log << "Writting very long message. Try to shrink format of " << message->type.c_str();
+		info_log << "Writting very long message. Try to shrink format of " << message->GetType().c_str();
 	}
 
 	boost::endian::native_to_little_inplace(messageSize);

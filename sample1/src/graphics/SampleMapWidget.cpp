@@ -13,17 +13,14 @@ namespace sample1
 SampleMapWidget::SampleMapWidget(QScrollArea* parent) : MapWidget(parent) {}
 SampleMapWidget::~SampleMapWidget() {}
 
-void SampleMapWidget::AddPlayer(SamplePlayer* playerSlot)
+void SampleMapWidget::AddPlayer(SamplePlayer* player)
 {
-	playerSlot->SetMapWidget(this);
+	player->SetMapWidget(this);
 
-	if (playerSlot->GetType() == PlayerType::HUMAN)
+	if (player->GetType() == PlayerType::HUMAN)
 	{
-		humanPlayerId = playerSlot->GetId();
-		humanPlayer = playerSlot;
-		
-		mapCopy.reset(new Map(playerSlot->GetMap()));
-		SetMap(mapCopy.get());
+		humanPlayerId = player->GetId();
+		humanPlayer = player;
 	}
 }
 
@@ -69,7 +66,7 @@ void SampleMapWidget::ObjectAdded(MapObject* object)
 void SampleMapWidget::paintEvent(QPaintEvent* event)
 {
 	MapWidget::paintEvent(event);
-	
+
 	if (currentEntity) // selection box
 	{
 		QPainter painter(this);
@@ -87,14 +84,14 @@ void SampleMapWidget::mousePressEvent(QMouseEvent* event)
 {
 	MapWidget::mousePressEvent(event);
 	if (!(event->buttons() & Qt::LeftButton)) return;
-	
+
 	QPoint point = event->pos();
 	MapCoord coord(point.x() / tileLen, point.y() / tileLen);
 	if (!map->IsCell(coord)) return;
-	
+
 	MapObject* object = map->GetCell(coord).object.get();
 	if (object == currentEntity) return;
-	
+
 	// click to empty place -> move
 	if (!object)
 	{
@@ -102,7 +99,7 @@ void SampleMapWidget::mousePressEvent(QMouseEvent* event)
 		entity.DoMove(coord);
 		return;
 	}
-	
+
 	// click on mine -> collect
 	if (MapMine* mine = dynamic_cast<MapMine*>(object))
 	{
@@ -110,7 +107,7 @@ void SampleMapWidget::mousePressEvent(QMouseEvent* event)
 		entity.DoCollect(coord, mine->name);
 		return;
 	}
-	
+
 	// click on own entity -> select
 	if (MapEntity* entity = dynamic_cast<MapEntity*>(object))
 	{
@@ -119,7 +116,7 @@ void SampleMapWidget::mousePressEvent(QMouseEvent* event)
 			ChangeSelection(entity);
 			return;
 		}
-		
+
 		// click on enemy entity -> attack
 		// @#~
 	}

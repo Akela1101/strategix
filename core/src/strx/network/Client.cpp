@@ -1,5 +1,5 @@
 #include <boost/asio.hpp>
-#include <strx/kernel/GameSlot.h>
+#include <strx/game/GameSlot.h>
 
 #include "Connection.h"
 #include "Client.h"
@@ -21,13 +21,13 @@ void Client::StartSession(GameSlot* game)
 	resolver.reset(new tcp::resolver(eventLoop));
 	auto iEndpoint = resolver->resolve({ "localhost", "10101" });
 
-	boost::asio::async_connect(*socket, iEndpoint, [](boost::system::error_code ec , tcp::resolver::iterator)
+	boost::asio::async_connect(*socket, iEndpoint, [](const boost::system::error_code& ec, const tcp::endpoint&)
 	{
 		if (!ec)
 		{
 			connection.reset(new Connection(move(*socket), ReceiveMessage));
 
-			connection->Write(make_s<Message>(Message::Type::RQ_CONTEXT));
+			connection->Write(make_s<EmptyMessage>(Message::Type::CONTEXT));
 		}
 	});
 
@@ -56,6 +56,11 @@ void Client::StopSession()
 {
 	game = nullptr;
 	if (clientThread) clientThread->join();
+}
+
+void Client::SendMessage(s_p<Message> message)
+{
+	connection->Write(message);
 }
 
 void Client::ReceiveMessage(s_p<Message> message, NetId id)

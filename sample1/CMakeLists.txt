@@ -14,11 +14,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 file(GLOB_RECURSE SOURCES *.cpp *.h)
 add_executable(${PROJECT_NAME} ${SOURCES})
 target_include_directories(${PROJECT_NAME} PRIVATE src)
-target_link_libraries(${PROJECT_NAME}
-        strategix
-        easyloggingpp
-        map_info
-        )
+target_link_libraries(${PROJECT_NAME} strategix map_info)
 
 file(COPY config/ DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/config)
 file(COPY ../map_editor/config/map/ DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/config/map)

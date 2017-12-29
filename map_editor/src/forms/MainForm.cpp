@@ -22,40 +22,40 @@ static const char* str(const QString& message) { return message.toUtf8().data();
 
 
 MainForm::MainForm()
-		: isMapOpened(false)
+        : isMapOpened(false)
 {
 	widget.setupUi(this);
-	
+
 	setWindowTitle(editorTitle);
 	widget.actionSave->setEnabled(false);
-	
+
 	MapInfo::LoadTerrainTools();
 	MapInfo::LoadObjectTools();
-	
+
 	// player marks
 	PlacePlayerMarks();
-	
+
 	// terrains
 	for (auto&& name_info : MapInfo::terrainTools)
 	{
 		ListWidgetFill(ToolType::TERRAIN, name_info.first, widget.terrainListWidget);
 	}
-	
+
 	// tools
 	ListWidgetFillMark("config/images/delete_object.png", widget.toolsListWidget);
-	
+
 	// resources
 	ListWidgetFill(ToolType::MINE, "gold", widget.toolsListWidget);
 	ListWidgetFill(ToolType::MINE, "tree", widget.toolsListWidget);
-	
+
 	// objects
 	ListWidgetFill(ToolType::ENTITY, "az_base", widget.toolsListWidget);
 	ListWidgetFill(ToolType::ENTITY, "az_worker", widget.toolsListWidget);
-	
+
 	// set current tool to delete object
 	widget.toolBox->setCurrentIndex(1);
 	widget.toolsListWidget->setCurrentRow(0);
-	
+
 	//
 	mapWidget = widget.gameWidget->CreateMapWidget<EditorMapWidget>();
 	connect(this, &CurrentToolChanged, mapWidget, &EditorMapWidget::CurrentToolChanged);
@@ -69,15 +69,15 @@ void MainForm::FileNew()
 {
 	if (!TrySaveMap())
 		return;
-	
+
 	DialogNew dialogNew;
 	if (dialogNew.exec() == QDialog::Accepted)
 	{
 		QString name = dialogNew.mapName;
 		try
 		{
-			map.reset(new Map(name.toStdString(), dialogNew.mapWidth, dialogNew.mapHeight));
-			mapWidget->SetMap(map.get());
+			map.reset(new Map(name.toStdString(), dialogNew.mapWidth, dialogNew.mapHeight, MapInfo::terrains));
+			mapWidget->SetMap(map);
 		}
 		catch (exception& e)
 		{
@@ -96,9 +96,9 @@ void MainForm::FileSave()
 void MainForm::FileLoad()
 {
 	using path = boost::filesystem::path;
-	
+
 	if (!TrySaveMap()) return;
-	
+
 	// load location
 	string configPath = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation).toStdString();
 	string lastLocationPath = (path(configPath) / "last_path.conf").string();
@@ -106,18 +106,19 @@ void MainForm::FileLoad()
 	ifstream fin(lastLocationPath);
 	if (fin)
 		getline(fin, lastPath);
-	
+
 	fin.close();
-	
+
 	// open file
 	QString loadedMapPath = QFileDialog::getOpenFileName(this, "Load the map", lastPath.c_str(), "Maps (*.map)");
 	if (loadedMapPath.isEmpty()) return;
-	
+
 	mapPath = loadedMapPath;
 	try
 	{
 		map.reset(new Map(mapPath.toStdString()));
-		mapWidget->SetMap(map.get());
+		map->UpdateTerrains(MapInfo::terrains);
+		mapWidget->SetMap(map);
 	}
 	catch (exception& e)
 	{
@@ -126,7 +127,7 @@ void MainForm::FileLoad()
 	}
 	isMapOpened = true;
 	MapChanged(false);
-	
+
 	// save location
 	boost::filesystem::create_directories(configPath);
 	ofstream fout(lastLocationPath, ios::trunc);
@@ -143,20 +144,20 @@ void MainForm::FileExit()
 void MainForm::HelpAbout()
 {
 	QMessageBox::about(this, editorTitle, QString("Version: %1 \n(C) 2010-%2 %3")
-			.arg(mapFormatVersion)
-			.arg(__DATE__ + 7)
-			.arg("Akela1101"));
+	        .arg(mapFormatVersion)
+	        .arg(__DATE__ + 7)
+	        .arg("Akela1101"));
 }
 
 void MainForm::CurrentItemChanged(QListWidgetItem* current, QListWidgetItem* previous)
 {
 	Q_UNUSED(previous);
-	
+
 	if (current)
 		this->statusBar()->showMessage(current->text());
 	else
 		this->statusBar()->showMessage("***");
-	
+
 	emit CurrentToolChanged(toolFromItem[current]);
 }
 
@@ -178,7 +179,7 @@ void MainForm::PlacePlayerMarks()
 {
 	auto layout = new QHBoxLayout();
 	layout->setMargin(0);
-	
+
 	QPushButton* firstButton = nullptr;
 	int i = 0;
 	for (auto&& playerMark : MapInfo::playerMarks)
@@ -188,7 +189,7 @@ void MainForm::PlacePlayerMarks()
 		button->setCheckable(true);
 		button->setAutoExclusive(true);
 		button->setFlat(true);
-		
+
 		layout->addWidget(button);
 		if (!firstButton)
 		{
@@ -204,10 +205,10 @@ void MainForm::PlacePlayerMarks()
 void MainForm::ListWidgetFillMark(const string& filePath, QListWidget* listWidget)
 {
 	using path = boost::filesystem::path;
-	
+
 	string name = path(filePath).stem().string();
 	QPixmap pixmap = MapInfo::LoadPixmap(filePath);
-	
+
 	QListWidgetItem* newItem = AddToListWidget(name, pixmap, listWidget);
 	toolFromItem.emplace(newItem, nullptr);
 }
@@ -217,24 +218,24 @@ void MainForm::ListWidgetFill(ToolType type, const std::string& name, QListWidge
 	ToolInfo* tool = nullptr;
 	switch (type)
 	{
-		case ToolType::TERRAIN:
-		{
-			tool = &MapInfo::terrainTools[name];
+	    case ToolType::TERRAIN:
+	    {
+		    tool = &MapInfo::terrainTools[name];
 			break;
-		}
-		case ToolType::MINE:
-		case ToolType::ENTITY:
-		{
-			tool = &MapInfo::objectTools[name];
+	    }
+	    case ToolType::MINE:
+	    case ToolType::ENTITY:
+	    {
+		    tool = &MapInfo::objectTools[name];
 			break;
-		}
-		default:
-		{
-			error_log << "Unable to handle %s tool"s % type.c_str();
+	    }
+	    default:
+	    {
+		    error_log << "Unable to handle %s tool"s % type.c_str();
 			return;
-		}
+	    }
 	}
-	
+
 	QListWidgetItem* newItem = AddToListWidget(name, tool->image, listWidget);
 	toolFromItem.emplace(newItem, tool);
 }
@@ -253,8 +254,8 @@ bool MainForm::TrySaveMap()
 	if (isMapOpened && !isMapSaved)
 	{
 		if (QMessageBox::Yes ==
-				QMessageBox::question(this, "Map wasn't saved", "Save changes?", QMessageBox::Yes | QMessageBox::No
-						, QMessageBox::No))
+		        QMessageBox::question(this, "Map wasn't saved", "Save changes?", QMessageBox::Yes | QMessageBox::No
+		                , QMessageBox::No))
 		{
 			if (SaveMap().isEmpty())
 			{
@@ -275,9 +276,9 @@ QString MainForm::SaveMap()
 	{
 		QString fileNameHint = map->GetName().c_str();
 		mapPath = QFileDialog::getSaveFileName(this, "Save the map", fileNameHint, "Maps (*.map)");
-		
+
 		statusBar()->showMessage(mapPath, 3000);
-		
+
 		// if user reconsider saving
 		if (mapPath.isEmpty())
 			return mapPath;
@@ -302,9 +303,9 @@ void MainForm::MapChanged(bool yes)
 	widget.actionSave->setEnabled(yes);
 	QString mapName = map->GetName().c_str();
 	setWindowTitle(QString("%1 %2- %3")
-			.arg(mapName)
-			.arg(yes ? "(*) " : "")
-			.arg(editorTitle));
+	        .arg(mapName)
+	        .arg(yes ? "(*) " : "")
+	        .arg(editorTitle));
 }
 
 }

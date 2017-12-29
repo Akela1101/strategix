@@ -1,4 +1,5 @@
 #include <boost/asio.hpp>
+#include <boost/range/adaptors.hpp>
 #include <strx/kernel/Kernel.h>
 #include <strx/network/Message.h>
 
@@ -19,12 +20,12 @@ void Server::Run(ushort port)
 	acceptor.reset(new tcp::acceptor(eventLoop, tcp::endpoint(tcp::v4(), port)));
 	socket.reset(new tcp::socket(eventLoop));
 	AcceptConnection();
-	
+
 	serverThread.reset(new thread([]()
 	{
 		nya_thread_name("_serv_");
 		trace_log << "Starting server";
-		
+
 		bool running = true;
 		while (running)
 		{
@@ -51,6 +52,14 @@ void Server::OnSendMessage(s_p<Message> message, NetId clientId)
 	connections[clientId]->Write(message);
 }
 
+void Server::OnSendMessageAll(s_p<Message> message)
+{
+	for (const auto& connection : connections | nya::map_values)
+	{
+		connection->Write(message);
+	}
+}
+
 void Server::AcceptConnection()
 {
 	acceptor->async_accept(*socket, [](boost::system::error_code ec)
@@ -59,7 +68,7 @@ void Server::AcceptConnection()
 		{
 			NetId id = to_netid(socket->remote_endpoint());
 			auto connection = new Connection(move(*socket), ReceiveMessage);
-			
+
 			connections.emplace(id, connection);
 		}
 		AcceptConnection();

@@ -9,19 +9,18 @@ namespace strx
 class MapManager : boost::noncopyable
 {
 	const string mapsPath;  /// usually "maps"
-	u_p<Map> map;           /// global map
-	
+	s_p<Map> map;           /// global map
+
 public:
 	MapManager(string mapsPath) : mapsPath(mapsPath) {}
-	~MapManager();
-	
+
 	const string& GetMapsDirectory() const { return mapsPath; }
 	bool HasMap() const { return map.get(); }
 	void LoadMap(const string& mapName);
-	
-	/// @#~ should return reference to map AND fog of war mask
-	Map& CreateMap(int playerId);
-	
+
+	/// @#~ should return map AND fog-of-war mask
+	s_p<MapMessage> CreateMapMessage(int playerId);
+
 private:
 	string GetFilePath(const string& name) const;
 };

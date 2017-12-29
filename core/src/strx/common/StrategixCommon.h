@@ -10,11 +10,6 @@ using ResourceInfosType = s_p<vector<string>>;
 using TechTreesType = umap<string, u_p<TechTree>>;
 
 
-enum class PlayerType
-{
-	HUMAN,
-	AI,
-	NET
-};
+enum class PlayerType { HUMAN, AI };
 
 }

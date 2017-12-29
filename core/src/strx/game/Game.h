@@ -9,13 +9,13 @@ using PlayersType = umap<string, u_p<Player>>;
 class Game : boost::noncopyable
 {
 	PlayersType players;       /// players by name
-	
+
 public:
 	virtual ~Game() = default;
-	
+
 	PlayersType& GetPlayers() { return players; }
-	
-	void AddPlayer(u_p<Player> player);
+
+	void AddPlayer(const PlayerMessage& playerMessage);
 };
 
 }

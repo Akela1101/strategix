@@ -1,10 +1,10 @@
 #pragma once
 
 #include <nya/api.hpp>
+#include <Strategix_fwd.h>
 
 #define qInvoke QMetaObject::invokeMethod
 
-namespace strx {}
 
 namespace sample1
 {

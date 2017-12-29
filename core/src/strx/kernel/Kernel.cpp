@@ -1,13 +1,15 @@
 #include <future>
 #include <thread>
-#include <boost/filesystem.hpp>
 #include <boost/asio/steady_timer.hpp>
+#include <boost/filesystem.hpp>
+#include <boost/range/adaptors.hpp>
 #include <nya/signal.hpp>
 
 #include <strx/common/Resources.h>
 #include <strx/common/TechTree.h>
 #include <strx/entity/Entity.h>
 #include <strx/common/EntityInfo.h>
+#include <strx/game/Game.h>
 #include <strx/kernel/ConfigManager.h>
 #include <strx/kernel/MapManager.h>
 #include <strx/map/Map.h>
@@ -16,7 +18,6 @@
 #include <strx/player/Player.h>
 
 #include "Kernel.h"
-#include "Game.h"
 
 
 namespace strx
@@ -29,6 +30,7 @@ using st_clock = chrono::steady_clock;
 static const auto minTick = 42ms;
 
 // Variables
+static umap<int, u_p<GameMessage>> games;     // list of games
 static s_p<Game> game;                        // single game
 static ConfigManager configManager;           // game configuration manager
 static u_p<MapManager> mapManager;            // has all information about the map
@@ -37,6 +39,7 @@ static u_p<st_timer> timer;                   // tick timer
 
 // Signals
 static nya::sig<void(s_p<Message>, NetId)> DoSendMessage;
+static nya::sig<void(s_p<Message>)> DoSendMessageAll;
 
 
 void TimerHandler(const boost::system::error_code& error)
@@ -68,53 +71,6 @@ void Kernel::RunAsync(const string& configPath)
 {
 	Init(configPath);
 	kernelThread.reset(new thread(RunImpl));
-}
-
-void Kernel::Init(const string& configPath)
-{
-	configManager.ParseConfig(configPath);
-	mapManager = make_u<MapManager>(configManager.GetMapsPath());
-
-	Server::Run(10101);
-	Server::connect(DoSendMessage, Server::OnSendMessage);
-
-	timer.reset(new st_timer(eventLoop));
-	timer->async_wait(TimerHandler);
-}
-
-void Kernel::RunImpl()
-{
-	nya_thread_name("_strx_");
-	try
-	{
-		eventLoop.run();
-	}
-	catch (exception& e)
-	{
-		error_log << "Unexpected error in strategix: " << e.what();
-		// @#~ should call game to stop
-	}
-}
-
-void Kernel::LoadMap(const string& mapName)
-{
-	if (!mapManager) nya_throw << "Configure() should be run before LoadMap().";
-
-	mapManager->LoadMap(mapName);
-}
-
-void Kernel::AddPlayer(const string& name, PlayerType type, int playerId, const string& raceName)
-{
-	if (!mapManager->HasMap()) nya_throw << "LoadMap() should be run before AddPlayer().";
-
-	Map& map = mapManager->CreateMap(playerId);
-	auto player = new Player(name, type, playerId, raceName, map);
-	game->AddPlayer(u_p<Player>(player));
-	player->Start();
-}
-
-void Kernel::Start(s_p<Game> game)
-{
 }
 
 void Kernel::Finish()
@@ -159,17 +115,15 @@ void Kernel::PrintInfo()
 
 void Kernel::OnReceiveMessage(s_p<Message> message, NetId clientId)
 {
-	s_p<Message> outMessage;
-	switch (message->type)
+	switch (message->GetType())
 	{
-		case Message::Type::RQ_CONTEXT:
-			outMessage = make_s<ContextMessage>(configManager.GetResourceInfos());
-			break;
-		default:
-			const char* t = message->type.c_str();
-			nya_throw << "Unable to handle message with type: " << (t[0] == '!' ? message->type : t);
+	case Message::Type::CONTEXT: ContextRequested(clientId); break;
+	case Message::Type::PLAYER: AddPlayer(sp_cast<PlayerMessage>(message)); break;
+	case Message::Type::START: StartGame(clientId); break;
+	default:
+		const char* t = message->GetType().c_str();
+		nya_throw << "Unable to handle message with type: " << (t[0] == '!' ? message->GetType() : t);
 	}
-	DoSendMessage(outMessage, clientId);
 }
 
 bool Kernel::CheckResource(const string& name)
@@ -235,6 +189,79 @@ u_p<Resources> Kernel::MakeResources()
 		*resources += Resource(resourceName, 0);
 	}
 	return resources;
+}
+
+void Kernel::Init(const string& configPath)
+{
+	configManager.ParseConfig(configPath);
+	mapManager = make_u<MapManager>(configManager.GetMapsPath());
+
+	// @#~
+	AddGame("small", "root");
+
+	Server::Run(configManager.GetServerPort());
+	Server::connect(DoSendMessage, Server::OnSendMessage);
+	Server::connect(DoSendMessageAll, Server::OnSendMessageAll);
+
+	timer.reset(new st_timer(eventLoop));
+	timer->async_wait(TimerHandler);
+}
+
+void Kernel::RunImpl()
+{
+	nya_thread_name("_strx_");
+	try
+	{
+		eventLoop.run();
+	}
+	catch (exception& e)
+	{
+		error_log << "Unexpected error in strategix: " << e.what();
+		// @#~ should call game to stop
+	}
+}
+
+void Kernel::ContextRequested(NetId clientId)
+{
+	auto contextMessage = make_s<ContextMessage>(configManager.GetResourceInfos());
+	DoSendMessage(contextMessage, clientId);
+
+	auto gamesMessage = make_s<MessageVector>();
+	for (const auto& gameMessage : games | nya::map_values)
+	{
+		gamesMessage->push_back(make_u<GameMessage>(*gameMessage));
+	}
+	DoSendMessage(gamesMessage, clientId);
+}
+
+void Kernel::LoadMap(const string& mapName)
+{
+	if (!mapManager) nya_throw << "Init() should be run before LoadMap().";
+
+	mapManager->LoadMap(mapName);
+}
+
+
+void Kernel::AddGame(const string& mapName, const string& creatorName)
+{
+	auto gameMessage = make_u<GameMessage>();
+	gameMessage->id = 1;
+	gameMessage->started = false;
+	gameMessage->mapName = mapName;
+	gameMessage->creatorName = creatorName;
+	games.emplace(1, move(gameMessage));
+
+	LoadMap(mapName);
+}
+
+void Kernel::AddPlayer(s_p<PlayerMessage> playerMessage)
+{
+	DoSendMessageAll(playerMessage);
+}
+
+void Kernel::StartGame(NetId clientId)
+{
+	DoSendMessageAll(mapManager->CreateMapMessage(1)); //TODO: playerId
 }
 
 }

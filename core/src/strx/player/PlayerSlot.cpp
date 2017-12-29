@@ -1,23 +1,15 @@
-#include <strx/player/Player.h>
+#include <strx/network/Message.h>
 
 #include "PlayerSlot.h"
 
 
 namespace strx
 {
-PlayerSlot::PlayerSlot(Player* player) : player(player)
-{
-	player->SetSlot(this);
-}
+PlayerSlot::PlayerSlot(s_p<PlayerMessage> playerMessage) : playerMessage(move(playerMessage)) {}
 
-PlayerSlot::~PlayerSlot() = default;
+const string& PlayerSlot::GetName() const { return playerMessage->name; }
 
-const string& PlayerSlot::GetName() const { return player->GetName(); }
+int PlayerSlot::GetId() const { return playerMessage->id; }
 
-int PlayerSlot::GetId() const { return player->GetId(); }
-
-PlayerType PlayerSlot::GetType() const { return player->GetType(); }
-
-Map& PlayerSlot::GetMap() const { return player->GetMap(); }
-
+PlayerType PlayerSlot::GetType() const { return playerMessage->type; }
 }

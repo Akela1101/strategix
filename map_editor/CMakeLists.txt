@@ -16,11 +16,7 @@ set(LIB_NAME map_info)
 file(GLOB_RECURSE COMMON_SOURCES map_info/*.cpp map_info/*.h)
 add_library(${LIB_NAME} ${COMMON_SOURCES})
 target_include_directories(${LIB_NAME} PUBLIC map_info)
-target_link_libraries(${LIB_NAME}
-        strategix
-        easyloggingpp
-        Qt5::Widgets
-        )
+target_link_libraries(${LIB_NAME} strategix Qt5::Widgets)
 
 # application
 file(GLOB_RECURSE SOURCES src/*.cpp src/*.h)

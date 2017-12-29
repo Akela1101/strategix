@@ -17,19 +17,18 @@ struct ToolInfo
 	ToolType type;
 	string name;
 	QPixmap image;
-	
+
 	ToolInfo() = default;
 	ToolInfo(ToolType type, string name, QPixmap image) : type(type), name(move(name)), image(move(image)) {}
 };
 
-class MapInfo
+struct MapInfo
 {
-public:
+	static Map::TerrainsType terrains;
 	static umap<string, ToolInfo> terrainTools;
 	static umap<string, ToolInfo> objectTools;
 	static vector<QPixmap> playerMarks;
-	
-public:
+
 	static const QPixmap& GetPlayerMark(int playerNumber);
 	static void QRegisterTypes();
 	static void LoadTerrainTools();

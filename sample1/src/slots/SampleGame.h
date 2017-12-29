@@ -1,6 +1,6 @@
 #pragma once
 
-#include <strx/kernel/GameSlot.h>
+#include <strx/game/GameSlot.h>
 #include <Sample_fwd.h>
 #include <QObject>
 
@@ -13,21 +13,25 @@ Q_OBJECT
 	u_p<SampleGameWidget> gameWidget;
 	SampleMapWidget* mapWidget;
 
+	ResourceInfosType resourceInfos;
+	umap<int, s_p<PlayerMessage>> registeredPlayers;
+
 public:
 	static void Configure();
-	
+
 	SampleGame();
 	~SampleGame() override;
-	
-	//void Start();
-	//void PlayerAdded(Player* player);
 
 protected:
 	void OnReceiveMessage(s_p<Message> message) override { qInvoke(this, [=](){ HandleMessage(message); }); }
 
 private:
-	void InitHuman(SamplePlayer* playerSlot);
-	
+	void Started();
+	void HandleMessageInstance(s_p<Message> message);
+	void StartGame(strx::MapMessage& mapMessage);
+	void AddPlayer(s_p<PlayerMessage> playerMessage);
+	void InitHuman(SamplePlayer* player);
+
 private slots:
 	void HandleMessage(s_p<Message> message);
 };
