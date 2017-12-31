@@ -1,18 +1,45 @@
 #include <strx/kernel/Kernel.h>
+#include <strx/kernel/MapManager.h>
+#include <strx/network/Message.h>
+#include <strx/network/Server.h>
 #include <strx/player/Player.h>
 
 #include "Game.h"
 
 namespace strx
 {
-void Game::AddPlayer(const PlayerMessage& playerMessage)
+void Game::AddPlayer(s_p<PlayerMessage> playerMessage, NetId netId)
 {
-//	if (!mapManager->HasMap()) nya_throw << "Map should be loaded before adding player.";
+	int playerId = playerMessage->id;
+	if (in_(playerId, playerNetIds)) // replace is not supported yet
+		nya_throw << "Trying to add same player twice [%d], name: %s"s % playerId % playerMessage->name;
 
-//	Map& map = mapManager->CreateMap(playerId);
-//	auto player = new Player(playerMessage, type, playerId, raceName, map);
-//	game->AddPlayer(u_p<Player>(player));
-//	player->Start();
-//	players.emplace(player->GetName(), move(player));
+	playerNetIds.emplace(playerId, netId);
+	plannedPlayers.push_back(move(playerMessage));
+}
+
+void Game::Start(MapManager& mapManager)
+{
+	if (!mapManager.HasMap()) nya_throw << "Map should be loaded before adding player.";
+
+	for (const auto& plannedPlayer : plannedPlayers)
+	{
+		int playerId = plannedPlayer->id;
+		NetId netId = playerNetIds[playerId];
+
+		// map
+		auto&& mapMessage = mapManager.CreateMapMessage(playerId);
+		Map& map = *mapMessage->map;
+		if (plannedPlayer->type == PlayerType::HUMAN)
+		{
+			Server::SendMessageOne(move(mapMessage), netId);
+		}
+
+		// player
+		auto player = make_u<Player>(*plannedPlayer, netId, map);
+		player->Start();
+		players.emplace(player->GetName(), move(player));
+	}
+	plannedPlayers.clear();
 }
 }

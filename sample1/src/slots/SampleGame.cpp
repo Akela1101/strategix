@@ -25,12 +25,7 @@ SampleGame::SampleGame() {}
 
 SampleGame::~SampleGame() = default;
 
-void SampleGame::Started()
-{
-
-}
-
-void SampleGame::HandleMessageInstance(s_p<Message> message)
+void SampleGame::HandleMessageImpl(s_p<Message> message)
 {
 	switch (message->GetType())
 	{
@@ -38,7 +33,7 @@ void SampleGame::HandleMessageInstance(s_p<Message> message)
 	{
 		for (auto& element : *sp_cast<MessageVector>(message))
 		{
-			HandleMessageInstance(move(element));
+			HandleMessageImpl(move(element));
 		}
 		break;
 	}
@@ -51,11 +46,11 @@ void SampleGame::HandleMessageInstance(s_p<Message> message)
 	{
 		// @#~ joint first game here
 		auto&& gameMessage = sp_cast<GameMessage>(message);
-		SendOneMessage(make_s<PlayerMessage>(gameMessage->id, 1, PlayerType::HUMAN, "Inu", "az"));
-		SendOneMessage(make_s<PlayerMessage>(gameMessage->id, 3, PlayerType::AI, "Saru", "az"));
+		SendMessageOne(make_s<PlayerMessage>(gameMessage->id, 1, PlayerType::HUMAN, "Inu", "az"));
+		SendMessageOne(make_s<PlayerMessage>(gameMessage->id, 3, PlayerType::AI, "Saru", "az"));
 
 		// @#~ start right away
-		SendOneMessage(make_s<EmptyMessage>(Message::Type::START));
+		SendMessageOne(make_s<EmptyMessage>(Message::Type::START));
 		break;
 	}
 	case Message::Type::PLAYER:
@@ -70,6 +65,13 @@ void SampleGame::HandleMessageInstance(s_p<Message> message)
 		StartGame(*sp_cast<MapMessage>(message));
 		break;
 	}
+	case Message::Type::ENTITY:
+	{
+		auto&& entityMessage = sp_cast<EntityMessage>(message);
+		int playerId = entityMessage->playerId;
+		players[playerId]->EntityAdded(move(entityMessage));
+		break;
+	}
 	default:
 		error_log << "Unable to handle message: " << message->GetType().c_str();
 	}
@@ -81,9 +83,9 @@ void SampleGame::StartGame(MapMessage& mapMessage)
 	mapWidget = gameWidget->CreateMapWidget<SampleMapWidget>();
 	mapWidget->SetMap(mapMessage.map);
 
-	for (auto&& player : registeredPlayers | nya::map_values)
+	for (auto&& playerMessage : registeredPlayers | nya::map_values)
 	{
-		AddPlayer(move(player));
+		AddPlayer(move(playerMessage));
 	}
 	registeredPlayers.clear();
 
@@ -100,10 +102,7 @@ void SampleGame::AddPlayer(s_p<PlayerMessage> playerMessage)
 		InitHuman(player.get());
 	}
 
-	// available resources
-	//TODO: player->AddResource(Resource("gold", 1000));
-
-	playerSlots.emplace(player->GetName(), move(player));
+	players.emplace(player->GetId(), move(player));
 }
 
 void SampleGame::InitHuman(SamplePlayer* player)
@@ -114,7 +113,7 @@ void SampleGame::InitHuman(SamplePlayer* player)
 
 void SampleGame::HandleMessage(s_p<Message> message)
 {
-	HandleMessageInstance(move(message));
+	HandleMessageImpl(move(message));
 }
 
 }

@@ -15,12 +15,12 @@
 namespace strx
 {
 Entity::Entity(const EntityInfo& entiInfo, int id, RealCoord coord, Player* player)
-		: player(player)
-		, entiInfo(entiInfo)
-		, id(id)
-		, coord(coord)
-		, mapCoord(coord)
-		, task(nullptr)
+        : player(player)
+        , entiInfo(entiInfo)
+        , id(id)
+        , coord(coord)
+        , mapCoord(coord)
+        , task(nullptr)
 {
 	for (auto&& pa : entiInfo.featureInfos)
 	{
@@ -76,16 +76,11 @@ bool Entity::SetMapCoord(MapCoord newCoord)
 			return currentObject == object;
 		}
 		object = move(currentObject);
-		
-		slot->OnMapMove(mapCoord, newCoord);
+
+		//TODO: slot->OnMapMove(mapCoord, newCoord);
 		mapCoord = newCoord;
 	}
 	return true;
-}
-
-void Entity::SetSlot(EntitySlot* slot)
-{
-	this->slot = slot;
 }
 
 void Entity::Tick(float seconds)
@@ -94,16 +89,14 @@ void Entity::Tick(float seconds)
 	{
 		feature->Tick(seconds);
 	}
-	
+
 	if (task) task->Tick(seconds);
-	
-	slot->OnTick(seconds);
 }
 
 void Entity::AssignTask(Feature* feature)
 {
 	if (task) task->Stop();
-	
+
 	task = feature;
 }
 

@@ -8,11 +8,11 @@ namespace strx
 
 class Player : boost::noncopyable
 {
-	PlayerSlot* slot = nullptr;    /// callback class
-	const string name;
-	const PlayerType type;
-	const int id;
-	const string raceName;
+	const int id;                  /// unique id on map
+	const NetId netId;             /// unique network id
+	const PlayerType type;         /// human | ai
+	const string name;             /// nick or alias
+	const string race;             /// race name
 
 	vector<u_p<Entity>> entities;  /// owned enties
 	u_p<Resources> resources;      /// available resources amount
@@ -22,7 +22,7 @@ class Player : boost::noncopyable
 	vector<Entity*> entisToRemove; /// entis removed at the end of Tick
 
 public:
-	Player(const string& name, PlayerType type, int id, const string& raceName, Map& map);
+	Player(const PlayerMessage& playerMessage, NetId netId, Map& map);
 	~Player();
 
 	const string& GetName() const { return name; }
@@ -32,7 +32,6 @@ public:
 	u_p<MapObject>& GetMapObject(MapCoord coord) const;
 	MapMine* GetMine(MapCoord coord) const;
 	const TechTree& GetTechTree() const { return techTree; }
-	void SetSlot(PlayerSlot* slot);
 
 	/// initialize player with entities from map
 	void Start();
@@ -41,7 +40,7 @@ public:
 	void Tick(float seconds);
 
 	/// add entity
-	void AddEntity(Entity* entity);
+	void AddEntity(u_p<Entity> entity);
 
 	/// remove entity
 	void RemoveEntity(Entity* entity);

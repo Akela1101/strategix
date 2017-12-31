@@ -15,7 +15,7 @@ public:
 	virtual ~GameSlot();
 
 protected:
-	void SendOneMessage(s_p<Message> message);
+	void SendMessageOne(s_p<Message> message);
 	virtual void OnReceiveMessage(s_p<Message> message) = 0;
 };
 }

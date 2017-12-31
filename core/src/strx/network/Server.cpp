@@ -47,12 +47,12 @@ void Server::Finish()
 	if (serverThread) serverThread->join();
 }
 
-void Server::OnSendMessage(s_p<Message> message, NetId clientId)
+void Server::SendMessageImpl(std::shared_ptr<Message> message, NetId clientId)
 {
 	connections[clientId]->Write(message);
 }
 
-void Server::OnSendMessageAll(s_p<Message> message)
+void Server::SendMessageAllImpl(s_p<Message> message)
 {
 	for (const auto& connection : connections | nya::map_values)
 	{

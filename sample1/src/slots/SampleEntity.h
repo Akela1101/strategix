@@ -10,12 +10,11 @@ namespace sample1
 class SampleEntity : public QObject, public EntitySlot
 {
 Q_OBJECT
-public:
-	SampleEntity(Entity* entity);
+	using EntitySlot::EntitySlot;
 
 protected:
-	void OnMove(RealCoord coord) override;
-	void OnMapMove(MapCoord from, MapCoord to) override { emit DoMapMoved(from, to); }
+	void Moved(RealCoord coord) override { emit DoMoved(GetId(), coord); }
+	void MapMoved(MapCoord from, MapCoord to) override { emit DoMapMoved(from, to); }
 
 signals:
 	void DoMoved(IdType id, RealCoord coord);

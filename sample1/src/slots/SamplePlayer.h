@@ -12,20 +12,19 @@ class SamplePlayer : public QObject, public PlayerSlot
 {
 Q_OBJECT
 	using PlayerSlot::PlayerSlot;
-	
+
 	SampleMapWidget* mapWidget = nullptr;
 	umap<int, u_p<SampleEntity>> entiSlots;
-	
+
 public:
 	SampleEntity& GetEntitySlot(int id) { return *entiSlots[id].get(); }
 	void SetMapWidget(SampleMapWidget* mapWidget) { this->mapWidget = mapWidget; }
 
-protected:
-	void EntiAdded(Entity* entity) override;
-	void EntiRemoved(Entity* entity) override {}
+// Callbacks:
+	void EntityAdded(s_p<EntityMessage> entityMessage) override;
 	void ResourcesChanged(const Resources& newResources) override { emit DoResourcesChanged(newResources); }
 	void MineRemoved(IdType id) override;
-	
+
 signals:
 	void DoResourcesChanged(Resources newResources);
 };

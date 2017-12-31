@@ -12,10 +12,10 @@ namespace strx
 {
 
 FeatureMove::FeatureMove(const FeatureInfo* featureInfo, Entity* entity)
-		: Feature(entity)
-		, featureInfoMove(dynamic_cast<const FeatureInfoMove*>(featureInfo))
-		, speed(featureInfoMove->speed)
-		, next(entity->GetCoord())
+        : Feature(entity)
+        , featureInfoMove(dynamic_cast<const FeatureInfoMove*>(featureInfo))
+        , speed(featureInfoMove->speed)
+        , next(entity->GetCoord())
 {}
 
 FeatureMove::~FeatureMove() = default;
@@ -25,12 +25,12 @@ void FeatureMove::Move(MapCoord coord, float radius, ICommand* iCommand)
 	this->coord = coord;
 	this->radius = radius;
 	this->iCommand = iCommand;
-	
+
 	RebuildPath();
 	distance = 0;
 	terrainQuality = 0;
-	
-	entity->GetSlot().OnMoveStart();
+
+	//@#~entity->GetSlot().OnMoveStart();
 	entity->AssignTask(this);
 }
 
@@ -38,36 +38,36 @@ void FeatureMove::Tick(float seconds)
 {
 	distance -= seconds * speed * terrainQuality;
 	bool isStop = distance <= 0 && !NextPoint();
-	
+
 	RealCoord newCoord = distance > 0 ? next - direction * distance : next;
 	entity->SetCoord(newCoord);
-	entity->GetSlot().OnMove(newCoord);
-	
+	//@#~entity->GetSlot().OnMove(newCoord);
+
 	if (isStop)
 	{
 		entity->AssignTask(nullptr);
-		if (iCommand) iCommand->OnComplete(path->IsWhole());
+		if (iCommand) iCommand->Completed(path->IsWhole());
 	}
 }
 
 void FeatureMove::Stop()
 {
-	entity->GetSlot().OnMoveStop();
+	//@#~entity->GetSlot().OnMoveStop();
 }
 
 bool FeatureMove::NextPoint()
 {
 	if (path->IsEmpty()) return false;
-	
+
 	RebuildPath();
 	if (path->IsEmpty()) return false;
-	
+
 	next = path->TakeNext();
 	if (!entity->SetMapCoord(next)) nya_throw << "The first point of the new path is occupied.";
-	
+
 	auto current = entity->GetCoord();
 	Player& player = entity->GetPlayer();
-	
+
 	RealCoord delta = (RealCoord)next - current;
 	direction = delta.Norm();
 	distance += delta.Len();

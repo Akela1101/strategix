@@ -30,10 +30,10 @@ public:
 
 // Callbacks:
 	/// on adding entity to map
-	virtual void EntiAdded(Entity* entity) = 0;
+	virtual void EntityAdded(s_p<EntityMessage> entityMessage) = 0;
 
 	/// on removing entity from map
-	virtual void EntiRemoved(Entity* entity) = 0;
+	//virtual void EntiRemoved(Entity* entity) = 0;
 
 	/// on holding resources change
 	virtual void ResourcesChanged(const Resources& newResources) {}

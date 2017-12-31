@@ -37,10 +37,6 @@ static u_p<MapManager> mapManager;            // has all information about the m
 static u_p<thread> kernelThread;              // main kernel thread
 static u_p<st_timer> timer;                   // tick timer
 
-// Signals
-static nya::sig<void(s_p<Message>, NetId)> DoSendMessage;
-static nya::sig<void(s_p<Message>)> DoSendMessageAll;
-
 
 void TimerHandler(const boost::system::error_code& error)
 {
@@ -87,9 +83,9 @@ void Kernel::Tick(float seconds)
 	{
 		if (!game) return;
 
-		for (auto& name_player : game->GetPlayers())
+		for (auto& player : game->GetPlayers() | nya::map_values)
 		{
-			name_player.second->Tick(seconds);
+			player->Tick(seconds);
 		}
 	}
 	catch (exception& e)
@@ -113,13 +109,13 @@ void Kernel::PrintInfo()
 	}
 }
 
-void Kernel::OnReceiveMessage(s_p<Message> message, NetId clientId)
+void Kernel::OnReceiveMessage(s_p<Message> message, NetId netId)
 {
 	switch (message->GetType())
 	{
-	case Message::Type::CONTEXT: ContextRequested(clientId); break;
-	case Message::Type::PLAYER: AddPlayer(sp_cast<PlayerMessage>(message)); break;
-	case Message::Type::START: StartGame(clientId); break;
+	case Message::Type::CONTEXT: ContextRequested(netId); break;
+	case Message::Type::PLAYER: AddPlayer(sp_cast<PlayerMessage>(message), netId); break;
+	case Message::Type::START: StartGame(netId); break;
 	default:
 		const char* t = message->GetType().c_str();
 		nya_throw << "Unable to handle message with type: " << (t[0] == '!' ? message->GetType() : t);
@@ -200,8 +196,6 @@ void Kernel::Init(const string& configPath)
 	AddGame("small", "root");
 
 	Server::Run(configManager.GetServerPort());
-	Server::connect(DoSendMessage, Server::OnSendMessage);
-	Server::connect(DoSendMessageAll, Server::OnSendMessageAll);
 
 	timer.reset(new st_timer(eventLoop));
 	timer->async_wait(TimerHandler);
@@ -224,14 +218,14 @@ void Kernel::RunImpl()
 void Kernel::ContextRequested(NetId clientId)
 {
 	auto contextMessage = make_s<ContextMessage>(configManager.GetResourceInfos());
-	DoSendMessage(contextMessage, clientId);
+	Server::SendMessageOne(contextMessage, clientId);
 
 	auto gamesMessage = make_s<MessageVector>();
 	for (const auto& gameMessage : games | nya::map_values)
 	{
 		gamesMessage->push_back(make_u<GameMessage>(*gameMessage));
 	}
-	DoSendMessage(gamesMessage, clientId);
+	Server::SendMessageOne(gamesMessage, clientId);
 }
 
 void Kernel::LoadMap(const string& mapName)
@@ -244,6 +238,8 @@ void Kernel::LoadMap(const string& mapName)
 
 void Kernel::AddGame(const string& mapName, const string& creatorName)
 {
+	game.reset(new Game());
+
 	auto gameMessage = make_u<GameMessage>();
 	gameMessage->id = 1;
 	gameMessage->started = false;
@@ -254,14 +250,16 @@ void Kernel::AddGame(const string& mapName, const string& creatorName)
 	LoadMap(mapName);
 }
 
-void Kernel::AddPlayer(s_p<PlayerMessage> playerMessage)
+void Kernel::AddPlayer(s_p<PlayerMessage> playerMessage, NetId netId)
 {
-	DoSendMessageAll(playerMessage);
+	game->AddPlayer(playerMessage, netId);
+	Server::SendMessageAll(playerMessage);
 }
 
 void Kernel::StartGame(NetId clientId)
 {
-	DoSendMessageAll(mapManager->CreateMapMessage(1)); //TODO: playerId
+	//TODO: check all clients are ready
+	game->Start(*mapManager);
 }
 
 }

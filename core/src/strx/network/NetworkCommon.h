@@ -7,7 +7,6 @@
 namespace strx
 {
 namespace asio = boost::asio;
-using NetId = llong;
 using boost::asio::ip::tcp;
 
 constexpr int recommendedMessageLimit = 1e7; // about 10Mb

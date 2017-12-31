@@ -21,6 +21,6 @@ public:
 	bool Attack(s_p<Entity> target);
 	virtual void Tick(float seconds);
 	virtual void Stop();
-	virtual void OnComplete(bool isComplete); // Moving Complete
+	virtual void Completed(bool done); // Moving Complete
 };
 }

@@ -39,6 +39,7 @@ private:
 
 public:
 	Map(string name, int width, int height, TerrainsType terrains);
+	Map(string name, const string& data);
 	Map(const string& path);
 	Map(const Map& other);
 	virtual ~Map();
@@ -55,9 +56,11 @@ public:
 	void UpdateTerrains(const TerrainsType& newTerrains);
 	void ChangeTerrain(Cell& cell, const string& terrainName);
 	void ChangeObject(Cell& cell, MapObject* object);
+	string SaveToString() const;
 	void SaveToFile(const string& path) const;
 
 private:
+	void LoadFromString(const string& data);
 	void LoadFromFile(const string& path);
 	void Save(ostream& os) const;
 	void Load(istream& is);

@@ -10,7 +10,7 @@ namespace strx
 {
 
 FeatureAttack::FeatureAttack(const FeatureInfo* featureInfo, Entity* entity)
-		: Feature(entity), featureInfoAttack(dynamic_cast<const FeatureInfoAttack*>(featureInfo)), hitProgress(0)
+        : Feature(entity), featureInfoAttack(dynamic_cast<const FeatureInfoAttack*>(featureInfo)), hitProgress(0)
 {}
 
 bool FeatureAttack::Attack(s_p<Entity> target)
@@ -20,10 +20,10 @@ bool FeatureAttack::Attack(s_p<Entity> target)
 		error_log << "Do not attack yourself :-)";
 		return false;
 	}
-	
+
 	// move and set OnComplete for this
 	entity->Do<FeatureMove>()->Move(target->GetCoord(), 0, this);
-	
+
 	this->target = target;
 	return true;
 }
@@ -33,7 +33,7 @@ void FeatureAttack::Tick(float seconds)
 	if (hitProgress < 1) // Preparing for 1 hit
 	{
 		hitProgress += seconds * featureInfoAttack->speed;
-		entity->GetSlot().OnAttack();
+		//@#~entity->GetSlot().Attacked();
 	}
 	else // Inflict damage
 	{
@@ -51,16 +51,16 @@ void FeatureAttack::Tick(float seconds)
 
 void FeatureAttack::Stop()
 {
-	entity->GetSlot().OnAttackStop();
+	//@#~entity->GetSlot().AttackedStop();
 	target.reset();
 }
 
-void FeatureAttack::OnComplete(bool isComplete)
+void FeatureAttack::Completed(bool done)
 {
-	if (!isComplete)
+	if (!done)
 		return;
-	
-	entity->GetSlot().OnAttackStart();
+
+	//@#~entity->GetSlot().AttackedStart();
 	entity->AssignTask(this);
 }
 

@@ -7,6 +7,7 @@ namespace strx
 class Client;
 class Entity;
 class EntityInfo;
+class EntityMessage;
 class EntitySlot;
 class Feature;
 class FeatureInfo;

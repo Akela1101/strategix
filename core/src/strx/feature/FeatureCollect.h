@@ -23,7 +23,7 @@ public:
 	
 	virtual void Tick(float seconds);
 	virtual void Stop();
-	virtual void OnComplete(bool isComplete); // moving complete
+	virtual void Completed(bool done); // moving complete
 
 private:
 	void Collect(MapCoord coord);

@@ -47,6 +47,13 @@ Map::Map(string name, int width, int height, TerrainsType terrains)
 	}
 }
 
+Map::Map(string name, const string& data)
+    : name(move(name))
+    , terrains(new umap<string, u_p<Terrain>>())
+{
+	LoadFromString(data);
+}
+
 Map::Map(const string& path)
         : name(boost::filesystem::path(path).stem().string())
         , terrains(new umap<string, u_p<Terrain>>())
@@ -107,28 +114,43 @@ void Map::ChangeObject(Cell& cell, MapObject* object)
 	cell.object.reset(object);
 }
 
+string Map::SaveToString() const
+{
+	ostringstream oss;
+	Save(oss);
+	return oss.str();
+}
+
 void Map::SaveToFile(const string& path) const
 {
-	ofstream fout(path);
-	if (!fout)
+	ofstream ofs(path);
+	if (!ofs)
 		nya_throw << "Unable to save to " << path;
 
-	ostringstream sout; // prevent exceptions from corrupting the file
-	Save(sout);
-	fout << sout.str();
+	// prevent exceptions from corrupting the file
+	ofs << SaveToString();
+}
+
+void Map::LoadFromString(const string& data)
+{
+	istringstream iss(data);
+	try { Load(iss); } catch (exception& e)
+	{
+		nya_throw << "Failed to load map from data.\n\t" << e.what();
+	}
 }
 
 void Map::LoadFromFile(const string& path)
 {
-	ifstream fin(path);
-	if (!fin)
+	ifstream ifs(path);
+	if (!ifs)
 		nya_throw << "Unable to open map file " << path;
 
-	try { Load(fin); } catch (exception& e)
+	try { Load(ifs); } catch (exception& e)
 	{
 		nya_throw << "Failed to load map file " << path << "\n\t" << e.what();
 	}
-	fin.close();
+	ifs.close();
 }
 
 void Map::Save(ostream& os) const

@@ -95,20 +95,26 @@ void SampleMapWidget::mousePressEvent(QMouseEvent* event)
 	// click to empty place -> move
 	if (!object)
 	{
-		auto& entity = humanPlayer->GetEntitySlot(currentEntity->id);
-		entity.DoMove(coord);
+		if (currentEntity)
+		{
+			auto& entity = humanPlayer->GetEntitySlot(currentEntity->id);
+			entity.DoMove(coord);
+		}
 		return;
 	}
 
 	// click on mine -> collect
 	if (MapMine* mine = dynamic_cast<MapMine*>(object))
 	{
-		auto& entity = humanPlayer->GetEntitySlot(currentEntity->id);
-		entity.DoCollect(coord, mine->name);
+		if (currentEntity)
+		{
+			auto& entity = humanPlayer->GetEntitySlot(currentEntity->id);
+			entity.DoCollect(coord, mine->name);
+		}
 		return;
 	}
 
-	// click on own entity -> select
+	// click on entity -> select or attack
 	if (MapEntity* entity = dynamic_cast<MapEntity*>(object))
 	{
 		if (entity->owner == humanPlayerId)
@@ -117,8 +123,10 @@ void SampleMapWidget::mousePressEvent(QMouseEvent* event)
 			return;
 		}
 
-		// click on enemy entity -> attack
-		// @#~
+		if (currentEntity)
+		{
+			// @#~
+		}
 	}
 }
 

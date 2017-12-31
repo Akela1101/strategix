@@ -9,12 +9,11 @@ namespace sample1
 class SampleGame : public QObject, public GameSlot
 {
 Q_OBJECT
-	umap<string, u_p<SamplePlayer>> playerSlots;
+	umap<int, s_p<PlayerMessage>> registeredPlayers;
+	umap<int, u_p<SamplePlayer>> players;
 	u_p<SampleGameWidget> gameWidget;
 	SampleMapWidget* mapWidget;
-
 	ResourceInfosType resourceInfos;
-	umap<int, s_p<PlayerMessage>> registeredPlayers;
 
 public:
 	static void Configure();
@@ -26,8 +25,7 @@ protected:
 	void OnReceiveMessage(s_p<Message> message) override { qInvoke(this, [=](){ HandleMessage(message); }); }
 
 private:
-	void Started();
-	void HandleMessageInstance(s_p<Message> message);
+	void HandleMessageImpl(s_p<Message> message);
 	void StartGame(strx::MapMessage& mapMessage);
 	void AddPlayer(s_p<PlayerMessage> playerMessage);
 	void InitHuman(SamplePlayer* player);

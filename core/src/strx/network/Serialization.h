@@ -20,6 +20,12 @@ namespace serialization {                \
 template<class Archive>                  \
 void serialize(Archive& ar, M& m, uint)
 
+#define StrxSerializationSplit(M) \
+BOOST_SERIALIZATION_SPLIT_FREE(M) \
+BOOST_CLASS_EXPORT(M)             \
+BOOST_CLASS_IMPLEMENTATION(M, boost::serialization::object_serializable)
+
+
 StrxSerialization(strx::Message::Type)
 {
 	ar & (strx::Message::Type::value_type&)m;
@@ -66,8 +72,44 @@ StrxSerialization(strx::PlayerMessage)
 	ar & m.race;
 }}}
 
-StrxSerialization(strx::MapMessage)
+StrxSerializationSplit(strx::MapMessage)
+namespace boost { namespace serialization {
+template<class Archive>
+void save(Archive& ar, const strx::MapMessage& m, uint)
+{
+	ar << base_object<strx::Message>(m);
+	ar << m.map->GetName();
+	ar << m.map->SaveToString();
+}
+
+template<class Archive>
+void load(Archive& ar, strx::MapMessage& m, uint)
+{
+	std::string name, data;
+	ar >> base_object<strx::Message>(m);
+	ar >> name >> data;
+	m.map.reset(new strx::Map(name, data));
+}
+}}
+
+StrxSerialization(strx::EntityMessage)
 {
 	ar & base_object<strx::Message>(m);
-	//ar & m.map;
+	ar & m.playerId;
+	ar & m.id;
+}}}
+
+StrxSerialization(strx::ResourcesMessage)
+{
+	ar & base_object<strx::Message>(m);
+}}}
+
+StrxSerialization(strx::MineMessage)
+{
+	ar & base_object<strx::Message>(m);
+}}}
+
+StrxSerialization(strx::MineRemovedMessage)
+{
+	ar & base_object<strx::Message>(m);
 }}}

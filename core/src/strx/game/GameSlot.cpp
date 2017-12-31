@@ -15,7 +15,7 @@ GameSlot::~GameSlot()
 	Client::StopSession();
 }
 
-void GameSlot::SendOneMessage(s_p<Message> message)
+void GameSlot::SendMessageOne(s_p<Message> message)
 {
 	Client::invoke(Client::SendMessage, move(message));
 }

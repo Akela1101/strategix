@@ -7,43 +7,31 @@ namespace strx
 {
 struct ICommand
 {
-	virtual void OnComplete(bool isComplete) = 0;
-};
-
-struct ITick
-{
-	virtual void OnTick(float seconds) {}
+	virtual void Completed(bool done) = 0;
 };
 
 struct IMove
 {
 	nya::sig<void(MapCoord coord)> DoMove;
-	
-	virtual void OnMoveStart() {}
-	virtual void OnMove(RealCoord coord) = 0;
-	virtual void OnMapMove(MapCoord from, MapCoord to) {}
-	virtual void OnMoveStop() {}
+
+	virtual void Moved(RealCoord coord) = 0;
+	virtual void MapMoved(MapCoord from, MapCoord to) {}
 };
 
 struct ICollect
 {
 	nya::sig<void(MapCoord coord, const string& resourceName)> DoCollect;
-	
-	virtual void OnCollectStart() {}
-	virtual void OnCollect() {}
-	virtual void OnCollectStop() {}
-	virtual void OnBringStop() {}
+
+	virtual void Collected() {}
 };
 
 struct IHealth
 {
-	virtual void OnHpChange() {}
+	virtual void HpChanged() {}
 };
 
 struct IAttack
 {
-	virtual void OnAttackStart() {}
-	virtual void OnAttack() {}
-	virtual void OnAttackStop() {}
+	virtual void Attacked() {}
 };
 }

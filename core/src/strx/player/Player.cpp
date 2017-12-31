@@ -7,6 +7,8 @@
 #include <strx/map/MapObject.h>
 #include <strx/map/MapPath.h>
 #include <strx/map/PathFinder.h>
+#include <strx/network/Message.h>
+#include <strx/network/Server.h>
 #include <strx/player/PlayerSlot.h>
 #include <strx/common/TechTree.h>
 
@@ -16,15 +18,16 @@
 namespace strx
 {
 
-Player::Player(const string& name, PlayerType type, int id, const string& raceName, Map& map)
-		: name(name)
-		, type(type)
-		, id(id)
-		, raceName(raceName)
-		, map(map)
-		, pathFinder(new PathFinder(map))
-		, resources(Kernel::MakeResources())
-		, techTree(Kernel::GetTechTree(raceName)) {}
+Player::Player(const PlayerMessage& playerMessage, NetId netId, Map& map)
+        : type(playerMessage.type)
+        , id(playerMessage.id)
+        , netId(netId)
+        , name(playerMessage.name)
+        , race(playerMessage.race)
+        , map(map)
+        , pathFinder(new PathFinder(map))
+        , resources(Kernel::MakeResources())
+        , techTree(Kernel::GetTechTree(race)) {}
 
 Player::~Player() = default;
 
@@ -43,11 +46,6 @@ MapMine* Player::GetMine(MapCoord coord) const
 	return dynamic_cast<MapMine*>(GetMapObject(coord).get());
 }
 
-void Player::SetSlot(PlayerSlot* slot)
-{
-	this->slot = slot;
-}
-
 void Player::Start()
 {
 	for (int y : boost::irange(0, map.GetLength()))
@@ -61,8 +59,8 @@ void Player::Start()
 				int objectId = entityObject->id;
 				auto& name = entityObject->name;
 				auto& info = techTree.GetNode(name);
-				
-				AddEntity(new Entity(info, objectId, MapCoord(x, y), this));
+
+				AddEntity(make_u<Entity>(info, objectId, MapCoord(x, y), this));
 			}
 		}
 	}
@@ -74,7 +72,7 @@ void Player::Tick(float seconds)
 	{
 		entity->Tick(seconds);
 	}
-	
+
 	// Remove queued entities if there are ones
 	if (!entisToRemove.empty())
 	{
@@ -86,11 +84,10 @@ void Player::Tick(float seconds)
 	}
 }
 
-void Player::AddEntity(Entity* entity)
+void Player::AddEntity(u_p<Entity> entity)
 {
-	entities.emplace_back(entity);
-	
-	slot->EntiAdded(entity);
+	Server::SendMessageOne(make_s<EntityMessage>(id, entity->GetId()), netId);
+	entities.push_back(move(entity));
 }
 
 void Player::RemoveEntity(Entity* entity)
@@ -101,14 +98,15 @@ void Player::RemoveEntity(Entity* entity)
 void Player::AddResource(const Resource& deltaResource)
 {
 	*resources += deltaResource;
-	slot->ResourcesChanged(*resources);
+	//*resources
+	Server::SendMessageOne(make_s<ResourcesMessage>(), netId);
 }
 
 Entity* Player::FindCollector(MapCoord coord) const
 {
 	// @#~ Check if there is path to Collector and also select nearest
 	// @#~ Check out the case when there are no collectors or more than one
-	
+
 	for (auto&& entity : entities)
 	{
 		if (entity->GetInfo().kind == "building") // @#~ should be building type check
@@ -122,7 +120,8 @@ Entity* Player::FindCollector(MapCoord coord) const
 MapMine* Player::FindMine(MapCoord coord, string resourceName, int squareRadius) const
 {
 	if (squareRadius == 0) return GetMine(coord);
-	
+
+	// check concentric squares from smallest to largest
 	for (int r : boost::irange(1, squareRadius))
 	{
 		MapCoord froms[] = { { -r, -r }, { -r + 1, r }, { -r, -r + 1 }, { r, -r } }; // h,h,v,v
@@ -155,14 +154,15 @@ u_p<MapPath> Player::FindPath(MapCoord from, MapCoord till, float radius) const
 ResourceUnit Player::PickResource(MapMine* mine, ResourceUnit amount)
 {
 	ResourceUnit picked = mine->PickResource(amount);
-	slot->MineAmountChanged(mine->id, mine->amount);
-	
+	//slot->MineAmountChanged(mine->id, mine->amount);
+	Server::SendMessageOne(s_p<MineMessage>(), netId);
+
 	if (!mine->amount)
 	{
 		// remove empty mine
 		IdType mineId = mine->id;
 		map.ChangeObject(map.GetCell(mine->coord), nullptr);
-		slot->MineRemoved(mineId);
+		Server::SendMessageOne(make_s<MineRemovedMessage>(), netId);//mineId
 	}
 	return picked;
 }

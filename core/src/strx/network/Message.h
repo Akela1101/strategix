@@ -14,7 +14,11 @@ struct Message : boost::noncopyable
 	    K(START) \
 	    K(GAME) \
 	    K(PLAYER) \
-	    K(MAP)
+	    K(MAP) \
+	    K(ENTITY) \
+	    K(RESOURCES) \
+	    K(MINE) \
+	    K(MINE_REMOVED)
 	nya_enum(Type, MessageTypeEnumDef)
 
 	virtual ~Message() = default;
@@ -84,5 +88,33 @@ struct MapMessage : Message
 	MapMessage() = default;
 	MapMessage(s_p<Map>& map) : map(map) {}
 	Type GetType() const override { return Type::MAP; }
+};
+
+struct EntityMessage : Message
+{
+	int playerId;
+	IdType id;
+
+	EntityMessage() = default;
+	EntityMessage(int playerId, IdType id) : playerId(playerId), id(id) {}
+	Type GetType() const override { return Type::ENTITY; }
+};
+
+struct ResourcesMessage : Message
+{
+	ResourcesMessage() = default;
+	Type GetType() const override { return Type::RESOURCES; }
+};
+
+struct MineMessage : Message
+{
+	MineMessage() = default;
+	Type GetType() const override { return Type::MINE; }
+};
+
+struct MineRemovedMessage : Message
+{
+	MineRemovedMessage() = default;
+	Type GetType() const override { return Type::MINE_REMOVED; }
 };
 }

@@ -7,13 +7,14 @@
 namespace strx
 {
 class EntitySlot : boost::noncopyable
-		, public ITick, public IMove, public ICollect, public IHealth, public IAttack
+        , public IMove, public ICollect, public IHealth, public IAttack
 {
-protected:
-	Entity* entity;
-	
+	s_p<EntityMessage> entityMessage;
+
 public:
-	EntitySlot(Entity* entity);
-	virtual ~EntitySlot() = 0;
+	EntitySlot(s_p<EntityMessage> entityMessage);
+	virtual ~EntitySlot() {}
+
+	IdType GetId() const;
 };
 }
