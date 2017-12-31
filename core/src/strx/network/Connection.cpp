@@ -1,17 +1,17 @@
 #include <istream>
 #include <sstream>
 #include <boost/endian/arithmetic.hpp>
+#include <strx/kernel/Message.h>
 
-#include "Message.h"
 #include "Connection.h"
 
 
 namespace strx
 {
-Connection::Connection(tcp::socket&& socket, const function<void(s_p<Message>, NetId)>& ReceiveMessage)
-		: socket(move(socket))
-		, ReceiveMessage(ReceiveMessage)
-		, id(to_netid(this->socket.remote_endpoint()))
+Connection::Connection(NetId id, tcp::socket&& socket, const function<void(s_p<Message>, NetId)>& ReceiveMessage)
+        : id(id)
+        , socket(move(socket))
+        , ReceiveMessage(ReceiveMessage)
 {
 	readBuffer.reserve(recommendedMessageLimit);
 	writeBuffer.reserve(recommendedMessageLimit);
@@ -51,12 +51,12 @@ void Connection::Write(s_p<Message> message)
 void Connection::Read()
 {
 	asio::async_read(socket, asio::buffer((char*)&expectedSize, sizeof(int))
-			, [this](boost::system::error_code ec, size_t)
-			{
-				if (ec)
+	        , [this](boost::system::error_code ec, size_t)
+	        {
+		        if (ec)
 				{
 					error_log << "socket read error: " << ec.message();
-					socket.close();
+					Close();
 					return;
 				}
 				boost::endian::little_to_native_inplace(expectedSize);
@@ -65,7 +65,7 @@ void Connection::Read()
 				if (messageSize != expectedSize)
 				{
 					error_log << "unable to read the whole buffer";
-					socket.close();
+					Close();
 					return;
 				}
 
@@ -73,7 +73,13 @@ void Connection::Read()
 				catch (exception& e) { error_log << "Unable to parse message: " << e.what(); }
 
 				Read();
-			});
+	        });
+}
+
+void Connection::Close()
+{
+	socket.close();
+	ReceiveMessage(nullptr, id);
 }
 
 }

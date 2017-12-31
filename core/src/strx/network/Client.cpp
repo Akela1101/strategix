@@ -1,9 +1,9 @@
 #include <boost/asio.hpp>
 #include <strx/game/GameSlot.h>
+#include <strx/kernel/Message.h>
 
 #include "Connection.h"
 #include "Client.h"
-#include "Message.h"
 
 
 namespace strx
@@ -25,7 +25,7 @@ void Client::StartSession(GameSlot* game)
 	{
 		if (!ec)
 		{
-			connection.reset(new Connection(move(*socket), ReceiveMessage));
+			connection.reset(new Connection(0, move(*socket), ReceiveMessage));
 
 			connection->Write(make_s<EmptyMessage>(Message::Type::CONTEXT));
 		}
@@ -58,14 +58,14 @@ void Client::StopSession()
 	if (clientThread) clientThread->join();
 }
 
-void Client::SendMessage(s_p<Message> message)
+void Client::SendMessageOne(s_p<Message> message)
 {
 	connection->Write(message);
 }
 
 void Client::ReceiveMessage(s_p<Message> message, NetId id)
 {
-	ignore = id;
+	ignore = id; // == 0
 	if (game) game->OnReceiveMessage(message);
 }
 }

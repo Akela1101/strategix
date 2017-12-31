@@ -14,7 +14,7 @@ public:
 	static void StartSession(GameSlot* game);
 	static void StopSession();
 
-	static void SendMessage(s_p<Message> message);
+	static void SendMessageOne(s_p<Message> message);
 
 private:
 	static void ReceiveMessage(s_p<Message> message, NetId id);

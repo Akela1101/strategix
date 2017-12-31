@@ -13,7 +13,7 @@
 #include <strx/kernel/ConfigManager.h>
 #include <strx/kernel/MapManager.h>
 #include <strx/map/Map.h>
-#include <strx/network/Message.h>
+#include <strx/kernel/Message.h>
 #include <strx/network/Server.h>
 #include <strx/player/Player.h>
 
@@ -107,6 +107,16 @@ void Kernel::PrintInfo()
 	{
 		cout << raceName << endl;
 	}
+}
+
+void Kernel::SendMessageOne(std::shared_ptr<Message> message, NetId clientId)
+{
+	Server::invoke(Server::SendMessageOne, move(message), clientId);
+}
+
+void Kernel::SendMessageAll(s_p<Message> message)
+{
+	Server::invoke(Server::SendMessageAll, move(message));
 }
 
 void Kernel::OnReceiveMessage(s_p<Message> message, NetId netId)

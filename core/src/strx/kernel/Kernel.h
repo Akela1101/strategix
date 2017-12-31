@@ -21,6 +21,8 @@ public:
 	static void Tick(float seconds);
 	static void PrintInfo();
 
+	static void SendMessageOne(s_p<Message> message, NetId clientId);
+	static void SendMessageAll(s_p<Message> message);
 	static void OnReceiveMessage(s_p<Message> message, NetId netId);
 
 	static bool CheckResource(const string& name);

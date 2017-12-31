@@ -6,7 +6,7 @@ namespace strx
 {
 using IdType = int;
 using HpType = int;
-using NetId = llong;
+using NetId = int;
 using ResourceInfosType = s_p<vector<string>>;
 using TechTreesType = umap<string, u_p<TechTree>>;
 

@@ -1,4 +1,4 @@
-#include <strx/network/Message.h>
+#include <strx/kernel/Message.h>
 
 #include "PlayerSlot.h"
 

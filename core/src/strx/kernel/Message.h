@@ -2,7 +2,6 @@
 
 #include <nya/enum.hpp>
 #include <Strategix_fwd.h>
-#include "NetworkCommon.h"
 
 namespace strx
 {

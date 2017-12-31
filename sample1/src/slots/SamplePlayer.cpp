@@ -1,5 +1,5 @@
 #include <strx/entity/Entity.h>
-#include <strx/network/Message.h>
+#include <strx/kernel/Message.h>
 #include <graphics/SampleMapWidget.h>
 #include <slots/SampleEntity.h>
 

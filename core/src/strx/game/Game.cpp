@@ -1,7 +1,6 @@
 #include <strx/kernel/Kernel.h>
 #include <strx/kernel/MapManager.h>
-#include <strx/network/Message.h>
-#include <strx/network/Server.h>
+#include <strx/kernel/Message.h>
 #include <strx/player/Player.h>
 
 #include "Game.h"
@@ -32,7 +31,7 @@ void Game::Start(MapManager& mapManager)
 		Map& map = *mapMessage->map;
 		if (plannedPlayer->type == PlayerType::HUMAN)
 		{
-			Server::SendMessageOne(move(mapMessage), netId);
+			Kernel::SendMessageOne(move(mapMessage), netId);
 		}
 
 		// player

@@ -1,7 +1,7 @@
 #include <strx/feature/FeatureCollect.h>
 #include <strx/feature/FeatureMove.h>
 #include <strx/network/Client.h>
-#include <strx/network/Message.h>
+#include <strx/kernel/Message.h>
 
 #include "Entity.h"
 #include "EntitySlot.h"

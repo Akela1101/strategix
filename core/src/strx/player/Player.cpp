@@ -7,8 +7,7 @@
 #include <strx/map/MapObject.h>
 #include <strx/map/MapPath.h>
 #include <strx/map/PathFinder.h>
-#include <strx/network/Message.h>
-#include <strx/network/Server.h>
+#include <strx/kernel/Message.h>
 #include <strx/player/PlayerSlot.h>
 #include <strx/common/TechTree.h>
 
@@ -86,7 +85,7 @@ void Player::Tick(float seconds)
 
 void Player::AddEntity(u_p<Entity> entity)
 {
-	Server::SendMessageOne(make_s<EntityMessage>(id, entity->GetId()), netId);
+	Kernel::SendMessageOne(make_s<EntityMessage>(id, entity->GetId()), netId);
 	entities.push_back(move(entity));
 }
 
@@ -99,7 +98,7 @@ void Player::AddResource(const Resource& deltaResource)
 {
 	*resources += deltaResource;
 	//*resources
-	Server::SendMessageOne(make_s<ResourcesMessage>(), netId);
+	Kernel::SendMessageOne(make_s<ResourcesMessage>(), netId);
 }
 
 Entity* Player::FindCollector(MapCoord coord) const
@@ -155,14 +154,14 @@ ResourceUnit Player::PickResource(MapMine* mine, ResourceUnit amount)
 {
 	ResourceUnit picked = mine->PickResource(amount);
 	//slot->MineAmountChanged(mine->id, mine->amount);
-	Server::SendMessageOne(s_p<MineMessage>(), netId);
+	Kernel::SendMessageOne(s_p<MineMessage>(), netId);
 
 	if (!mine->amount)
 	{
 		// remove empty mine
 		IdType mineId = mine->id;
 		map.ChangeObject(map.GetCell(mine->coord), nullptr);
-		Server::SendMessageOne(make_s<MineRemovedMessage>(), netId);//mineId
+		Kernel::SendMessageOne(make_s<MineRemovedMessage>(), netId);//mineId
 	}
 	return picked;
 }

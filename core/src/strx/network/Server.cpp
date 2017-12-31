@@ -1,7 +1,7 @@
 #include <boost/asio.hpp>
 #include <boost/range/adaptors.hpp>
 #include <strx/kernel/Kernel.h>
-#include <strx/network/Message.h>
+#include <strx/kernel/Message.h>
 
 #include "Connection.h"
 #include "Server.h"
@@ -9,16 +9,18 @@
 
 namespace strx
 {
-static u_p<thread> serverThread;              // server thread
-u_p<tcp::socket> socket;                      // socket for the next connection
-u_p<tcp::acceptor> acceptor;                  // connection listener
-umap<NetId, u_p<Connection>> connections;     // connections
+static u_p<thread> serverThread;                  // server thread
+static u_p<tcp::socket> socket;                   // socket for the next connection
+static u_p<tcp::acceptor> acceptor;               // connection listener
+static umap<NetId, u_p<Connection>> connections;  // connections
+static NetId currentConnectionId;                 // incrementing connection id
 
 
 void Server::Run(ushort port)
 {
 	acceptor.reset(new tcp::acceptor(eventLoop, tcp::endpoint(tcp::v4(), port)));
 	socket.reset(new tcp::socket(eventLoop));
+	currentConnectionId = 0;
 	AcceptConnection();
 
 	serverThread.reset(new thread([]()
@@ -47,27 +49,14 @@ void Server::Finish()
 	if (serverThread) serverThread->join();
 }
 
-void Server::SendMessageImpl(std::shared_ptr<Message> message, NetId clientId)
-{
-	connections[clientId]->Write(message);
-}
-
-void Server::SendMessageAllImpl(s_p<Message> message)
-{
-	for (const auto& connection : connections | nya::map_values)
-	{
-		connection->Write(message);
-	}
-}
-
 void Server::AcceptConnection()
 {
 	acceptor->async_accept(*socket, [](boost::system::error_code ec)
 	{
 		if (!ec)
 		{
-			NetId id = to_netid(socket->remote_endpoint());
-			auto connection = new Connection(move(*socket), ReceiveMessage);
+			NetId id = ++currentConnectionId;
+			auto connection = new Connection(id, move(*socket), ReceiveMessage);
 
 			connections.emplace(id, connection);
 		}
@@ -77,6 +66,25 @@ void Server::AcceptConnection()
 
 void Server::ReceiveMessage(s_p<Message> message, NetId id)
 {
-	Kernel::invoke(Kernel::OnReceiveMessage, message, id);
+	if (!message)
+	{
+		connections.erase(id);
+		return;
+	}
+	Kernel::invoke(Kernel::OnReceiveMessage, move(message), id);
 }
+
+void Server::SendMessageOne(std::shared_ptr<Message> message, NetId id)
+{
+	connections[id]->Write(message);
+}
+
+void Server::SendMessageAll(s_p<Message> message)
+{
+	for (const auto& connection : connections | nya::map_values)
+	{
+		connection->Write(message);
+	}
+}
+
 }

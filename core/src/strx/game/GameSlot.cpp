@@ -17,6 +17,6 @@ GameSlot::~GameSlot()
 
 void GameSlot::SendMessageOne(s_p<Message> message)
 {
-	Client::invoke(Client::SendMessage, move(message));
+	Client::invoke(Client::SendMessageOne, move(message));
 }
 }
