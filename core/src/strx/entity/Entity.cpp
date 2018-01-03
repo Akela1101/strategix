@@ -4,6 +4,7 @@
 #include <strx/feature/FeatureCollect.h>
 #include <strx/feature/FeatureHealth.h>
 #include <strx/feature/FeatureAttack.h>
+#include <strx/kernel/Message.h>
 #include <strx/map/Map.h>
 #include <strx/map/MapObject.h>
 #include <strx/player/Player.h>
@@ -25,6 +26,23 @@ Entity::Entity(const EntityInfo& entiInfo, int id, RealCoord coord, Player* play
 	for (auto&& pa : entiInfo.featureInfos)
 	{
 		AddFeature(pa.first, pa.second.get());
+	}
+}
+
+void Entity::ReceiveMessage(s_p<CommandMessage> message)
+{
+	switch (message->GetType())
+	{
+	case Message::Type::MOVE:
+	{
+		auto command = sp_cast<MoveMessage>(message);
+		info_log << "move to " << command->coord;
+		//if (auto f = Do<FeatureMove>()) f->Move(coord, 0, nullptr);
+		break;
+	}
+	default:
+		const char* t = message->GetType().c_str();
+		nya_throw << "Unable to handle message with type: " << (t[0] == '!' ? message->GetType() : t);
 	}
 }
 

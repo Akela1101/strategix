@@ -31,8 +31,9 @@ public:
 	int GetId() const { return id; }
 	RealCoord GetCoord() const { return coord; }
 	MapCoord GetMapCoord() const { return mapCoord; }
-
 	bool SetCoord(RealCoord newCoord) { coord = newCoord; }
+
+	void ReceiveMessage(s_p<CommandMessage> message);
 
 	/// change entity place on the map
 	[[nodiscard]]

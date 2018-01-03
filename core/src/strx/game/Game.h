@@ -5,7 +5,7 @@
 namespace strx
 {
 using PlannedPlayers = vector<s_p<PlayerMessage>>;
-using Players = umap<int, u_p<Player>>;
+using Players = umap<PlayerId, u_p<Player>>;
 
 class Game : boost::noncopyable
 {
@@ -18,13 +18,14 @@ public:
 	Game(const string& mapName);
 
 	Players& GetPlayers() { return players; }
-
-	void AddPlayer(s_p<PlayerMessage> playerMessage, PlayerId playerId);
-	void Start();
+	void ReceiveMessage(s_p<Message> message, PlayerId playerId);
 
 private:
 	s_p<MapMessage> CreateMapMessage(int playerSpot);
 	void LoadMap(const string& mapName);
+	void AddPlayer(s_p<Message> message, PlayerId playerId);
+	void Ready(PlayerId playerId);
+	void Start();
 };
 
 }

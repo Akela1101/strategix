@@ -106,7 +106,7 @@ void Kernel::PrintInfo()
 	}
 }
 
-void Kernel::SendMessageOne(std::shared_ptr<Message> message, PlayerId playerId)
+void Kernel::SendMessageOne(s_p<Message> message, PlayerId playerId)
 {
 	Server::invoke(Server::SendMessageOne, move(message), playerId);
 }
@@ -121,12 +121,7 @@ void Kernel::OnReceiveMessage(s_p<Message> message, PlayerId playerId)
 	switch (message->GetType())
 	{
 	case Message::Type::CONTEXT: ContextRequested(playerId); break;
-	case Message::Type::PLAYER: AddPlayer(move(message), playerId); break;
-	case Message::Type::START: StartGame(playerId); break;
-	case Message::Type::MOVE: MoveEntity(move(message), playerId); break;
-	default:
-		const char* t = message->GetType().c_str();
-		nya_throw << "Unable to handle message with type: " << (t[0] == '!' ? message->GetType() : t);
+	default: game->ReceiveMessage(move(message), playerId);
 	}
 }
 
@@ -245,25 +240,6 @@ void Kernel::AddGame(const string& mapName, const string& creatorName)
 	gameMessage->mapName = mapName;
 	gameMessage->creatorName = creatorName;
 	games.emplace(1, move(gameMessage));
-}
-
-void Kernel::AddPlayer(s_p<Message> message, PlayerId playerId)
-{
-	auto playerMessage = sp_cast<PlayerMessage>(message);
-	game->AddPlayer(playerMessage, playerId);
-	Server::SendMessageAll(playerMessage);
-}
-
-void Kernel::StartGame(PlayerId playerId)
-{
-	//TODO: check all clients are ready
-	game->Start();
-}
-
-void Kernel::MoveEntity(s_p<Message> message, PlayerId playerId)
-{
-	//auto moveMessage = sp_cast<MoveMessage>(message);
-	//game->MoveEntity(moveMessage->id, moveMessage->coord);
 }
 
 }

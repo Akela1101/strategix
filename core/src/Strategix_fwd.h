@@ -5,6 +5,7 @@
 namespace strx
 {
 class Client;
+class CommandMessage;
 class Entity;
 class EntityInfo;
 class EntityMessage;

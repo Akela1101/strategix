@@ -14,12 +14,12 @@ class Player : boost::noncopyable
 	const string name;             /// nick or alias
 	const string race;             /// race name
 
-	vector<u_p<Entity>> entities;  /// owned enties
+	umap<IdType, u_p<Entity>> entities;  /// owned entities
 	u_p<Resources> resources;      /// available resources amount
 	Map& map;                      /// link to map
 	u_p<PathFinder> pathFinder;    /// map path finder
 	const TechTree& techTree;      /// link to tech tree
-	vector<Entity*> entisToRemove; /// entis removed at the end of Tick
+	vector<Entity*> entisToRemove; /// entities removed at the end of Tick
 
 public:
 	Player(const PlayerMessage& playerMessage, PlayerId playerId, Map& map);
@@ -27,11 +27,13 @@ public:
 
 	const string& GetName() const { return name; }
 	PlayerType GetType() const { return type; }
-	int GetId() const { return spot; }
+	int GetSpot() const { return spot; }
 	Terrain* GetTerrain(MapCoord coord) const;
 	u_p<MapObject>& GetMapObject(MapCoord coord) const;
 	MapMine* GetMine(MapCoord coord) const;
 	const TechTree& GetTechTree() const { return techTree; }
+
+	void ReceiveMessage(s_p<Message> message);
 
 	/// initialize player with entities from map
 	void Start();

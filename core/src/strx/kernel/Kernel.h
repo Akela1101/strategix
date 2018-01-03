@@ -38,8 +38,5 @@ private:
 	static void RunImpl();
 	static void ContextRequested(PlayerId playerId);
 	static void AddGame(const string& mapName, const string& creatorName);
-	static void AddPlayer(s_p<Message> message, PlayerId playerId);
-	static void StartGame(PlayerId playerId);
-	static void MoveEntity(s_p<Message> message, PlayerId playerId);
 };
 }

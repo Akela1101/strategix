@@ -45,6 +45,22 @@ MapMine* Player::GetMine(MapCoord coord) const
 	return dynamic_cast<MapMine*>(GetMapObject(coord).get());
 }
 
+void Player::ReceiveMessage(s_p<Message> message)
+{
+	switch (message->GetType())
+	{
+	default:
+		auto&& command = dp_cast<CommandMessage>(message);
+		if (!command) nya_throw << "Unknown message: " << message->GetType().c_str();
+
+		auto i = entities.find(command->id);
+		if (i == entities.end()) nya_throw << "Entity with id %d does not exist."s % command->id;
+
+		Entity* entity = i->second.get();
+		entity->ReceiveMessage(move(command));
+	}
+}
+
 void Player::Start()
 {
 	for (int y : boost::irange(0, map.GetLength()))
@@ -67,7 +83,7 @@ void Player::Start()
 
 void Player::Tick(float seconds)
 {
-	for (auto&& entity : entities)
+	for (auto& entity : entities | nya::map_values)
 	{
 		entity->Tick(seconds);
 	}
@@ -86,7 +102,7 @@ void Player::Tick(float seconds)
 void Player::AddEntity(u_p<Entity> entity)
 {
 	Kernel::SendMessageOne(make_s<EntityMessage>(spot, entity->GetId()), playerId);
-	entities.push_back(move(entity));
+	entities.emplace(entity->GetId(), move(entity));
 }
 
 void Player::RemoveEntity(Entity* entity)
@@ -106,7 +122,7 @@ Entity* Player::FindCollector(MapCoord coord) const
 	// @#~ Check if there is path to Collector and also select nearest
 	// @#~ Check out the case when there are no collectors or more than one
 
-	for (auto&& entity : entities)
+	for (auto& entity : entities | nya::map_values)
 	{
 		if (entity->GetInfo().kind == "building") // @#~ should be building type check
 		{

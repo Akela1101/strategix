@@ -74,7 +74,7 @@ void Server::ReceiveMessage(s_p<Message> message, PlayerId id)
 	Kernel::invoke(Kernel::OnReceiveMessage, move(message), id);
 }
 
-void Server::SendMessageOne(std::shared_ptr<Message> message, PlayerId id)
+void Server::SendMessageOne(s_p<Message> message, PlayerId id)
 {
 	connections[id]->Write(message);
 }

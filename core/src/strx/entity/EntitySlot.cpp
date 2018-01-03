@@ -22,8 +22,6 @@ IdType EntitySlot::GetId() const
 void EntitySlot::Move(MapCoord coord)
 {
 	GameSlot::SendMessageOne(make_s<MoveMessage>(GetId(), coord));
-
-	//if (auto f = entity->Do<FeatureMove>()) f->Move(coord, 0, nullptr);
 }
 
 void EntitySlot::Collect(MapCoord coord, const string& resourceName)

@@ -20,6 +20,11 @@ Connection::Connection(PlayerId id, tcp::socket&& socket, const function<void(s_
 
 void Connection::Write(s_p<Message> message)
 {
+	if (!message)
+	{
+		nya_throw << "Writting null message.";
+	}
+
 	writeBuffer.clear();
 	Message::Serialize(message, writeBuffer);
 	int messageSize = writeBuffer.size();

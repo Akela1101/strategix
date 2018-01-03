@@ -17,14 +17,49 @@ Game::Game(const string& mapName)
 	LoadMap(mapName);
 }
 
-void Game::AddPlayer(s_p<PlayerMessage> playerMessage, PlayerId playerId)
+void Game::ReceiveMessage(s_p<Message> message, PlayerId playerId)
 {
+	switch (message->GetType())
+	{
+	case Message::Type::PLAYER: AddPlayer(move(message), playerId); break;
+	case Message::Type::START: Ready(playerId); break;
+	default: players[playerId]->ReceiveMessage(move(message));
+	}
+}
+
+s_p<MapMessage> Game::CreateMapMessage(int playerSpot)
+{
+	// @#~ should return map AND fog-of-war mask
+	ignore = playerSpot;
+	return make_s<MapMessage>(map);
+}
+
+void Game::LoadMap(const string& mapName)
+{
+	string mapsPath = ConfigManager::GetMapsPath();
+	string fileName = boost::str("%s.map"s % mapName);
+	string path = (boost::filesystem::path(mapsPath) / fileName).string();
+
+	map.reset(new Map(path));
+}
+
+void Game::AddPlayer(s_p<Message> message, PlayerId playerId)
+{
+	auto playerMessage = sp_cast<PlayerMessage>(message);
 	int playerSpot = playerMessage->spot;
 	if (in_(playerSpot, playerIds)) // replace is not supported yet
 		nya_throw << "Trying to add same player twice [%d], name: %s"s % playerSpot % playerMessage->name;
 
 	playerIds.emplace(playerSpot, playerId);
-	plannedPlayers.push_back(move(playerMessage));
+	plannedPlayers.push_back(playerMessage);
+
+	Kernel::SendMessageAll(move(playerMessage));
+}
+
+void Game::Ready(PlayerId playerId)
+{
+	//TODO: check all players are ready
+	Start();
 }
 
 void Game::Start()
@@ -45,25 +80,9 @@ void Game::Start()
 		// player
 		auto player = make_u<Player>(*plannedPlayer, playerId, map);
 		player->Start();
-		players.emplace(player->GetId(), move(player));
+		players.emplace(playerId, move(player));
 	}
 	plannedPlayers.clear();
-}
-
-s_p<MapMessage> Game::CreateMapMessage(int playerSpot)
-{
-	// @#~ should return map AND fog-of-war mask
-	ignore = playerSpot;
-	return make_s<MapMessage>(map);
-}
-
-void Game::LoadMap(const string& mapName)
-{
-	string mapsPath = ConfigManager::GetMapsPath();
-	string fileName = boost::str("%s.map"s % mapName);
-	string path = (boost::filesystem::path(mapsPath) / fileName).string();
-
-	map.reset(new Map(path));
 }
 
 }
