@@ -9,6 +9,7 @@ struct Message : boost::noncopyable
 {
 #   define MessageTypeEnumDef(K, V) \
 	    K(VECTOR) \
+	    K(COMMAND) \
 	    K(CONTEXT) \
 	    K(START) \
 	    K(GAME) \
@@ -17,7 +18,8 @@ struct Message : boost::noncopyable
 	    K(ENTITY) \
 	    K(RESOURCES) \
 	    K(MINE) \
-	    K(MINE_REMOVED)
+	    K(MINE_REMOVED) \
+	    K(MOVE)
 	nya_enum(Type, MessageTypeEnumDef)
 
 	virtual ~Message() = default;
@@ -25,6 +27,19 @@ struct Message : boost::noncopyable
 
 	static s_p<Message> Parse(const string& buffer);
 	static void Serialize(s_p<Message> message, string& buffer);
+};
+
+struct CommandMessage : Message
+{
+	IdType id;
+
+	CommandMessage() = default;
+	CommandMessage(IdType id) : id(id) {}
+};
+
+struct MessageVector : Message, vector<s_p<Message>>
+{
+	Type GetType() const override { return Type::VECTOR; }
 };
 
 struct EmptyMessage : Message
@@ -35,11 +50,6 @@ struct EmptyMessage : Message
 	EmptyMessage(Type type) : type(type) {}
 
 	Type GetType() const override { return type; }
-};
-
-struct MessageVector : Message, vector<s_p<Message>>
-{
-	Type GetType() const override { return Type::VECTOR; }
 };
 
 struct ContextMessage : Message
@@ -69,14 +79,14 @@ struct GameMessage : Message
 struct PlayerMessage : Message
 {
 	int gameId;
-	int id;
+	int spot;
 	PlayerType type;
 	string name;
 	string race;
 
 	PlayerMessage() = default;
-	PlayerMessage(int gameId, int id, PlayerType type, string name, string race)
-	    : gameId(gameId), id(id), type(type), name(move(name)), race(move(race)) {}
+	PlayerMessage(int gameId, int spot, PlayerType type, string name, string race)
+	    : gameId(gameId), spot(spot), type(type), name(move(name)), race(move(race)) {}
 	Type GetType() const override { return Type::PLAYER; }
 };
 
@@ -91,11 +101,11 @@ struct MapMessage : Message
 
 struct EntityMessage : Message
 {
-	int playerId;
+	int playerSpot;
 	IdType id;
 
 	EntityMessage() = default;
-	EntityMessage(int playerId, IdType id) : playerId(playerId), id(id) {}
+	EntityMessage(int playerSpot, IdType id) : playerSpot(playerSpot), id(id) {}
 	Type GetType() const override { return Type::ENTITY; }
 };
 
@@ -115,5 +125,14 @@ struct MineRemovedMessage : Message
 {
 	MineRemovedMessage() = default;
 	Type GetType() const override { return Type::MINE_REMOVED; }
+};
+
+struct MoveMessage : CommandMessage
+{
+	MapCoord coord;
+
+	MoveMessage() = default;
+	MoveMessage(IdType id, MapCoord coord) : CommandMessage(id), coord(coord) {}
+	Type GetType() const override { return Type::MOVE; }
 };
 }

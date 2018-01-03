@@ -11,21 +11,20 @@ namespace strx
 static GameSlot* game = nullptr;              // current game
 static u_p<thread> clientThread;              // client thread
 static u_p<tcp::socket> socket;               // client socket
-static u_p<tcp::resolver> resolver;           // ip resolver
 static u_p<Connection> connection;            // single client connection
 
 void Client::StartSession(GameSlot* game)
 {
 	strx::game = game;
 	socket.reset(new tcp::socket(eventLoop));
-	resolver.reset(new tcp::resolver(eventLoop));
-	auto iEndpoint = resolver->resolve({ "localhost", "10101" });
+	auto iEndpoint = tcp::resolver(eventLoop).resolve({ "localhost", "10101" });
 
 	boost::asio::async_connect(*socket, iEndpoint, [](const boost::system::error_code& ec, const tcp::endpoint&)
 	{
 		if (!ec)
 		{
 			connection.reset(new Connection(0, move(*socket), ReceiveMessage));
+			socket.reset();
 
 			connection->Write(make_s<EmptyMessage>(Message::Type::CONTEXT));
 		}
@@ -54,18 +53,20 @@ void Client::StartSession(GameSlot* game)
 
 void Client::StopSession()
 {
-	game = nullptr;
+	invoke([] { connection.reset(); });
+
 	if (clientThread) clientThread->join();
+	game = nullptr;
 }
 
 void Client::SendMessageOne(s_p<Message> message)
 {
-	connection->Write(message);
+	if (connection) connection->Write(message);
 }
 
-void Client::ReceiveMessage(s_p<Message> message, NetId id)
+void Client::ReceiveMessage(s_p<Message> message, PlayerId id)
 {
 	ignore = id; // == 0
-	if (game) game->OnReceiveMessage(message);
+	game->OnReceiveMessage(message);
 }
 }

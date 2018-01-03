@@ -1,6 +1,7 @@
 #include <iomanip>
 #include <fstream>
 #include <sstream>
+#include <boost/filesystem.hpp>
 
 #include <strx/kernel/Kernel.h>
 #include <strx/map/MapObject.h>

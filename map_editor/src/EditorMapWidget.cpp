@@ -14,9 +14,9 @@ void EditorMapWidget::CurrentToolChanged(ToolInfo* tool)
 	this->tool = tool;
 }
 
-void EditorMapWidget::CurrentPlayerChanged(int playerId)
+void EditorMapWidget::CurrentPlayerChanged(int playerSpot)
 {
-	this->playerId = playerId;
+	this->playerSpot = playerSpot;
 }
 
 void EditorMapWidget::paintEvent(QPaintEvent* event)
@@ -113,7 +113,7 @@ MapObject* EditorMapWidget::CreateObject(int x, int y)
 	switch (tool->type)
 	{
 		case ToolType::ENTITY:
-			return new MapEntity{ tool->name, coord, playerId };
+			return new MapEntity{ tool->name, coord, playerSpot };
 		case ToolType::MINE:
 			return new MapMine{ tool->name, coord, 1000 };
 	}

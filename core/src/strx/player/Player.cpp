@@ -17,10 +17,10 @@
 namespace strx
 {
 
-Player::Player(const PlayerMessage& playerMessage, NetId netId, Map& map)
-        : type(playerMessage.type)
-        , id(playerMessage.id)
-        , netId(netId)
+Player::Player(const PlayerMessage& playerMessage, PlayerId playerId, Map& map)
+        : playerId(playerId)
+        , type(playerMessage.type)
+        , spot(playerMessage.spot)
         , name(playerMessage.name)
         , race(playerMessage.race)
         , map(map)
@@ -53,7 +53,7 @@ void Player::Start()
 		{
 			auto object = map.GetCell(x, y).object.get();
 			auto entityObject = dynamic_cast<MapEntity*>(object);
-			if (entityObject && entityObject->owner == id)
+			if (entityObject && entityObject->owner == spot)
 			{
 				int objectId = entityObject->id;
 				auto& name = entityObject->name;
@@ -85,7 +85,7 @@ void Player::Tick(float seconds)
 
 void Player::AddEntity(u_p<Entity> entity)
 {
-	Kernel::SendMessageOne(make_s<EntityMessage>(id, entity->GetId()), netId);
+	Kernel::SendMessageOne(make_s<EntityMessage>(spot, entity->GetId()), playerId);
 	entities.push_back(move(entity));
 }
 
@@ -98,7 +98,7 @@ void Player::AddResource(const Resource& deltaResource)
 {
 	*resources += deltaResource;
 	//*resources
-	Kernel::SendMessageOne(make_s<ResourcesMessage>(), netId);
+	Kernel::SendMessageOne(make_s<ResourcesMessage>(), playerId);
 }
 
 Entity* Player::FindCollector(MapCoord coord) const
@@ -154,14 +154,14 @@ ResourceUnit Player::PickResource(MapMine* mine, ResourceUnit amount)
 {
 	ResourceUnit picked = mine->PickResource(amount);
 	//slot->MineAmountChanged(mine->id, mine->amount);
-	Kernel::SendMessageOne(s_p<MineMessage>(), netId);
+	Kernel::SendMessageOne(s_p<MineMessage>(), playerId);
 
 	if (!mine->amount)
 	{
 		// remove empty mine
 		IdType mineId = mine->id;
 		map.ChangeObject(map.GetCell(mine->coord), nullptr);
-		Kernel::SendMessageOne(make_s<MineRemovedMessage>(), netId);//mineId
+		Kernel::SendMessageOne(make_s<MineRemovedMessage>(), playerId);//mineId
 	}
 	return picked;
 }

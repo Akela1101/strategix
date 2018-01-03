@@ -12,8 +12,8 @@ namespace strx
 static u_p<thread> serverThread;                  // server thread
 static u_p<tcp::socket> socket;                   // socket for the next connection
 static u_p<tcp::acceptor> acceptor;               // connection listener
-static umap<NetId, u_p<Connection>> connections;  // connections
-static NetId currentConnectionId;                 // incrementing connection id
+static umap<PlayerId, u_p<Connection>> connections;  // connections
+static PlayerId currentConnectionId;                 // incrementing connection id
 
 
 void Server::Run(ushort port)
@@ -55,7 +55,7 @@ void Server::AcceptConnection()
 	{
 		if (!ec)
 		{
-			NetId id = ++currentConnectionId;
+			PlayerId id = ++currentConnectionId;
 			auto connection = new Connection(id, move(*socket), ReceiveMessage);
 
 			connections.emplace(id, connection);
@@ -64,7 +64,7 @@ void Server::AcceptConnection()
 	});
 }
 
-void Server::ReceiveMessage(s_p<Message> message, NetId id)
+void Server::ReceiveMessage(s_p<Message> message, PlayerId id)
 {
 	if (!message)
 	{
@@ -74,7 +74,7 @@ void Server::ReceiveMessage(s_p<Message> message, NetId id)
 	Kernel::invoke(Kernel::OnReceiveMessage, move(message), id);
 }
 
-void Server::SendMessageOne(std::shared_ptr<Message> message, NetId id)
+void Server::SendMessageOne(std::shared_ptr<Message> message, PlayerId id)
 {
 	connections[id]->Write(message);
 }

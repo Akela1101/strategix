@@ -14,13 +14,48 @@ namespace pt = boost::property_tree;
 namespace fs = boost::filesystem;
 
 
-struct ConfigManager::ConfigurationManagerImpl
+struct ConfigurationManagerImpl
 {
-	string configFileName;
+	const string configFileName;
 	ushort serverPort;
 	string mapsPath;
 	ResourceInfosType resourceInfos = make_s<vector<string>>();
 	TechTreesType techTrees;
+
+	ConfigurationManagerImpl(string configFileName) : configFileName(configFileName) {}
+
+	void ParseConfig()
+	{
+		try
+		{
+			pt::ptree propTree;
+			pt::read_json(configFileName, propTree);
+
+			serverPort = propTree.get<ushort>("server_port");
+			mapsPath = propTree.get<string>("maps_path");
+
+			for (auto&& tree : propTree.get_child("resource_types") | nya::map_values)
+			{
+				const string& resourceName = tree.get_value<string>();
+				resourceInfos->push_back(resourceName);
+			}
+
+			for (auto&& tree : propTree.get_child("races") | nya::map_values)
+			{
+				auto&& techTree = ParseRace(tree);
+				auto&& raceName = techTree->GetRaceName();
+				techTrees.emplace(raceName, move(techTree));
+			}
+		}
+		catch (const pt::ptree_error& e)
+		{
+			info_log << e.what();
+		}
+		catch (exception& e)
+		{
+			error_log << "Unexpected error: " << e.what();
+		}
+	}
 
 	u_p<TechTree> ParseRace(const pt::ptree& raceTree)
 	{
@@ -134,47 +169,17 @@ struct ConfigManager::ConfigurationManagerImpl
 };
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-ConfigManager::ConfigManager() = default;
-ConfigManager::~ConfigManager() = default;
+u_p<ConfigurationManagerImpl> impl;
 
 void ConfigManager::ParseConfig(string configFileName)
 {
-	impl.reset(new ConfigurationManagerImpl);
-	impl->configFileName = configFileName;
-	try
-	{
-		pt::ptree propTree;
-		pt::read_json(configFileName, propTree);
-
-		impl->serverPort = propTree.get<ushort>("server_port");
-		impl->mapsPath = propTree.get<string>("maps_path");
-
-		for (auto&& tree : propTree.get_child("resource_types") | nya::map_values)
-		{
-			const string& resourceName = tree.get_value<string>();
-			impl->resourceInfos->push_back(resourceName);
-		}
-
-		for (auto&& tree : propTree.get_child("races") | nya::map_values)
-		{
-			auto&& techTree = impl->ParseRace(tree);
-			auto&& raceName = techTree->GetRaceName();
-			impl->techTrees.emplace(raceName, move(techTree));
-		}
-	}
-	catch (const pt::ptree_error& e)
-	{
-		info_log << e.what();
-	}
-	catch (exception& e)
-	{
-		error_log << "Unexpected error: " << e.what();
-	}
+	impl.reset(new ConfigurationManagerImpl(configFileName));
+	impl->ParseConfig();
 }
 
-ushort ConfigManager::GetServerPort() const { return impl->serverPort; }
-const string& ConfigManager::GetMapsPath() const {return impl->mapsPath; }
-const ResourceInfosType& ConfigManager::GetResourceInfos() const { return  impl->resourceInfos; }
-const TechTreesType& ConfigManager::GetTechTrees() const { return impl->techTrees; }
+ushort ConfigManager::GetServerPort() { return impl->serverPort; }
+const string& ConfigManager::GetMapsPath() {return impl->mapsPath; }
+const ResourceInfosType& ConfigManager::GetResourceInfos() { return  impl->resourceInfos; }
+const TechTreesType& ConfigManager::GetTechTrees() { return impl->techTrees; }
 
 }

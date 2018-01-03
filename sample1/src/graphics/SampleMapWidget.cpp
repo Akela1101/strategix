@@ -98,7 +98,7 @@ void SampleMapWidget::mousePressEvent(QMouseEvent* event)
 		if (currentEntity)
 		{
 			auto& entity = humanPlayer->GetEntitySlot(currentEntity->id);
-			entity.DoMove(coord);
+			entity.Move(coord);
 		}
 		return;
 	}
@@ -109,7 +109,7 @@ void SampleMapWidget::mousePressEvent(QMouseEvent* event)
 		if (currentEntity)
 		{
 			auto& entity = humanPlayer->GetEntitySlot(currentEntity->id);
-			entity.DoCollect(coord, mine->name);
+			entity.Collect(coord, mine->name);
 		}
 		return;
 	}

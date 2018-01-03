@@ -56,8 +56,8 @@ void SampleGame::HandleMessageImpl(s_p<Message> message)
 	case Message::Type::PLAYER:
 	{
 		auto&& playerMessage = sp_cast<PlayerMessage>(message);
-		int id = playerMessage->id;
-		registeredPlayers.emplace(id, move(playerMessage));
+		int spot = playerMessage->spot;
+		registeredPlayers.emplace(spot, move(playerMessage));
 		break;
 	}
 	case Message::Type::MAP:
@@ -68,8 +68,8 @@ void SampleGame::HandleMessageImpl(s_p<Message> message)
 	case Message::Type::ENTITY:
 	{
 		auto&& entityMessage = sp_cast<EntityMessage>(message);
-		int playerId = entityMessage->playerId;
-		players[playerId]->EntityAdded(move(entityMessage));
+		int spot = entityMessage->playerSpot;
+		players[spot]->EntityAdded(move(entityMessage));
 		break;
 	}
 	default:

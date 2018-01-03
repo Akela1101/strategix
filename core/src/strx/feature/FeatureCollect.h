@@ -1,13 +1,11 @@
 #pragma once
 
 #include "Feature.h"
-#include "Interfaces.h"
-
 
 
 namespace strx
 {
-class FeatureCollect : public Feature, public ICommand
+class FeatureCollect : public Feature
 {
 	const FeatureInfoCollect* const info; /// Link to tree
 	MapCoord coord;             /// coordinate to search for resources
@@ -18,12 +16,12 @@ class FeatureCollect : public Feature, public ICommand
 
 public:
 	FeatureCollect(const FeatureInfo* featureInfo, Entity* entity);
-	
+
 	bool Collect(MapCoord coord, const string& resourceName);
-	
-	virtual void Tick(float seconds);
-	virtual void Stop();
-	virtual void Completed(bool done); // moving complete
+
+	void Tick(float seconds) override;
+	void Stop() override;
+	void Completed(bool done) override; // moving complete
 
 private:
 	void Collect(MapCoord coord);

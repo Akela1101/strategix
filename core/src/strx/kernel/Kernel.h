@@ -21,9 +21,10 @@ public:
 	static void Tick(float seconds);
 	static void PrintInfo();
 
-	static void SendMessageOne(s_p<Message> message, NetId clientId);
+	static void SendMessageOne(s_p<Message> message, PlayerId playerId);
 	static void SendMessageAll(s_p<Message> message);
-	static void OnReceiveMessage(s_p<Message> message, NetId netId);
+	static void OnReceiveMessage(s_p<Message> message, PlayerId playerId);
+//	static void Subscribe(int playerSpot)
 
 	static bool CheckResource(const string& name);
 	static const TechTree& GetTechTree(const string& raceName);
@@ -35,10 +36,10 @@ public:
 private:
 	static void Init(const string& configPath);
 	static void RunImpl();
-	static void ContextRequested(NetId clientId);
-	static void LoadMap(const string& mapName);
+	static void ContextRequested(PlayerId playerId);
 	static void AddGame(const string& mapName, const string& creatorName);
-	static void AddPlayer(s_p<PlayerMessage> playerMessage, NetId netId);
-	static void StartGame(NetId clientId);
+	static void AddPlayer(s_p<Message> message, PlayerId playerId);
+	static void StartGame(PlayerId playerId);
+	static void MoveEntity(s_p<Message> message, PlayerId playerId);
 };
 }

@@ -1,32 +1,28 @@
 #pragma once
 
-#include <utility>
-#include <string>
-
 #include <Strategix_fwd.h>
 
 namespace strx
 {
-
-/// Reusable configuration manager.
-class ConfigManager : boost::noncopyable
+/**
+ * Global configuration manager.
+ * It should parse config before other actions.
+ */
+class ConfigManager
 {
-	struct ConfigurationManagerImpl;
-	u_p<ConfigurationManagerImpl> impl;
-	
+	ConfigManager() = delete;
+
 public:
-	ConfigManager();
-	~ConfigManager();
 	/**
 	 * @param configFileName path of configuration file .json
 	 * @return valid resource names and technology trees
 	 */
-	void ParseConfig(string configFileName);
-	
-	ushort GetServerPort() const;
-	const string& GetMapsPath() const;
-	const ResourceInfosType& GetResourceInfos() const;
-	const TechTreesType& GetTechTrees() const;
+	static void ParseConfig(string configFileName);
+
+	static ushort GetServerPort();
+	static const string& GetMapsPath();
+	static const ResourceInfosType& GetResourceInfos();
+	static const TechTreesType& GetTechTrees();
 };
 
 }

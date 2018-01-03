@@ -20,11 +20,11 @@ FeatureMove::FeatureMove(const FeatureInfo* featureInfo, Entity* entity)
 
 FeatureMove::~FeatureMove() = default;
 
-void FeatureMove::Move(MapCoord coord, float radius, ICommand* iCommand)
+void FeatureMove::Move(MapCoord coord, float radius, Feature* mover)
 {
 	this->coord = coord;
 	this->radius = radius;
-	this->iCommand = iCommand;
+	this->mover = mover;
 
 	RebuildPath();
 	distance = 0;
@@ -46,7 +46,7 @@ void FeatureMove::Tick(float seconds)
 	if (isStop)
 	{
 		entity->AssignTask(nullptr);
-		if (iCommand) iCommand->Completed(path->IsWhole());
+		if (mover) mover->Completed(path->IsWhole());
 	}
 }
 

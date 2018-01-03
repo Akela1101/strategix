@@ -11,7 +11,6 @@
 #include <strx/common/EntityInfo.h>
 #include <strx/game/Game.h>
 #include <strx/kernel/ConfigManager.h>
-#include <strx/kernel/MapManager.h>
 #include <strx/map/Map.h>
 #include <strx/kernel/Message.h>
 #include <strx/network/Server.h>
@@ -32,8 +31,6 @@ static const auto minTick = 42ms;
 // Variables
 static umap<int, u_p<GameMessage>> games;     // list of games
 static s_p<Game> game;                        // single game
-static ConfigManager configManager;           // game configuration manager
-static u_p<MapManager> mapManager;            // has all information about the map
 static u_p<thread> kernelThread;              // main kernel thread
 static u_p<st_timer> timer;                   // tick timer
 
@@ -109,9 +106,9 @@ void Kernel::PrintInfo()
 	}
 }
 
-void Kernel::SendMessageOne(std::shared_ptr<Message> message, NetId clientId)
+void Kernel::SendMessageOne(std::shared_ptr<Message> message, PlayerId playerId)
 {
-	Server::invoke(Server::SendMessageOne, move(message), clientId);
+	Server::invoke(Server::SendMessageOne, move(message), playerId);
 }
 
 void Kernel::SendMessageAll(s_p<Message> message)
@@ -119,13 +116,14 @@ void Kernel::SendMessageAll(s_p<Message> message)
 	Server::invoke(Server::SendMessageAll, move(message));
 }
 
-void Kernel::OnReceiveMessage(s_p<Message> message, NetId netId)
+void Kernel::OnReceiveMessage(s_p<Message> message, PlayerId playerId)
 {
 	switch (message->GetType())
 	{
-	case Message::Type::CONTEXT: ContextRequested(netId); break;
-	case Message::Type::PLAYER: AddPlayer(sp_cast<PlayerMessage>(message), netId); break;
-	case Message::Type::START: StartGame(netId); break;
+	case Message::Type::CONTEXT: ContextRequested(playerId); break;
+	case Message::Type::PLAYER: AddPlayer(move(message), playerId); break;
+	case Message::Type::START: StartGame(playerId); break;
+	case Message::Type::MOVE: MoveEntity(move(message), playerId); break;
 	default:
 		const char* t = message->GetType().c_str();
 		nya_throw << "Unable to handle message with type: " << (t[0] == '!' ? message->GetType() : t);
@@ -134,7 +132,7 @@ void Kernel::OnReceiveMessage(s_p<Message> message, NetId netId)
 
 bool Kernel::CheckResource(const string& name)
 {
-	auto&& resourceInfos = configManager.GetResourceInfos();
+	auto&& resourceInfos = ConfigManager::GetResourceInfos();
 	return find(all_(*resourceInfos), name) != resourceInfos->end();
 }
 
@@ -142,7 +140,7 @@ const TechTree& Kernel::GetTechTree(const string& raceName)
 {
 	try
 	{
-		return *configManager.GetTechTrees().at(raceName);
+		return *ConfigManager::GetTechTrees().at(raceName);
 	}
 	catch (out_of_range&)
 	{
@@ -155,7 +153,7 @@ vector<string> Kernel::GetMapNames()
 	vector<string> mapNames;
 	try
 	{
-		fs::recursive_directory_iterator it(mapManager->GetMapsDirectory()), eod;
+		fs::recursive_directory_iterator it(ConfigManager::GetMapsPath()), eod;
 		for (; it != eod; ++it)
 		{
 			const fs::path& p = *it;
@@ -175,7 +173,7 @@ vector<string> Kernel::GetMapNames()
 vector<string> Kernel::GetRaceNames()
 {
 	vector<string> raceNames;
-	for (auto&& name_tree : configManager.GetTechTrees())
+	for (auto&& name_tree : ConfigManager::GetTechTrees())
 	{
 		raceNames.push_back(name_tree.second->GetRaceName());
 	}
@@ -184,7 +182,7 @@ vector<string> Kernel::GetRaceNames()
 
 const ResourceInfosType& Kernel::GetResourceInfos()
 {
-	return configManager.GetResourceInfos();
+	return ConfigManager::GetResourceInfos();
 }
 
 u_p<Resources> Kernel::MakeResources()
@@ -199,13 +197,12 @@ u_p<Resources> Kernel::MakeResources()
 
 void Kernel::Init(const string& configPath)
 {
-	configManager.ParseConfig(configPath);
-	mapManager = make_u<MapManager>(configManager.GetMapsPath());
+	ConfigManager::ParseConfig(configPath);
 
 	// @#~
 	AddGame("small", "root");
 
-	Server::Run(configManager.GetServerPort());
+	Server::Run(ConfigManager::GetServerPort());
 
 	timer.reset(new st_timer(eventLoop));
 	timer->async_wait(TimerHandler);
@@ -225,30 +222,22 @@ void Kernel::RunImpl()
 	}
 }
 
-void Kernel::ContextRequested(NetId clientId)
+void Kernel::ContextRequested(PlayerId playerId)
 {
-	auto contextMessage = make_s<ContextMessage>(configManager.GetResourceInfos());
-	Server::SendMessageOne(contextMessage, clientId);
+	auto contextMessage = make_s<ContextMessage>(ConfigManager::GetResourceInfos());
+	Server::SendMessageOne(contextMessage, playerId);
 
 	auto gamesMessage = make_s<MessageVector>();
 	for (const auto& gameMessage : games | nya::map_values)
 	{
 		gamesMessage->push_back(make_u<GameMessage>(*gameMessage));
 	}
-	Server::SendMessageOne(gamesMessage, clientId);
+	Server::SendMessageOne(gamesMessage, playerId);
 }
-
-void Kernel::LoadMap(const string& mapName)
-{
-	if (!mapManager) nya_throw << "Init() should be run before LoadMap().";
-
-	mapManager->LoadMap(mapName);
-}
-
 
 void Kernel::AddGame(const string& mapName, const string& creatorName)
 {
-	game.reset(new Game());
+	game.reset(new Game(mapName));
 
 	auto gameMessage = make_u<GameMessage>();
 	gameMessage->id = 1;
@@ -256,20 +245,25 @@ void Kernel::AddGame(const string& mapName, const string& creatorName)
 	gameMessage->mapName = mapName;
 	gameMessage->creatorName = creatorName;
 	games.emplace(1, move(gameMessage));
-
-	LoadMap(mapName);
 }
 
-void Kernel::AddPlayer(s_p<PlayerMessage> playerMessage, NetId netId)
+void Kernel::AddPlayer(s_p<Message> message, PlayerId playerId)
 {
-	game->AddPlayer(playerMessage, netId);
+	auto playerMessage = sp_cast<PlayerMessage>(message);
+	game->AddPlayer(playerMessage, playerId);
 	Server::SendMessageAll(playerMessage);
 }
 
-void Kernel::StartGame(NetId clientId)
+void Kernel::StartGame(PlayerId playerId)
 {
 	//TODO: check all clients are ready
-	game->Start(*mapManager);
+	game->Start();
+}
+
+void Kernel::MoveEntity(s_p<Message> message, PlayerId playerId)
+{
+	//auto moveMessage = sp_cast<MoveMessage>(message);
+	//game->MoveEntity(moveMessage->id, moveMessage->coord);
 }
 
 }

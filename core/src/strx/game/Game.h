@@ -4,19 +4,27 @@
 
 namespace strx
 {
-using PlayersType = umap<string, u_p<Player>>;
+using PlannedPlayers = vector<s_p<PlayerMessage>>;
+using Players = umap<int, u_p<Player>>;
 
 class Game : boost::noncopyable
 {
-	vector<s_p<PlayerMessage>> plannedPlayers; /// players going to join
-	umap<int, NetId> playerNetIds; /// player network ids
-	PlayersType players;           /// players in game
+	s_p<Map> map;                  /// global map
+	umap<int, PlayerId> playerIds; /// { spot - id }
+	PlannedPlayers plannedPlayers; /// players going to join
+	Players players;               /// players in game
 
 public:
-	PlayersType& GetPlayers() { return players; }
+	Game(const string& mapName);
 
-	void AddPlayer(s_p<PlayerMessage> playerMessage, NetId netId);
-	void Start(MapManager& mapManager);
+	Players& GetPlayers() { return players; }
+
+	void AddPlayer(s_p<PlayerMessage> playerMessage, PlayerId playerId);
+	void Start();
+
+private:
+	s_p<MapMessage> CreateMapMessage(int playerSpot);
+	void LoadMap(const string& mapName);
 };
 
 }

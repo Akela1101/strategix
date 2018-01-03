@@ -12,13 +12,16 @@
 #include "Message.h"
 
 
-#define StrxSerialization(M)             \
-BOOST_CLASS_EXPORT(M)                    \
-BOOST_CLASS_IMPLEMENTATION(M, boost::serialization::object_serializable) \
+#define StrxSerializationSimple(M)       \
 namespace boost {                        \
 namespace serialization {                \
 template<class Archive>                  \
 void serialize(Archive& ar, M& m, uint)
+
+#define StrxSerialization(M)             \
+BOOST_CLASS_EXPORT(M)                    \
+BOOST_CLASS_IMPLEMENTATION(M, boost::serialization::object_serializable) \
+StrxSerializationSimple(M)
 
 #define StrxSerializationSplit(M) \
 BOOST_SERIALIZATION_SPLIT_FREE(M) \
@@ -26,7 +29,13 @@ BOOST_CLASS_EXPORT(M)             \
 BOOST_CLASS_IMPLEMENTATION(M, boost::serialization::object_serializable)
 
 
-StrxSerialization(strx::Message::Type)
+StrxSerializationSimple(strx::MapCoord)
+{
+	ar & m.x;
+	ar & m.y;
+}}}
+
+StrxSerializationSimple(strx::Message::Type)
 {
 	ar & (strx::Message::Type::value_type&)m;
 }}}
@@ -35,16 +44,22 @@ StrxSerialization(strx::Message)
 {
 }}}
 
-StrxSerialization(strx::EmptyMessage)
+StrxSerialization(strx::CommandMessage)
 {
 	ar & base_object<strx::Message>(m);
-	ar & m.type;
+	ar & m.id;
 }}}
 
 StrxSerialization(strx::MessageVector)
 {
 	ar & base_object<strx::Message>(m);
 	ar & base_object<std::vector<s_p<strx::Message>>>(m);
+}}}
+
+StrxSerialization(strx::EmptyMessage)
+{
+	ar & base_object<strx::Message>(m);
+	ar & m.type;
 }}}
 
 StrxSerialization(strx::ContextMessage)
@@ -66,7 +81,7 @@ StrxSerialization(strx::PlayerMessage)
 {
 	ar & base_object<strx::Message>(m);
 	ar & m.gameId;
-	ar & m.id;
+	ar & m.spot;
 	ar & m.type;
 	ar & m.name;
 	ar & m.race;
@@ -95,7 +110,7 @@ void load(Archive& ar, strx::MapMessage& m, uint)
 StrxSerialization(strx::EntityMessage)
 {
 	ar & base_object<strx::Message>(m);
-	ar & m.playerId;
+	ar & m.playerSpot;
 	ar & m.id;
 }}}
 
@@ -112,4 +127,10 @@ StrxSerialization(strx::MineMessage)
 StrxSerialization(strx::MineRemovedMessage)
 {
 	ar & base_object<strx::Message>(m);
+}}}
+
+StrxSerialization(strx::MoveMessage)
+{
+	ar & base_object<strx::CommandMessage>(m);
+	ar & m.coord;
 }}}

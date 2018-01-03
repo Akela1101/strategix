@@ -8,7 +8,7 @@
 
 namespace strx
 {
-Connection::Connection(NetId id, tcp::socket&& socket, const function<void(s_p<Message>, NetId)>& ReceiveMessage)
+Connection::Connection(PlayerId id, tcp::socket&& socket, const function<void(s_p<Message>, PlayerId)>& ReceiveMessage)
         : id(id)
         , socket(move(socket))
         , ReceiveMessage(ReceiveMessage)
@@ -55,8 +55,8 @@ void Connection::Read()
 	        {
 		        if (ec)
 				{
-					error_log << "socket read error: " << ec.message();
-					Close();
+//					error_log << "socket read error: " << ec.message();
+//					Close();
 					return;
 				}
 				boost::endian::little_to_native_inplace(expectedSize);
@@ -78,8 +78,12 @@ void Connection::Read()
 
 void Connection::Close()
 {
-	socket.close();
-	ReceiveMessage(nullptr, id);
+	if (socket.is_open())
+	{
+		socket.shutdown(tcp::socket::shutdown_both);
+		socket.close();
+		ReceiveMessage(nullptr, id);
+	}
 }
 
 }

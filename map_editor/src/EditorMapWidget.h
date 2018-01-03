@@ -14,7 +14,7 @@ class EditorMapWidget : public MapWidget
 	using MapWidget::MapWidget;
 	
 	ToolInfo* tool = nullptr;     // current tool
-	int playerId = 0;             // current player
+	int playerSpot = 0;             // current player
 	
 	bool isHighlight = false;     // highlight cell under cursor
 	MapCoord lastCoord;           // last cursor position in map coords
@@ -22,7 +22,7 @@ class EditorMapWidget : public MapWidget
 
 public slots:
 	void CurrentToolChanged(ToolInfo* tool);
-	void CurrentPlayerChanged(int playerId);
+	void CurrentPlayerChanged(int playerSpot);
 
 protected:
 	void paintEvent(QPaintEvent*) override;

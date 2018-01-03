@@ -1,26 +1,22 @@
 #pragma once
 
 #include "Feature.h"
-#include "Interfaces.h"
 
 
 namespace strx
 {
-class FeatureAttack : public Feature, public ICommand
+class FeatureAttack : public Feature
 {
-protected:
-	const FeatureInfoAttack* featureInfoAttack; // Link to tree
-
-private:
+	const FeatureInfoAttack* featureInfoAttack; // link to tree
 	s_p<Entity> target;
 	HpType hitProgress;
 
 public:
 	FeatureAttack(const FeatureInfo* featureInfo, Entity* entity);
-	
+
 	bool Attack(s_p<Entity> target);
-	virtual void Tick(float seconds);
-	virtual void Stop();
-	virtual void Completed(bool done); // Moving Complete
+	void Tick(float seconds) override;
+	void Stop() override;
+	void Completed(bool done) override; // moving complete
 };
 }

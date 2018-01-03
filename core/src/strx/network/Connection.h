@@ -11,18 +11,18 @@ namespace strx
 {
 class Connection : boost::noncopyable
 {
-	NetId id;
+	PlayerId id;
 	tcp::socket socket;
-	const function<void(s_p<Message>, NetId)> ReceiveMessage;
+	const function<void(s_p<Message>, PlayerId)> ReceiveMessage;
 
 	string writeBuffer;
 	string readBuffer;
 	int expectedSize;
 
 public:
-	Connection(NetId id, tcp::socket&& socket, const function<void(s_p<Message>, NetId)>& ReceiveMessage);
+	Connection(PlayerId id, tcp::socket&& socket, const function<void(s_p<Message>, PlayerId)>& ReceiveMessage);
 
-	NetId GetId() const { return id; }
+	PlayerId GetId() const { return id; }
 	void Write(s_p<Message> message);
 
 private:

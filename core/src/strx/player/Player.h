@@ -8,9 +8,9 @@ namespace strx
 
 class Player : boost::noncopyable
 {
-	const int id;                  /// unique id on map
-	const NetId netId;             /// unique network id
+	const PlayerId playerId;       /// unique id
 	const PlayerType type;         /// human | ai
+	const int spot;                /// id on map
 	const string name;             /// nick or alias
 	const string race;             /// race name
 
@@ -22,12 +22,12 @@ class Player : boost::noncopyable
 	vector<Entity*> entisToRemove; /// entis removed at the end of Tick
 
 public:
-	Player(const PlayerMessage& playerMessage, NetId netId, Map& map);
+	Player(const PlayerMessage& playerMessage, PlayerId playerId, Map& map);
 	~Player();
 
 	const string& GetName() const { return name; }
 	PlayerType GetType() const { return type; }
-	int GetId() const { return id; }
+	int GetId() const { return spot; }
 	Terrain* GetTerrain(MapCoord coord) const;
 	u_p<MapObject>& GetMapObject(MapCoord coord) const;
 	MapMine* GetMine(MapCoord coord) const;

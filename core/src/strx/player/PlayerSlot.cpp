@@ -9,7 +9,7 @@ PlayerSlot::PlayerSlot(s_p<PlayerMessage> playerMessage) : playerMessage(move(pl
 
 const string& PlayerSlot::GetName() const { return playerMessage->name; }
 
-int PlayerSlot::GetId() const { return playerMessage->id; }
+int PlayerSlot::GetId() const { return playerMessage->spot; }
 
 PlayerType PlayerSlot::GetType() const { return playerMessage->type; }
 }

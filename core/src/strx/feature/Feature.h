@@ -13,8 +13,9 @@ protected:
 public:
 	Feature(Entity* entity) : entity(entity) {}
 	virtual ~Feature() = default;
-	
-	virtual void Tick(float seconds) = 0; // stop tick, if false.
+
+	virtual void Tick(float seconds) = 0;
 	virtual void Stop() = 0;
+	virtual void Completed(bool done) {}
 };
 }
