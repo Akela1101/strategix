@@ -3,10 +3,8 @@
 #include <sstream>
 #include <boost/filesystem.hpp>
 
-#include <strx/kernel/Kernel.h>
 #include <strx/map/MapObject.h>
 #include <strx/map/MapMine.h>
-#include <strx/player/Player.h>
 
 #include "Map.h"
 
@@ -16,14 +14,14 @@ namespace strx
 const char mapFileTopString[] = "Strategix Map";
 const char mapFormatVersion[] = "0.0.1";
 
-int MapObject::lastId = 0;
+IdType Map::lastObjectId = 0;
 
 
-Map::Cell::Cell(Terrain* terrain, MapObject* object)
+Cell::Cell(Terrain* terrain, MapObject* object)
         : terrain(terrain)
         , object(object) {}
 
-Map::Cell::Cell(const Map::Cell& other)
+Cell::Cell(const Cell& other)
         : terrain(other.terrain)
         , object(other.object ? other.object->clone() : nullptr) {}
 
@@ -110,9 +108,9 @@ void Map::ChangeTerrain(Cell& cell, const string& terrainName)
 	cell.terrain = i->second.get();
 }
 
-void Map::ChangeObject(Cell& cell, MapObject* object)
+void Map::ChangeObject(Cell& cell, u_p<MapObject> object)
 {
-	cell.object.reset(object);
+	cell.object = move(object);
 }
 
 string Map::SaveToString() const
@@ -209,7 +207,7 @@ void Map::Save(ostream& os) const
 	for (auto&& pos_info : objects)
 	{
 		os << pos_info.first.x << " " << pos_info.first.y << " "
-		     << pos_info.second->name << " " << pos_info.second->owner << "\n";
+		     << pos_info.second->name << " " << pos_info.second->ownerSpot << "\n";
 	}
 	os << "\n";
 
@@ -288,7 +286,7 @@ void Map::Load(istream& is)
 		is >> col >> row >> name >> owner;
 
 		MapCoord coord(col, row);
-		GetCell(col, row).object.reset(new MapEntity{ name, coord, owner });
+		GetCell(col, row).object.reset(new MapEntity{ ++lastObjectId, name, coord, owner });
 	}
 	if (!is.good()) nya_throw << "map entities are wrong";
 
@@ -301,7 +299,7 @@ void Map::Load(istream& is)
 		is >> col >> row >> name >> amount;
 
 		MapCoord coord(col, row);
-		GetCell(col, row).object.reset(new MapMine{ name, coord, amount });
+		GetCell(col, row).object.reset(new MapMine{ ++lastObjectId, name, coord, amount });
 	}
 	if (!is.good()) nya_throw << "map resource mines are wrong";
 }

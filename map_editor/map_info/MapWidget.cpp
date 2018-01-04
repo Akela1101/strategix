@@ -171,7 +171,7 @@ void MapWidget::DrawObject(MapObject* object, QPainter& painter)
 		QRect markRc = rc.adjusted(0, 0, -w / 2, -h / 2);
 
 		painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
-		painter.drawPixmap(markRc, MapInfo::GetPlayerMark(entityObject->owner));
+		painter.drawPixmap(markRc, MapInfo::GetPlayerMark(entityObject->ownerSpot));
 	}
 }
 

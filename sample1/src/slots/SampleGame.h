@@ -22,16 +22,15 @@ public:
 	~SampleGame() override;
 
 protected:
-	void OnReceiveMessage(s_p<Message> message) override { qInvoke(this, [=](){ HandleMessage(message); }); }
+	void MessageReceived(s_p<Message> message) override { qInvoke(this, [=](){ OnReceiveMessage(message); }); }
 
 private:
-	void HandleMessageImpl(s_p<Message> message);
-	void StartGame(strx::MapMessage& mapMessage);
+	void StartGame(MapMessage& mapMessage);
 	void AddPlayer(s_p<PlayerMessage> playerMessage);
 	void InitHuman(SamplePlayer* player);
 
 private slots:
-	void HandleMessage(s_p<Message> message);
+	void OnReceiveMessage(s_p<Message> message);
 };
 
 }

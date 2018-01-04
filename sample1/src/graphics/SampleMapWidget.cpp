@@ -117,7 +117,7 @@ void SampleMapWidget::mousePressEvent(QMouseEvent* event)
 	// click on entity -> select or attack
 	if (MapEntity* entity = dynamic_cast<MapEntity*>(object))
 	{
-		if (entity->owner == humanPlayerId)
+		if (entity->ownerSpot == humanPlayerId)
 		{
 			ChangeSelection(entity);
 			return;

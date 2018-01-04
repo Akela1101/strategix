@@ -67,6 +67,6 @@ void Client::SendMessageOne(s_p<Message> message)
 void Client::ReceiveMessage(s_p<Message> message, PlayerId id)
 {
 	ignore = id; // == 0
-	game->OnReceiveMessage(message);
+	game->MessageReceived(message);
 }
 }

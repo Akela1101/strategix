@@ -7,27 +7,23 @@ namespace strx
 {
 struct MapObject
 {
-private:
-	static IdType lastId;
-	
-public:
-	IdType id;
-	string name;
-	RealCoord coord;
-	
-	MapObject(string name, RealCoord coord) : id(++lastId), name(move(name)), coord(coord) {}
+	IdType id;            /// globally unique id
+	string name;          /// object type name, like "worker" or "barracks"
+	RealCoord coord;      /// precise coord
+
+	MapObject(IdType id, string name, RealCoord coord) : id(id), name(move(name)), coord(coord) {}
 	MapObject(const MapObject& other) : id(other.id), name(other.name), coord(other.coord) {}
 	virtual ~MapObject() {}
-	
 	virtual MapObject* clone() = 0;
 };
 
 struct MapEntity : MapObject
 {
-	int owner;        // owner player id
-	
-	MapEntity(string name, RealCoord coord, int owner) : MapObject(move(name), coord), owner(owner) {}
-	MapEntity(const MapEntity& other) : MapObject(other), owner(other.owner) {}
+	int ownerSpot;        /// owner player spot
+
+	MapEntity(IdType id, string name, RealCoord coord, int ownerSpot)
+	    : MapObject(id, move(name), coord), ownerSpot(ownerSpot) {}
+	MapEntity(const MapEntity& other) : MapObject(other), ownerSpot(other.ownerSpot) {}
 	MapObject* clone() override { return new MapEntity(*this); }
 };
 

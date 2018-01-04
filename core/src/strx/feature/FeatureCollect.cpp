@@ -77,7 +77,7 @@ void FeatureCollect::Completed(bool done)
 void FeatureCollect::Collect(MapCoord coord)
 {
 	// try move and set OnComplete for this
-	entity->Do<FeatureMove>()->Move(coord, info->radius, this);
+	entity->Do<FeatureMove>().Move(coord, info->radius, this);
 
 	this->coord = coord;
 	this->isMovingToCollector = false;
@@ -89,7 +89,7 @@ void FeatureCollect::MoveToCollector()
 {
 	if (Entity* collector = entity->GetPlayer().FindCollector(entity->GetCoord()))
 	{
-		entity->Do<FeatureMove>()->Move(collector->GetCoord(), info->radius, this);
+		entity->Do<FeatureMove>().Move(collector->GetCoord(), info->radius, this);
 		isMovingToCollector = true;
 	}
 }

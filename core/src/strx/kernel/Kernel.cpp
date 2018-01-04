@@ -118,10 +118,17 @@ void Kernel::SendMessageAll(s_p<Message> message)
 
 void Kernel::OnReceiveMessage(s_p<Message> message, PlayerId playerId)
 {
-	switch (message->GetType())
+	try
 	{
-	case Message::Type::CONTEXT: ContextRequested(playerId); break;
-	default: game->ReceiveMessage(move(message), playerId);
+		switch (message->GetType())
+		{
+		case Message::Type::CONTEXT: ContextRequested(playerId); break;
+		default: game->ReceiveMessage(move(message), playerId);
+		}
+	}
+	catch (exception& e)
+	{
+		error_log << e.what();
 	}
 }
 

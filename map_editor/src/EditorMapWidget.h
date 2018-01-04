@@ -10,12 +10,12 @@ using namespace map_info;
 class EditorMapWidget : public MapWidget
 {
 	friend class EditorGameWidget;
-	
+
 	using MapWidget::MapWidget;
-	
+
 	ToolInfo* tool = nullptr;     // current tool
 	int playerSpot = 0;             // current player
-	
+
 	bool isHighlight = false;     // highlight cell under cursor
 	MapCoord lastCoord;           // last cursor position in map coords
 	QRect lastRc;                 // last rect under cursor
@@ -28,9 +28,10 @@ protected:
 	void paintEvent(QPaintEvent*) override;
 	void mouseMoveEvent(QMouseEvent* event) override;
 	void mousePressEvent(QMouseEvent* event) override;
-	
+
 private:
 	void UpdateUnderMouse(QMouseEvent* event);
-	MapObject* CreateObject(int x, int y);
+	void ChangeTerrain(MapCoord coord);
+	void ChangeObject(MapCoord coord);
 };
 }

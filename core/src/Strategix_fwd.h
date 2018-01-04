@@ -4,6 +4,7 @@
 
 namespace strx
 {
+class Cell;
 class Client;
 class CommandMessage;
 class Entity;

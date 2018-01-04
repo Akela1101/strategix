@@ -22,7 +22,7 @@ bool FeatureAttack::Attack(s_p<Entity> target)
 	}
 
 	// move and set OnComplete for this
-	entity->Do<FeatureMove>()->Move(target->GetCoord(), 0, this);
+	entity->Do<FeatureMove>().Move(target->GetCoord(), 0, this);
 
 	this->target = target;
 	return true;
@@ -38,7 +38,7 @@ void FeatureAttack::Tick(float seconds)
 	else // Inflict damage
 	{
 		hitProgress = 0;
-		if (target->Do<FeatureHealth>()->HpChange(-featureInfoAttack->damage))
+		if (target->Do<FeatureHealth>().HpChange(-featureInfoAttack->damage))
 		{
 			// Continue attack
 		}

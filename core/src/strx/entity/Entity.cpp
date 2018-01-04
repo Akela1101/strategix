@@ -4,6 +4,7 @@
 #include <strx/feature/FeatureCollect.h>
 #include <strx/feature/FeatureHealth.h>
 #include <strx/feature/FeatureAttack.h>
+#include <strx/kernel/Kernel.h>
 #include <strx/kernel/Message.h>
 #include <strx/map/Map.h>
 #include <strx/map/MapObject.h>
@@ -15,7 +16,7 @@
 
 namespace strx
 {
-Entity::Entity(const EntityInfo& entiInfo, int id, RealCoord coord, Player* player)
+Entity::Entity(const EntityInfo& entiInfo, IdType id, RealCoord coord, Player* player)
         : player(player)
         , entiInfo(entiInfo)
         , id(id)
@@ -29,6 +30,8 @@ Entity::Entity(const EntityInfo& entiInfo, int id, RealCoord coord, Player* play
 	}
 }
 
+Entity::~Entity() = default;
+
 void Entity::ReceiveMessage(s_p<CommandMessage> message)
 {
 	switch (message->GetType())
@@ -36,8 +39,7 @@ void Entity::ReceiveMessage(s_p<CommandMessage> message)
 	case Message::Type::MOVE:
 	{
 		auto command = sp_cast<MoveMessage>(message);
-		info_log << "move to " << command->coord;
-		//if (auto f = Do<FeatureMove>()) f->Move(coord, 0, nullptr);
+		Do<FeatureMove>().Move(command->coord, 0, nullptr);
 		break;
 	}
 	default:
@@ -46,17 +48,20 @@ void Entity::ReceiveMessage(s_p<CommandMessage> message)
 	}
 }
 
-Entity::~Entity() = default;
+void Entity::SetCoord(RealCoord coord)
+{
+	this->coord = coord;
+	Kernel::SendMessageAll(make_s<RealMoveMessage>(GetId(), coord));
+}
 
-Feature* Entity::GetFeature(type_index type) const
+Feature& Entity::GetFeature(type_index type) const
 {
 	auto iFeature = features.find(type);
 	if (iFeature == features.end())
 	{
-		info_log << "%s has no feature %s"s % entiInfo.name % boost::core::demangle(type.name());
-		return nullptr;
+		nya_throw << "%s has no feature %s"s % entiInfo.name % boost::core::demangle(type.name());
 	}
-	return iFeature->second.get();
+	return *iFeature->second.get();
 }
 
 void Entity::AddFeature(const string& name, const FeatureInfo* featureInfo)
@@ -95,8 +100,8 @@ bool Entity::SetMapCoord(MapCoord newCoord)
 		}
 		object = move(currentObject);
 
-		//TODO: slot->OnMapMove(mapCoord, newCoord);
 		mapCoord = newCoord;
+		Kernel::SendMessageAll(make_s<MoveMessage>(GetId(), mapCoord));
 	}
 	return true;
 }

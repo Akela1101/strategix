@@ -35,6 +35,12 @@ StrxSerializationSimple(strx::MapCoord)
 	ar & m.y;
 }}}
 
+StrxSerializationSimple(strx::RealCoord)
+{
+	ar & m.x;
+	ar & m.y;
+}}}
+
 StrxSerializationSimple(strx::Message::Type)
 {
 	ar & (strx::Message::Type::value_type&)m;
@@ -130,6 +136,12 @@ StrxSerialization(strx::MineRemovedMessage)
 }}}
 
 StrxSerialization(strx::MoveMessage)
+{
+	ar & base_object<strx::CommandMessage>(m);
+	ar & m.coord;
+}}}
+
+StrxSerialization(strx::RealMoveMessage)
 {
 	ar & base_object<strx::CommandMessage>(m);
 	ar & m.coord;

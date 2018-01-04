@@ -14,10 +14,10 @@ Q_OBJECT
 	using PlayerSlot::PlayerSlot;
 
 	SampleMapWidget* mapWidget = nullptr;
-	umap<int, u_p<SampleEntity>> entiSlots;
+	umap<IdType, u_p<SampleEntity>> entiSlots;
 
 public:
-	SampleEntity& GetEntitySlot(int id) { return *entiSlots[id].get(); }
+	SampleEntity& GetEntitySlot(IdType id) { return *entiSlots[id]; }
 	void SetMapWidget(SampleMapWidget* mapWidget) { this->mapWidget = mapWidget; }
 
 // Callbacks:

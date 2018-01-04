@@ -15,22 +15,25 @@ struct Terrain
 	Terrain(int id, string name, float quality) : id(id), name(move(name)), quality(quality) {}
 };
 
+struct Cell
+{
+	Terrain* terrain;
+	u_p<MapObject> object;  // can be null
+
+	Cell() = default;
+	Cell(Terrain* terrain, MapObject* object);
+	Cell(const Cell& other);
+};
+
 class Map
 {
 public:
-	struct Cell
-	{
-		Terrain* terrain;
-		u_p<MapObject> object;  // can be null
-
-		Cell() = default;
-		Cell(Terrain* terrain, MapObject* object);
-		Cell(const Cell& other);
-	};
 	using CellsType = vector<vector<Cell>>;
 	using TerrainsType = s_p<umap<string, u_p<Terrain>>>;
 
 private:
+	static IdType lastObjectId;
+
 	string name;
 	int width;
 	int length;
@@ -44,6 +47,7 @@ public:
 	Map(const Map& other);
 	virtual ~Map();
 
+	static IdType GetNextId() { return ++lastObjectId; }
 	const string& GetName() const { return name; }
 	int GetWidth() const { return width; }
 	int GetLength() const { return length; }
@@ -55,7 +59,7 @@ public:
 	bool IsCell(MapCoord coord) const;
 	void UpdateTerrains(const TerrainsType& newTerrains);
 	void ChangeTerrain(Cell& cell, const string& terrainName);
-	void ChangeObject(Cell& cell, MapObject* object);
+	void ChangeObject(Cell& cell, u_p<MapObject> object);
 	string SaveToString() const;
 	void SaveToFile(const string& path) const;
 

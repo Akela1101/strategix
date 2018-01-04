@@ -25,58 +25,6 @@ SampleGame::SampleGame() {}
 
 SampleGame::~SampleGame() = default;
 
-void SampleGame::HandleMessageImpl(s_p<Message> message)
-{
-	switch (message->GetType())
-	{
-	case Message::Type::VECTOR:
-	{
-		for (auto& element : *sp_cast<MessageVector>(message))
-		{
-			HandleMessageImpl(move(element));
-		}
-		break;
-	}
-	case Message::Type::CONTEXT:
-	{
-		resourceInfos = sp_cast<ContextMessage>(message)->resourceInfos;
-		break;
-	}
-	case Message::Type::GAME:
-	{
-		// @#~ joint first game here
-		auto&& gameMessage = sp_cast<GameMessage>(message);
-		SendMessageOne(make_s<PlayerMessage>(gameMessage->id, 1, PlayerType::HUMAN, "Inu", "az"));
-		SendMessageOne(make_s<PlayerMessage>(gameMessage->id, 3, PlayerType::AI, "Saru", "az"));
-
-		// @#~ start right away
-		SendMessageOne(make_s<EmptyMessage>(Message::Type::START));
-		break;
-	}
-	case Message::Type::PLAYER:
-	{
-		auto&& playerMessage = sp_cast<PlayerMessage>(message);
-		int spot = playerMessage->spot;
-		registeredPlayers.emplace(spot, move(playerMessage));
-		break;
-	}
-	case Message::Type::MAP:
-	{
-		StartGame(*sp_cast<MapMessage>(message));
-		break;
-	}
-	case Message::Type::ENTITY:
-	{
-		auto&& entityMessage = sp_cast<EntityMessage>(message);
-		int spot = entityMessage->playerSpot;
-		players[spot]->EntityAdded(move(entityMessage));
-		break;
-	}
-	default:
-		error_log << "Unable to handle message: " << message->GetType().c_str();
-	}
-}
-
 void SampleGame::StartGame(MapMessage& mapMessage)
 {
 	gameWidget.reset(new SampleGameWidget(resourceInfos));
@@ -107,13 +55,71 @@ void SampleGame::AddPlayer(s_p<PlayerMessage> playerMessage)
 
 void SampleGame::InitHuman(SamplePlayer* player)
 {
-	QObject::connect(player, SamplePlayer::DoResourcesChanged
-	        , gameWidget.get(), SampleGameWidget::OnResourcesChanged);
+	connect(player, SamplePlayer::DoResourcesChanged, gameWidget.get(), SampleGameWidget::OnResourcesChanged);
 }
 
-void SampleGame::HandleMessage(s_p<Message> message)
+void SampleGame::OnReceiveMessage(s_p<Message> message)
 {
-	HandleMessageImpl(move(message));
+	switch (message->GetType())
+	{
+	case Message::Type::VECTOR:
+	{
+		for (auto& element : *sp_cast<MessageVector>(message))
+		{
+			OnReceiveMessage(move(element));
+		}
+		break;
+	}
+	case Message::Type::CONTEXT:
+	{
+		resourceInfos = sp_cast<ContextMessage>(message)->resourceInfos;
+		break;
+	}
+	case Message::Type::GAME:
+	{
+		// @#~ join first game here
+		auto&& gameMessage = sp_cast<GameMessage>(message);
+		SendMessageOne(make_s<PlayerMessage>(gameMessage->id, 1, PlayerType::HUMAN, "Inu", "az"));
+		SendMessageOne(make_s<PlayerMessage>(gameMessage->id, 3, PlayerType::AI, "Saru", "az"));
+
+		// @#~ start right away
+		SendMessageOne(make_s<EmptyMessage>(Message::Type::START));
+		break;
+	}
+	case Message::Type::PLAYER:
+	{
+		auto&& playerMessage = sp_cast<PlayerMessage>(message);
+		int spot = playerMessage->spot;
+		registeredPlayers.emplace(spot, move(playerMessage));
+		break;
+	}
+	case Message::Type::MAP:
+	{
+		StartGame(*sp_cast<MapMessage>(message));
+		break;
+	}
+	case Message::Type::ENTITY:
+	{
+		auto&& entityMessage = sp_cast<EntityMessage>(message);
+		int spot = entityMessage->playerSpot;
+		players[spot]->EntityAdded(move(entityMessage));
+		break;
+	}
+	case Message::Type::MOVE:
+	{
+		auto&& moveMessage = sp_cast<MoveMessage>(message);
+		info_log << "Place: " << moveMessage->coord;
+		break;
+	}
+	case Message::Type::REAL_MOVE:
+	{
+		auto&& moveMessage = sp_cast<RealMoveMessage>(message);
+		info_log << moveMessage->coord;
+		break;
+	}
+	default:
+		error_log << "Unable to handle message: " << message->GetType().c_str();
+	}
 }
 
 }

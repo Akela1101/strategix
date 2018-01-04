@@ -19,7 +19,8 @@ struct Message : boost::noncopyable
 	    K(RESOURCES) \
 	    K(MINE) \
 	    K(MINE_REMOVED) \
-	    K(MOVE)
+	    K(MOVE) \
+	    K(REAL_MOVE)
 	nya_enum(Type, MessageTypeEnumDef)
 
 	virtual ~Message() = default;
@@ -134,5 +135,14 @@ struct MoveMessage : CommandMessage
 	MoveMessage() = default;
 	MoveMessage(IdType id, MapCoord coord) : CommandMessage(id), coord(coord) {}
 	Type GetType() const override { return Type::MOVE; }
+};
+
+struct RealMoveMessage : CommandMessage
+{
+	RealCoord coord;
+
+	RealMoveMessage() = default;
+	RealMoveMessage(IdType id, RealCoord coord) : CommandMessage(id), coord(coord) {}
+	Type GetType() const override { return Type::REAL_MOVE; }
 };
 }

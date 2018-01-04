@@ -17,6 +17,6 @@ public:
 	static void SendMessageOne(s_p<Message> message);
 
 protected:
-	virtual void OnReceiveMessage(s_p<Message> message) = 0;
+	virtual void MessageReceived(s_p<Message> message) = 0;
 };
 }

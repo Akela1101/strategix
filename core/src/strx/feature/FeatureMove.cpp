@@ -30,7 +30,6 @@ void FeatureMove::Move(MapCoord coord, float radius, Feature* mover)
 	distance = 0;
 	terrainQuality = 0;
 
-	//@#~entity->GetSlot().OnMoveStart();
 	entity->AssignTask(this);
 }
 
@@ -41,7 +40,6 @@ void FeatureMove::Tick(float seconds)
 
 	RealCoord newCoord = distance > 0 ? next - direction * distance : next;
 	entity->SetCoord(newCoord);
-	//@#~entity->GetSlot().OnMove(newCoord);
 
 	if (isStop)
 	{
@@ -50,10 +48,7 @@ void FeatureMove::Tick(float seconds)
 	}
 }
 
-void FeatureMove::Stop()
-{
-	//@#~entity->GetSlot().OnMoveStop();
-}
+void FeatureMove::Stop() {}
 
 bool FeatureMove::NextPoint()
 {

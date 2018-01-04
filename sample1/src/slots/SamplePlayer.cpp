@@ -10,11 +10,11 @@ namespace sample1
 {
 void SamplePlayer::EntityAdded(s_p<EntityMessage> entityMessage)
 {
-	auto entiSlot = new SampleEntity(move(entityMessage));
-	entiSlots.emplace(entiSlot->GetId(), entiSlot);
+	auto entiSlot = make_u<SampleEntity>(move(entityMessage));
+	connect(entiSlot.get(), &SampleEntity::DoMoved, mapWidget, &SampleMapWidget::OnEntityMoved);
+	connect(entiSlot.get(), &SampleEntity::DoMapMoved, mapWidget, &SampleMapWidget::OnEntityMapMoved);
 
-//	QObject::connect(entiSlot, &SampleEntity::DoMoved, mapWidget, &SampleMapWidget::OnEntityMoved);
-//	QObject::connect(entiSlot, &SampleEntity::DoMapMoved, mapWidget, &SampleMapWidget::OnEntityMapMoved);
+	entiSlots.emplace(entiSlot->GetId(), move(entiSlot));
 }
 
 void SamplePlayer::MineRemoved(IdType id)

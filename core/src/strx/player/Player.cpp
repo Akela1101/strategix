@@ -69,7 +69,7 @@ void Player::Start()
 		{
 			auto object = map.GetCell(x, y).object.get();
 			auto entityObject = dynamic_cast<MapEntity*>(object);
-			if (entityObject && entityObject->owner == spot)
+			if (entityObject && entityObject->ownerSpot == spot)
 			{
 				int objectId = entityObject->id;
 				auto& name = entityObject->name;
@@ -101,8 +101,9 @@ void Player::Tick(float seconds)
 
 void Player::AddEntity(u_p<Entity> entity)
 {
-	Kernel::SendMessageOne(make_s<EntityMessage>(spot, entity->GetId()), playerId);
-	entities.emplace(entity->GetId(), move(entity));
+	Entity& entityRef = *entity;
+	entities.emplace(entityRef.GetId(), move(entity));
+	Kernel::SendMessageAll(make_s<EntityMessage>(spot, entityRef.GetId()));
 }
 
 void Player::RemoveEntity(Entity* entity)
