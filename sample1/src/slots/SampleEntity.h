@@ -12,7 +12,7 @@ class SampleEntity : public QObject, public EntitySlot
 Q_OBJECT
 	using EntitySlot::EntitySlot;
 
-protected:
+private:
 	void Moved(RealCoord coord) override { emit DoMoved(GetId(), coord); }
 	void MapMoved(MapCoord from, MapCoord to) override { emit DoMapMoved(from, to); }
 

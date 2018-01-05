@@ -137,6 +137,16 @@ struct MoveMessage : CommandMessage
 	Type GetType() const override { return Type::MOVE; }
 };
 
+struct MapMoveMessage : CommandMessage
+{
+	MapCoord from;
+	MapCoord to;
+
+	MapMoveMessage() = default;
+	MapMoveMessage(IdType id, MapCoord from, MapCoord to) : CommandMessage(id), from(from), to(to) {}
+	Type GetType() const override { return Type::MOVE; }
+};
+
 struct RealMoveMessage : CommandMessage
 {
 	RealCoord coord;

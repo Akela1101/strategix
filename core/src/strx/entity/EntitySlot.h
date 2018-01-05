@@ -18,7 +18,6 @@ public:
 	void Move(MapCoord coord);
 	void Collect(MapCoord coord, const string& resourceName);
 
-protected:
 	virtual void Moved(RealCoord coord) = 0;
 	virtual void MapMoved(MapCoord from, MapCoord to) {}
 	virtual void Collected() {}

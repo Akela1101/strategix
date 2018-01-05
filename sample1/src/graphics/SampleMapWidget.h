@@ -10,9 +10,10 @@ namespace sample1
 class SampleMapWidget : public map_info::MapWidget
 {
 Q_OBJECT
+	SampleGame* game = nullptr;
+	SamplePlayer* humanPlayer = nullptr;
 	int humanPlayerId = 0;
 	MapEntity* currentEntity = nullptr;
-	SamplePlayer* humanPlayer = nullptr;
 
 	umap<int, MapObject*> mapObjects;
 
@@ -20,7 +21,7 @@ public:
 	SampleMapWidget(QScrollArea* parent);
 	~SampleMapWidget();
 
-	void AddPlayer(SamplePlayer* player);
+	void Init(SampleGame* game, SamplePlayer* humanPlayer);
 
 public slots:
 	void OnEntityMoved(IdType id, RealCoord coord);

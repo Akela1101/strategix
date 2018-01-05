@@ -11,11 +11,9 @@
 
 namespace sample1
 {
-using namespace map_info;
-using namespace boost::adaptors;
-
 void SampleGame::Configure()
 {
+	using namespace map_info;
 	MapInfo::QRegisterTypes();
 	MapInfo::LoadTerrainTools();
 	MapInfo::LoadObjectTools();
@@ -25,101 +23,41 @@ SampleGame::SampleGame() {}
 
 SampleGame::~SampleGame() = default;
 
-void SampleGame::StartGame(MapMessage& mapMessage)
+void SampleGame::StartGame(s_p<Map> map)
 {
-	gameWidget.reset(new SampleGameWidget(resourceInfos));
+	gameWidget.reset(new SampleGameWidget(GetResourceInfos()));
 	mapWidget = gameWidget->CreateMapWidget<SampleMapWidget>();
-	mapWidget->SetMap(mapMessage.map);
+	mapWidget->SetMap(move(map));
 
-	for (auto&& playerMessage : registeredPlayers | nya::map_values)
-	{
-		AddPlayer(move(playerMessage));
-	}
-	registeredPlayers.clear();
+	GameSlot::StartGame(nullptr);//@#~
 
 	gameWidget->showMaximized();
 }
 
-void SampleGame::AddPlayer(s_p<PlayerMessage> playerMessage)
+u_p<PlayerSlot> SampleGame::AddPlayer(s_p<PlayerMessage> playerMessage)
 {
 	auto player = make_u<SamplePlayer>(move(playerMessage));
 
-	mapWidget->AddPlayer(player.get());
 	if (player->GetType() == PlayerType::HUMAN)
 	{
-		InitHuman(player.get());
+		mapWidget->Init(this, player.get());
+		connect(player.get(), SamplePlayer::DoResourcesChanged
+		        , gameWidget.get(), SampleGameWidget::OnResourcesChanged);
 	}
-
-	players.emplace(player->GetId(), move(player));
+	return player;
 }
 
-void SampleGame::InitHuman(SamplePlayer* player)
+u_p<EntitySlot> SampleGame::AddEntity(s_p<EntityMessage> entityMessage)
 {
-	connect(player, SamplePlayer::DoResourcesChanged, gameWidget.get(), SampleGameWidget::OnResourcesChanged);
+	auto entity = make_u<SampleEntity>(move(entityMessage));
+	connect(entity.get(), &SampleEntity::DoMoved, mapWidget, &SampleMapWidget::OnEntityMoved);
+	connect(entity.get(), &SampleEntity::DoMapMoved, mapWidget, &SampleMapWidget::OnEntityMapMoved);
+	return entity;
 }
 
-void SampleGame::OnReceiveMessage(s_p<Message> message)
+void SampleGame::MineRemoved(IdType id)
 {
-	switch (message->GetType())
-	{
-	case Message::Type::VECTOR:
-	{
-		for (auto& element : *sp_cast<MessageVector>(message))
-		{
-			OnReceiveMessage(move(element));
-		}
-		break;
-	}
-	case Message::Type::CONTEXT:
-	{
-		resourceInfos = sp_cast<ContextMessage>(message)->resourceInfos;
-		break;
-	}
-	case Message::Type::GAME:
-	{
-		// @#~ join first game here
-		auto&& gameMessage = sp_cast<GameMessage>(message);
-		SendMessageOne(make_s<PlayerMessage>(gameMessage->id, 1, PlayerType::HUMAN, "Inu", "az"));
-		SendMessageOne(make_s<PlayerMessage>(gameMessage->id, 3, PlayerType::AI, "Saru", "az"));
-
-		// @#~ start right away
-		SendMessageOne(make_s<EmptyMessage>(Message::Type::START));
-		break;
-	}
-	case Message::Type::PLAYER:
-	{
-		auto&& playerMessage = sp_cast<PlayerMessage>(message);
-		int spot = playerMessage->spot;
-		registeredPlayers.emplace(spot, move(playerMessage));
-		break;
-	}
-	case Message::Type::MAP:
-	{
-		StartGame(*sp_cast<MapMessage>(message));
-		break;
-	}
-	case Message::Type::ENTITY:
-	{
-		auto&& entityMessage = sp_cast<EntityMessage>(message);
-		int spot = entityMessage->playerSpot;
-		players[spot]->EntityAdded(move(entityMessage));
-		break;
-	}
-	case Message::Type::MOVE:
-	{
-		auto&& moveMessage = sp_cast<MoveMessage>(message);
-		info_log << "Place: " << moveMessage->coord;
-		break;
-	}
-	case Message::Type::REAL_MOVE:
-	{
-		auto&& moveMessage = sp_cast<RealMoveMessage>(message);
-		info_log << moveMessage->coord;
-		break;
-	}
-	default:
-		error_log << "Unable to handle message: " << message->GetType().c_str();
-	}
+	qInvoke(mapWidget, [=]() { mapWidget->OnMineRemoved(id); });
 }
 
 }

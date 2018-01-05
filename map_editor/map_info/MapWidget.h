@@ -28,7 +28,7 @@ public:
 	MapWidget(QScrollArea* parent);
 	~MapWidget() = default;
 
-	void SetMap(s_p<Map>& map);
+	void SetMap(s_p<Map> newMap);
 
 protected:
 	virtual void ObjectAdded(MapObject* object) {}

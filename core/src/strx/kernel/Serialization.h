@@ -141,6 +141,13 @@ StrxSerialization(strx::MoveMessage)
 	ar & m.coord;
 }}}
 
+StrxSerialization(strx::MapMoveMessage)
+{
+	ar & base_object<strx::CommandMessage>(m);
+	ar & m.from;
+	ar & m.to;
+}}}
+
 StrxSerialization(strx::RealMoveMessage)
 {
 	ar & base_object<strx::CommandMessage>(m);

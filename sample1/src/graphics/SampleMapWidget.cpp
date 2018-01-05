@@ -1,4 +1,5 @@
 #include <slots/SampleEntity.h>
+#include <slots/SampleGame.h>
 #include <slots/SamplePlayer.h>
 #include <strx/map/MapObject.h>
 #include <strx/map/MapMine.h>
@@ -13,15 +14,11 @@ namespace sample1
 SampleMapWidget::SampleMapWidget(QScrollArea* parent) : MapWidget(parent) {}
 SampleMapWidget::~SampleMapWidget() {}
 
-void SampleMapWidget::AddPlayer(SamplePlayer* player)
+void SampleMapWidget::Init(SampleGame* game, SamplePlayer* humanPlayer)
 {
-	player->SetMapWidget(this);
-
-	if (player->GetType() == PlayerType::HUMAN)
-	{
-		humanPlayerId = player->GetId();
-		humanPlayer = player;
-	}
+	this->game = game;
+	this->humanPlayer = humanPlayer;
+	humanPlayerId = humanPlayer->GetId();
 }
 
 void SampleMapWidget::OnEntityMoved(IdType id, RealCoord coord)
@@ -97,7 +94,7 @@ void SampleMapWidget::mousePressEvent(QMouseEvent* event)
 	{
 		if (currentEntity)
 		{
-			auto& entity = humanPlayer->GetEntitySlot(currentEntity->id);
+			auto& entity = game->GetEntitySlot(currentEntity->id);
 			entity.Move(coord);
 		}
 		return;
@@ -108,7 +105,7 @@ void SampleMapWidget::mousePressEvent(QMouseEvent* event)
 	{
 		if (currentEntity)
 		{
-			auto& entity = humanPlayer->GetEntitySlot(currentEntity->id);
+			auto& entity = game->GetEntitySlot(currentEntity->id);
 			entity.Collect(coord, mine->name);
 		}
 		return;

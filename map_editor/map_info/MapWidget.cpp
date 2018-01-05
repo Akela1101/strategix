@@ -16,9 +16,9 @@ MapWidget::MapWidget(QScrollArea* parent)
 	setMouseTracking(true);
 }
 
-void MapWidget::SetMap(s_p<Map>& map)
+void MapWidget::SetMap(s_p<Map> newMap)
 {
-	this->map = map;
+	map = std::move(newMap);
 	if (!map) return;
 
 	int width = map->GetWidth();

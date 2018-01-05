@@ -100,8 +100,8 @@ bool Entity::SetMapCoord(MapCoord newCoord)
 		}
 		object = move(currentObject);
 
+		Kernel::SendMessageAll(make_s<MapMoveMessage>(GetId(), mapCoord, newCoord));
 		mapCoord = newCoord;
-		Kernel::SendMessageAll(make_s<MoveMessage>(GetId(), mapCoord));
 	}
 	return true;
 }
