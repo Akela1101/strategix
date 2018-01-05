@@ -18,7 +18,7 @@ void SampleMapWidget::Init(SampleGame* game, SamplePlayer* humanPlayer)
 {
 	this->game = game;
 	this->humanPlayer = humanPlayer;
-	humanPlayerId = humanPlayer->GetId();
+	humanPlayerId = humanPlayer->GetSpot();
 }
 
 void SampleMapWidget::OnEntityMoved(IdType id, RealCoord coord)

@@ -36,13 +36,16 @@ protected:
 	/// add entity to map
 	virtual u_p<EntitySlot> AddEntity(s_p<EntityMessage> entityMessage) = 0;
 
-	/// on removing entity from map
+	/// player resources change
+	virtual void ResourcesChanged(const Resources& newResources) {}
+
+	/// removing entity from map
 	//virtual void EntiRemoved(Entity* entity) = 0;
 
-	/// on mine amount changed
-	//virtual void MineAmountChanged(IdType id, ResourceUnit amount) {}
+	/// mine amount changed
+	virtual void MineAmountChanged(IdType id, ResourceUnit amount) {}
 
-	/// on mine removed
+	/// mine removed
 	virtual void MineRemoved(IdType id) {}
 };
 }

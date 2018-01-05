@@ -108,11 +108,15 @@ void Kernel::PrintInfo()
 
 void Kernel::SendMessageOne(s_p<Message> message, PlayerId playerId)
 {
+	if (!message) nya_throw << "Writting null message.";
+
 	Server::invoke(Server::SendMessageOne, move(message), playerId);
 }
 
 void Kernel::SendMessageAll(s_p<Message> message)
 {
+	if (!message) nya_throw << "Writting null message.";
+
 	Server::invoke(Server::SendMessageAll, move(message));
 }
 

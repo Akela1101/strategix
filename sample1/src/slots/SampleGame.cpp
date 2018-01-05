@@ -41,8 +41,6 @@ u_p<PlayerSlot> SampleGame::AddPlayer(s_p<PlayerMessage> playerMessage)
 	if (player->GetType() == PlayerType::HUMAN)
 	{
 		mapWidget->Init(this, player.get());
-		connect(player.get(), SamplePlayer::DoResourcesChanged
-		        , gameWidget.get(), SampleGameWidget::OnResourcesChanged);
 	}
 	return player;
 }
@@ -55,9 +53,14 @@ u_p<EntitySlot> SampleGame::AddEntity(s_p<EntityMessage> entityMessage)
 	return entity;
 }
 
+void SampleGame::ResourcesChanged(const Resources& newResources)
+{
+	gameWidget->OnResourcesChanged(newResources);
+}
+
 void SampleGame::MineRemoved(IdType id)
 {
-	qInvoke(mapWidget, [=]() { mapWidget->OnMineRemoved(id); });
+	mapWidget->OnMineRemoved(id);
 }
 
 }

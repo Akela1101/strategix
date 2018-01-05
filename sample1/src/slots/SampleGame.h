@@ -22,6 +22,7 @@ private:
 	void StartGame(s_p<Map> map) override;
 	u_p<PlayerSlot> AddPlayer(s_p<PlayerMessage> playerMessage) override;
 	u_p<EntitySlot> AddEntity(s_p<EntityMessage> entityMessage) override;
+	void ResourcesChanged(const Resources& newResources) override;
 	void MineRemoved(IdType id) override;
 };
 

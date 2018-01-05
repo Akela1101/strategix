@@ -10,13 +10,6 @@ class SampleEntity;
 
 class SamplePlayer : public QObject, public PlayerSlot
 {
-Q_OBJECT
 	using PlayerSlot::PlayerSlot;
-
-public:
-	void ResourcesChanged(const Resources& newResources) override { emit DoResourcesChanged(newResources); }
-
-signals:
-	void DoResourcesChanged(Resources newResources);
 };
 }

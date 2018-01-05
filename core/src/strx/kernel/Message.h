@@ -17,10 +17,11 @@ struct Message : boost::noncopyable
 	    K(MAP) \
 	    K(ENTITY) \
 	    K(RESOURCES) \
-	    K(MINE) \
+	    K(MINE_AMOUNT) \
 	    K(MINE_REMOVED) \
 	    K(MOVE) \
-	    K(REAL_MOVE)
+	    K(REAL_MOVE) \
+	    K(COLLECT)
 	nya_enum(Type, MessageTypeEnumDef)
 
 	virtual ~Message() = default;
@@ -28,14 +29,6 @@ struct Message : boost::noncopyable
 
 	static s_p<Message> Parse(const string& buffer);
 	static void Serialize(s_p<Message> message, string& buffer);
-};
-
-struct CommandMessage : Message
-{
-	IdType id;
-
-	CommandMessage() = default;
-	CommandMessage(IdType id) : id(id) {}
 };
 
 struct MessageVector : Message, vector<s_p<Message>>
@@ -112,19 +105,33 @@ struct EntityMessage : Message
 
 struct ResourcesMessage : Message
 {
+	Resources resources;
+
 	ResourcesMessage() = default;
+	ResourcesMessage(Resources resources) : resources(move(resources)) {}
 	Type GetType() const override { return Type::RESOURCES; }
 };
 
-struct MineMessage : Message
+struct CommandMessage : Message
 {
-	MineMessage() = default;
-	Type GetType() const override { return Type::MINE; }
+	IdType id;
+
+	CommandMessage() = default;
+	CommandMessage(IdType id) : id(id) {}
 };
 
-struct MineRemovedMessage : Message
+struct MineAmountMessage : CommandMessage
 {
-	MineRemovedMessage() = default;
+	ResourceUnit amount;
+
+	MineAmountMessage() = default;
+	MineAmountMessage(IdType id, ResourceUnit amount) : CommandMessage(id), amount(amount) {}
+	Type GetType() const override { return Type::MINE_AMOUNT; }
+};
+
+struct MineRemovedMessage : CommandMessage
+{
+	using CommandMessage::CommandMessage;
 	Type GetType() const override { return Type::MINE_REMOVED; }
 };
 
@@ -155,4 +162,16 @@ struct RealMoveMessage : CommandMessage
 	RealMoveMessage(IdType id, RealCoord coord) : CommandMessage(id), coord(coord) {}
 	Type GetType() const override { return Type::REAL_MOVE; }
 };
+
+struct CollectMessage : CommandMessage
+{
+	MapCoord coord;
+	string resourceName;
+
+	CollectMessage() = default;
+	CollectMessage(IdType id, MapCoord coord, string resourceName)
+	    : CommandMessage(id), coord(coord), resourceName(move(resourceName)) {}
+	Type GetType() const override { return Type::COLLECT; }
+};
+
 }

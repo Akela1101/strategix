@@ -2,11 +2,12 @@
 
 #include <boost/archive/binary_oarchive.hpp>
 #include <boost/archive/binary_iarchive.hpp>
-#include <boost/serialization/level.hpp>
 #include <boost/serialization/export.hpp>
+#include <boost/serialization/level.hpp>
 #include <boost/serialization/shared_ptr.hpp>
-#include <boost/serialization/unique_ptr.hpp>
 #include <boost/serialization/string.hpp>
+#include <boost/serialization/unique_ptr.hpp>
+#include <boost/serialization/unordered_map.hpp>
 #include <boost/serialization/vector.hpp>
 #include <strx/map/Map.h>
 #include "Message.h"
@@ -41,6 +42,11 @@ StrxSerializationSimple(strx::RealCoord)
 	ar & m.y;
 }}}
 
+StrxSerializationSimple(strx::Resources)
+{
+	ar & (strx::ResourcesType&)m;
+}}}
+
 StrxSerializationSimple(strx::Message::Type)
 {
 	ar & (strx::Message::Type::value_type&)m;
@@ -48,12 +54,6 @@ StrxSerializationSimple(strx::Message::Type)
 
 StrxSerialization(strx::Message)
 {
-}}}
-
-StrxSerialization(strx::CommandMessage)
-{
-	ar & base_object<strx::Message>(m);
-	ar & m.id;
 }}}
 
 StrxSerialization(strx::MessageVector)
@@ -123,16 +123,24 @@ StrxSerialization(strx::EntityMessage)
 StrxSerialization(strx::ResourcesMessage)
 {
 	ar & base_object<strx::Message>(m);
+	ar & m.resources;
 }}}
 
-StrxSerialization(strx::MineMessage)
+StrxSerialization(strx::CommandMessage)
 {
 	ar & base_object<strx::Message>(m);
+	ar & m.id;
+}}}
+
+StrxSerialization(strx::MineAmountMessage)
+{
+	ar & base_object<strx::CommandMessage>(m);
+	ar & m.amount;
 }}}
 
 StrxSerialization(strx::MineRemovedMessage)
 {
-	ar & base_object<strx::Message>(m);
+	ar & base_object<strx::CommandMessage>(m);
 }}}
 
 StrxSerialization(strx::MoveMessage)
@@ -152,4 +160,11 @@ StrxSerialization(strx::RealMoveMessage)
 {
 	ar & base_object<strx::CommandMessage>(m);
 	ar & m.coord;
+}}}
+
+StrxSerialization(strx::CollectMessage)
+{
+	ar & base_object<strx::CommandMessage>(m);
+	ar & m.coord;
+	ar & m.resourceName;
 }}}

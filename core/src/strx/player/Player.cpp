@@ -114,8 +114,7 @@ void Player::RemoveEntity(Entity* entity)
 void Player::AddResource(const Resource& deltaResource)
 {
 	*resources += deltaResource;
-	//*resources
-	Kernel::SendMessageOne(make_s<ResourcesMessage>(), playerId);
+	Kernel::SendMessageOne(make_s<ResourcesMessage>(*resources), playerId);
 }
 
 Entity* Player::FindCollector(MapCoord coord) const
@@ -170,15 +169,13 @@ u_p<MapPath> Player::FindPath(MapCoord from, MapCoord till, float radius) const
 ResourceUnit Player::PickResource(MapMine* mine, ResourceUnit amount)
 {
 	ResourceUnit picked = mine->PickResource(amount);
-	//slot->MineAmountChanged(mine->id, mine->amount);
-	Kernel::SendMessageOne(s_p<MineMessage>(), playerId);
+	Kernel::SendMessageAll(make_s<MineAmountMessage>(mine->id, mine->amount));
 
 	if (!mine->amount)
 	{
 		// remove empty mine
-		IdType mineId = mine->id;
+		Kernel::SendMessageAll(make_s<MineRemovedMessage>(mine->id)); // get id before removal
 		map.ChangeObject(map.GetCell(mine->coord), nullptr);
-		Kernel::SendMessageOne(make_s<MineRemovedMessage>(), playerId);//mineId
 	}
 	return picked;
 }

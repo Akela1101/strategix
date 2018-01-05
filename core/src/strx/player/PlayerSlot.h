@@ -22,13 +22,10 @@ public:
 	/// @return unique name
 	const string& GetName() const;
 
-	/// @return player id
-	int GetId() const;
+	/// @return player spot
+	int GetSpot() const;
 
 	/// @return [human | ai | net]
 	PlayerType GetType() const;
-
-	/// on holding resources change
-	virtual void ResourcesChanged(const Resources& newResources) {}
 };
 }

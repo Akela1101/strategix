@@ -25,6 +25,8 @@ EntitySlot&GameSlot::GetEntitySlot(IdType id)
 
 void GameSlot::SendMessageOne(s_p<Message> message)
 {
+	if (!message) nya_throw << "Writting null message.";
+
 	Client::invoke(Client::SendMessageOne, move(message));
 }
 
@@ -75,15 +77,33 @@ void GameSlot::ReceiveMessage(s_p<Message> message)
 		entities.emplace(entity->GetId(), move(entity));
 		break;
 	}
+	case Message::Type::RESOURCES:
+	{
+		const auto& resourcesMessage = sp_cast<ResourcesMessage>(message);
+		ResourcesChanged(resourcesMessage->resources);
+		break;
+	}
+	case Message::Type::MINE_AMOUNT:
+	{
+		const auto& mineAmountMessage = sp_cast<MineAmountMessage>(message);
+		MineAmountChanged(mineAmountMessage->id, mineAmountMessage->amount);
+		break;
+	}
+	case Message::Type::MINE_REMOVED:
+	{
+		const auto& mineRemovedMessage = sp_cast<MineRemovedMessage>(message);
+		MineRemoved(mineRemovedMessage->id);
+		break;
+	}
 	case Message::Type::MOVE:
 	{
-		auto&& moveMessage = sp_cast<MapMoveMessage>(message);
+		const auto& moveMessage = sp_cast<MapMoveMessage>(message);
 		entities[moveMessage->id]->MapMoved(moveMessage->from, moveMessage->to);
 		break;
 	}
 	case Message::Type::REAL_MOVE:
 	{
-		auto&& moveMessage = sp_cast<RealMoveMessage>(message);
+		const auto& moveMessage = sp_cast<RealMoveMessage>(message);
 		entities[moveMessage->id]->Moved(moveMessage->coord);
 		break;
 	}
@@ -97,7 +117,7 @@ void GameSlot::StartGame(s_p<Map> map)
 	for (auto&& playerMessage : registeredPlayers | nya::map_values)
 	{
 		auto&& player = AddPlayer(move(playerMessage));
-		players.emplace(player->GetId(), move(player));
+		players.emplace(player->GetSpot(), move(player));
 	}
 	registeredPlayers.clear();
 }

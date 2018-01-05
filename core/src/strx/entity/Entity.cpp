@@ -38,8 +38,14 @@ void Entity::ReceiveMessage(s_p<CommandMessage> message)
 	{
 	case Message::Type::MOVE:
 	{
-		auto command = sp_cast<MoveMessage>(message);
+		const auto& command = sp_cast<MoveMessage>(message);
 		Do<FeatureMove>().Move(command->coord, 0, nullptr);
+		break;
+	}
+	case Message::Type::COLLECT:
+	{
+		const auto& command = sp_cast<CollectMessage>(message);
+		Do<FeatureCollect>().Collect(command->coord, command->resourceName);
 		break;
 	}
 	default:

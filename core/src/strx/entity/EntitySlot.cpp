@@ -26,10 +26,7 @@ void EntitySlot::Move(MapCoord coord)
 
 void EntitySlot::Collect(MapCoord coord, const string& resourceName)
 {
-//	Client::connect(DoCollect, [entity] (MapCoord coord, const string& resourceName)
-//	{
-//		if (auto f = entity->Do<FeatureCollect>()) f->Collect(coord, resourceName);
-//	});
+	GameSlot::SendMessageOne(make_s<CollectMessage>(GetId(), coord, resourceName));
 }
 
 }
