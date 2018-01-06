@@ -9,9 +9,9 @@
 
 namespace strx
 {
-static u_p<thread> serverThread;                  // server thread
-static u_p<tcp::socket> socket;                   // socket for the next connection
-static u_p<tcp::acceptor> acceptor;               // connection listener
+static u_p<thread> serverThread;                     // server thread
+static u_p<tcp::socket> socket;                      // socket for the next connection
+static u_p<tcp::acceptor> acceptor;                  // connection listener
 static umap<PlayerId, u_p<Connection>> connections;  // connections
 static PlayerId currentConnectionId;                 // incrementing connection id
 
@@ -76,7 +76,11 @@ void Server::ReceiveMessage(s_p<Message> message, PlayerId id)
 
 void Server::SendMessageOne(s_p<Message> message, PlayerId id)
 {
-	connections[id]->Write(message);
+	auto i = connections.find(id);
+	if (i != connections.end())
+	{
+		i->second->Write(message);
+	}
 }
 
 void Server::SendMessageAll(s_p<Message> message)

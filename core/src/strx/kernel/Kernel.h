@@ -24,7 +24,6 @@ public:
 	static void SendMessageOne(s_p<Message> message, PlayerId playerId);
 	static void SendMessageAll(s_p<Message> message);
 	static void OnReceiveMessage(s_p<Message> message, PlayerId playerId);
-//	static void Subscribe(int playerSpot)
 
 	static bool CheckResource(const string& name);
 	static const TechTree& GetTechTree(const string& raceName);

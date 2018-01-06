@@ -35,14 +35,14 @@ void Connection::Write(s_p<Message> message)
 	asio::write(socket, sizeBuffer, ec);
 	if (ec)
 	{
-		error_log << "socket write error: " << ec.message();
+		error_log << "socket write error: %d (%s)"s % ec.value() % ec.message();
 		socket.close();
 		return;
 	}
 	asio::write(socket, asio::buffer(writeBuffer.data(), writeBuffer.size()), ec);
 	if (ec)
 	{
-		error_log << "socket write error: " << ec.message();
+		error_log << "socket write error: %d (%s)"s % ec.value() % ec.message();
 		socket.close();
 		return;
 	}
@@ -55,8 +55,11 @@ void Connection::Read()
 	        {
 		        if (ec)
 				{
-//					error_log << "socket read error: " << ec.message();
-//					Close();
+					if (ec != asio::error::eof)
+					{
+						error_log << "socket read error: %d (%s)"s % ec.value() % ec.message();
+					}
+					Close();
 					return;
 				}
 				boost::endian::little_to_native_inplace(expectedSize);
@@ -69,7 +72,17 @@ void Connection::Read()
 					return;
 				}
 
-				try { ReceiveMessage(Message::Parse(readBuffer), id); }
+				try
+				{
+					auto&& message = Message::Parse(readBuffer);
+					if (auto&& exitMessage = dp_cast<EmptyMessage>(message)
+					        ; exitMessage && exitMessage->type == Message::Type::EXIT)
+					{
+						Close();
+						return;
+					}
+					ReceiveMessage(move(message), id);
+				}
 				catch (exception& e) { error_log << "Unable to parse message: " << e.what(); }
 
 				Read();

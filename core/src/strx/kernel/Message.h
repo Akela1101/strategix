@@ -8,20 +8,21 @@ namespace strx
 struct Message : boost::noncopyable
 {
 #   define MessageTypeEnumDef(K, V) \
-	    K(VECTOR) \
-	    K(COMMAND) \
-	    K(CONTEXT) \
-	    K(START) \
-	    K(GAME) \
-	    K(PLAYER) \
-	    K(MAP) \
-	    K(ENTITY) \
-	    K(RESOURCES) \
-	    K(MINE_AMOUNT) \
-	    K(MINE_REMOVED) \
-	    K(MOVE) \
-	    K(REAL_MOVE) \
-	    K(COLLECT)
+	    K(VECTOR)          /* vector of messages */ \
+	    K(COMMAND)         /* command to entity */ \
+	    K(EXIT)            /* exit from client */ \
+	    K(CONTEXT)         /* game context */ \
+	    K(START)           /* start game */ \
+	    K(GAME)            /* game description */ \
+	    K(PLAYER)          /* player description */ \
+	    K(MAP)             /* map description */ \
+	    K(ENTITY)          /* entity description */ \
+	    K(RESOURCES)       /* player resources */ \
+	    K(MINE_AMOUNT)     /* mine amount changed */ \
+	    K(MINE_REMOVED)    /* mine removed */ \
+	    K(MOVE)            /* entity map placing change */ \
+	    K(REAL_MOVE)       /* entity precise coordinate move */ \
+	    K(COLLECT)         /* collect mine */
 	nya_enum(Type, MessageTypeEnumDef)
 
 	virtual ~Message() = default;

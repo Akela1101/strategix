@@ -22,7 +22,7 @@
 namespace strx
 {
 namespace fs = boost::filesystem;
-using st_timer = boost::asio::steady_timer;
+using st_timer = asio::steady_timer;
 using st_clock = chrono::steady_clock;
 
 // Constants

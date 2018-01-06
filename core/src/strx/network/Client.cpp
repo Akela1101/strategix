@@ -19,7 +19,7 @@ void Client::StartSession(GameSlot* game)
 	socket.reset(new tcp::socket(eventLoop));
 	auto iEndpoint = tcp::resolver(eventLoop).resolve({ "localhost", "10101" });
 
-	boost::asio::async_connect(*socket, iEndpoint, [](const boost::system::error_code& ec, const tcp::endpoint&)
+	asio::async_connect(*socket, iEndpoint, [](const boost::system::error_code& ec, const tcp::endpoint&)
 	{
 		if (!ec)
 		{
@@ -53,7 +53,11 @@ void Client::StartSession(GameSlot* game)
 
 void Client::StopSession()
 {
-	invoke([] { connection.reset(); });
+	invoke([]
+	{
+		SendMessageOne(make_s<EmptyMessage>(Message::Type::EXIT));
+		connection.reset();
+	});
 
 	if (clientThread) clientThread->join();
 	game = nullptr;
