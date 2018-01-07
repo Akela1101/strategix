@@ -16,7 +16,7 @@ static const float mineSelectionRadius = 10;
 
 FeatureCollect::FeatureCollect(const FeatureInfo* featureInfo, Entity* entity)
         : Feature(entity)
-        , info(dynamic_cast<const FeatureInfoCollect*>(featureInfo))
+        , info(dynamic_cast<const CollectFeatureInfo*>(featureInfo))
         , load(0)
         , isMovingToCollector(false) {}
 
@@ -76,7 +76,7 @@ void FeatureCollect::Completed(bool done)
 
 void FeatureCollect::Collect(MapCoord coord)
 {
-	// try move and set OnComplete for this
+	// move and wait it done
 	entity->Do<FeatureMove>().Move(coord, info->radius, this);
 
 	this->coord = coord;

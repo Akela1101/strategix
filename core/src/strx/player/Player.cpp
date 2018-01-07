@@ -9,7 +9,6 @@
 #include <strx/map/PathFinder.h>
 #include <strx/kernel/Message.h>
 #include <strx/player/PlayerSlot.h>
-#include <strx/common/TechTree.h>
 
 #include "Player.h"
 
@@ -17,8 +16,9 @@
 namespace strx
 {
 
-Player::Player(const PlayerMessage& playerMessage, PlayerId playerId, Map& map)
-        : playerId(playerId)
+Player::Player(Game& game, PlayerId id, const PlayerMessage& playerMessage, Map& map)
+        : game(game)
+        , id(id)
         , type(playerMessage.type)
         , spot(playerMessage.spot)
         , name(playerMessage.name)
@@ -29,6 +29,12 @@ Player::Player(const PlayerMessage& playerMessage, PlayerId playerId, Map& map)
         , techTree(Kernel::GetTechTree(race)) {}
 
 Player::~Player() = default;
+
+s_p<Entity> Player::GetEntity(IdType id) const
+{
+	auto i = entities.find(id);
+	return i == entities.end() ? nullptr : i->second;
+}
 
 Terrain* Player::GetTerrain(MapCoord coord) const
 {
@@ -45,76 +51,29 @@ MapMine* Player::GetMine(MapCoord coord) const
 	return dynamic_cast<MapMine*>(GetMapObject(coord).get());
 }
 
-void Player::ReceiveMessage(s_p<Message> message)
-{
-	switch (message->GetType())
-	{
-	default:
-		auto&& command = dp_cast<CommandMessage>(message);
-		if (!command) nya_throw << "Unknown message: " << message->GetType().c_str();
-
-		auto i = entities.find(command->id);
-		if (i == entities.end()) nya_throw << "Entity with id %d does not exist."s % command->id;
-
-		Entity* entity = i->second.get();
-		entity->ReceiveMessage(move(command));
-	}
-}
-
-void Player::Start()
-{
-	for (int y : boost::irange(0, map.GetLength()))
-	{
-		for (int x : boost::irange(0, map.GetWidth()))
-		{
-			auto object = map.GetCell(x, y).object.get();
-			auto entityObject = dynamic_cast<MapEntity*>(object);
-			if (entityObject && entityObject->ownerSpot == spot)
-			{
-				int objectId = entityObject->id;
-				auto& name = entityObject->name;
-				auto& info = techTree.GetNode(name);
-
-				AddEntity(make_u<Entity>(info, objectId, MapCoord(x, y), this));
-			}
-		}
-	}
-}
-
-void Player::Tick(float seconds)
-{
-	for (auto& entity : entities | nya::map_values)
-	{
-		entity->Tick(seconds);
-	}
-
-	// Remove queued entities if there are ones
-	if (!entisToRemove.empty())
-	{
-		for (auto it = entisToRemove.rbegin(); it != entisToRemove.rend(); ++it)
-		{
-			// @#~
-		}
-		entisToRemove.clear();
-	}
-}
-
-void Player::AddEntity(u_p<Entity> entity)
+void Player::EntityAdded(s_p<Entity> entity)
 {
 	Entity& entityRef = *entity;
 	entities.emplace(entityRef.GetId(), move(entity));
 	Kernel::SendMessageAll(make_s<EntityMessage>(spot, entityRef.GetId()));
 }
 
-void Player::RemoveEntity(Entity* entity)
+void Player::EntityRemoved(IdType id)
 {
-	entisToRemove.push_back(entity);
+	auto i = entities.find(id);
+	MapCoord coord = i->second->GetMapCoord();
+
+	entities.erase(i);
+	ObjectRemoved(id, coord);
 }
 
 void Player::AddResource(const Resource& deltaResource)
 {
 	*resources += deltaResource;
-	Kernel::SendMessageOne(make_s<ResourcesMessage>(*resources), playerId);
+	if (GetType() == PlayerType::HUMAN)
+	{
+		Kernel::SendMessageOne(make_s<ResourcesMessage>(*resources), id);
+	}
 }
 
 Entity* Player::FindCollector(MapCoord coord) const
@@ -171,12 +130,13 @@ ResourceUnit Player::PickResource(MapMine* mine, ResourceUnit amount)
 	ResourceUnit picked = mine->PickResource(amount);
 	Kernel::SendMessageAll(make_s<MineAmountMessage>(mine->id, mine->amount));
 
-	if (!mine->amount)
-	{
-		// remove empty mine
-		Kernel::SendMessageAll(make_s<MineRemovedMessage>(mine->id)); // get id before removal
-		map.ChangeObject(map.GetCell(mine->coord), nullptr);
-	}
+	if (!mine->amount) ObjectRemoved(mine->id, mine->coord);
 	return picked;
+}
+
+void Player::ObjectRemoved(IdType id, MapCoord coord)
+{
+	map.ChangeObject(map.GetCell(coord), nullptr);
+	Kernel::SendMessageAll(make_s<ObjectRemovedMessage>(id));
 }
 }

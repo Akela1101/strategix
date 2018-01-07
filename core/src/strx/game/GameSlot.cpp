@@ -89,10 +89,10 @@ void GameSlot::ReceiveMessage(s_p<Message> message)
 		MineAmountChanged(mineAmountMessage->id, mineAmountMessage->amount);
 		break;
 	}
-	case Message::Type::MINE_REMOVED:
+	case Message::Type::OBJECT_REMOVED:
 	{
-		const auto& mineRemovedMessage = sp_cast<MineRemovedMessage>(message);
-		MineRemoved(mineRemovedMessage->id);
+		const auto& removalMessage = sp_cast<ObjectRemovedMessage>(message);
+		ObjectRemoved(removalMessage->id);
 		break;
 	}
 	case Message::Type::MOVE:

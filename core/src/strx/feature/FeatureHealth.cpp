@@ -1,6 +1,7 @@
 #include <strx/entity/Entity.h>
 #include <strx/entity/EntitySlot.h>
 #include <strx/feature/FeatureInfo.h>
+#include <strx/game/Game.h>
 #include <strx/player/Player.h>
 
 #include "FeatureHealth.h"
@@ -9,44 +10,35 @@ namespace strx
 {
 
 FeatureHealth::FeatureHealth(const FeatureInfo* featureInfo, Entity* entity)
-        : Feature(entity), featureInfoHealth(dynamic_cast<const FeatureInfoHealth*>(featureInfo))
-        , hp(featureInfoHealth->hp)
+        : Feature(entity), info(dynamic_cast<const HealthFeatureInfo*>(featureInfo))
+        , hp(info->hp)
 {}
 
 void FeatureHealth::Tick(float seconds)
 {
-	// regeneration. if integer value changes -> OnHpChange
-}
-
-void FeatureHealth::Stop()
-{
-	// Stop Regeneration
+	//@#~ recovery
 }
 
 const HpType FeatureHealth::GetMaxHp() const
 {
-	return featureInfoHealth->hp;
+	return info->hp;
 }
 
-bool FeatureHealth::HpChange(HpType deltaHp)
+bool FeatureHealth::ChangeHp(HpType deltaHp)
 {
 	hp += deltaHp;
 
 	if (hp <= 0)
 	{
-		// Dead
-		hp = 0;
-		//@#~entity->GetSlot().OnHpChange();
-		entity->GetPlayer().RemoveEntity(entity);
-		return false;
+		hp = 0; // destroied
+		entity->GetGame().RemoveEntity(entity->GetId());
 	}
-	else if (hp > featureInfoHealth->hp)
+	else if (hp > info->hp)
 	{
-		// Stop healing|repair
-		hp = featureInfoHealth->hp;
+		hp = info->hp; // stop recovery
 	}
 	//@#~entity->GetSlot().OnHpChange();
-	return true;
+	return hp != 0;
 }
 
 }

@@ -16,46 +16,44 @@ struct FeatureInfo : boost::noncopyable
 	virtual FeatureInfo* clone() = 0;
 };
 
-struct FeatureInfoMove : FeatureInfo
+struct HealthFeatureInfo : FeatureInfo
 {
-	float speed;
-	
-	FeatureInfoMove(float speed) : speed(speed) {}
-	
-	FeatureInfoMove* clone() override { return new FeatureInfoMove(speed); }
+	HpType hp;       /// hit points
+	float recovery;  /// hp/sec recovery speed
+
+	HealthFeatureInfo(const HpType hp, float recovery)
+	        : hp(hp), recovery(recovery) {}
+	HealthFeatureInfo* clone() override { return new HealthFeatureInfo(hp, recovery); }
 };
 
-struct FeatureInfoCollect : FeatureInfo
+struct MoveFeatureInfo : FeatureInfo
 {
-	float speed; // Res/sec
-	float radius; // radius Entity is able to collect from
-	u_p<Resources> capacities; // Maximum amout of each resource, creature can bear
-	
-	FeatureInfoCollect(float speed, float radius, u_p<Resources> capacities)
-			: speed(speed), radius(radius), capacities(move(capacities)) {}
-	
-	FeatureInfoCollect* clone() override { return new FeatureInfoCollect(speed, radius, make_u<Resources>(*capacities)); }
+	float speed;     /// tile/sec
+
+	MoveFeatureInfo(float speed) : speed(speed) {}
+	MoveFeatureInfo* clone() override { return new MoveFeatureInfo(speed); }
 };
 
-struct FeatureInfoHealth : FeatureInfo
+struct AttackFeatureInfo : FeatureInfo
 {
-	HpType hp;
-	float regenSpeed;
-	
-	FeatureInfoHealth(const HpType hp, float regenSpeed)
-			: hp(hp), regenSpeed(regenSpeed) {}
-	
-	FeatureInfoHealth* clone() override { return new FeatureInfoHealth(hp, regenSpeed); }
+	HpType damage;   /// hp reduced on one attack
+	float speed;     /// hit/sec
+	float radius;    /// reach radius
+
+	AttackFeatureInfo(const HpType damage, float speed, float radius)
+	        : damage(damage), speed(speed), radius(radius) {}
+	AttackFeatureInfo* clone() override { return new AttackFeatureInfo(damage, speed, radius); }
 };
 
-struct FeatureInfoAttack : FeatureInfo
+struct CollectFeatureInfo : FeatureInfo
 {
-	HpType damage;
-	float speed; // Hit/sec
-	
-	FeatureInfoAttack(const HpType damage, float speed)
-			: damage(damage), speed(speed) {}
-	
-	FeatureInfoAttack* clone() override { return new FeatureInfoAttack(damage, speed); }
+	float speed;     /// amount/sec
+	float radius;    /// reach radius
+	u_p<Resources> capacities; // maximum amout of each resource, entity can bear
+
+	CollectFeatureInfo(float speed, float radius, u_p<Resources> capacities)
+	        : speed(speed), radius(radius), capacities(move(capacities)) {}
+	CollectFeatureInfo* clone() override { return new CollectFeatureInfo(speed, radius, make_u<Resources>(*capacities)); }
 };
+
 }

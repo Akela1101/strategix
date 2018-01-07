@@ -7,7 +7,7 @@ namespace strx
 {
 class FeatureCollect : public Feature
 {
-	const FeatureInfoCollect* const info; /// Link to tree
+	const CollectFeatureInfo* const info; /// Link to tree
 	MapCoord coord;             /// coordinate to search for resources
 	string resourceName;        /// resource name
 	ResourceUnit capacity;      /// amount of resource Entity can hold

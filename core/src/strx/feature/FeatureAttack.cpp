@@ -3,6 +3,8 @@
 #include <strx/feature/FeatureInfo.h>
 #include <strx/feature/FeatureHealth.h>
 #include <strx/feature/FeatureMove.h>
+#include <strx/game/Game.h>
+#include <strx/player/Player.h>
 
 #include "FeatureAttack.h"
 
@@ -10,57 +12,55 @@ namespace strx
 {
 
 FeatureAttack::FeatureAttack(const FeatureInfo* featureInfo, Entity* entity)
-        : Feature(entity), featureInfoAttack(dynamic_cast<const FeatureInfoAttack*>(featureInfo)), hitProgress(0)
+        : Feature(entity)
+        , info(dynamic_cast<const AttackFeatureInfo*>(featureInfo))
 {}
 
-bool FeatureAttack::Attack(s_p<Entity> target)
+bool FeatureAttack::Attack(IdType targetId)
 {
-	if (target.get() == entity)
+	target = entity->GetGame().GetEntity(targetId);
+	if (!target) return false;
+
+	if (&target->GetPlayer() == &entity->GetPlayer())
 	{
-		error_log << "Do not attack yourself :-)";
+		error_log << "Attacking own units is not supported yet.";
 		return false;
 	}
 
-	// move and set OnComplete for this
-	entity->Do<FeatureMove>().Move(target->GetCoord(), 0, this);
+	hitProgress = 0;
 
-	this->target = target;
+	// move and wait it done
+	entity->Do<FeatureMove>().Move(target->GetCoord(), info->radius, this);
 	return true;
 }
 
 void FeatureAttack::Tick(float seconds)
 {
-	if (hitProgress < 1) // Preparing for 1 hit
+	if (!target) return;
+
+	if (hitProgress < 1) // preparing for hit
 	{
-		hitProgress += seconds * featureInfoAttack->speed;
-		//@#~entity->GetSlot().Attacked();
+		hitProgress += seconds * info->speed;
+		return;
 	}
-	else // Inflict damage
+	--hitProgress;
+
+	// one hit
+	if (!target->Do<FeatureHealth>().ChangeHp(-info->damage))
 	{
-		hitProgress = 0;
-		if (target->Do<FeatureHealth>().HpChange(-featureInfoAttack->damage))
-		{
-			// Continue attack
-		}
-		else // Dead
-		{
-			Stop();
-		}
+		entity->AssignTask(nullptr); // target destroied
 	}
 }
 
 void FeatureAttack::Stop()
 {
-	//@#~entity->GetSlot().AttackedStop();
 	target.reset();
 }
 
 void FeatureAttack::Completed(bool done)
 {
-	if (!done)
-		return;
+	if (!done) return;
 
-	//@#~entity->GetSlot().AttackedStart();
 	entity->AssignTask(this);
 }
 

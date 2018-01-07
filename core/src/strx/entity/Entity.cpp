@@ -16,10 +16,11 @@
 
 namespace strx
 {
-Entity::Entity(const EntityInfo& entiInfo, IdType id, RealCoord coord, Player* player)
-        : player(player)
-        , entiInfo(entiInfo)
+Entity::Entity(Game& game, Player& player, IdType id, const EntityInfo& entiInfo, RealCoord coord)
+        : game(game)
+        , player(player)
         , id(id)
+        , entiInfo(entiInfo)
         , coord(coord)
         , mapCoord(coord)
         , task(nullptr)
@@ -46,6 +47,12 @@ void Entity::ReceiveMessage(s_p<CommandMessage> message)
 	{
 		const auto& command = sp_cast<CollectMessage>(message);
 		Do<FeatureCollect>().Collect(command->coord, command->resourceName);
+		break;
+	}
+	case Message::Type::ATTACK:
+	{
+		const auto& command = sp_cast<AttackMessage>(message);
+		Do<FeatureAttack>().Attack(command->targetId);
 		break;
 	}
 	default:
@@ -98,8 +105,8 @@ bool Entity::SetMapCoord(MapCoord newCoord)
 {
 	if (mapCoord != newCoord)
 	{
-		auto& currentObject = player->GetMapObject(mapCoord);
-		auto& object = player->GetMapObject(newCoord);
+		auto& currentObject = player.GetMapObject(mapCoord);
+		auto& object = player.GetMapObject(newCoord);
 		if (object)
 		{
 			return currentObject == object;

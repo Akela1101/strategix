@@ -13,8 +13,8 @@ namespace strx
 
 FeatureMove::FeatureMove(const FeatureInfo* featureInfo, Entity* entity)
         : Feature(entity)
-        , featureInfoMove(dynamic_cast<const FeatureInfoMove*>(featureInfo))
-        , speed(featureInfoMove->speed)
+        , info(dynamic_cast<const MoveFeatureInfo*>(featureInfo))
+        , speed(info->speed)
         , next(entity->GetCoord())
 {}
 

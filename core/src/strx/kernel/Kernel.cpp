@@ -1,3 +1,4 @@
+#include <atomic>
 #include <future>
 #include <thread>
 #include <boost/asio/steady_timer.hpp>
@@ -29,10 +30,11 @@ using st_clock = chrono::steady_clock;
 static const auto minTick = 42ms;
 
 // Variables
-static umap<int, u_p<GameMessage>> games;     // list of games
-static s_p<Game> game;                        // single game
-static u_p<thread> kernelThread;              // main kernel thread
-static u_p<st_timer> timer;                   // tick timer
+static umap<int, u_p<GameMessage>> games;            // list of games
+static s_p<Game> game;                               // single game
+static u_p<thread> kernelThread;                     // main kernel thread
+static u_p<st_timer> timer;                          // tick timer
+static atomic<PlayerId> currentPlayerId{ 0 };        // incrementing player id
 
 
 void TimerHandler(const boost::system::error_code& error)
@@ -80,10 +82,7 @@ void Kernel::Tick(float seconds)
 	{
 		if (!game) return;
 
-		for (auto& player : game->GetPlayers() | nya::map_values)
-		{
-			player->Tick(seconds);
-		}
+		game->Tick(seconds);
 	}
 	catch (exception& e)
 	{
@@ -104,6 +103,11 @@ void Kernel::PrintInfo()
 	{
 		cout << raceName << endl;
 	}
+}
+
+PlayerId Kernel::GetNextPlayerId()
+{
+	return ++currentPlayerId;
 }
 
 void Kernel::SendMessageOne(s_p<Message> message, PlayerId playerId)

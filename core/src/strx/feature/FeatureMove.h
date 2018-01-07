@@ -6,7 +6,7 @@ namespace strx
 {
 class FeatureMove : public Feature
 {
-	const FeatureInfoMove* featureInfoMove; /// Link to tree
+	const MoveFeatureInfo* const info; /// Link to tree
 	MapCoord coord;       /// finish coordinate
 	float radius;         /// finish point radius
 	Feature* mover;       /// feature started moving (can be null)

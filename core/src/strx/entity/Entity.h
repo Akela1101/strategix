@@ -9,24 +9,25 @@ namespace strx
 
 class Entity : boost::noncopyable
 {
-	Player* const player;        /// link to owner
-	const EntityInfo& entiInfo;  /// link to tree
-	const IdType id;             /// unique id
-	RealCoord coord;             /// real coordinate
-	MapCoord mapCoord;           /// discreet coordinate of object
+	Game& game;                      /// link to game
+	Player& player;                  /// link to owner
+	const IdType id;                 /// unique id
+	const EntityInfo& entiInfo;      /// link to tree
+	RealCoord coord;                 /// real coordinate
+	MapCoord mapCoord;               /// discreet coordinate of object
 
 	using FeaturesType = umap<type_index, u_p<Feature>>;
-	FeaturesType features;       /// set of features
+	FeaturesType features;           /// set of features
 
-	Feature* task;               /// current active feature
-	vector<Feature*> passiveTasks; /// entity routines
-	/* ex.: regeneration, taking damage, etc. */
+	Feature* task;                   /// current active feature
+	vector<Feature*> passiveTasks;   /// entity routines like recovery or poison
 
 public:
-	Entity(const EntityInfo& entiInfo, IdType id, RealCoord coord, Player* player);
+	Entity(Game& game, Player& player, IdType id, const EntityInfo& entiInfo, RealCoord coord);
 	~Entity();
 
-	Player& GetPlayer() const { return *player; }
+	Game& GetGame() const { return game; }
+	Player& GetPlayer() const { return player; }
 	const EntityInfo& GetInfo() const { return entiInfo; }
 	int GetId() const { return id; }
 	RealCoord GetCoord() const { return coord; }

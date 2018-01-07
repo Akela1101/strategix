@@ -46,6 +46,6 @@ protected:
 	virtual void MineAmountChanged(IdType id, ResourceUnit amount) {}
 
 	/// mine removed
-	virtual void MineRemoved(IdType id) {}
+	virtual void ObjectRemoved(IdType id) {}
 };
 }

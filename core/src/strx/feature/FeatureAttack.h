@@ -7,14 +7,14 @@ namespace strx
 {
 class FeatureAttack : public Feature
 {
-	const FeatureInfoAttack* featureInfoAttack; // link to tree
+	const AttackFeatureInfo* const info; /// link to tree
 	s_p<Entity> target;
-	HpType hitProgress;
+	float hitProgress;
 
 public:
 	FeatureAttack(const FeatureInfo* featureInfo, Entity* entity);
 
-	bool Attack(s_p<Entity> target);
+	bool Attack(IdType targetId);
 	void Tick(float seconds) override;
 	void Stop() override;
 	void Completed(bool done) override; // moving complete

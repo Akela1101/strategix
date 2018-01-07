@@ -15,7 +15,7 @@ public:
 	virtual ~Feature() = default;
 
 	virtual void Tick(float seconds) = 0;
-	virtual void Stop() = 0;
+	virtual void Stop() {}
 	virtual void Completed(bool done) {}
 };
 }

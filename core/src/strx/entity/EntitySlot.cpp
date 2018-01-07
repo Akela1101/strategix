@@ -29,4 +29,9 @@ void EntitySlot::Collect(MapCoord coord, const string& resourceName)
 	GameSlot::SendMessageOne(make_s<CollectMessage>(GetId(), coord, resourceName));
 }
 
+void EntitySlot::Attack(IdType targetId)
+{
+	GameSlot::SendMessageOne(make_s<AttackMessage>(GetId(), targetId));
+}
+
 }

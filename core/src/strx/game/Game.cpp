@@ -1,8 +1,12 @@
 #include <boost/filesystem.hpp>
+#include <strx/common/EntityInfo.h>
+#include <strx/common/TechTree.h>
+#include <strx/entity/Entity.h>
 #include <strx/kernel/ConfigManager.h>
 #include <strx/kernel/Kernel.h>
 #include <strx/kernel/Message.h>
 #include <strx/map/Map.h>
+#include <strx/map/MapObject.h>
 #include <strx/player/Player.h>
 
 #include "Game.h"
@@ -17,14 +21,62 @@ Game::Game(const string& mapName)
 	LoadMap(mapName);
 }
 
+s_p<Entity> Game::GetEntity(IdType id) const
+{
+	auto i = entities.find(id);
+	return i == entities.end() ? nullptr : i->second;
+}
+
 void Game::ReceiveMessage(s_p<Message> message, PlayerId playerId)
 {
 	switch (message->GetType())
 	{
 	case Message::Type::PLAYER: AddPlayer(move(message), playerId); break;
 	case Message::Type::START: Ready(playerId); break;
-	default: players[playerId]->ReceiveMessage(move(message));
+	default:
+		auto&& command = dp_cast<CommandMessage>(message);
+		if (!command) nya_throw << "Unknown message: " << message->GetType().c_str();
+
+		auto i = entities.find(command->id);
+		if (i == entities.end()) nya_throw << "Entity with id %d does not exist."s % command->id;
+
+		Entity* entity = i->second.get();
+		entity->ReceiveMessage(move(command));
 	}
+}
+
+void Game::Tick(float seconds)
+{
+	for (auto& entity : entities | nya::map_values)
+	{
+		entity->Tick(seconds);
+	}
+
+	for (IdType entityId : removedEntities)
+	{
+		auto i = entities.find(entityId);
+		i->second->GetPlayer().EntityRemoved(entityId);
+		entities.erase(i);
+	}
+	removedEntities.clear();
+}
+
+void Game::AddEntity(MapEntity* mapEntity)
+{
+	auto& name = mapEntity->name;
+	PlayerId playerId = playerIds[mapEntity->ownerSpot];
+	auto& player = *players[playerId];
+	auto& info = player.GetTechTree().GetNode(name);
+	int objectId = mapEntity->id;
+
+	auto entity = make_s<Entity>(*this, player, objectId, info, mapEntity->coord);
+	player.EntityAdded(entity);
+	entities.emplace(objectId, move(entity));
+}
+
+void Game::RemoveEntity(IdType entityId)
+{
+	removedEntities.push_back(entityId);
 }
 
 s_p<MapMessage> Game::CreateMapMessage(int playerSpot)
@@ -50,6 +102,10 @@ void Game::AddPlayer(s_p<Message> message, PlayerId playerId)
 	if (in_(playerSpot, playerIds)) // replace is not supported yet
 		nya_throw << "Trying to add same player twice [%d], name: %s"s % playerSpot % playerMessage->name;
 
+	if (playerMessage->type != PlayerType::HUMAN)
+	{
+		playerId = Kernel::GetNextPlayerId(); // id for AI
+	}
 	playerIds.emplace(playerSpot, playerId);
 	plannedPlayers.push_back(playerMessage);
 
@@ -58,31 +114,43 @@ void Game::AddPlayer(s_p<Message> message, PlayerId playerId)
 
 void Game::Ready(PlayerId playerId)
 {
-	//TODO: check all players are ready
+	//@#~ should check all players are ready
 	Start();
 }
 
 void Game::Start()
 {
-	for (const auto& plannedPlayer : plannedPlayers)
+	for (const auto& playerMessage : plannedPlayers)
 	{
-		int playerSpot = plannedPlayer->spot;
+		int playerSpot = playerMessage->spot;
 		PlayerId playerId = playerIds[playerSpot];
 
 		// map
 		auto&& mapMessage = CreateMapMessage(playerSpot);
 		Map& map = *mapMessage->map;
-		if (plannedPlayer->type == PlayerType::HUMAN)
+		if (playerMessage->type == PlayerType::HUMAN)
 		{
 			Kernel::SendMessageOne(move(mapMessage), playerId);
 		}
 
 		// player
-		auto player = make_u<Player>(*plannedPlayer, playerId, map);
-		player->Start();
+		auto player = make_u<Player>(*this, playerId, *playerMessage, map);
 		players.emplace(playerId, move(player));
 	}
 	plannedPlayers.clear();
+
+	// entities
+	for (int y : boost::irange(0, map->GetLength()))
+	{
+		for (int x : boost::irange(0, map->GetWidth()))
+		{
+			auto object = map->GetCell(x, y).object.get();
+			if (auto mapEntity = dynamic_cast<MapEntity*>(object))
+			{
+				AddEntity(mapEntity);
+			}
+		}
+	}
 }
 
 }

@@ -21,6 +21,7 @@ public:
 	static void Tick(float seconds);
 	static void PrintInfo();
 
+	static PlayerId GetNextPlayerId();
 	static void SendMessageOne(s_p<Message> message, PlayerId playerId);
 	static void SendMessageAll(s_p<Message> message);
 	static void OnReceiveMessage(s_p<Message> message, PlayerId playerId);

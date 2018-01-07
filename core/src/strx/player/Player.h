@@ -8,44 +8,41 @@ namespace strx
 
 class Player : boost::noncopyable
 {
-	const PlayerId playerId;       /// unique id
-	const PlayerType type;         /// human | ai
-	const int spot;                /// id on map
-	const string name;             /// nick or alias
-	const string race;             /// race name
+	Game& game;                      /// link to game
+	const PlayerId id;               /// unique id
+	const PlayerType type;           /// human | ai
+	const int spot;                  /// id on map
+	const string name;               /// nick or alias
+	const string race;               /// race name
 
-	umap<IdType, u_p<Entity>> entities;  /// owned entities
-	u_p<Resources> resources;      /// available resources amount
-	Map& map;                      /// link to map
-	u_p<PathFinder> pathFinder;    /// map path finder
-	const TechTree& techTree;      /// link to tech tree
-	vector<Entity*> entisToRemove; /// entities removed at the end of Tick
+	umap<IdType, s_p<Entity>> entities;  /// owned entities
+	u_p<Resources> resources;        /// available resources amount
+	Map& map;                        /// link to map
+	u_p<PathFinder> pathFinder;      /// map path finder
+	const TechTree& techTree;        /// link to tech tree
 
 public:
-	Player(const PlayerMessage& playerMessage, PlayerId playerId, Map& map);
+	Player(Game& game, PlayerId id, const PlayerMessage& playerMessage, Map& map);
 	~Player();
 
-	const string& GetName() const { return name; }
+	Game& GetGame() const { return game; }
 	PlayerType GetType() const { return type; }
 	int GetSpot() const { return spot; }
+	const string& GetName() const { return name; }
+	s_p<Entity> GetEntity(IdType id) const;
 	Terrain* GetTerrain(MapCoord coord) const;
 	u_p<MapObject>& GetMapObject(MapCoord coord) const;
 	MapMine* GetMine(MapCoord coord) const;
 	const TechTree& GetTechTree() const { return techTree; }
 
-	void ReceiveMessage(s_p<Message> message);
-
 	/// initialize player with entities from map
 	void Start();
 
-	/// update player by time
-	void Tick(float seconds);
-
-	/// add entity
-	void AddEntity(u_p<Entity> entity);
+	/// entity added to game
+	void EntityAdded(s_p<Entity> entity);
 
 	/// remove entity
-	void RemoveEntity(Entity* entity);
+	void EntityRemoved(IdType id);
 
 	/// add resource to disposal
 	void AddResource(const Resource& deltaResource);
@@ -61,5 +58,8 @@ public:
 
 	/// pick resource from the mine and change it accordingly
 	ResourceUnit PickResource(MapMine* mine, ResourceUnit amount);
+
+private:
+	void ObjectRemoved(IdType id, MapCoord coord);
 };
 }

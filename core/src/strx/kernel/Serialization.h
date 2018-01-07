@@ -138,7 +138,7 @@ StrxSerialization(strx::MineAmountMessage)
 	ar & m.amount;
 }}}
 
-StrxSerialization(strx::MineRemovedMessage)
+StrxSerialization(strx::ObjectRemovedMessage)
 {
 	ar & base_object<strx::CommandMessage>(m);
 }}}
@@ -167,4 +167,10 @@ StrxSerialization(strx::CollectMessage)
 	ar & base_object<strx::CommandMessage>(m);
 	ar & m.coord;
 	ar & m.resourceName;
+}}}
+
+StrxSerialization(strx::AttackMessage)
+{
+	ar & base_object<strx::CommandMessage>(m);
+	ar & m.targetId;
 }}}

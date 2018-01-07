@@ -7,21 +7,22 @@ namespace strx
 {
 class FeatureHealth : public Feature
 {
-protected:
-	const FeatureInfoHealth* featureInfoHealth; // Link to tree
-
-private:
+	const HealthFeatureInfo* const info; /// Link to tree
 	HpType hp;
 
 public:
 	FeatureHealth(const FeatureInfo* featureInfo, Entity* entity);
-	
-	void Tick(float seconds) override;
-	void Stop() override;
-	
-	const HpType GetHp() const { return hp; }
-	
+
+	HpType GetHp() const { return hp; }
 	const HpType GetMaxHp() const;
-	bool HpChange(HpType deltaHp); // false if become dead
+
+	void Tick(float seconds) override;
+
+	/**
+	 * Change HP.
+	 * @param deltaHp hp difference (should be less than zero to reduce hp)
+	 * @return false if destroied
+	 */
+	bool ChangeHp(HpType deltaHp);
 };
 }

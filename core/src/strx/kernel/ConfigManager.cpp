@@ -111,26 +111,27 @@ struct ConfigurationManagerImpl
 			if (name == "move")
 			{
 				auto speed = feature.get<float>("speed");
-				return make_u<FeatureInfoMove>(speed);
+				return make_u<MoveFeatureInfo>(speed);
 			}
 			else if (name == "collect")
 			{
 				auto speed = feature.get<float>("speed");
 				auto radius = feature.get<float>("radius");
 				u_p<Resources> capacities = ParseResources(feature.get_child("capacities"));
-				return make_u<FeatureInfoCollect>(speed, radius, move(capacities));
+				return make_u<CollectFeatureInfo>(speed, radius, move(capacities));
 			}
 			else if (name == "health")
 			{
 				auto hp = feature.get<HpType>("hp");
-				auto regenSpeed = feature.get<float>("regenSpeed");
-				return make_u<FeatureInfoHealth>(hp, regenSpeed);
+				auto recovery = feature.get<float>("recovery");
+				return make_u<HealthFeatureInfo>(hp, recovery);
 			}
 			else if (name == "attack")
 			{
 				auto damage = feature.get<HpType>("damage");
 				auto speed = feature.get<float>("speed");
-				return make_u<FeatureInfoAttack>(damage, speed);
+				auto radius = feature.get<float>("radius");
+				return make_u<AttackFeatureInfo>(damage, speed, radius);
 			}
 		}
 		catch (pt::ptree_error& e)

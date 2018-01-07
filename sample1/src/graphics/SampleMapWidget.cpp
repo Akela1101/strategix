@@ -14,22 +14,32 @@ namespace sample1
 SampleMapWidget::SampleMapWidget(QScrollArea* parent) : MapWidget(parent) {}
 SampleMapWidget::~SampleMapWidget() {}
 
-void SampleMapWidget::Init(SampleGame* game, SamplePlayer* humanPlayer)
+void SampleMapWidget::Init(SampleGame* game, SamplePlayer* player)
 {
 	this->game = game;
-	this->humanPlayer = humanPlayer;
-	humanPlayerId = humanPlayer->GetSpot();
+	this->player = player;
+	playerSpot = player->GetSpot();
+}
+
+void SampleMapWidget::ObjectRemoved(IdType id)
+{
+	if (MapObject* object = GetMapObject(id))
+	{
+		MapCoord coord = object->coord;
+		map->ChangeObject(map->GetCell(coord), nullptr);
+		mapObjects.erase(id);
+		update(GetUpdateRect(coord));
+	}
 }
 
 void SampleMapWidget::OnEntityMoved(IdType id, RealCoord coord)
 {
-	if (MapObject* object = mapObjects[id])
+	if (MapObject* object = GetMapObject(id))
 	{
 		update(GetUpdateRect(coord));
 		update(GetUpdateRect(object->coord));
 		object->coord = coord;
 	}
-	else error_log << "Entity with id %d does not exist."s % id;
 }
 
 void SampleMapWidget::OnEntityMapMoved(MapCoord from, MapCoord to)
@@ -41,18 +51,6 @@ void SampleMapWidget::OnEntityMapMoved(MapCoord from, MapCoord to)
 		return;
 	}
 	object = std::move(map->GetCell(from).object);
-}
-
-void SampleMapWidget::OnMineRemoved(IdType id)
-{
-	if (MapMine* mine = dynamic_cast<MapMine*>(mapObjects[id]))
-	{
-		MapCoord coord = mine->coord;
-		map->ChangeObject(map->GetCell(coord), nullptr);
-		mapObjects.erase(id);
-		update(GetUpdateRect(coord));
-	}
-	else error_log << "Mine with id %d does not exist."s % id;
 }
 
 void SampleMapWidget::ObjectAdded(MapObject* object)
@@ -94,8 +92,8 @@ void SampleMapWidget::mousePressEvent(QMouseEvent* event)
 	{
 		if (currentEntity)
 		{
-			auto& entity = game->GetEntitySlot(currentEntity->id);
-			entity.Move(coord);
+			auto& entitySlot = game->GetEntitySlot(currentEntity->id);
+			entitySlot.Move(coord);
 		}
 		return;
 	}
@@ -105,8 +103,8 @@ void SampleMapWidget::mousePressEvent(QMouseEvent* event)
 	{
 		if (currentEntity)
 		{
-			auto& entity = game->GetEntitySlot(currentEntity->id);
-			entity.Collect(coord, mine->name);
+			auto& entitySlot = game->GetEntitySlot(currentEntity->id);
+			entitySlot.Collect(coord, mine->name);
 		}
 		return;
 	}
@@ -114,7 +112,7 @@ void SampleMapWidget::mousePressEvent(QMouseEvent* event)
 	// click on entity -> select or attack
 	if (MapEntity* entity = dynamic_cast<MapEntity*>(object))
 	{
-		if (entity->ownerSpot == humanPlayerId)
+		if (entity->ownerSpot == playerSpot)
 		{
 			ChangeSelection(entity);
 			return;
@@ -122,8 +120,19 @@ void SampleMapWidget::mousePressEvent(QMouseEvent* event)
 
 		if (currentEntity)
 		{
-			// @#~
+			auto& entitySlot = game->GetEntitySlot(currentEntity->id);
+			entitySlot.Attack(entity->id);
 		}
+	}
+}
+
+MapObject* SampleMapWidget::GetMapObject(IdType id) const
+{
+	try { return mapObjects.at(id); }
+	catch (out_of_range&)
+	{
+		error_log << "Object with id %d does not exist."s % id;
+		return nullptr;
 	}
 }
 

@@ -19,10 +19,11 @@ struct Message : boost::noncopyable
 	    K(ENTITY)          /* entity description */ \
 	    K(RESOURCES)       /* player resources */ \
 	    K(MINE_AMOUNT)     /* mine amount changed */ \
-	    K(MINE_REMOVED)    /* mine removed */ \
+	    K(OBJECT_REMOVED)    /* mine removed */ \
 	    K(MOVE)            /* entity map placing change */ \
 	    K(REAL_MOVE)       /* entity precise coordinate move */ \
-	    K(COLLECT)         /* collect mine */
+	    K(COLLECT)         /* collect mine */ \
+	    K(ATTACK)          /* attack other entity */
 	nya_enum(Type, MessageTypeEnumDef)
 
 	virtual ~Message() = default;
@@ -130,10 +131,10 @@ struct MineAmountMessage : CommandMessage
 	Type GetType() const override { return Type::MINE_AMOUNT; }
 };
 
-struct MineRemovedMessage : CommandMessage
+struct ObjectRemovedMessage : CommandMessage
 {
 	using CommandMessage::CommandMessage;
-	Type GetType() const override { return Type::MINE_REMOVED; }
+	Type GetType() const override { return Type::OBJECT_REMOVED; }
 };
 
 struct MoveMessage : CommandMessage
@@ -173,6 +174,15 @@ struct CollectMessage : CommandMessage
 	CollectMessage(IdType id, MapCoord coord, string resourceName)
 	    : CommandMessage(id), coord(coord), resourceName(move(resourceName)) {}
 	Type GetType() const override { return Type::COLLECT; }
+};
+
+struct AttackMessage : CommandMessage
+{
+	IdType targetId;
+
+	AttackMessage() = default;
+	AttackMessage(IdType id, IdType targetId) : CommandMessage(id), targetId(targetId) {}
+	Type GetType() const override { return Type::ATTACK; }
 };
 
 }

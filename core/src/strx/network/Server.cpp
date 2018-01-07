@@ -13,14 +13,12 @@ static u_p<thread> serverThread;                     // server thread
 static u_p<tcp::socket> socket;                      // socket for the next connection
 static u_p<tcp::acceptor> acceptor;                  // connection listener
 static umap<PlayerId, u_p<Connection>> connections;  // connections
-static PlayerId currentConnectionId;                 // incrementing connection id
 
 
 void Server::Run(ushort port)
 {
 	acceptor.reset(new tcp::acceptor(eventLoop, tcp::endpoint(tcp::v4(), port)));
 	socket.reset(new tcp::socket(eventLoop));
-	currentConnectionId = 0;
 	AcceptConnection();
 
 	serverThread.reset(new thread([]()
@@ -55,7 +53,7 @@ void Server::AcceptConnection()
 	{
 		if (!ec)
 		{
-			PlayerId id = ++currentConnectionId;
+			PlayerId id = Kernel::GetNextPlayerId();
 			auto connection = new Connection(id, move(*socket), ReceiveMessage);
 
 			connections.emplace(id, connection);
@@ -77,10 +75,12 @@ void Server::ReceiveMessage(s_p<Message> message, PlayerId id)
 void Server::SendMessageOne(s_p<Message> message, PlayerId id)
 {
 	auto i = connections.find(id);
-	if (i != connections.end())
+	if (i == connections.end())
 	{
-		i->second->Write(message);
+		error_log << "Player with id %d is not connected!"s % id;
+		return;
 	}
+	i->second->Write(message);
 }
 
 void Server::SendMessageAll(s_p<Message> message)

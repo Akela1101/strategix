@@ -58,9 +58,9 @@ void SampleGame::ResourcesChanged(const Resources& newResources)
 	gameWidget->OnResourcesChanged(newResources);
 }
 
-void SampleGame::MineRemoved(IdType id)
+void SampleGame::ObjectRemoved(IdType id)
 {
-	mapWidget->OnMineRemoved(id);
+	mapWidget->ObjectRemoved(id);
 }
 
 }
