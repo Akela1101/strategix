@@ -11,9 +11,10 @@ class EntitySlot : boost::noncopyable
 
 public:
 	EntitySlot(s_p<EntityMessage> entityMessage);
-	virtual ~EntitySlot() {}
+	virtual ~EntitySlot() = default;
 
 	IdType GetId() const;
+	HpType GetMaxHp() const;
 
 	void Move(MapCoord coord);
 	void Collect(MapCoord coord, const string& resourceName);
@@ -21,7 +22,6 @@ public:
 
 	virtual void Moved(RealCoord coord) = 0;
 	virtual void MapMoved(MapCoord from, MapCoord to) {}
-	virtual void HpChanged() {}
-	virtual void Attacked() {}
+	virtual void HpChanged(HpType hp) {}
 };
 }

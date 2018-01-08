@@ -55,6 +55,8 @@ void Game::Tick(float seconds)
 	for (IdType entityId : removedEntities)
 	{
 		auto i = entities.find(entityId);
+		if (i == entities.end()) nya_throw << "Trying to destroy entity %d one more time."s % entityId;
+
 		i->second->GetPlayer().EntityRemoved(entityId);
 		entities.erase(i);
 	}

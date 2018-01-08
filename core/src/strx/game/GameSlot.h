@@ -39,13 +39,10 @@ protected:
 	/// player resources change
 	virtual void ResourcesChanged(const Resources& newResources) {}
 
-	/// removing entity from map
-	//virtual void EntiRemoved(Entity* entity) = 0;
-
 	/// mine amount changed
 	virtual void MineAmountChanged(IdType id, ResourceUnit amount) {}
 
-	/// mine removed
-	virtual void ObjectRemoved(IdType id) {}
+	/// object removed
+	virtual void ObjectRemoved(IdType id) = 0;
 };
 }

@@ -19,11 +19,12 @@ struct Message : boost::noncopyable
 	    K(ENTITY)          /* entity description */ \
 	    K(RESOURCES)       /* player resources */ \
 	    K(MINE_AMOUNT)     /* mine amount changed */ \
-	    K(OBJECT_REMOVED)    /* mine removed */ \
+	    K(OBJECT_REMOVED)  /* object removed */ \
 	    K(MOVE)            /* entity map placing change */ \
 	    K(REAL_MOVE)       /* entity precise coordinate move */ \
 	    K(COLLECT)         /* collect mine */ \
-	    K(ATTACK)          /* attack other entity */
+	    K(ATTACK)          /* attack other entity */ \
+	    K(HP)              /* hit points change */
 	nya_enum(Type, MessageTypeEnumDef)
 
 	virtual ~Message() = default;
@@ -99,9 +100,11 @@ struct EntityMessage : Message
 {
 	int playerSpot;
 	IdType id;
+	HpType maxHp;
 
 	EntityMessage() = default;
-	EntityMessage(int playerSpot, IdType id) : playerSpot(playerSpot), id(id) {}
+	EntityMessage(int playerSpot, IdType id, HpType maxHp)
+	    : playerSpot(playerSpot), id(id), maxHp(maxHp) {}
 	Type GetType() const override { return Type::ENTITY; }
 };
 
@@ -183,6 +186,15 @@ struct AttackMessage : CommandMessage
 	AttackMessage() = default;
 	AttackMessage(IdType id, IdType targetId) : CommandMessage(id), targetId(targetId) {}
 	Type GetType() const override { return Type::ATTACK; }
+};
+
+struct HpMessage : CommandMessage
+{
+	HpType hp;
+
+	HpMessage() = default;
+	HpMessage(IdType id, HpType hp) : CommandMessage(id), hp(hp) {}
+	Type GetType() const override { return Type::HP; }
 };
 
 }

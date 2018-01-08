@@ -66,6 +66,7 @@ void MapWidget::paintEvent(QPaintEvent* event)
 	int fromY = max(0, rc.top() / tileLen - 1);
 	int tillX = min(map->GetWidth() - 1, rc.right() / tileLen + 1);
 	int tillY = min(map->GetLength() - 1, rc.bottom() / tileLen + 1);
+
 	for (int row = fromY; row <= tillY; ++row)
 	{
 		for (int col = fromX; col <= tillX; ++col)
@@ -102,7 +103,7 @@ void MapWidget::wheelEvent(QWheelEvent* event)
 	QScrollBar* hSB = scrollArea->horizontalScrollBar();
 	int tilesNumberX = hSB->pageStep() / maxZoom;       // number of tiles on screen for max zoom
 	int centralWidth = map->GetWidth() - tilesNumberX;  // number of tiles in the center of screen
-	int centralX = point.x() - tilesNumberX / 2;      // position in central coordinates
+	int centralX = point.x() - tilesNumberX / 2;        // position in central coordinates
 	if (centralWidth < 1) centralWidth = 1;
 	hSB->setSliderPosition(hSB->maximum() * centralX / centralWidth);
 
@@ -164,14 +165,13 @@ void MapWidget::DrawObject(MapObject* object, QPainter& painter)
 	QRect rc = GetBaseRect(object->coord);
 	painter.drawPixmap(rc, tool.image);
 
-	if (tool.type == ToolType::ENTITY) // player geo-tag
+	if (auto mapEntity = dynamic_cast<MapEntity*>(object)) // player geo-tag
 	{
-		auto entityObject = (MapEntity*) object;
 		int w = rc.width(), h = rc.height();
 		QRect markRc = rc.adjusted(0, 0, -w / 2, -h / 2);
 
 		painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
-		painter.drawPixmap(markRc, MapInfo::GetPlayerMark(entityObject->ownerSpot));
+		painter.drawPixmap(markRc, MapInfo::GetPlayerMark(mapEntity->ownerSpot));
 	}
 }
 

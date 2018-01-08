@@ -33,6 +33,7 @@ const QPixmap& MapInfo::GetPlayerMark(int playerNumber)
 void MapInfo::QRegisterTypes()
 {
 	Q_REG_TYPE(IdType);
+	Q_REG_TYPE(HpType);
 	Q_REG_TYPE(MapCoord);
 	Q_REG_TYPE(RealCoord);
 	Q_REG_TYPE(Resources);

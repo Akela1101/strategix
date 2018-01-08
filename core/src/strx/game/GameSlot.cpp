@@ -107,6 +107,12 @@ void GameSlot::ReceiveMessage(s_p<Message> message)
 		entities[moveMessage->id]->Moved(moveMessage->coord);
 		break;
 	}
+	case Message::Type::HP:
+	{
+		const auto& hpMessage = sp_cast<HpMessage>(message);
+		entities[hpMessage->id]->HpChanged(hpMessage->hp);
+		break;
+	}
 	default:
 		error_log << "Unable to handle message: " << message->GetType().c_str();
 	}

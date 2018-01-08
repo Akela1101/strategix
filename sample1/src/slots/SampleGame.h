@@ -18,7 +18,7 @@ public:
 	~SampleGame() override;
 
 private:
-	void MessageReceived(s_p<Message> message) override { qInvoke(this, [=](){ ReceiveMessage(move(message)); }); }
+	void MessageReceived(s_p<Message> message) override;
 	void StartGame(s_p<Map> map) override;
 	u_p<PlayerSlot> AddPlayer(s_p<PlayerMessage> playerMessage) override;
 	u_p<EntitySlot> AddEntity(s_p<EntityMessage> entityMessage) override;

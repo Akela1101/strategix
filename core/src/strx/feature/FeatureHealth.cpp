@@ -2,6 +2,8 @@
 #include <strx/entity/EntitySlot.h>
 #include <strx/feature/FeatureInfo.h>
 #include <strx/game/Game.h>
+#include <strx/kernel/Kernel.h>
+#include <strx/kernel/Message.h>
 #include <strx/player/Player.h>
 
 #include "FeatureHealth.h"
@@ -26,6 +28,8 @@ const HpType FeatureHealth::GetMaxHp() const
 
 bool FeatureHealth::ChangeHp(HpType deltaHp)
 {
+	if (hp == 0) return false; // prevent destroing more than once
+
 	hp += deltaHp;
 
 	if (hp <= 0)
@@ -37,7 +41,7 @@ bool FeatureHealth::ChangeHp(HpType deltaHp)
 	{
 		hp = info->hp; // stop recovery
 	}
-	//@#~entity->GetSlot().OnHpChange();
+	Kernel::SendMessageAll(make_s<HpMessage>(entity->GetId(), hp));
 	return hp != 0;
 }
 

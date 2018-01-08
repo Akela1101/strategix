@@ -18,23 +18,26 @@ Q_OBJECT
 
 public:
 	SampleMapWidget(QScrollArea* parent);
-	~SampleMapWidget();
+	~SampleMapWidget() override;
 
+	MapObject* GetMapObject(IdType id) const;
 	void Init(SampleGame* game, SamplePlayer* player);
 	void ObjectRemoved(IdType id);
 
 public slots:
 	void OnEntityMoved(IdType id, RealCoord coord);
 	void OnEntityMapMoved(MapCoord from, MapCoord to);
+	void OnEntityHpChanged(IdType id, HpType hp);
 
 protected:
 	void ObjectAdded(MapObject* object) override;
+	void DrawObject(MapObject* object, QPainter& painter) override;
+	QRect GetUpdateRect(RealCoord coord) override;
 
 	void paintEvent(QPaintEvent*) override;
 	void mousePressEvent(QMouseEvent* event) override;
 
 private:
-	MapObject* GetMapObject(IdType id) const;
 	void ChangeSelection(MapEntity* entity);
 };
 

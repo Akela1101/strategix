@@ -55,7 +55,7 @@ void Player::EntityAdded(s_p<Entity> entity)
 {
 	Entity& entityRef = *entity;
 	entities.emplace(entityRef.GetId(), move(entity));
-	Kernel::SendMessageAll(make_s<EntityMessage>(spot, entityRef.GetId()));
+	Kernel::SendMessageAll(make_s<EntityMessage>(spot, entityRef.GetId(), entityRef.GetMaxHp()));
 }
 
 void Player::EntityRemoved(IdType id)

@@ -26,7 +26,6 @@ protected:
 
 public:
 	MapWidget(QScrollArea* parent);
-	~MapWidget() = default;
 
 	void SetMap(s_p<Map> newMap);
 
@@ -40,8 +39,8 @@ protected:
 	void mouseReleaseEvent(QMouseEvent* event) override;
 
 	void DrawTerrain(const QPixmap& pixmap, const QRect& rc);
-	void DrawObject(MapObject* object, QPainter& painter);
-	QRect GetUpdateRect(RealCoord coord);
+	virtual void DrawObject(MapObject* object, QPainter& painter);
+	virtual QRect GetUpdateRect(RealCoord coord);
 	static QRect GetBaseRect(RealCoord coord);
 
 signals:

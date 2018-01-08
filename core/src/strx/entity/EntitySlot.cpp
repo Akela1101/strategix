@@ -19,6 +19,11 @@ IdType EntitySlot::GetId() const
 	return entityMessage->id;
 }
 
+HpType EntitySlot::GetMaxHp() const
+{
+	return entityMessage->maxHp;
+}
+
 void EntitySlot::Move(MapCoord coord)
 {
 	GameSlot::SendMessageOne(make_s<MoveMessage>(GetId(), coord));

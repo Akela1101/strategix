@@ -118,6 +118,7 @@ StrxSerialization(strx::EntityMessage)
 	ar & base_object<strx::Message>(m);
 	ar & m.playerSpot;
 	ar & m.id;
+	ar & m.maxHp;
 }}}
 
 StrxSerialization(strx::ResourcesMessage)
@@ -173,4 +174,10 @@ StrxSerialization(strx::AttackMessage)
 {
 	ar & base_object<strx::CommandMessage>(m);
 	ar & m.targetId;
+}}}
+
+StrxSerialization(strx::HpMessage)
+{
+	ar & base_object<strx::CommandMessage>(m);
+	ar & m.hp;
 }}}

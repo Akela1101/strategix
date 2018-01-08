@@ -32,6 +32,8 @@ public:
 	int GetId() const { return id; }
 	RealCoord GetCoord() const { return coord; }
 	MapCoord GetMapCoord() const { return mapCoord; }
+	HpType GetMaxHp() const;
+	HpType GetHp() const;
 
 	/// receive player command
 	void ReceiveMessage(s_p<CommandMessage> message);
@@ -54,7 +56,7 @@ public:
 
 	/// return feature, or throw if nothing found
 	template<typename F>
-	F& Do() { return dynamic_cast<F&>(GetFeature(typeid(F))); }
+	F& Do() const { return dynamic_cast<F&>(GetFeature(typeid(F))); }
 
 private:
 	Feature& GetFeature(type_index type) const;

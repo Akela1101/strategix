@@ -21,6 +21,19 @@ void SampleGame::Configure()
 
 SampleGame::SampleGame() {}
 
+void SampleGame::MessageReceived(s_p<Message> message)
+{
+	qInvoke(this, [=]()
+	{
+		Message::Type type = message->GetType();
+		try { ReceiveMessage(move(message)); }
+		catch (exception& e)
+		{
+			error_log << "Error while handling message %s: %s"s % type.c_str() % e.what();
+		}
+	});
+}
+
 SampleGame::~SampleGame() = default;
 
 void SampleGame::StartGame(s_p<Map> map)
@@ -47,9 +60,9 @@ u_p<PlayerSlot> SampleGame::AddPlayer(s_p<PlayerMessage> playerMessage)
 
 u_p<EntitySlot> SampleGame::AddEntity(s_p<EntityMessage> entityMessage)
 {
-	auto entity = make_u<SampleEntity>(move(entityMessage));
-	connect(entity.get(), &SampleEntity::DoMoved, mapWidget, &SampleMapWidget::OnEntityMoved);
-	connect(entity.get(), &SampleEntity::DoMapMoved, mapWidget, &SampleMapWidget::OnEntityMapMoved);
+	auto entity = make_u<SampleEntity>(move(entityMessage), mapWidget);
+	auto mapEntity = (MapEntity*)mapWidget->GetMapObject(entity->GetId());
+	mapEntity->SetMaxHp(entity->GetMaxHp());
 	return entity;
 }
 

@@ -31,6 +31,16 @@ Entity::Entity(Game& game, Player& player, IdType id, const EntityInfo& entiInfo
 	}
 }
 
+HpType Entity::GetMaxHp() const
+{
+	return Do<FeatureHealth>().GetMaxHp();
+}
+
+HpType Entity::GetHp() const
+{
+	return Do<FeatureHealth>().GetHp();
+}
+
 Entity::~Entity() = default;
 
 void Entity::ReceiveMessage(s_p<CommandMessage> message)

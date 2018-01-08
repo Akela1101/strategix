@@ -14,6 +14,16 @@ namespace sample1
 SampleMapWidget::SampleMapWidget(QScrollArea* parent) : MapWidget(parent) {}
 SampleMapWidget::~SampleMapWidget() {}
 
+MapObject* SampleMapWidget::GetMapObject(IdType id) const
+{
+	try { return mapObjects.at(id); }
+	catch (out_of_range&)
+	{
+		error_log << "Object with id %d does not exist."s % id;
+		return nullptr;
+	}
+}
+
 void SampleMapWidget::Init(SampleGame* game, SamplePlayer* player)
 {
 	this->game = game;
@@ -53,9 +63,41 @@ void SampleMapWidget::OnEntityMapMoved(MapCoord from, MapCoord to)
 	object = std::move(map->GetCell(from).object);
 }
 
+void SampleMapWidget::OnEntityHpChanged(IdType id, HpType hp)
+{
+	if (auto entity = (MapEntity*)GetMapObject(id))
+	{
+		entity->hp = hp;
+		update(GetUpdateRect(entity->coord));
+	}
+}
+
 void SampleMapWidget::ObjectAdded(MapObject* object)
 {
 	mapObjects.emplace(object->id, object);
+}
+
+void SampleMapWidget::DrawObject(MapObject* object, QPainter& painter)
+{
+	MapWidget::DrawObject(object, painter);
+
+	// hp bar
+	if (auto mapEntity = dynamic_cast<MapEntity*>(object))
+	{
+		QRect rc = GetBaseRect(object->coord);
+		int width = (rc.width() - 6) * mapEntity->hp / mapEntity->maxHp;
+		QRect barRc { rc.left() + 3, rc.top() - 15, width, 10 };
+
+		painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
+		painter.setBrush(QColor(100, 255, 100));
+		painter.drawRect(barRc);
+	}
+}
+
+QRect SampleMapWidget::GetUpdateRect(RealCoord coord)
+{
+	QRect rc = MapWidget::GetUpdateRect(coord);
+	return rc.adjusted(0, -16, 0, 0); // hp bar
 }
 
 void SampleMapWidget::paintEvent(QPaintEvent* event)
@@ -123,16 +165,6 @@ void SampleMapWidget::mousePressEvent(QMouseEvent* event)
 			auto& entitySlot = game->GetEntitySlot(currentEntity->id);
 			entitySlot.Attack(entity->id);
 		}
-	}
-}
-
-MapObject* SampleMapWidget::GetMapObject(IdType id) const
-{
-	try { return mapObjects.at(id); }
-	catch (out_of_range&)
-	{
-		error_log << "Object with id %d does not exist."s % id;
-		return nullptr;
 	}
 }
 

@@ -20,11 +20,15 @@ struct MapObject
 struct MapEntity : MapObject
 {
 	int ownerSpot;        /// owner player spot
+	HpType hp;            /// HP
+	HpType maxHp;         /// max HP
 
 	MapEntity(IdType id, string name, RealCoord coord, int ownerSpot)
-	    : MapObject(id, move(name), coord), ownerSpot(ownerSpot) {}
+	    : MapObject(id, move(name), coord), ownerSpot(ownerSpot), hp(0), maxHp(1) {}
 	MapEntity(const MapEntity& other) : MapObject(other), ownerSpot(other.ownerSpot) {}
 	MapObject* clone() override { return new MapEntity(*this); }
+
+	void SetMaxHp(HpType initHp) { hp = maxHp = initHp; }
 };
 
 }
