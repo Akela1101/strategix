@@ -1,21 +1,28 @@
 # Strategix — RTS game engine (draft)
-The main aim of this project is a base library for common Real-Time Strategy games. 
+The main aim of this project — to provide a template for common Real-Time Strategy games. 
 
 ## Contents
 * core — strategix core library
+* server — server based on this library
 * map_editor — qt application for map editing
-* sample1 — sample of game based on map_editor \[ in progress... ]
-![screenshot1](docs/screenshots/2017_12_11.png)
+* sample1 — sample of client, based on map_editor
+
+![screenshot1](docs/screenshots/screenshot1.png)
+
+## Features
+* Configuring games with json.
+* Simple client-server protocol.
+* Entities now able to collect resources and attack enemy units.
 
 ## Dependencies
-* boost
-* qt5
-* [easylogging++](https://github.com/muflihun/easyloggingpp)
-* [nya](https://github.com/Akela1101/nya)
+* boost (filesystem, json, network, serialization, ...)
+* qt5 (widgets for map editor)
+* [easylogging++](https://github.com/muflihun/easyloggingpp) (logs)
+* [nya](https://github.com/Akela1101/nya) (my toolbox)
 
 ## Build
 Probably any popular C++17 compiler can be used. 
-But tested on **mingw64 gcc 7.2** from [msys2](http://www.msys2.org/).
+But tested on **mingw64 gcc** from [msys2](http://www.msys2.org/).
 ```sh
 cd <your projects dir>
 git clone git@github.com:muflihun/easyloggingpp.git
@@ -26,9 +33,11 @@ mkdir build && cd build
 cmake .. # see below
 make
 ```
-cmake might ask for some options like the prefix to QT
-, so the command would be:
+It seems, cmake now does not build binary subprojects automatically:
+```sh
+cmake ../easyloggingpp
+```
+Also cmake might ask for some options like a prefix to custom QT:
 ```sh
 cmake -DCMAKE_PREFIX_PATH=C:\msys\mingw64\qt5-static ..
 ```
-Anyway it's better to use IDE for build purposes.
