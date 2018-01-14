@@ -16,7 +16,7 @@ The main aim of this project — to provide a template for common Real-Time Stra
 
 ## Dependencies
 * boost (filesystem, json, network, serialization, ...)
-* qt5 (widgets for map editor)
+* qt >=5.10 (widgets for map editor)
 * [easylogging++](https://github.com/muflihun/easyloggingpp) (logs)
 * [nya](https://github.com/Akela1101/nya) (my toolbox)
 
