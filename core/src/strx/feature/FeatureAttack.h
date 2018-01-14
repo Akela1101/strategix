@@ -9,6 +9,7 @@ class FeatureAttack : public Feature
 {
 	const AttackFeatureInfo* const info; /// link to tree
 	s_p<Entity> target;
+	w_p<Entity> movingTarget;
 	float hitProgress;
 
 public:

@@ -20,6 +20,12 @@ FeatureMove::FeatureMove(const FeatureInfo* featureInfo, Entity* entity)
 
 FeatureMove::~FeatureMove() = default;
 
+void FeatureMove::Move(s_p<Entity> target, float radius, Feature* mover)
+{
+    this->target = move(target);
+    Move(this->target->GetMapCoord(), radius, mover);
+}
+
 void FeatureMove::Move(MapCoord coord, float radius, Feature* mover)
 {
 	this->coord = coord;
@@ -48,7 +54,10 @@ void FeatureMove::Tick(float seconds)
 	}
 }
 
-void FeatureMove::Stop() {}
+void FeatureMove::Stop()
+{
+	target.reset();
+}
 
 bool FeatureMove::NextPoint()
 {
@@ -72,7 +81,8 @@ bool FeatureMove::NextPoint()
 
 void FeatureMove::RebuildPath()
 {
-	path = entity->GetPlayer().FindPath(entity->GetMapCoord(), coord, radius);
+	MapCoord targetCoord = target ? target->GetMapCoord() : coord;
+	path = entity->GetPlayer().FindPath(entity->GetMapCoord(), targetCoord, radius);
 	if (distance > 0)
 	{
 		// first point shouldn't be removed, if it's still moving there

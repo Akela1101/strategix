@@ -7,6 +7,7 @@ namespace strx
 class FeatureMove : public Feature
 {
 	const MoveFeatureInfo* const info; /// Link to tree
+	s_p<Entity> target;   /// target entity (can be null)
 	MapCoord coord;       /// finish coordinate
 	float radius;         /// finish point radius
 	Feature* mover;       /// feature started moving (can be null)
@@ -21,6 +22,7 @@ public:
 	FeatureMove(const FeatureInfo* featureInfo, Entity* entity);
 	~FeatureMove();
 
+	void Move(s_p<Entity> target, float radius, Feature* mover);
 	void Move(MapCoord coord, float radius, Feature* mover);
 	void Tick(float seconds) override;
 	void Stop() override;

@@ -27,25 +27,37 @@ bool FeatureAttack::Attack(IdType targetId)
 		return false;
 	}
 
-	hitProgress = 0;
+	hitProgress = 1.0; // first hit is instant, if near the target
 
-	// move and wait it done
-	entity->Do<FeatureMove>().Move(target->GetCoord(), info->radius, this);
+	entity->AssignTask(this);
 	return true;
 }
 
 void FeatureAttack::Tick(float seconds)
 {
-	if (!target) return;
-
-	if (hitProgress < 1) // preparing for hit
+	// prepare for a hit
+	if (hitProgress < 1)
 	{
 		hitProgress += seconds * info->speed;
 		return;
 	}
-	--hitProgress;
+
+	// check it's not destroied
+	if (target->GetHp() == 0)
+	{
+		entity->AssignTask(nullptr);
+		return;
+	}
+
+	// pursue the target
+	if ((entity->GetMapCoord() - target->GetMapCoord()).Len() > info->radius)
+	{
+		entity->Do<FeatureMove>().Move(target, info->radius, this);
+		return;
+	}
 
 	// one hit
+	--hitProgress;
 	if (!target->Do<FeatureHealth>().ChangeHp(-info->damage))
 	{
 		entity->AssignTask(nullptr); // target destroied
@@ -54,6 +66,7 @@ void FeatureAttack::Tick(float seconds)
 
 void FeatureAttack::Stop()
 {
+	movingTarget = target;
 	target.reset();
 }
 
@@ -61,7 +74,10 @@ void FeatureAttack::Completed(bool done)
 {
 	if (!done) return;
 
-	entity->AssignTask(this);
+	if (target = movingTarget.lock())
+	{
+		entity->AssignTask(this);
+	}
 }
 
 }
