@@ -28,7 +28,7 @@ void RedirectIOToConsole()
 	long lStdHandle;
 	CONSOLE_SCREEN_BUFFER_INFO coninfo;
 	FILE *fp;
-	
+
 	AllocConsole();
 
 	// set the screen buffer to be big enough to let us scroll text
@@ -57,7 +57,7 @@ void RedirectIOToConsole()
 	*stderr = *fp;
 	setvbuf( stderr, NULL, _IONBF, 0 );
 
-	// make cout, wcout, cin, wcin, wcerr, cerr, wclog and clog 
+	// make cout, wcout, cin, wcin, wcerr, cerr, wclog and clog
 	// point to console as well
 	ios::sync_with_stdio();
 }
@@ -72,21 +72,17 @@ int main(int argc, char* argv[])
 {
 #endif
 	using namespace sample1;
-	
+
 	QApplication app(argc, argv);
 	nya::init_logs("config/log.conf");
-	
+
 	SampleGame::Configure();
-	
+
 	try // run a game
 	{
 		// connect to server asyncronously
-		SampleGame game;
+		SampleGame game(argc == 1 ? 1 : 3); //TODO: select player in gui
 
-		//game->Create();
-		
-		//game->Join();
-		
 		// start graphics
 		app.exec();
 	}
@@ -98,7 +94,7 @@ int main(int argc, char* argv[])
 	{
 		error_log << "Unexpected error occurred:\n[" << e.what() << "] \nFinishing the game..." << endl;
 	}
-	
+
 #if defined( _MSC_VER )
 	getch();
 #endif

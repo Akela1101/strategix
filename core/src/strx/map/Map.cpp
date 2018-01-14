@@ -32,7 +32,7 @@ Map::Map(string name, int width, int height, TerrainsType terrains)
         , length(length)
         , terrains(move(terrains))
 {
-	CheckDimentions();
+    CheckDimentions();
 
 	cells.reserve(height);
 	for (int row = 0; row < height; ++row)
@@ -50,14 +50,14 @@ Map::Map(string name, const string& data)
     : name(move(name))
     , terrains(new umap<string, u_p<Terrain>>())
 {
-	LoadFromString(data);
+    LoadFromString(data);
 }
 
 Map::Map(const string& path)
         : name(boost::filesystem::path(path).stem().string())
         , terrains(new umap<string, u_p<Terrain>>())
 {
-	LoadFromFile(path);
+    LoadFromFile(path);
 }
 
 Map::Map(const Map& other)
@@ -287,8 +287,13 @@ void Map::Load(istream& is)
 
 		MapCoord coord(col, row);
 		GetCell(col, row).object.reset(new MapEntity{ ++lastObjectId, name, coord, owner });
+
+		auto iSpot = find(all_(playerSpots), owner);
+		if (iSpot == playerSpots.end()) playerSpots.push_back(owner);
 	}
 	if (!is.good()) nya_throw << "map entities are wrong";
+
+	sort(all_(playerSpots));
 
 	// resources
 	is >> n;

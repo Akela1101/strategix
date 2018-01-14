@@ -11,6 +11,13 @@
 
 namespace sample1
 {
+SampleGame::SampleGame(int playerSpot)
+    : gameWidget(nullptr)
+    , mapWidget(nullptr)
+    , playerSpot(playerSpot) {}
+
+SampleGame::~SampleGame() = default;
+
 void SampleGame::Configure()
 {
 	using namespace map_info;
@@ -18,8 +25,6 @@ void SampleGame::Configure()
 	MapInfo::LoadTerrainTools();
 	MapInfo::LoadObjectTools();
 }
-
-SampleGame::SampleGame() {}
 
 void SampleGame::MessageReceived(s_p<Message> message)
 {
@@ -34,7 +39,18 @@ void SampleGame::MessageReceived(s_p<Message> message)
 	});
 }
 
-SampleGame::~SampleGame() = default;
+void SampleGame::GameUpdated(int gameId, const GameMessage* gameMessage)
+{
+	// @#~ start first available game
+	if (gameMessage)
+	{
+		string playerName = str("Player_%d"s % playerSpot);
+		SendMessageOne(make_s<PlayerMessage>(gameId, playerSpot, PlayerType::HUMAN, move(playerName), "az"));
+
+		// @#~ start right away
+		SendMessageOne(make_s<EmptyMessage>(Message::Type::START));
+	}
+}
 
 void SampleGame::StartGame(s_p<Map> map)
 {
@@ -44,7 +60,7 @@ void SampleGame::StartGame(s_p<Map> map)
 
 	GameSlot::StartGame(nullptr);//@#~
 
-	gameWidget->showMaximized();
+	gameWidget->show();
 }
 
 u_p<PlayerSlot> SampleGame::AddPlayer(s_p<PlayerMessage> playerMessage)

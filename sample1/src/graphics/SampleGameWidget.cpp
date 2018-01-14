@@ -13,14 +13,14 @@ using namespace map_info;
 static const int len = 32;
 
 SampleGameWidget::SampleGameWidget(const ResourceInfosType& resourceInfos)
-		: GameWidget()
-		, resourcesWidget(new QWidget(this))
+        : GameWidget()
+        , resourcesWidget(new QWidget(this))
 {
-	resize(1200, 600);
+	resize(800, 600);
 	resourcesWidget->setMaximumHeight(len + 4);
 	resourcesWidget->setContentsMargins(8, 2, 8, 2);
 	resourcesWidget->setStyleSheet(".QWidget { background-color : rgba(100, 100, 100, 0.3) }");
-	
+
 	auto layout = new QHBoxLayout();
 	layout->setMargin(0);
 	for (auto&& resourceInfo : *resourceInfos)
@@ -30,11 +30,11 @@ SampleGameWidget::SampleGameWidget(const ResourceInfosType& resourceInfos)
 		imageLabel->setScaledContents(true);
 		imageLabel->setPixmap(MapInfo::objectTools[resourceInfo].image);
 		layout->addWidget(imageLabel);
-		
+
 		auto amountLabel = new QLabel("0");
 		amountLabel->setStyleSheet("color : white; font-weight: bold");
 		layout->addWidget(amountLabel);
-		
+
 		resourceAmountLabels.emplace(resourceInfo, amountLabel);
 	}
 	resourcesWidget->setLayout(layout);

@@ -12,6 +12,7 @@ class Game : boost::noncopyable
 	s_p<Map> map;                    /// global map
 	umap<int, PlayerId> playerIds;   /// { spot - id }
 	PlannedPlayers plannedPlayers;   /// players going to join
+	uset<PlayerId> readyPlayers;     /// players ready to start
 	Players players;                 /// players in game
 	umap<IdType, s_p<Entity>> entities;  /// all entities
 	vector<IdType> removedEntities;  /// entities removed at the end of Tick

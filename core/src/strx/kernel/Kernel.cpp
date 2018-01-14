@@ -30,7 +30,7 @@ using st_clock = chrono::steady_clock;
 static const auto minTick = 42ms;
 
 // Variables
-static umap<int, u_p<GameMessage>> games;            // list of games
+static umap<int, s_p<GameMessage>> games;            // list of games
 static s_p<Game> game;                               // single game
 static u_p<thread> kernelThread;                     // main kernel thread
 static u_p<st_timer> timer;                          // tick timer
@@ -209,7 +209,7 @@ void Kernel::Init(const string& configPath)
 {
 	ConfigManager::ParseConfig(configPath);
 
-	// @#~
+	//TODO: one game is created by default (should be done from client)
 	AddGame("small", "root");
 
 	Server::Run(ConfigManager::GetServerPort());
@@ -238,9 +238,9 @@ void Kernel::ContextRequested(PlayerId playerId)
 	Server::SendMessageOne(contextMessage, playerId);
 
 	auto gamesMessage = make_s<MessageVector>();
-	for (const auto& gameMessage : games | nya::map_values)
+	for (auto& gameMessage : games | nya::map_values)
 	{
-		gamesMessage->push_back(make_u<GameMessage>(*gameMessage));
+		gamesMessage->push_back(gameMessage);
 	}
 	Server::SendMessageOne(gamesMessage, playerId);
 }
@@ -249,7 +249,7 @@ void Kernel::AddGame(const string& mapName, const string& creatorName)
 {
 	game.reset(new Game(mapName));
 
-	auto gameMessage = make_u<GameMessage>();
+	auto gameMessage = make_s<GameMessage>();
 	gameMessage->id = 1;
 	gameMessage->started = false;
 	gameMessage->mapName = mapName;

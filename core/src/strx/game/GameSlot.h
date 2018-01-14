@@ -4,6 +4,9 @@
 
 namespace strx
 {
+/**
+ * Game representation on client.
+ */
 class GameSlot : boost::noncopyable
 {
 	ResourceInfosType resourceInfos;
@@ -19,10 +22,24 @@ public:
 	EntitySlot& GetEntitySlot(IdType id);
 
 	static void SendMessageOne(s_p<Message> message);
+
+	/**
+	 * Called in network thread, thus should call ReceiveMessage() in game thread.
+	 */
 	virtual void MessageReceived(s_p<Message> message) = 0;
 
 protected:
+	/**
+	 * Must be called from MessageReceived().
+	 */
 	void ReceiveMessage(s_p<Message> message);
+
+	/**
+	 * Update one game in the list of open games.
+	 * @param gameId game id
+	 * @param gameMessage game information, null if removed.
+	 */
+	virtual void GameUpdated(int gameId, const GameMessage* gameMessage) = 0;
 
 	/**
 	 * Start new game.

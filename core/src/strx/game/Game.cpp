@@ -116,8 +116,11 @@ void Game::AddPlayer(s_p<Message> message, PlayerId playerId)
 
 void Game::Ready(PlayerId playerId)
 {
-	//@#~ should check all players are ready
-	Start();
+	readyPlayers.insert(playerId);
+	if (readyPlayers.size() == map->GetPlayerSpots().size())
+	{
+		Start();
+	}
 }
 
 void Game::Start()

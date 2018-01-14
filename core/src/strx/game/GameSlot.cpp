@@ -49,13 +49,8 @@ void GameSlot::ReceiveMessage(s_p<Message> message)
 	}
 	case Message::Type::GAME:
 	{
-		// @#~ join first game here
 		auto&& gameMessage = sp_cast<GameMessage>(message);
-		SendMessageOne(make_s<PlayerMessage>(gameMessage->id, 1, PlayerType::HUMAN, "Inu", "az"));
-		SendMessageOne(make_s<PlayerMessage>(gameMessage->id, 3, PlayerType::AI, "Saru", "az"));
-
-		// @#~ start right away
-		SendMessageOne(make_s<EmptyMessage>(Message::Type::START));
+		GameUpdated(gameMessage->id, gameMessage.get());
 		break;
 	}
 	case Message::Type::PLAYER:

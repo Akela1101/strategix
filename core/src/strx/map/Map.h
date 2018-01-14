@@ -32,13 +32,14 @@ public:
 	using TerrainsType = s_p<umap<string, u_p<Terrain>>>;
 
 private:
-	static IdType lastObjectId;
+	static IdType lastObjectId; /// holder of the last unique id
 
 	string name;
 	int width;
 	int length;
-	TerrainsType terrains;  /// terrain descriptions
-	CellsType cells;        /// [rows][columns] (i.e. [y][x])
+	TerrainsType terrains;    /// terrain descriptions
+	CellsType cells;          /// [rows][columns] (i.e. [y][x])
+	vector<int> playerSpots;  /// sorted list of player spots
 
 public:
 	Map(string name, int width, int height, TerrainsType terrains);
@@ -55,6 +56,7 @@ public:
 	Cell& GetCell(MapCoord coord) { return cells[coord.y][coord.x]; }
 	const Cell& GetCell(int x, int y) const { return cells[y][x]; }
 	const Cell& GetCell(MapCoord coord) const { return cells[coord.y][coord.x]; }
+	const vector<int>& GetPlayerSpots() const { return playerSpots; }
 
 	bool IsCell(MapCoord coord) const;
 	void UpdateTerrains(const TerrainsType& newTerrains);

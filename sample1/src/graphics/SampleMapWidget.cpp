@@ -38,6 +38,10 @@ void SampleMapWidget::ObjectRemoved(IdType id)
 		MapCoord coord = object->coord;
 		map->ChangeObject(map->GetCell(coord), nullptr);
 		mapObjects.erase(id);
+		if (currentEntity && currentEntity->id == id)
+		{
+			currentEntity = nullptr;
+		}
 		update(GetUpdateRect(coord));
 	}
 }
