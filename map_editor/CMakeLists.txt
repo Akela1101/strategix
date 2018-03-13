@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.9)
+cmake_minimum_required(VERSION 3.10)
 project(map_editor)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
@@ -20,7 +20,7 @@ target_link_libraries(${LIB_NAME} strategix Qt5::Widgets)
 
 # application
 file(GLOB_RECURSE SOURCES src/*.cpp src/*.h)
-add_executable(${PROJECT_NAME} ${SOURCES})
+add_executable(${PROJECT_NAME} ${OS_BUNDLE} ${SOURCES})
 target_include_directories(${PROJECT_NAME} PRIVATE src src/forms)
 target_link_libraries(${PROJECT_NAME} ${LIB_NAME})
 

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.9)
+cmake_minimum_required(VERSION 3.10)
 project(sample1)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
@@ -12,7 +12,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 
 file(GLOB_RECURSE SOURCES *.cpp *.h)
-add_executable(${PROJECT_NAME} ${SOURCES})
+add_executable(${PROJECT_NAME} ${OS_BUNDLE} ${SOURCES})
 target_include_directories(${PROJECT_NAME} PRIVATE src)
 target_link_libraries(${PROJECT_NAME} strategix map_info)
 

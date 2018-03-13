@@ -1,76 +1,12 @@
 #include <slots/SampleGame.h>
 #include <QApplication>
 
-#if defined(Q_OS_WIN) && defined(QT_STATIC_LINK)
-#include <QtPlugin>
-Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin)
-#endif
-
 
 INITIALIZE_EASYLOGGINGPP
 
 
-#if defined( _MSC_VER )
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#include <conio.h>
-#include <stdio.h>
-#include <fcntl.h>
-#include <io.h>
-#include <iostream>
-#include <fstream>
-
-static const WORD MAX_CONSOLE_LINES = 1000;
-
-void RedirectIOToConsole()
-{
-	int hConHandle;
-	long lStdHandle;
-	CONSOLE_SCREEN_BUFFER_INFO coninfo;
-	FILE *fp;
-
-	AllocConsole();
-
-	// set the screen buffer to be big enough to let us scroll text
-	GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &coninfo);
-	coninfo.dwSize.Y = MAX_CONSOLE_LINES;
-	SetConsoleScreenBufferSize(GetStdHandle(STD_OUTPUT_HANDLE), coninfo.dwSize);
-
-	// redirect unbuffered STDOUT to the console
-	lStdHandle = (long)GetStdHandle(STD_OUTPUT_HANDLE);
-	hConHandle = _open_osfhandle(lStdHandle, _O_TEXT);
-	fp = _fdopen( hConHandle, "w" );
-	*stdout = *fp;
-	setvbuf( stdout, NULL, _IONBF, 0 );
-
-	// redirect unbuffered STDIN to the console
-	lStdHandle = (long)GetStdHandle(STD_INPUT_HANDLE);
-	hConHandle = _open_osfhandle(lStdHandle, _O_TEXT);
-	fp = _fdopen( hConHandle, "r" );
-	*stdin = *fp;
-	setvbuf( stdin, NULL, _IONBF, 0 );
-
-	// redirect unbuffered STDERR to the console
-	lStdHandle = (long)GetStdHandle(STD_ERROR_HANDLE);
-	hConHandle = _open_osfhandle(lStdHandle, _O_TEXT);
-	fp = _fdopen( hConHandle, "w" );
-	*stderr = *fp;
-	setvbuf( stderr, NULL, _IONBF, 0 );
-
-	// make cout, wcout, cin, wcin, wcerr, cerr, wclog and clog
-	// point to console as well
-	ios::sync_with_stdio();
-}
-
-
-INT WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR strCmdLine, INT)
-{
-	RedirectIOToConsole();
-	//SetCurrentDirectory("C:\\.......");
-#else
 int main(int argc, char* argv[])
 {
-#endif
 	using namespace sample1;
 
 	QApplication app(argc, argv);
@@ -80,22 +16,20 @@ int main(int argc, char* argv[])
 
 	try // run a game
 	{
-		// connect to server asyncronously
+		// connect to server asynchronously
 		SampleGame game(argc == 1 ? 1 : 3); //TODO: select player in gui
 
 		// start graphics
-		app.exec();
+		return app.exec();
 	}
 	catch (nya::exception& e)
 	{
 		error_log << "Strategix error occurred:\n[" << e.what() << "] \nFinishing the game..." << endl;
+		return 1;
 	}
 	catch (exception& e)
 	{
 		error_log << "Unexpected error occurred:\n[" << e.what() << "] \nFinishing the game..." << endl;
+		return 2;
 	}
-
-#if defined( _MSC_VER )
-	getch();
-#endif
 }
