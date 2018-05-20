@@ -1,0 +1,6 @@
+[submodule "modules/nya"]
+	path = modules/nya
+	url = git@github.com:Akela1101/nya.git
+[submodule "modules/el"]
+	path = modules/el
+	url = git@github.com:muflihun/easyloggingpp.git

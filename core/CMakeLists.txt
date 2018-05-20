@@ -4,11 +4,13 @@ project(strategix)
 # Boost
 find_package(Boost COMPONENTS system filesystem serialization REQUIRED)
 
+# el
+set(EL_SOURCE_DIR ${CMAKE_SOURCE_DIR}/modules/el/src)
 
 file(GLOB_RECURSE SOURCES src/*.cpp src/*.h src/*.hpp)
 
 add_library(${PROJECT_NAME} ${SOURCES})
-target_include_directories(${PROJECT_NAME} PUBLIC src ../../easyloggingpp/src)
+target_include_directories(${PROJECT_NAME} PUBLIC src ${EL_SOURCE_DIR})
 target_link_libraries(${PROJECT_NAME} nya easyloggingpp ${Boost_LIBRARIES})
 if(WIN32)
     target_link_libraries(${PROJECT_NAME} ws2_32 wsock32) # boost::asio

@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 project(strategix_all)
 
-include(../nya/cmake/nya.cmake)
+include(modules/nya/cmake/nya.cmake)
 
 # cotire
 # -DCMAKE_MODULE_PATH="C:/msys/mingw64/share/cmake/Modules"
@@ -11,13 +11,13 @@ set_property(GLOBAL PROPERTY COTIRE_ADD_UNITY_BUILD FALSE) # disable uniting sou
 set_property(GLOBAL PROPERTY COTIRE_PREFIX_HEADER_IGNORE_PATH
         "${CMAKE_BINARY_DIR}"
         "${CMAKE_SOURCE_DIR}"
-        "${CMAKE_SOURCE_DIR}/../nya") # exclude nya from pch, as it's small and can change frequently
+		"${CMAKE_SOURCE_DIR}/modules/nya") # exclude nya from pch, as it's small and can change frequently
 
 # nya
-add_subdirectory(../nya nya)
+add_subdirectory(modules/nya)
 
 # easylogging
-add_subdirectory(../easyloggingpp el)
+add_subdirectory(modules/el)
 
 # strategix
 add_subdirectory(core)
