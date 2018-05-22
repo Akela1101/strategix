@@ -149,7 +149,7 @@ struct ConfigurationManagerImpl
 			for (auto&& name_tree : resourcesPropTree)
 			{
 				const string& resourceName = name_tree.first; // gold or something else
-				if (find(all_(*resourceInfos), resourceName) == resourceInfos->end())
+				if (find(nya_all(*resourceInfos), resourceName) == resourceInfos->end())
 				{
 					info_log << "Wrong resource [%s] in configuration file: %s"s
 					        % resourceName % configFileName;

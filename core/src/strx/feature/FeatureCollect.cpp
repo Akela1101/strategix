@@ -23,7 +23,7 @@ FeatureCollect::FeatureCollect(const FeatureInfo* featureInfo, Entity* entity)
 bool FeatureCollect::Collect(MapCoord coord, const string& resourceName)
 {
 	// check if entity can bear this resource
-	if (!in_(resourceName, *info->capacities)) return false;
+	if (!nya_in(resourceName, *info->capacities)) return false;
 
 	if (this->resourceName != resourceName)
 	{

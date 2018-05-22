@@ -101,7 +101,7 @@ void Game::AddPlayer(s_p<Message> message, PlayerId playerId)
 {
 	auto playerMessage = sp_cast<PlayerMessage>(message);
 	int playerSpot = playerMessage->spot;
-	if (in_(playerSpot, playerIds)) // replace is not supported yet
+	if (nya_in(playerSpot, playerIds)) // replace is not supported yet
 		nya_throw << "Trying to add same player twice [%d], name: %s"s % playerSpot % playerMessage->name;
 
 	if (playerMessage->type != PlayerType::HUMAN)

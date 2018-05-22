@@ -161,8 +161,8 @@ void Map::Save(ostream& os) const
 
 	// terrain descriptions
 	vector<Terrain*> sortedTerrains; sortedTerrains.reserve(terrains->size());
-	transform(all_(*terrains), back_inserter(sortedTerrains), [](auto& pa) { return pa.second.get(); });
-	sort(all_(sortedTerrains), [](auto& a, auto& b) { return a->id < b->id; });
+	transform(nya_all(*terrains), back_inserter(sortedTerrains), [](auto& pa) { return pa.second.get(); });
+	sort(nya_all(sortedTerrains), [](auto& a, auto& b) { return a->id < b->id; });
 	//
 	os << terrains->size() << "\n";
 	for (const Terrain& terrain : sortedTerrains | nya::indirected)
@@ -267,7 +267,7 @@ void Map::Load(istream& is)
 		{
 			int id;
 			is >> id;
-			if (!in_(id, id_terrains))
+			if (!nya_in(id, id_terrains))
 			{
 				nya_throw << "Terrain with id [%d] is not found"s % id;
 			}
@@ -288,12 +288,12 @@ void Map::Load(istream& is)
 		MapCoord coord(col, row);
 		GetCell(col, row).object.reset(new MapEntity{ ++lastObjectId, name, coord, owner });
 
-		auto iSpot = find(all_(playerSpots), owner);
+		auto iSpot = find(nya_all(playerSpots), owner);
 		if (iSpot == playerSpots.end()) playerSpots.push_back(owner);
 	}
 	if (!is.good()) nya_throw << "map entities are wrong";
 
-	sort(all_(playerSpots));
+	sort(nya_all(playerSpots));
 
 	// resources
 	is >> n;

@@ -143,7 +143,7 @@ void Kernel::OnReceiveMessage(s_p<Message> message, PlayerId playerId)
 bool Kernel::CheckResource(const string& name)
 {
 	auto&& resourceInfos = ConfigManager::GetResourceInfos();
-	return find(all_(*resourceInfos), name) != resourceInfos->end();
+	return find(nya_all(*resourceInfos), name) != resourceInfos->end();
 }
 
 const TechTree& Kernel::GetTechTree(const string& raceName)

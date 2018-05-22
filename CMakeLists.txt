@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.11)
 project(strategix_all)
 
 include(modules/nya/cmake/nya.cmake)
@@ -9,8 +9,8 @@ include(modules/nya/cmake/nya.cmake)
 include(cotire OPTIONAL)
 set_property(GLOBAL PROPERTY COTIRE_ADD_UNITY_BUILD FALSE) # disable uniting source files into batches, because of add_subdirectory(..
 set_property(GLOBAL PROPERTY COTIRE_PREFIX_HEADER_IGNORE_PATH
-        "${CMAKE_BINARY_DIR}"
-        "${CMAKE_SOURCE_DIR}"
+		"${CMAKE_BINARY_DIR}"
+		"${CMAKE_SOURCE_DIR}"
 		"${CMAKE_SOURCE_DIR}/modules/nya") # exclude nya from pch, as it's small and can change frequently
 
 # nya

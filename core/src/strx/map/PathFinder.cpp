@@ -82,7 +82,7 @@ u_p<MapPath> PathFinder::FindPath(MapCoord from, MapCoord till, float radius) co
 			MapCoord coord = current->coord + around[i];
 			float currentQuality = map.GetCell(current->coord).terrain->quality;
 			
-			if (IsAccessible(coord) && !in_(coord, closed))
+			if (IsAccessible(coord) && !nya_in(coord, closed))
 			{
 				float quality = 0.5 * (currentQuality + map.GetCell(coord).terrain->quality);
 				Price nextG = current->G + (i % 2 ? straight : diagonal) / quality;
