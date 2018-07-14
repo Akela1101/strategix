@@ -16,7 +16,7 @@ class PlayerSlot : boost::noncopyable
 	s_p<PlayerMessage> playerMessage;
 
 public:
-	PlayerSlot(s_p<PlayerMessage> playerMessage);
+	PlayerSlot(s_p<PlayerMessage> playerMessage) : playerMessage(move(playerMessage)) {}
 	virtual ~PlayerSlot() = default;
 
 	/// @return unique name

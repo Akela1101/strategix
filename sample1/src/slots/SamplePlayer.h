@@ -10,6 +10,7 @@ class SampleEntity;
 
 class SamplePlayer : public QObject, public PlayerSlot
 {
-	using PlayerSlot::PlayerSlot;
+public:
+	SamplePlayer(s_p<PlayerMessage> playerMessage) : PlayerSlot(playerMessage) {}
 };
 }

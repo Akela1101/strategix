@@ -52,7 +52,7 @@ private:
 	QString SaveMap();
 
 signals:
-	void CurrentToolChanged(ToolInfo* tool);
+	void CurrentToolChanged(map_info::ToolInfo* tool);
 	void CurrentPlayerChanged(int playerNumber);
 };
 

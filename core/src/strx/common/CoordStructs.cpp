@@ -3,7 +3,7 @@
 
 namespace strx
 {
-#ifndef MSCC // GCC
+#ifndef _MSC_VER // GCC
 
 template<>
 MapCoord::operator RealCoord() const

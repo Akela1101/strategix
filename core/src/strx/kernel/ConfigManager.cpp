@@ -133,12 +133,16 @@ struct ConfigurationManagerImpl
 				auto radius = feature.get<float>("radius");
 				return make_u<AttackFeatureInfo>(damage, speed, radius);
 			}
+			else
+			{
+				error_log << "Unknown feature: %s"s % name;
+			}
 		}
 		catch (pt::ptree_error& e)
 		{
-			info_log << "Unable to parse feature: %s. Error: %s"s % name % e.what();
-			return nullptr;
+			error_log << "Unable to parse feature: %s. Error: %s"s % name % e.what();
 		}
+		return nullptr;
 	}
 
 	u_p<Resources> ParseResources(const pt::ptree& resourcesPropTree)

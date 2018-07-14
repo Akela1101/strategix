@@ -58,9 +58,9 @@ MainForm::MainForm()
 
 	//
 	mapWidget = widget.gameWidget->CreateMapWidget<EditorMapWidget>();
-	connect(this, &CurrentToolChanged, mapWidget, &EditorMapWidget::CurrentToolChanged);
-	connect(this, &CurrentPlayerChanged, mapWidget, &EditorMapWidget::CurrentPlayerChanged);
-	connect(mapWidget, &EditorMapWidget::MapChanged, this, &MapChanged);
+	connect(this, &MainForm::CurrentToolChanged, mapWidget, &EditorMapWidget::CurrentToolChanged);
+	connect(this, &MainForm::CurrentPlayerChanged, mapWidget, &EditorMapWidget::CurrentPlayerChanged);
+	connect(mapWidget, &EditorMapWidget::MapChanged, this, &MainForm::MapChanged);
 }
 
 MainForm::~MainForm() = default;
@@ -197,7 +197,7 @@ void MainForm::PlacePlayerMarks()
 			button->setChecked(true);
 		}
 		playerNumbers.emplace(button, i++);
-		connect(button, &QPushButton::toggled, this, &PlayerButtonToggled);
+		connect(button, &QPushButton::toggled, this, &MainForm::PlayerButtonToggled);
 	}
 	widget.playersGroupBox->setLayout(layout);
 }

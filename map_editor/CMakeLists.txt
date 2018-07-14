@@ -14,7 +14,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 # common library
 set(LIB_NAME map_info)
 file(GLOB_RECURSE COMMON_SOURCES map_info/*.cpp map_info/*.h)
-add_library(${LIB_NAME} ${COMMON_SOURCES})
+add_library(${LIB_NAME} STATIC ${COMMON_SOURCES})
 target_include_directories(${LIB_NAME} PUBLIC map_info)
 target_link_libraries(${LIB_NAME} strategix Qt5::Widgets)
 

@@ -14,7 +14,7 @@ Q_OBJECT
 	Ui::DialogNew widget;
 	
 	QString mapName;
-	size_t mapWidth, mapHeight;
+	int mapWidth, mapHeight;
 
 public:
 	DialogNew();

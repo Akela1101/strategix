@@ -4,38 +4,39 @@
 
 namespace strx
 {
-class Cell;
+struct AttackFeatureInfo;
+struct Cell;
+struct CollectFeatureInfo;
+struct CommandMessage;
+struct EntityInfo;
+struct EntityMessage;
+struct FeatureInfo;
+struct GameMessage;
+struct HealthFeatureInfo;
+struct MapEntity;
+struct MapObject;
+struct MapMessage;
+struct MapMine;
+struct Message;
+struct MoveFeatureInfo;
+struct PlayerMessage;
+struct Terrain;
+
 class Client;
-class CommandMessage;
 class Entity;
-class EntityInfo;
-class EntityMessage;
 class EntitySlot;
 class Feature;
-class FeatureInfo;
-class CollectFeatureInfo;
-class MoveFeatureInfo;
-class HealthFeatureInfo;
-class AttackFeatureInfo;
 class Game;
-class GameMessage;
 class GameSlot;
 class Map;
-class MapEntity;
 class MapManager;
-class MapMessage;
-class MapObject;
 class MapPath;
-class Message;
-class MapMine;
 class PathFinder;
 class Player;
-class PlayerMessage;
 class PlayerSlot;
 class Server;
 class TechTree;
 class TechTreesBuilder;
-class Terrain;
 
 using namespace std; // only in my namespace, so it won't affect foreign headers
 }

@@ -6,9 +6,10 @@ namespace strx {}
 
 namespace map_info
 {
-class MapInfo;
+struct MapInfo;
+struct ToolInfo;
+
 class MapWidget;
-class ToolInfo;
 
 
 #define ToolTypeDef(K, V)                      \

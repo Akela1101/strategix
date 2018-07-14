@@ -20,8 +20,8 @@ void DialogNew::accept()
 		return;
 	}
 	
-	mapWidth = (size_t) widget.horizontalSlider->sliderPosition();
-	mapHeight = (size_t) widget.verticalSlider->sliderPosition();
+	mapWidth = widget.horizontalSlider->sliderPosition();
+	mapHeight = widget.verticalSlider->sliderPosition();
 	
 	QDialog::accept();
 }

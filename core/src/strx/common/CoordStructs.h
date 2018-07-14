@@ -33,7 +33,7 @@ struct Coord
 using MapCoord  = Coord<int, float>; // used in Maps
 using RealCoord = Coord<float, int>; // used in Entity and everywhere
 
-#ifdef MSCC
+#ifdef _MSC_VER
 template<>
 MapCoord::operator RealCoord() const
 {

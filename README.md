@@ -21,8 +21,11 @@ The main aim of this project — to provide a template for common Real-Time Stra
 * [nya](https://github.com/Akela1101/nya) (my toolbox)
 
 ## Build
-Probably any popular C++17 compiler can be used. 
-But tested on **mingw64 gcc** from [msys2](http://www.msys2.org/).
+Checked on the following compilers:
+
+* **mingw64 gcc** from [msys2](http://www.msys2.org/).
+* **msvc 15** (VS 2017)
+
 
 ```sh
 cd <your projects dir>

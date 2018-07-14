@@ -10,7 +10,7 @@ set(EL_SOURCE_DIR ${CMAKE_SOURCE_DIR}/modules/el/src)
 
 file(GLOB_RECURSE SOURCES src/*.cpp src/*.h src/*.hpp)
 
-add_library(${PROJECT_NAME} ${SOURCES})
+add_library(${PROJECT_NAME} STATIC ${SOURCES})
 target_include_directories(${PROJECT_NAME} PUBLIC src ${EL_SOURCE_DIR} ${Boost_INCLUDE_DIR})
 target_link_libraries(${PROJECT_NAME} nya easyloggingpp ${Boost_LIBRARIES})
 if(WIN32)
