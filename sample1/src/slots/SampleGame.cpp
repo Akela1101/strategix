@@ -28,24 +28,22 @@ void SampleGame::Configure()
 
 void SampleGame::MessageReceived(s_p<Message> message)
 {
-	qInvoke(this, [=]()
+	qInvoke(this, [this, message]
 	{
 		Message::Type type = message->GetType();
-		try { ReceiveMessage(move(message)); }
-		catch (exception& e)
+		try { ReceiveMessage(move(message)); } catch (exception& e)
 		{
 			error_log << "Error while handling message %s: %s"s % type.c_str() % e.what();
 		}
 	});
 }
 
-void SampleGame::GameUpdated(int gameId, const GameMessage* gameMessage)
+void SampleGame::GameUpdated(GameId gameId, const GameMessage* gameMessage)
 {
 	// @#~ start first available game
 	if (gameMessage)
 	{
-		string playerName = str("Player_%d"s % playerSpot);
-		SendMessageOne(make_s<PlayerMessage>(gameId, playerSpot, PlayerType::HUMAN, move(playerName), "az"));
+		SendMessageOne(make_s<PlayerMessage>(gameId, PlayerType::HUMAN));
 
 		// @#~ start right away
 		SendMessageOne(make_s<EmptyMessage>(Message::Type::START));

@@ -9,10 +9,13 @@
 
 namespace strx
 {
-static u_p<thread> serverThread;                     // server thread
-static u_p<tcp::socket> socket;                      // socket for the next connection
-static u_p<tcp::acceptor> acceptor;                  // connection listener
-static umap<PlayerId, u_p<Connection>> connections;  // connections
+namespace
+{
+	u_p<thread> serverThread;                         // server thread
+	u_p<tcp::socket> socket;                          // socket for the next connection
+	u_p<tcp::acceptor> acceptor;                      // connection listener
+	umap<ConnectionId, u_p<Connection>> connections;  // connections
+}
 
 
 void Server::Run(ushort port)
@@ -53,16 +56,15 @@ void Server::AcceptConnection()
 	{
 		if (!ec)
 		{
-			PlayerId id = Kernel::GetNextPlayerId();
-			auto connection = new Connection(id, move(*socket), ReceiveMessage);
+			auto connection = make_u<Connection>(move(*socket), ReceiveMessage);
 
-			connections.emplace(id, connection);
+			connections.emplace(connection->GetId(), move(connection));
 		}
 		AcceptConnection();
 	});
 }
 
-void Server::ReceiveMessage(s_p<Message> message, PlayerId id)
+void Server::ReceiveMessage(s_p<Message> message, ConnectionId id)
 {
 	if (!message)
 	{
@@ -72,7 +74,7 @@ void Server::ReceiveMessage(s_p<Message> message, PlayerId id)
 	Kernel::invoke(Kernel::OnReceiveMessage, move(message), id);
 }
 
-void Server::SendMessageOne(s_p<Message> message, PlayerId id)
+void Server::SendMessageOne(s_p<Message> message, ConnectionId id)
 {
 	auto i = connections.find(id);
 	if (i == connections.end())

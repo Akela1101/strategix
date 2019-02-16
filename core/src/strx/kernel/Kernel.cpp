@@ -34,7 +34,7 @@ static umap<int, s_p<GameMessage>> games;            // list of games
 static s_p<Game> game;                               // single game
 static u_p<thread> kernelThread;                     // main kernel thread
 static u_p<st_timer> timer;                          // tick timer
-static atomic<PlayerId> currentPlayerId{ 0 };        // incrementing player id
+static atomic<PlayerId> currentPlayerId {0};         // incrementing player id
 
 
 void TimerHandler(const boost::system::error_code& error)
@@ -124,14 +124,14 @@ void Kernel::SendMessageAll(s_p<Message> message)
 	Server::invoke(Server::SendMessageAll, move(message));
 }
 
-void Kernel::OnReceiveMessage(s_p<Message> message, PlayerId playerId)
+void Kernel::OnReceiveMessage(s_p<Message> message, ConnectionId connectionId)
 {
 	try
 	{
 		switch (message->GetType())
 		{
-		case Message::Type::CONTEXT: ContextRequested(playerId); break;
-		default: game->ReceiveMessage(move(message), playerId);
+		case Message::Type::CONTEXT: ContextRequested(connectionId); break;
+		default: game->ReceiveMessage(move(message), connectionId);
 		}
 	}
 	catch (exception& e)
@@ -221,28 +221,24 @@ void Kernel::Init(const string& configPath)
 void Kernel::RunImpl()
 {
 	nya_thread_name("_strx_");
-	try
-	{
-		eventLoop.run();
-	}
-	catch (exception& e)
+	try { eventLoop.run(); } catch (exception& e)
 	{
 		error_log << "Unexpected error in strategix: " << e.what();
 		// @#~ should call game to stop
 	}
 }
 
-void Kernel::ContextRequested(PlayerId playerId)
+void Kernel::ContextRequested(ConnectionId connectionId)
 {
 	auto contextMessage = make_s<ContextMessage>(ConfigManager::GetResourceInfos());
-	Server::SendMessageOne(contextMessage, playerId);
+	Server::SendMessageOne(contextMessage, connectionId);
 
 	auto gamesMessage = make_s<MessageVector>();
 	for (auto& gameMessage : games | nya::map_values)
 	{
 		gamesMessage->push_back(gameMessage);
 	}
-	Server::SendMessageOne(gamesMessage, playerId);
+	Server::SendMessageOne(gamesMessage, connectionId);
 }
 
 void Kernel::AddGame(const string& mapName, const string& creatorName)

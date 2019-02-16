@@ -75,15 +75,15 @@ struct GameMessage : Message
 
 struct PlayerMessage : Message
 {
-	int gameId;
-	int spot;
+	GameId gameId;
 	PlayerType type;
+	int spot;
 	string name;
 	string race;
 
 	PlayerMessage() = default;
-	PlayerMessage(int gameId, int spot, PlayerType type, string name, string race)
-	    : gameId(gameId), spot(spot), type(type), name(move(name)), race(move(race)) {}
+	PlayerMessage(GameId gameId, PlayerType type)
+	    : gameId(gameId), type(type) {}
 	Type GetType() const override { return Type::PLAYER; }
 };
 

@@ -23,7 +23,7 @@ void Client::StartSession(GameSlot* game)
 	{
 		if (!ec)
 		{
-			connection.reset(new Connection(0, move(*socket), ReceiveMessage));
+			connection.reset(new Connection(move(*socket), ReceiveMessage));
 			socket.reset();
 
 			connection->Write(make_s<EmptyMessage>(Message::Type::CONTEXT));

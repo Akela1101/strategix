@@ -39,7 +39,7 @@ protected:
 	 * @param gameId game id
 	 * @param gameMessage game information, null if removed.
 	 */
-	virtual void GameUpdated(int gameId, const GameMessage* gameMessage) = 0;
+	virtual void GameUpdated(GameId gameId, const GameMessage* gameMessage) = 0;
 
 	/**
 	 * Start new game.

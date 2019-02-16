@@ -17,8 +17,8 @@ public:
 	HpType GetMaxHp() const;
 
 	void Move(MapCoord coord);
-	void Collect(MapCoord coord, const string& resourceName);
-	void Attack(IdType targetId);
+	virtual void Collect(MapCoord coord, const string& resourceName);
+	virtual void Attack(IdType targetId);
 
 	virtual void Moved(RealCoord coord) = 0;
 	virtual void MapMoved(MapCoord from, MapCoord to) {}

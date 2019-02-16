@@ -21,7 +21,7 @@ public:
 
 private:
 	void MessageReceived(s_p<Message> message) override;
-	void GameUpdated(int gameId, const GameMessage* gameMessage) override;
+	void GameUpdated(GameId gameId, const GameMessage* gameMessage) override;
 	void StartGame(s_p<Map> map) override;
 	u_p<PlayerSlot> AddPlayer(s_p<PlayerMessage> playerMessage) override;
 	u_p<EntitySlot> AddEntity(s_p<EntityMessage> entityMessage) override;

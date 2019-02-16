@@ -87,8 +87,8 @@ StrxSerialization(strx::PlayerMessage)
 {
 	ar & base_object<strx::Message>(m);
 	ar & m.gameId;
-	ar & m.spot;
 	ar & m.type;
+	ar & m.spot;
 	ar & m.name;
 	ar & m.race;
 }}}

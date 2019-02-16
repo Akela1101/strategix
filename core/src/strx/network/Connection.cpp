@@ -8,8 +8,13 @@
 
 namespace strx
 {
-Connection::Connection(PlayerId id, tcp::socket&& socket, const function<void(s_p<Message>, PlayerId)>& ReceiveMessage)
-        : id(id)
+namespace
+{
+	atomic<ConnectionId> lastConnectionId {0};
+}
+
+Connection::Connection(tcp::socket&& socket, const function<void(s_p<Message>, ConnectionId)>& ReceiveMessage)
+        : id(++lastConnectionId)
         , socket(move(socket))
         , ReceiveMessage(ReceiveMessage)
 {

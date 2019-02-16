@@ -24,7 +24,7 @@ public:
 	static PlayerId GetNextPlayerId();
 	static void SendMessageOne(s_p<Message> message, PlayerId playerId);
 	static void SendMessageAll(s_p<Message> message);
-	static void OnReceiveMessage(s_p<Message> message, PlayerId playerId);
+	static void OnReceiveMessage(s_p<Message> message, ConnectionId connectionId);
 
 	static bool CheckResource(const string& name);
 	static const TechTree& GetTechTree(const string& raceName);
@@ -36,7 +36,7 @@ public:
 private:
 	static void Init(const string& configPath);
 	static void RunImpl();
-	static void ContextRequested(PlayerId playerId);
+	static void ContextRequested(ConnectionId connectionId);
 	static void AddGame(const string& mapName, const string& creatorName);
 };
 }

@@ -18,8 +18,8 @@ public:
 
 private:
 	static void AcceptConnection();
-	static void ReceiveMessage(s_p<Message> message, PlayerId id);
-	static void SendMessageOne(s_p<Message> message, PlayerId id);
+	static void ReceiveMessage(s_p<Message> message, ConnectionId id);
+	static void SendMessageOne(s_p<Message> message, ConnectionId id);
 	static void SendMessageAll(s_p<Message> message);
 };
 }
