@@ -5,18 +5,16 @@ project(strategix)
 SET(Boost_USE_STATIC_LIBS ON CACHE STRING "ON or OFF")
 find_package(Boost COMPONENTS date_time filesystem regex serialization system REQUIRED)
 
-# el
-set(EL_SOURCE_DIR ${CMAKE_SOURCE_DIR}/modules/el/src)
-
 file(GLOB_RECURSE SOURCES src/*.cpp src/*.h src/*.hpp)
 
 add_library(${PROJECT_NAME} STATIC ${SOURCES})
-target_include_directories(${PROJECT_NAME} PUBLIC src ${EL_SOURCE_DIR} ${Boost_INCLUDE_DIR})
+target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
+target_include_directories(${PROJECT_NAME} PUBLIC src ${Boost_INCLUDE_DIR})
 target_link_libraries(${PROJECT_NAME} nya easyloggingpp ${Boost_LIBRARIES})
 if(WIN32)
-    target_link_libraries(${PROJECT_NAME} ws2_32 wsock32) # boost::asio
+	target_link_libraries(${PROJECT_NAME} ws2_32 wsock32) # boost::asio
 endif()
 
 if (COMMAND cotire)
-    cotire(${PROJECT_NAME})
+	cotire(${PROJECT_NAME})
 endif()

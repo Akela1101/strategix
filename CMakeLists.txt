@@ -1,7 +1,9 @@
 cmake_minimum_required(VERSION 3.11)
 project(strategix_all)
 
-include(modules/nya/cmake/nya.cmake)
+# nya_fetch
+file(DOWNLOAD "https://raw.githubusercontent.com/Akela1101/nya/master/cmake/nya_fetch.cmake" "${CMAKE_BINARY_DIR}/nya_fetch.cmake")
+include(${CMAKE_BINARY_DIR}/nya_fetch.cmake)
 
 # cotire
 # -DCMAKE_MODULE_PATH="C:/msys/mingw64/share/cmake/Modules"
@@ -11,13 +13,15 @@ set_property(GLOBAL PROPERTY COTIRE_ADD_UNITY_BUILD FALSE) # disable uniting sou
 set_property(GLOBAL PROPERTY COTIRE_PREFIX_HEADER_IGNORE_PATH
 		"${CMAKE_BINARY_DIR}"
 		"${CMAKE_SOURCE_DIR}"
-		"${CMAKE_SOURCE_DIR}/modules/nya") # exclude nya from pch, as it's small and can change frequently
+		"${CMAKE_SOURCE_DIR}/../nya") # exclude nya from pch, as it's small and can change frequently
 
 # nya
-add_subdirectory(modules/nya)
+nya_fetch(git@github.com:Akela1101/nya.git)
+include(${FETCH_ROOT}/cmake/nya.cmake)
 
 # easylogging
-add_subdirectory(modules/el)
+nya_fetch(git@github.com:zuhd-org/easyloggingpp.git)
+target_include_directories(easyloggingpp PUBLIC ${FETCH_ROOT}/src) # + PR in el
 
 # strategix
 add_subdirectory(core)
