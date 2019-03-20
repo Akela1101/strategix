@@ -7,8 +7,8 @@ namespace strx
 {
 class MapPath : boost::noncopyable
 {
-	bool isWhole;           /// if false, path does not reach the finish point
-	vector<MapCoord> path;  /// list of path coordinates without the first one
+	bool isWhole;           ///< if false, path does not reach the finish point
+	vector<MapCoord> path;  ///< list of path coordinates without the first one
 
 public:
 	MapPath(bool isWhole = true) : isWhole(isWhole) {}

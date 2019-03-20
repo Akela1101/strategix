@@ -8,18 +8,18 @@ namespace strx
 
 class Player : boost::noncopyable
 {
-	Game& game;                      /// link to game
-	const PlayerId id;               /// unique id
-	const PlayerType type;           /// human | ai
-	const int spot;                  /// id on map
-	const string name;               /// nick or alias
-	const string race;               /// race name
+	Game& game;                      ///< link to game
+	const PlayerId id;               ///< unique id
+	const PlayerType type;           ///< human | ai
+	const int spot;                  ///< id on map
+	const string name;               ///< nick or alias
+	const string race;               ///< race name
 
-	umap<IdType, s_p<Entity>> entities;  /// owned entities
-	u_p<Resources> resources;        /// available resources amount
-	Map& map;                        /// link to map
-	u_p<PathFinder> pathFinder;      /// map path finder
-	const TechTree& techTree;        /// link to tech tree
+	umap<IdType, s_p<Entity>> entities;  ///< owned entities
+	u_p<Resources> resources;        ///< available resources amount
+	Map& map;                        ///< link to map
+	u_p<PathFinder> pathFinder;      ///< map path finder
+	const TechTree& techTree;        ///< link to tech tree
 
 public:
 	Player(Game& game, PlayerId id, const PlayerMessage& playerMessage, Map& map);

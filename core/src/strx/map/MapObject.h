@@ -7,9 +7,9 @@ namespace strx
 {
 struct MapObject
 {
-	IdType id;            /// globally unique id
-	string name;          /// object type name, like "worker" or "barracks"
-	RealCoord coord;      /// precise coord
+	IdType id;            ///< globally unique id
+	string name;          ///< object type name, like "worker" or "barracks"
+	RealCoord coord;      ///< precise coord
 
 	MapObject(IdType id, string name, RealCoord coord) : id(id), name(move(name)), coord(coord) {}
 	MapObject(const MapObject& other) : id(other.id), name(other.name), coord(other.coord) {}
@@ -19,9 +19,9 @@ struct MapObject
 
 struct MapEntity : MapObject
 {
-	int ownerSpot;        /// owner player spot
-	HpType hp;            /// HP
-	HpType maxHp;         /// max HP
+	int ownerSpot;        ///< owner player spot
+	HpType hp;            ///< HP
+	HpType maxHp;         ///< max HP
 
 	MapEntity(IdType id, string name, RealCoord coord, int ownerSpot)
 	    : MapObject(id, move(name), coord), ownerSpot(ownerSpot), hp(0), maxHp(1) {}

@@ -11,7 +11,7 @@ class SampleGame : public QObject, public GameSlot
 	u_p<SampleGameWidget> gameWidget;
 	SampleMapWidget* mapWidget;
 
-	int playerSpot; /// spot on map
+	int playerSpot; ///< spot on map
 
 public:
 	SampleGame(int playerSpot);

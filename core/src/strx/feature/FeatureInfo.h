@@ -18,8 +18,8 @@ struct FeatureInfo : boost::noncopyable
 
 struct HealthFeatureInfo : FeatureInfo
 {
-	HpType hp;       /// hit points
-	float recovery;  /// hp/sec recovery speed
+	HpType hp;       ///< hit points
+	float recovery;  ///< hp/sec recovery speed
 
 	HealthFeatureInfo(const HpType hp, float recovery)
 	        : hp(hp), recovery(recovery) {}
@@ -28,7 +28,7 @@ struct HealthFeatureInfo : FeatureInfo
 
 struct MoveFeatureInfo : FeatureInfo
 {
-	float speed;     /// tile/sec
+	float speed;     ///< tile/sec
 
 	MoveFeatureInfo(float speed) : speed(speed) {}
 	MoveFeatureInfo* clone() override { return new MoveFeatureInfo(speed); }
@@ -36,9 +36,9 @@ struct MoveFeatureInfo : FeatureInfo
 
 struct AttackFeatureInfo : FeatureInfo
 {
-	HpType damage;   /// hp reduced on one attack
-	float speed;     /// hit/sec
-	float radius;    /// reach radius
+	HpType damage;   ///< hp reduced on one attack
+	float speed;     ///< hit/sec
+	float radius;    ///< reach radius
 
 	AttackFeatureInfo(const HpType damage, float speed, float radius)
 	        : damage(damage), speed(speed), radius(radius) {}
@@ -47,8 +47,8 @@ struct AttackFeatureInfo : FeatureInfo
 
 struct CollectFeatureInfo : FeatureInfo
 {
-	float speed;     /// amount/sec
-	float radius;    /// reach radius
+	float speed;     ///< amount/sec
+	float radius;    ///< reach radius
 	u_p<Resources> capacities; // maximum amout of each resource, entity can bear
 
 	CollectFeatureInfo(float speed, float radius, u_p<Resources> capacities)
