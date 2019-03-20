@@ -65,10 +65,11 @@ void Game::Tick(float seconds)
 
 void Game::AddEntity(MapEntity* mapEntity)
 {
-	auto& name = mapEntity->name;
-	PlayerId playerId = playerIds[mapEntity->ownerSpot];
-	auto& player = *players[playerId];
-	auto& info = player.GetTechTree().GetNode(name);
+	auto iSpotId = spotIds.find(mapEntity->ownerSpot);
+	if (iSpotId == spotIds.end()) return;
+
+	auto& player = *players.at(iSpotId->second);
+	auto& info = player.GetTechTree().GetNode(mapEntity->name);
 	int objectId = mapEntity->id;
 
 	auto entity = make_s<Entity>(*this, player, objectId, info, mapEntity->coord);
@@ -110,9 +111,9 @@ void Game::AddPlayer(s_p<Message> message, PlayerId playerId)
 	{
 		for (auto spot : map->GetPlayerSpots())
 		{
-			if (!nya_in(spot, playerIds))
+			if (!nya_in(spot, spotIds))
 			{
-				playerIds.emplace(spot, playerId);
+				spotIds.emplace(spot, playerId);
 				playerSpot = spot;
 				break;
 			}
@@ -127,7 +128,7 @@ void Game::AddPlayer(s_p<Message> message, PlayerId playerId)
 		{
 			nya_throw << "There's no map spot: " << playerSpot;
 		}
-		if (nya_in(playerSpot, playerIds)) // replace is not supported yet
+		if (nya_in(playerSpot, spotIds)) // replace is not supported yet
 		{
 			nya_throw << "Trying to add same player twice [%d], name: %s"s % playerSpot % playerMessage->name;
 		}
@@ -143,7 +144,7 @@ void Game::AddPlayer(s_p<Message> message, PlayerId playerId)
 		playerMessage->name = ("Player%d"s % playerId).str();
 	}
 
-	playerIds.emplace(playerSpot, playerId);
+	spotIds.emplace(playerSpot, playerId);
 	plannedPlayers.push_back(playerMessage);
 
 	Kernel::SendMessageAll(move(playerMessage));
@@ -152,30 +153,36 @@ void Game::AddPlayer(s_p<Message> message, PlayerId playerId)
 void Game::Ready(PlayerId playerId)
 {
 	readyPlayers.insert(playerId);
-	if (readyPlayers.size() == map->GetPlayerSpots().size())
+
+	// wait for all human players to be ready
+	for (const auto& plannedPlayer : plannedPlayers)
 	{
-		Start();
+		PlayerId id = spotIds.at(plannedPlayer->spot);
+		if (plannedPlayer->type == PlayerType::HUMAN && !nya_in(id, readyPlayers))
+		{
+			return;
+		}
 	}
+	Start();
 }
 
 void Game::Start()
 {
 	for (const auto& playerMessage : plannedPlayers)
 	{
-		int playerSpot = playerMessage->spot;
-		PlayerId playerId = playerIds[playerSpot];
+		PlayerId id = spotIds.at(playerMessage->spot);
 
 		// map
-		auto&& mapMessage = CreateMapMessage(playerSpot);
+		auto&& mapMessage = CreateMapMessage(playerMessage->spot);
 		Map& map = *mapMessage->map;
 		if (playerMessage->type == PlayerType::HUMAN)
 		{
-			Kernel::SendMessageOne(move(mapMessage), playerId);
+			Kernel::SendMessageOne(move(mapMessage), id);
 		}
 
 		// player
-		auto player = make_u<Player>(*this, playerId, *playerMessage, map);
-		players.emplace(playerId, move(player));
+		auto player = make_u<Player>(*this, id, *playerMessage, map);
+		players.emplace(id, move(player));
 	}
 	plannedPlayers.clear();
 

@@ -4,13 +4,14 @@
 
 namespace strx
 {
-using PlannedPlayers = vector<s_p<PlayerMessage>>;
 using Players = umap<PlayerId, u_p<Player>>;
 
 class Game : boost::noncopyable
 {
+	using PlannedPlayers = vector<s_p<PlayerMessage>>;
+	
 	s_p<Map> map;                    ///< global map
-	umap<int, PlayerId> playerIds;   ///< { spot - id }
+	umap<int, PlayerId> spotIds;     ///< { spot - id }
 	PlannedPlayers plannedPlayers;   ///< players going to join
 	uset<PlayerId> readyPlayers;     ///< players ready to start
 	Players players;                 ///< players in game
