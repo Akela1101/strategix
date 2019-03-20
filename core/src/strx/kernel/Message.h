@@ -83,7 +83,7 @@ struct PlayerMessage : Message
 
 	PlayerMessage() = default;
 	PlayerMessage(GameId gameId, PlayerType type)
-	    : gameId(gameId), type(type) {}
+	    : gameId(gameId), type(type), spot(0) {}
 	Type GetType() const override { return Type::PLAYER; }
 };
 

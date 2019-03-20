@@ -100,14 +100,49 @@ void Game::LoadMap(const string& mapName)
 void Game::AddPlayer(s_p<Message> message, PlayerId playerId)
 {
 	auto playerMessage = sp_cast<PlayerMessage>(message);
-	int playerSpot = playerMessage->spot;
-	if (nya_in(playerSpot, playerIds)) // replace is not supported yet
-		nya_throw << "Trying to add same player twice [%d], name: %s"s % playerSpot % playerMessage->name;
-
 	if (playerMessage->type != PlayerType::HUMAN)
 	{
 		playerId = Kernel::GetNextPlayerId(); // id for AI
 	}
+
+	int& playerSpot = playerMessage->spot;
+	if (!playerSpot)
+	{
+		for (auto spot : map->GetPlayerSpots())
+		{
+			if (!nya_in(spot, playerIds))
+			{
+				playerIds.emplace(spot, playerId);
+				playerSpot = spot;
+				break;
+			}
+		}
+		if (!playerSpot)
+			nya_throw << "Map is already full and cannot allow one more: " << playerId;
+	}
+	else
+	{
+		const auto& spots = map->GetPlayerSpots();
+		if (find(nya_all(spots), playerSpot) == spots.end())
+		{
+			nya_throw << "There's no map spot: " << playerSpot;
+		}
+		if (nya_in(playerSpot, playerIds)) // replace is not supported yet
+		{
+			nya_throw << "Trying to add same player twice [%d], name: %s"s % playerSpot % playerMessage->name;
+		}
+	}
+
+	if (playerMessage->race.empty())
+	{
+		playerMessage->race = "az"; //todo: fill it random
+	}
+
+	if (playerMessage->name.empty())
+	{
+		playerMessage->name = ("Player%d"s % playerId).str();
+	}
+
 	playerIds.emplace(playerSpot, playerId);
 	plannedPlayers.push_back(playerMessage);
 
