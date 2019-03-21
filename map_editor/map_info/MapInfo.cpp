@@ -1,5 +1,6 @@
 #include <boost/filesystem.hpp>
 #include <QBitmap>
+#include <nya/io.hpp>
 
 #include "MapInfo.h"
 
@@ -53,7 +54,7 @@ void MapInfo::LoadTerrainTools()
 	}
 
 	std::string terrainsImageFileName;
-	getline(fin, terrainsImageFileName);
+	nya_getline(fin, terrainsImageFileName);
 
 	// image
 	QPixmap pixmap;

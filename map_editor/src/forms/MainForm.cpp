@@ -7,6 +7,7 @@
 #include <QMessageBox>
 #include <QStandardPaths>
 #include <QPushButton>
+#include <nya/io.hpp>
 
 #include "DialogNew.h"
 #include "MainForm.h"
@@ -105,7 +106,7 @@ void MainForm::FileLoad()
 	string lastPath;
 	ifstream fin(lastLocationPath);
 	if (fin)
-		getline(fin, lastPath);
+		nya_getline(fin, lastPath);
 
 	fin.close();
 

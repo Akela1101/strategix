@@ -2,7 +2,7 @@
 #include <fstream>
 #include <sstream>
 #include <boost/filesystem.hpp>
-
+#include <nya/io.hpp>
 #include <strx/map/MapObject.h>
 #include <strx/map/MapMine.h>
 
@@ -226,12 +226,12 @@ void Map::Load(istream& is)
 	string oneString;
 
 	// top string
-	getline(is, oneString);
+	nya_getline(is, oneString);
 	if (oneString != mapFileTopString)
 		nya_throw << "First string should be " << mapFileTopString;
 
 	// version
-	getline(is, oneString);
+	nya_getline(is, oneString);
 	if (oneString != mapFormatVersion)
 		nya_throw << "Version of map [%s] should be [%s]."s % oneString % mapFormatVersion;
 
