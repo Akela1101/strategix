@@ -56,7 +56,7 @@ void Server::AcceptConnection()
 	{
 		if (!ec)
 		{
-			auto connection = make_u<Connection>(move(*socket), ReceiveMessage);
+			auto connection = make_u<Connection>(move(*socket), ReceiveMessage, ConnectionClosed);
 
 			connections.emplace(connection->GetId(), move(connection));
 		}
@@ -66,11 +66,6 @@ void Server::AcceptConnection()
 
 void Server::ReceiveMessage(s_p<Message> message, ConnectionId id)
 {
-	if (!message)
-	{
-		connections.erase(id);
-		return;
-	}
 	Kernel::invoke(Kernel::OnReceiveMessage, move(message), id);
 }
 
@@ -91,6 +86,11 @@ void Server::SendMessageAll(s_p<Message> message)
 	{
 		connection->Write(message);
 	}
+}
+
+void Server::ConnectionClosed(ConnectionId id)
+{
+	connections.erase(id);
 }
 
 }

@@ -11,16 +11,22 @@ namespace strx
 {
 class Connection : boost::noncopyable
 {
+public:
+	using ReceiveCallback = function<void(s_p<Message>, ConnectionId)>;
+	using ClosedCallback = function<void(ConnectionId id)>;
+
+private:
 	ConnectionId id;
 	tcp::socket socket;
-	const function<void(s_p<Message>, ConnectionId)> ReceiveMessage;
+	const ReceiveCallback receiveCallback;
+	const ClosedCallback closedCallback;
 
 	string writeBuffer;
 	string readBuffer;
 	int expectedSize;
 
 public:
-	Connection(tcp::socket&& socket, const function<void(s_p<Message>, ConnectionId)>& ReceiveMessage);
+	Connection(tcp::socket socket, ReceiveCallback receiveCallback, ClosedCallback closedCallback = {});
 
 	ConnectionId GetId() const { return id; }
 	void Write(s_p<Message> message);

@@ -10,9 +10,10 @@ namespace strx
 class Server : public nya::event_loop_holder<Server>
 {
 	friend class Kernel;
-	Server() = delete;
 
 public:
+	Server() = delete;
+
 	static void Run(ushort port);
 	static void Finish();
 
@@ -21,5 +22,6 @@ private:
 	static void ReceiveMessage(s_p<Message> message, ConnectionId id);
 	static void SendMessageOne(s_p<Message> message, ConnectionId id);
 	static void SendMessageAll(s_p<Message> message);
+	static void ConnectionClosed(ConnectionId id);
 };
 }

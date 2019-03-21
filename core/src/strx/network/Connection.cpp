@@ -13,10 +13,11 @@ namespace
 	atomic<ConnectionId> lastConnectionId {0};
 }
 
-Connection::Connection(tcp::socket&& socket, const function<void(s_p<Message>, ConnectionId)>& ReceiveMessage)
+Connection::Connection(tcp::socket socket, ReceiveCallback receiveCallback, ClosedCallback closedCallback)
         : id(++lastConnectionId)
         , socket(move(socket))
-        , ReceiveMessage(ReceiveMessage)
+        , receiveCallback(move(receiveCallback))
+        , closedCallback(move(closedCallback))
 {
 	readBuffer.reserve(recommendedMessageLimit);
 	writeBuffer.reserve(recommendedMessageLimit);
@@ -41,14 +42,14 @@ void Connection::Write(s_p<Message> message)
 	if (ec)
 	{
 		error_log << "socket write error: %d (%s)"s % ec.value() % ec.message();
-		socket.close();
+        Close();
 		return;
 	}
 	asio::write(socket, asio::buffer(writeBuffer.data(), writeBuffer.size()), ec);
 	if (ec)
 	{
 		error_log << "socket write error: %d (%s)"s % ec.value() % ec.message();
-		socket.close();
+        Close();
 		return;
 	}
 }
@@ -60,7 +61,7 @@ void Connection::Read()
 	        {
 		        if (ec)
 				{
-					if (ec != asio::error::eof)
+					if (ec != asio::error::eof && ec != asio::error::operation_aborted)
 					{
 						error_log << "socket read error: %d (%s)"s % ec.value() % ec.message();
 					}
@@ -86,7 +87,7 @@ void Connection::Read()
 						Close();
 						return;
 					}
-					ReceiveMessage(move(message), id);
+					receiveCallback(move(message), id);
 				}
 				catch (exception& e) { error_log << "Unable to parse message: " << e.what(); }
 
@@ -96,12 +97,7 @@ void Connection::Read()
 
 void Connection::Close()
 {
-	if (socket.is_open())
-	{
-		socket.shutdown(tcp::socket::shutdown_both);
-		socket.close();
-		ReceiveMessage(nullptr, id);
-	}
+    if (closedCallback) closedCallback(id);
 }
 
 }
