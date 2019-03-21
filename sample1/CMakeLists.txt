@@ -4,7 +4,7 @@ project(sample1)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
 
 # Qt
-find_package(Qt5Widgets)
+find_package(Qt5Widgets 5.11 REQUIRED)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
