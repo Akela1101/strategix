@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.11)
+cmake_minimum_required(VERSION 3.16)
 project(strategix)
 
 # Boost
@@ -17,8 +17,4 @@ if(WIN32)
 else()
 	find_library(PTHREAD_LIBRARY pthread)
 	target_link_libraries(${PROJECT_NAME} ${PTHREAD_LIBRARY})
-endif()
-
-if (COMMAND cotire)
-	cotire(${PROJECT_NAME})
 endif()
