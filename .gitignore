@@ -22,6 +22,7 @@ Makefile*
 bin/
 build/
 build*/
+cmake-build*/
 dist/
 Debug/
 Release/

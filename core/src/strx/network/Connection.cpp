@@ -1,5 +1,5 @@
 #include <istream>
-#include <boost/endian.hpp>
+#include <boost/endian/conversion.hpp>
 #include <strx/kernel/Message.h>
 
 #include "Connection.h"
