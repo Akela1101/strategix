@@ -81,7 +81,7 @@ void MapWidget::wheelEvent(QWheelEvent* event)
 {
 	if (!map) return;
 
-	tileLen += copysign(4, event->delta());
+	tileLen += copysign(4, event->angleDelta().y());
 	if (tileLen < minZoom)
 	{
 		tileLen = minZoom;
@@ -97,7 +97,7 @@ void MapWidget::wheelEvent(QWheelEvent* event)
 	setFixedSize(groundPixmap->size() * tileLen / baseTileLen);
 	update();
 
-	QPoint point = event->pos() / tileLen;
+	QPointF point = event->position() / tileLen;
 
 	// Move sliders to mouse center
 	QScrollBar* hSB = scrollArea->horizontalScrollBar();

@@ -1,6 +1,7 @@
 #include <strx/common/EntityInfo.h>
 #include <strx/common/TechTree.h>
 
+#define BOOST_BIND_GLOBAL_PLACEHOLDERS
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/filesystem.hpp>
