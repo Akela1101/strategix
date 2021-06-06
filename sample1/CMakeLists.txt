@@ -4,7 +4,7 @@ project(sample1)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
 
 # Qt
-find_package(Qt5Widgets 5.11 REQUIRED)
+find_package(Qt5 5.11 REQUIRED Widgets)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
@@ -18,3 +18,5 @@ target_link_libraries(${PROJECT_NAME} strategix map_info)
 
 file(COPY config/ DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/config)
 file(COPY ../map_editor/config/map/ DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/config/map)
+
+nya_deploy_qt(${PROJECT_NAME} --no-translations)

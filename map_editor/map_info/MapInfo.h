@@ -3,7 +3,6 @@
 #define ELPP_QT_LOGGING
 
 #include <nya/api.hpp>
-#include <strx/common/StrategixCommon.h>
 #include <strx/map/Map.h>
 #include <MapInfo_fwd.h>
 #include <QPixmap>

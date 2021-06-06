@@ -9,8 +9,25 @@ include(${CMAKE_BINARY_DIR}/nya_fetch.cmake)
 nya_fetch(git@github.com:Akela1101/nya.git)
 include(${FETCH_ROOT}/cmake/nya.cmake)
 
+# add to nya_qt
+function(nya_deploy_qt target)
+    if(NOT WIN32)
+        return()
+    endif()
+
+    find_program(windeployqt_exe windeployqt)
+    if(NOT windeployqt_exe)
+        message(FATAL_ERROR "windeployqt not found. Please, check CMAKE_PREFIX_PATH.")
+    endif()
+
+    add_custom_target(${target}-with-qt ALL
+            ${windeployqt_exe} ${ARGN} $<TARGET_FILE:${target}>
+            DEPENDS ${target}
+    )
+endfunction()
+
 # easylogging
-nya_fetch(git@github.com:zuhd-org/easyloggingpp.git)
+nya_fetch(git@github.com:amrayn/easyloggingpp.git)
 target_include_directories(easyloggingpp SYSTEM PUBLIC ${FETCH_ROOT}/src)
 
 # strategix

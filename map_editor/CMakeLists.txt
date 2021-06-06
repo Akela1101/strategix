@@ -4,7 +4,7 @@ project(map_editor)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
 
 # Qt
-find_package(Qt5Widgets)
+find_package(Qt5 5.11 REQUIRED Widgets)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
@@ -25,3 +25,5 @@ target_include_directories(${PROJECT_NAME} PRIVATE src src/forms)
 target_link_libraries(${PROJECT_NAME} ${LIB_NAME})
 
 file(COPY config/ DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/config)
+
+nya_deploy_qt(${PROJECT_NAME} --no-translations)
