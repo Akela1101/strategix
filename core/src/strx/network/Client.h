@@ -6,7 +6,7 @@
 
 namespace strx
 {
-class Client : public nya::event_loop_holder<Client>
+class Client : public nya::event_loop_holder<boost::asio::io_context>
 {
 	friend class GameSlot;
 	Client() = delete;

@@ -7,7 +7,7 @@
 
 namespace strx
 {
-class Server : public nya::event_loop_holder<Server>
+class Server : public nya::event_loop_holder<boost::asio::io_context>
 {
 	friend class Kernel;
 

@@ -9,7 +9,7 @@
  */
 namespace strx
 {
-class Kernel : public nya::event_loop_holder<Kernel>
+class Kernel : public nya::event_loop_holder<boost::asio::io_context>
 {
 	Kernel() = delete;
 
