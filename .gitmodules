@@ -1,0 +1,6 @@
+[submodule "deps/nya"]
+	path = deps/nya
+	url = git@github.com:nyacpp/nya.git
+[submodule "deps/easyloggingpp"]
+	path = deps/easyloggingpp
+	url = git@github.com:amrayn/easyloggingpp.git

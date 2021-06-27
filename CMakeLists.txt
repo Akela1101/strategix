@@ -1,13 +1,9 @@
 cmake_minimum_required(VERSION 3.16)
 project(strategix_all)
 
-# nya_fetch
-file(DOWNLOAD "https://raw.githubusercontent.com/Akela1101/nya/master/cmake/nya_fetch.cmake" "${CMAKE_BINARY_DIR}/nya_fetch.cmake")
-include(${CMAKE_BINARY_DIR}/nya_fetch.cmake)
-
 # nya
-nya_fetch(git@github.com:Akela1101/nya.git)
-include(${FETCH_ROOT}/cmake/nya.cmake)
+add_subdirectory(deps/nya)
+include(deps/nya/cmake/nya.cmake)
 
 # add to nya_qt
 function(nya_deploy_qt target)
@@ -27,8 +23,8 @@ function(nya_deploy_qt target)
 endfunction()
 
 # easylogging
-nya_fetch(git@github.com:amrayn/easyloggingpp.git)
-target_include_directories(easyloggingpp SYSTEM PUBLIC ${FETCH_ROOT}/src)
+add_subdirectory(deps/easyloggingpp)
+target_include_directories(easyloggingpp SYSTEM PUBLIC deps/easyloggingpp/src)
 
 # strategix
 add_subdirectory(core)
