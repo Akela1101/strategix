@@ -1,8 +1,10 @@
 cmake_minimum_required(VERSION 3.16)
 project(strategix_all)
 
+include(cmake/utils.cmake)
+
 # nya
-add_subdirectory(deps/nya)
+nya_submodule(deps/nya)
 include(deps/nya/cmake/nya.cmake)
 
 # add to nya_qt
@@ -23,7 +25,7 @@ function(nya_deploy_qt target)
 endfunction()
 
 # easylogging
-add_subdirectory(deps/easyloggingpp)
+nya_submodule(deps/easyloggingpp)
 target_include_directories(easyloggingpp SYSTEM PUBLIC deps/easyloggingpp/src)
 
 # strategix
