@@ -1,13 +1,13 @@
 #pragma once
 
 #include <Strategix_fwd.h>
-#include <nya/signal.hpp>
+#include <nya/invoker.hpp>
 #include "NetworkCommon.h"
 
 
 namespace strx
 {
-class Server : public nya::event_loop_holder<boost::asio::io_context>
+class Server : public nya::static_invoker<Server, boost::asio::io_context>
 {
 	friend class Kernel;
 

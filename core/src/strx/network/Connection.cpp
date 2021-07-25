@@ -88,8 +88,10 @@ void Connection::Read()
 					}
 					receiveCallback(move(message), id);
 				}
-				catch (exception& e) { error_log << "Unable to parse message: " << e.what(); }
-
+				catch (exception& e)
+				{
+					error_log << "Parse message error: " << e.what() << ", size: " << readBuffer.size();
+				}
 				Read();
 	        });
 }

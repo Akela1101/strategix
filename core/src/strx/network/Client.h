@@ -1,12 +1,12 @@
 #pragma once
 
 #include <Strategix_fwd.h>
-#include <nya/signal.hpp>
+#include <nya/invoker.hpp>
 #include "NetworkCommon.h"
 
 namespace strx
 {
-class Client : public nya::event_loop_holder<boost::asio::io_context>
+class Client : public nya::static_invoker<Client, boost::asio::io_context>
 {
 	friend class GameSlot;
 	Client() = delete;

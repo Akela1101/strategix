@@ -2,14 +2,14 @@
 
 #include <Strategix_fwd.h>
 #include <strx/network/NetworkCommon.h>
-#include <nya/signal.hpp>
+#include <nya/invoker.hpp>
 
 /**
  * Main functionality is here.
  */
 namespace strx
 {
-class Kernel : public nya::event_loop_holder<boost::asio::io_context>
+class Kernel : public nya::static_invoker<Kernel, boost::asio::io_context>
 {
 	Kernel() = delete;
 

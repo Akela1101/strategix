@@ -4,7 +4,7 @@
 #include <Strategix_fwd.h>
 #include <strx/network/NetworkCommon.h>
 #include <boost/asio.hpp>
-#include <nya/signal.hpp>
+#include <nya/invoker.hpp>
 
 
 namespace strx

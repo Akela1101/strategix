@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Strategix_fwd.h>
+#include <nya/enum.hpp>
 
 namespace strx
 {
@@ -9,6 +10,12 @@ namespace strx
  */
 class GameSlot : boost::noncopyable
 {
+#   define GameStageEnumDef(K, V) \
+	    K(NONE)          /* no game started */ \
+	    K(STARTED)       /* started */
+	nya_enum(GameStage, GameStageEnumDef)
+
+	GameStage stage = GameStage::NONE;
 	ResourceInfosType resourceInfos;
 	umap<int, s_p<PlayerMessage>> registeredPlayers;
 	umap<int, u_p<PlayerSlot>> players;
@@ -61,5 +68,8 @@ protected:
 
 	/// object removed
 	virtual void ObjectRemoved(IdType id) = 0;
+
+private:
+	bool CheckGameStage(const Message& message);
 };
 }

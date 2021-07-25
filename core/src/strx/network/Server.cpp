@@ -27,7 +27,7 @@ void Server::Run(ushort port)
 	serverThread.reset(new thread([]()
 	{
 		nya_thread_name("_serv_");
-		trace_log << "Starting server";
+		trace_log << "starting server";
 
 		bool running = true;
 		while (running)
@@ -42,6 +42,7 @@ void Server::Run(ushort port)
 				error_log << "Unexpected error in server: " << e.what();
 			}
 		}
+		trace_log << "stopping server";
 	}));
 }
 

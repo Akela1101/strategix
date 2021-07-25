@@ -100,6 +100,8 @@ void Game::LoadMap(const string& mapName)
 
 void Game::AddPlayer(s_p<Message> message, PlayerId playerId)
 {
+	trace_log << "add player: " << playerId;
+
 	auto playerMessage = sp_cast<PlayerMessage>(message);
 	if (playerMessage->type != PlayerType::HUMAN)
 	{
@@ -152,6 +154,7 @@ void Game::AddPlayer(s_p<Message> message, PlayerId playerId)
 
 void Game::Ready(PlayerId playerId)
 {
+	trace_log << "player is ready: " << playerId;
 	readyPlayers.insert(playerId);
 
 	// wait for all human players to be ready
@@ -168,20 +171,21 @@ void Game::Ready(PlayerId playerId)
 
 void Game::Start()
 {
+	trace_log << "game is started";
+
 	for (const auto& playerMessage : plannedPlayers)
 	{
 		PlayerId id = spotIds.at(playerMessage->spot);
 
 		// map
 		auto&& mapMessage = CreateMapMessage(playerMessage->spot);
-		Map& map = *mapMessage->map;
 		if (playerMessage->type == PlayerType::HUMAN)
 		{
 			Kernel::SendMessageOne(move(mapMessage), id);
 		}
 
 		// player
-		auto player = make_u<Player>(*this, id, *playerMessage, map);
+		auto player = make_u<Player>(*this, id, *playerMessage, *map);
 		players.emplace(id, move(player));
 	}
 	plannedPlayers.clear();

@@ -1,10 +1,11 @@
 #include <atomic>
 #include <future>
+#include <memory>
 #include <thread>
 #include <boost/asio/steady_timer.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/range/adaptors.hpp>
-#include <nya/signal.hpp>
+#include <nya/invoker.hpp>
 
 #include <strx/common/Resources.h>
 #include <strx/common/TechTree.h>
@@ -220,7 +221,7 @@ void Kernel::Init(const string& configPath)
 
 void Kernel::RunImpl()
 {
-	nya_thread_name("_strx_");
+	nya_thread_name("_kern_");
 	try { eventLoop.run(); } catch (exception& e)
 	{
 		error_log << "Unexpected error in strategix: " << e.what();
@@ -230,6 +231,8 @@ void Kernel::RunImpl()
 
 void Kernel::ContextRequested(ConnectionId connectionId)
 {
+	trace_log << "context requested from: " << connectionId;
+
 	auto contextMessage = make_s<ContextMessage>(ConfigManager::GetResourceInfos());
 	Server::SendMessageOne(contextMessage, connectionId);
 
@@ -243,7 +246,8 @@ void Kernel::ContextRequested(ConnectionId connectionId)
 
 void Kernel::AddGame(const string& mapName, const string& creatorName)
 {
-	game.reset(new Game(mapName));
+	trace_log << "new game on: " << mapName << ", created by: " << creatorName;
+	game = make_s<Game>(mapName);
 
 	auto gameMessage = make_s<GameMessage>();
 	gameMessage->id = 1;

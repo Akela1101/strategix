@@ -35,3 +35,15 @@ mkdir build && cd build
 cmake ..
 make
 ```
+
+## Game Flow
+| Server             | Client               | Comment |
+| ---                | ---                  | ---     |
+| **Init**           |                      | Load Map info, etc |
+|                    | **Init**             | Startup GUI and connect |
+| **Context**        | \>>>                 | Get available Maps and Games |             
+| <                  | **Add Game**         | Only one Client does it |
+| <<<                | **Add Player**       | Select spot on the map, etc, thus showing that player is ready|
+| **Start Game**     | \>>>                 | Send Map, Entities, etc |
+| <<<                | \>>>                 | Commands exchange |
+| **Stop Game**      | \>>>                 | Send winner, score, etc |
