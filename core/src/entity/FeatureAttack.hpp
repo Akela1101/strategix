@@ -8,12 +8,12 @@ namespace strx
 class FeatureAttack : public Feature
 {
 	const AttackFeatureInfo* const info;  ///< link to tree
-	s_p<Entity> target;
-	w_p<Entity> movingTarget;
+	s_p<EntityKernel> target;
+	w_p<EntityKernel> movingTarget;
 	float hitProgress;
 
 public:
-	FeatureAttack(const FeatureInfo* featureInfo, Entity* entity);
+	FeatureAttack(const FeatureInfo* featureInfo, EntityKernel* entity);
 
 	bool Attack(IdType targetId);
 	void Tick(float seconds) override;

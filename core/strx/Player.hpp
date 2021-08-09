@@ -11,13 +11,13 @@ namespace strx
  *
  * This class belongs to strategix, so shouldn't be deleted by user.
  */
-class PlayerSlot : boost::noncopyable
+class Player : boost::noncopyable
 {
 	s_p<PlayerMessage> playerMessage;
 
 public:
-	PlayerSlot(s_p<PlayerMessage> playerMessage) : playerMessage(move(playerMessage)) {}
-	virtual ~PlayerSlot() = default;
+	Player(s_p<PlayerMessage> playerMessage) : playerMessage(move(playerMessage)) {}
+	virtual ~Player() = default;
 
 	/// @return unique name
 	const string& GetName() const;

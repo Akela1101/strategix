@@ -7,7 +7,7 @@ namespace sample1
 {
 
 SampleEntity::SampleEntity(s_p<EntityMessage> entityMessage, SampleMapWidget* mapWidget)
-        : EntitySlot(move(entityMessage)), mapWidget(mapWidget)
+        : Entity(move(entityMessage)), mapWidget(mapWidget)
 {}
 
 void SampleEntity::Moved(RealCoord coord)

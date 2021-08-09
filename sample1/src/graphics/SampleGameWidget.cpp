@@ -3,8 +3,8 @@
 
 #include <MapInfo.hpp>
 
-#include "SampleMapWidget.hpp"
 #include "SampleGameWidget.hpp"
+#include "SampleMapWidget.hpp"
 
 
 namespace sample1

@@ -13,7 +13,7 @@ class User : boost::noncopyable
 {
 	ResourceInfosType resourceInfos;
 
-	u_p<GameSlot> game;
+	u_p<Game> game;
 
 public:
 	static void SendMessageOne(s_p<Message> message);
@@ -50,6 +50,6 @@ protected:
 	 * @param gameId game id
 	 * @return game object
 	 */
-	virtual u_p<GameSlot> AddGame(GameId gameId, ResourceInfosType resourceInfos) = 0;
+	virtual u_p<Game> AddGame(GameId gameId, ResourceInfosType resourceInfos) = 0;
 };
 }  // namespace strx

@@ -5,13 +5,13 @@
 
 namespace strx
 {
-class EntitySlot : boost::noncopyable
+class Entity : boost::noncopyable
 {
 	s_p<EntityMessage> entityMessage;
 
 public:
-	EntitySlot(s_p<EntityMessage> entityMessage);
-	virtual ~EntitySlot() = default;
+	Entity(s_p<EntityMessage> entityMessage);
+	virtual ~Entity() = default;
 
 	IdType GetId() const;
 	HpType GetMaxHp() const;

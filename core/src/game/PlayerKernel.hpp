@@ -6,30 +6,30 @@
 namespace strx
 {
 
-class Player : boost::noncopyable
+class PlayerKernel : boost::noncopyable
 {
-	Game& game;             ///< link to game
+	GameKernel& game;       ///< link to game
 	const PlayerId id;      ///< unique id
 	const PlayerType type;  ///< human | ai
 	const int spot;         ///< id on map
 	const string name;      ///< nick or alias
 	const string race;      ///< race name
 
-	umap<IdType, s_p<Entity>> entities;  ///< owned entities
-	u_p<Resources> resources;            ///< available resources amount
-	Map& map;                            ///< link to map
-	u_p<PathFinder> pathFinder;          ///< map path finder
-	const TechTree& techTree;            ///< link to tech tree
+	umap<IdType, s_p<EntityKernel>> entities;  ///< owned entities
+	u_p<Resources> resources;                  ///< available resources amount
+	Map& map;                                  ///< link to map
+	u_p<PathFinder> pathFinder;                ///< map path finder
+	const TechTree& techTree;                  ///< link to tech tree
 
 public:
-	Player(Game& game, PlayerId id, const PlayerMessage& playerMessage, Map& map);
-	~Player();
+	PlayerKernel(GameKernel& game, PlayerId id, const PlayerMessage& playerMessage, Map& map);
+	~PlayerKernel();
 
-	Game& GetGame() const { return game; }
+	GameKernel& GetGame() const { return game; }
 	PlayerType GetType() const { return type; }
 	int GetSpot() const { return spot; }
 	const string& GetName() const { return name; }
-	s_p<Entity> GetEntity(IdType id) const;
+	s_p<EntityKernel> GetEntity(IdType id) const;
 	Terrain* GetTerrain(MapCoord coord) const;
 	u_p<MapObject>& GetMapObject(MapCoord coord) const;
 	MapMine* GetMine(MapCoord coord) const;
@@ -39,7 +39,7 @@ public:
 	void Start();
 
 	/// entity added to game
-	void EntityAdded(s_p<Entity> entity);
+	void EntityAdded(s_p<EntityKernel> entity);
 
 	/// remove entity
 	void EntityRemoved(IdType id);
@@ -48,7 +48,7 @@ public:
 	void AddResource(const Resource& deltaResource);
 
 	/// find nearest resource collector building
-	Entity* FindCollector(MapCoord coord) const;
+	EntityKernel* FindCollector(MapCoord coord) const;
 
 	/// find nearest mine in the given manh radius
 	MapMine* FindMine(MapCoord coord, string resourceName, int squareRadius) const;

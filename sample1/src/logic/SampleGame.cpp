@@ -11,7 +11,7 @@
 namespace sample1
 {
 SampleGame::SampleGame(int playerSpot, ResourceInfosType resourceInfos)
-        : GameSlot(move(resourceInfos)), gameWidget(nullptr), mapWidget(nullptr), playerSpot(playerSpot)
+        : Game(move(resourceInfos)), gameWidget(nullptr), mapWidget(nullptr), playerSpot(playerSpot)
 {}
 
 SampleGame::~SampleGame() = default;
@@ -22,12 +22,12 @@ void SampleGame::StartGame(s_p<Map> map)
 	mapWidget = gameWidget->CreateMapWidget<SampleMapWidget>();
 	mapWidget->SetMap(move(map));
 
-	GameSlot::StartGame(nullptr);  //@#~
+	Game::StartGame(nullptr);  //@#~
 
 	gameWidget->show();
 }
 
-u_p<PlayerSlot> SampleGame::AddPlayer(s_p<PlayerMessage> playerMessage)
+u_p<Player> SampleGame::AddPlayer(s_p<PlayerMessage> playerMessage)
 {
 	auto player = make_u<SamplePlayer>(move(playerMessage));
 
@@ -35,7 +35,7 @@ u_p<PlayerSlot> SampleGame::AddPlayer(s_p<PlayerMessage> playerMessage)
 	return player;
 }
 
-u_p<EntitySlot> SampleGame::AddEntity(s_p<EntityMessage> entityMessage)
+u_p<Entity> SampleGame::AddEntity(s_p<EntityMessage> entityMessage)
 {
 	auto entity = make_u<SampleEntity>(move(entityMessage), mapWidget);
 	auto mapEntity = (MapEntity*) mapWidget->GetMapObject(entity->GetId());

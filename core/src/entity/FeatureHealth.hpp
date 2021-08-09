@@ -11,7 +11,7 @@ class FeatureHealth : public Feature
 	HpType hp;
 
 public:
-	FeatureHealth(const FeatureInfo* featureInfo, Entity* entity);
+	FeatureHealth(const FeatureInfo* featureInfo, EntityKernel* entity);
 
 	HpType GetHp() const { return hp; }
 	const HpType GetMaxHp() const;

@@ -1,7 +1,7 @@
-#include "../../strx/EntitySlot.hpp"
-#include "../../strx/GameSlot.hpp"
+#include "../../strx/Entity.hpp"
+#include "../../strx/Game.hpp"
 #include "../../strx/Message.hpp"
-#include "../../strx/PlayerSlot.hpp"
+#include "../../strx/Player.hpp"
 #include "../network/Client.hpp"
 
 #include "../../strx/User.hpp"

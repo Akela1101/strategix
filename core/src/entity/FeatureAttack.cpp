@@ -1,8 +1,8 @@
-#include "../../strx/EntitySlot.hpp"
+#include "../../strx/Entity.hpp"
 #include "../../strx/FeatureInfo.hpp"
-#include "../game/Game.hpp"
-#include "../game/Player.hpp"
-#include "Entity.hpp"
+#include "../game/GameKernel.hpp"
+#include "../game/PlayerKernel.hpp"
+#include "EntityKernel.hpp"
 #include "FeatureHealth.hpp"
 #include "FeatureMove.hpp"
 
@@ -11,7 +11,7 @@
 namespace strx
 {
 
-FeatureAttack::FeatureAttack(const FeatureInfo* featureInfo, Entity* entity)
+FeatureAttack::FeatureAttack(const FeatureInfo* featureInfo, EntityKernel* entity)
         : Feature(entity), info(dynamic_cast<const AttackFeatureInfo*>(featureInfo))
 {}
 

@@ -1,11 +1,11 @@
 #pragma once
 
+#include "Entity.hpp"
 #include "EntityInfo.hpp"
-#include "EntitySlot.hpp"
-#include "GameSlot.hpp"
+#include "Game.hpp"
 #include "Map.hpp"
 #include "MapMine.hpp"
 #include "MapObject.hpp"
 #include "Message.hpp"
-#include "PlayerSlot.hpp"
+#include "Player.hpp"
 #include "TechTree.hpp"

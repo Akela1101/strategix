@@ -1,12 +1,12 @@
 #pragma once
 
 #include <sample1_fwd.hpp>
-#include <strx/EntitySlot.hpp>
+#include <strx/Entity.hpp>
 
 
 namespace sample1
 {
-class SampleEntity : public EntitySlot
+class SampleEntity : public Entity
 {
 	SampleMapWidget* mapWidget;
 

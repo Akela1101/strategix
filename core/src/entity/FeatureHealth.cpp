@@ -1,17 +1,17 @@
-#include "../../strx/EntitySlot.hpp"
+#include "../../strx/Entity.hpp"
 #include "../../strx/FeatureInfo.hpp"
 #include "../../strx/Kernel.hpp"
 #include "../../strx/Message.hpp"
-#include "../game/Game.hpp"
-#include "../game/Player.hpp"
-#include "Entity.hpp"
+#include "../game/GameKernel.hpp"
+#include "../game/PlayerKernel.hpp"
+#include "EntityKernel.hpp"
 
 #include "FeatureHealth.hpp"
 
 namespace strx
 {
 
-FeatureHealth::FeatureHealth(const FeatureInfo* featureInfo, Entity* entity)
+FeatureHealth::FeatureHealth(const FeatureInfo* featureInfo, EntityKernel* entity)
         : Feature(entity), info(dynamic_cast<const HealthFeatureInfo*>(featureInfo)), hp(info->hp)
 {}
 

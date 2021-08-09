@@ -1,190 +1,118 @@
-#include <boost/filesystem.hpp>
-
-#include "../../strx/EntityInfo.hpp"
-#include "../../strx/Kernel.hpp"
-#include "../../strx/Map.hpp"
-#include "../../strx/MapObject.hpp"
+#include "../../strx/Entity.hpp"
 #include "../../strx/Message.hpp"
-#include "../../strx/TechTree.hpp"
-#include "../entity/Entity.hpp"
-#include "../game/Player.hpp"
-#include "../kernel/ConfigManager.hpp"
+#include "../../strx/Player.hpp"
+#include "../network/Client.hpp"
 
-#include "Game.hpp"
+#include "../../strx/Game.hpp"
+
 
 namespace strx
 {
-Game::Game(const string& mapName)
-{
-	string mapsPath = ConfigManager::GetMapsPath();
-	if (mapsPath.empty()) nya_throw << "Configuration should be loaded before adding game.";
+Game::~Game() = default;
 
-	LoadMap(mapName);
+void Game::SendMessageOne(s_p<Message> message)
+{
+	if (!message) nya_throw << "Writting null message.";
+
+	Client::invoke(Client::SendMessageOne, move(message));
 }
 
-s_p<Entity> Game::GetEntity(IdType id) const
+void Game::ReceiveMessage(s_p<Message> message)
 {
-	auto i = entities.find(id);
-	return i == entities.end() ? nullptr : i->second;
-}
-
-void Game::ReceiveMessage(s_p<Message> message, PlayerId playerId)
-{
-	switch (message->GetType())
+	Message::Type type = message->GetType();
+	if (!CheckGameStage(*message))
 	{
-		case Message::Type::PLAYER: AddPlayer(move(message), playerId); break;
-		case Message::Type::START: Ready(playerId); break;
-		default:
-			auto&& command = dp_cast<CommandMessage>(message);
-			if (!command) nya_throw << "Unknown message: " << message->GetType().c_str();
-
-			auto i = entities.find(command->id);
-			if (i == entities.end()) nya_throw << "Entity with id %d does not exist."s % command->id;
-
-			Entity* entity = i->second.get();
-			entity->ReceiveMessage(move(command));
-	}
-}
-
-void Game::Tick(float seconds)
-{
-	for (auto& entity : entities | nya::map_values) { entity->Tick(seconds); }
-
-	for (IdType entityId : removedEntities)
-	{
-		auto i = entities.find(entityId);
-		if (i == entities.end()) nya_throw << "Trying to destroy entity %d one more time."s % entityId;
-
-		i->second->GetPlayer().EntityRemoved(entityId);
-		entities.erase(i);
-	}
-	removedEntities.clear();
-}
-
-void Game::AddEntity(MapEntity* mapEntity)
-{
-	auto iSpotId = spotIds.find(mapEntity->ownerSpot);
-	if (iSpotId == spotIds.end()) return;
-
-	auto& player = *players.at(iSpotId->second);
-	auto& info = player.GetTechTree().GetNode(mapEntity->name);
-	int objectId = mapEntity->id;
-
-	auto entity = make_s<Entity>(*this, player, objectId, info, mapEntity->coord);
-	player.EntityAdded(entity);
-	entities.emplace(objectId, move(entity));
-}
-
-void Game::RemoveEntity(IdType entityId)
-{
-	removedEntities.push_back(entityId);
-}
-
-s_p<MapMessage> Game::CreateMapMessage(int playerSpot)
-{
-	// @#~ should return map AND fog-of-war mask
-	ignore = playerSpot;
-	return make_s<MapMessage>(map);
-}
-
-void Game::LoadMap(const string& mapName)
-{
-	string mapsPath = ConfigManager::GetMapsPath();
-	string fileName = boost::str("%s.map"s % mapName);
-	string path = (boost::filesystem::path(mapsPath) / fileName).string();
-
-	map.reset(new Map(path));
-}
-
-void Game::AddPlayer(s_p<Message> message, PlayerId playerId)
-{
-	trace_log << "add player: " << playerId;
-
-	auto playerMessage = sp_cast<PlayerMessage>(message);
-	if (playerMessage->type != PlayerType::HUMAN)
-	{
-		playerId = Kernel::GetNextPlayerId();  // id for AI
+		error_log << "Message of type: " << type.c_str() << " is not accepted on stage: " << stage.c_str();
+		return;
 	}
 
-	int& playerSpot = playerMessage->spot;
-	if (!playerSpot)
+	switch (type)
 	{
-		for (auto spot : map->GetPlayerSpots())
+		case Message::Type::PLAYER:
 		{
-			if (!nya_in(spot, spotIds))
-			{
-				spotIds.emplace(spot, playerId);
-				playerSpot = spot;
-				break;
-			}
+			auto&& playerMessage = sp_cast<PlayerMessage>(message);
+			trace_log << "player added";
+			int spot = playerMessage->spot;
+			registeredPlayers.emplace(spot, move(playerMessage));
+			break;
 		}
-		if (!playerSpot) nya_throw << "Map is already full and cannot allow one more: " << playerId;
-	}
-	else
-	{
-		const auto& spots = map->GetPlayerSpots();
-		if (find(nya_all(spots), playerSpot) == spots.end()) nya_throw << "There's no map spot: " << playerSpot;
-
-		if (nya_in(playerSpot, spotIds))  // replace is not supported yet
+		case Message::Type::MAP:
 		{
-			nya_throw << "Trying to add same player twice [%d], name: %s"s % playerSpot % playerMessage->name;
+			trace_log << "map received";
+			StartGame(sp_cast<MapMessage>(message)->map);
+
+			stage = GameStage::STARTED;
+			break;
 		}
+		case Message::Type::ENTITY:
+		{
+			auto&& entityMessage = sp_cast<EntityMessage>(message);
+			trace_log << "entity added";
+			auto&& entity = AddEntity(move(entityMessage));
+			entities.emplace(entity->GetId(), move(entity));
+			break;
+		}
+		case Message::Type::RESOURCES:
+		{
+			const auto& resourcesMessage = sp_cast<ResourcesMessage>(message);
+			trace_log << "resources updated";
+			ResourcesChanged(resourcesMessage->resources);
+			break;
+		}
+		case Message::Type::MINE_AMOUNT:
+		{
+			const auto& mineAmountMessage = sp_cast<MineAmountMessage>(message);
+			trace_log << "mine info updated: " << mineAmountMessage->id << " = " << mineAmountMessage->amount;
+			MineAmountChanged(mineAmountMessage->id, mineAmountMessage->amount);
+			break;
+		}
+		case Message::Type::OBJECT_REMOVED:
+		{
+			const auto& removalMessage = sp_cast<ObjectRemovedMessage>(message);
+			trace_log << "object removed: " << removalMessage->id;
+			ObjectRemoved(removalMessage->id);
+			break;
+		}
+		case Message::Type::MOVE:
+		{
+			const auto& moveMessage = sp_cast<MapMoveMessage>(message);
+			trace_log << "entity move started: " << moveMessage->id;
+			entities[moveMessage->id]->MapMoved(moveMessage->from, moveMessage->to);
+			break;
+		}
+		case Message::Type::REAL_MOVE:
+		{
+			const auto& moveMessage = sp_cast<RealMoveMessage>(message);
+			trace_log << "entity move finished: " << moveMessage->id;
+			entities[moveMessage->id]->Moved(moveMessage->coord);
+			break;
+		}
+		case Message::Type::HP:
+		{
+			const auto& hpMessage = sp_cast<HpMessage>(message);
+			trace_log << "entity hp: " << hpMessage->id << " = " << hpMessage->hp;
+			entities[hpMessage->id]->HpChanged(hpMessage->hp);
+			break;
+		}
+		default: error_log << "Unable to handle message: " << message->GetType().c_str();
 	}
-
-	if (playerMessage->race.empty())
-	{
-		playerMessage->race = "az";  //todo: fill it random
-	}
-
-	if (playerMessage->name.empty()) playerMessage->name = ("Player%d"s % playerId).str();
-
-	spotIds.emplace(playerSpot, playerId);
-	plannedPlayers.push_back(playerMessage);
-
-	Kernel::SendMessageAll(move(playerMessage));
 }
 
-void Game::Ready(PlayerId playerId)
+void Game::StartGame(s_p<Map> map)
 {
-	trace_log << "player is ready: " << playerId;
-	readyPlayers.insert(playerId);
-
-	// wait for all human players to be ready
-	for (const auto& plannedPlayer : plannedPlayers)
+	for (auto&& playerMessage : registeredPlayers | nya::map_values)
 	{
-		PlayerId id = spotIds.at(plannedPlayer->spot);
-		if (plannedPlayer->type == PlayerType::HUMAN && !nya_in(id, readyPlayers)) return;
+		auto&& player = AddPlayer(move(playerMessage));
+		players.emplace(player->GetSpot(), move(player));
 	}
-	Start();
+	registeredPlayers.clear();
 }
 
-void Game::Start()
+bool Game::CheckGameStage(const Message& message)
 {
-	trace_log << "game is started";
-
-	for (const auto& playerMessage : plannedPlayers)
-	{
-		PlayerId id = spotIds.at(playerMessage->spot);
-
-		// map
-		auto&& mapMessage = CreateMapMessage(playerMessage->spot);
-		if (playerMessage->type == PlayerType::HUMAN) Kernel::SendMessageOne(move(mapMessage), id);
-
-		// player
-		auto player = make_u<Player>(*this, id, *playerMessage, *map);
-		players.emplace(id, move(player));
-	}
-	plannedPlayers.clear();
-
-	// entities
-	for (int y : boost::irange(0, map->GetLength()))
-	{
-		for (int x : boost::irange(0, map->GetWidth()))
-		{
-			auto object = map->GetCell(x, y).object.get();
-			if (auto mapEntity = dynamic_cast<MapEntity*>(object)) AddEntity(mapEntity);
-		}
-	}
+	Message::Type type = message.GetType();
+	return (stage == GameStage::NONE && type < Message::Type::ENTITY)
+	       || (stage == GameStage::STARTED && type >= Message::Type::ENTITY);
 }
 
 }  // namespace strx

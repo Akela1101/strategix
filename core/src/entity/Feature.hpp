@@ -8,10 +8,10 @@ namespace strx
 class Feature : boost::noncopyable
 {
 protected:
-	Entity* entity;  // Link to entity
+	EntityKernel* entity;  // Link to entity
 
 public:
-	Feature(Entity* entity) : entity(entity) {}
+	Feature(EntityKernel* entity) : entity(entity) {}
 	virtual ~Feature() = default;
 
 	virtual void Tick(float seconds) = 0;

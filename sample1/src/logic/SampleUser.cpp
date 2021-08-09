@@ -35,7 +35,8 @@ void SampleUser::MessageReceived(s_p<Message> message)
 void SampleUser::HandleContext()
 {
 	//todo: add game from gui
-	if (userId == 1) {
+	if (userId == 1)
+	{
 		auto gameMessage = make_s<GameMessage>();
 		gameMessage->mapName = "small";
 		gameMessage->creatorName = "user 1";
@@ -48,7 +49,7 @@ void SampleUser::GameUpdated(GameId gameId, const GameMessage* gameMessage)
 	//
 }
 
-u_p<GameSlot> SampleUser::AddGame(GameId gameId, ResourceInfosType resourceInfos)
+u_p<Game> SampleUser::AddGame(GameId gameId, ResourceInfosType resourceInfos)
 {
 	SendMessageOne(make_s<PlayerMessage>(gameId, PlayerType::HUMAN));
 	SendMessageOne(make_s<EmptyMessage>(Message::Type::START));

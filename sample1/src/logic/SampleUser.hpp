@@ -23,7 +23,7 @@ private:
 	void MessageReceived(s_p<Message> message) override;
 	void HandleContext() override;
 	void GameUpdated(GameId gameId, const GameMessage* gameMessage) override;
-	u_p<GameSlot> AddGame(GameId gameId, ResourceInfosType resourceInfos) override;
+	u_p<Game> AddGame(GameId gameId, ResourceInfosType resourceInfos) override;
 };
 
 }  // namespace sample1

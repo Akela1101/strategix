@@ -9,7 +9,7 @@ namespace strx
 /**
  * Game representation on client.
  */
-class GameSlot : boost::noncopyable
+class Game : boost::noncopyable
 {
 #define GameStageEnumDef(K, V)       \
 	K(NONE)    /* no game started */ \
@@ -19,15 +19,15 @@ class GameSlot : boost::noncopyable
 	GameStage stage = GameStage::NONE;
 	ResourceInfosType resourceInfos;
 	umap<int, s_p<PlayerMessage>> registeredPlayers;
-	umap<int, u_p<PlayerSlot>> players;
-	umap<IdType, u_p<EntitySlot>> entities;
+	umap<int, u_p<Player>> players;
+	umap<IdType, u_p<Entity>> entities;
 
 public:
-	GameSlot(ResourceInfosType resourceInfos) : resourceInfos(move(resourceInfos)) {}
-	virtual ~GameSlot();
+	Game(ResourceInfosType resourceInfos) : resourceInfos(move(resourceInfos)) {}
+	virtual ~Game();
 
 	const ResourceInfosType& GetResourceInfos() const { return resourceInfos; }
-	EntitySlot& GetEntitySlot(IdType id) { return *entities[id]; }
+	Entity& GetEntitySlot(IdType id) { return *entities[id]; }
 
 	static void SendMessageOne(s_p<Message> message);
 
@@ -44,10 +44,10 @@ protected:
 	virtual void StartGame(s_p<Map> map);
 
 	/// create player slot
-	virtual u_p<PlayerSlot> AddPlayer(s_p<PlayerMessage> playerMessage) = 0;
+	virtual u_p<Player> AddPlayer(s_p<PlayerMessage> playerMessage) = 0;
 
 	/// add entity to map
-	virtual u_p<EntitySlot> AddEntity(s_p<EntityMessage> entityMessage) = 0;
+	virtual u_p<Entity> AddEntity(s_p<EntityMessage> entityMessage) = 0;
 
 	/// player resources change
 	virtual void ResourcesChanged(const Resources& newResources) {}

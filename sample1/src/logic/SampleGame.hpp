@@ -2,13 +2,13 @@
 
 #include <QObject>
 #include <sample1_fwd.hpp>
-#include <strx/GameSlot.hpp>
+#include <strx/Game.hpp>
 
 namespace sample1
 {
 class SampleGame
         : public QObject
-        , public GameSlot
+        , public Game
 {
 	u_p<SampleGameWidget> gameWidget;
 	SampleMapWidget* mapWidget;
@@ -21,8 +21,8 @@ public:
 
 private:
 	void StartGame(s_p<Map> map) override;
-	u_p<PlayerSlot> AddPlayer(s_p<PlayerMessage> playerMessage) override;
-	u_p<EntitySlot> AddEntity(s_p<EntityMessage> entityMessage) override;
+	u_p<Player> AddPlayer(s_p<PlayerMessage> playerMessage) override;
+	u_p<Entity> AddEntity(s_p<EntityMessage> entityMessage) override;
 	void ResourcesChanged(const Resources& newResources) override;
 	void ObjectRemoved(IdType id) override;
 };

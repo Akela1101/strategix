@@ -1,9 +1,9 @@
-#include "../../strx/EntitySlot.hpp"
+#include "../../strx/Entity.hpp"
 #include "../../strx/FeatureInfo.hpp"
 #include "../../strx/Map.hpp"
-#include "../game/Player.hpp"
+#include "../game/PlayerKernel.hpp"
 #include "../map/MapPath.hpp"
-#include "Entity.hpp"
+#include "EntityKernel.hpp"
 
 #include "FeatureMove.hpp"
 
@@ -11,7 +11,7 @@
 namespace strx
 {
 
-FeatureMove::FeatureMove(const FeatureInfo* featureInfo, Entity* entity)
+FeatureMove::FeatureMove(const FeatureInfo* featureInfo, EntityKernel* entity)
         : Feature(entity)
         , info(dynamic_cast<const MoveFeatureInfo*>(featureInfo))
         , speed(info->speed)
@@ -20,7 +20,7 @@ FeatureMove::FeatureMove(const FeatureInfo* featureInfo, Entity* entity)
 
 FeatureMove::~FeatureMove() = default;
 
-void FeatureMove::Move(s_p<Entity> target, float radius, Feature* mover)
+void FeatureMove::Move(s_p<EntityKernel> target, float radius, Feature* mover)
 {
 	this->target = move(target);
 	Move(this->target->GetMapCoord(), radius, mover);
@@ -70,7 +70,7 @@ bool FeatureMove::NextPoint()
 	if (!entity->SetMapCoord(next)) nya_throw << "The first point of the new path is occupied.";
 
 	auto current = entity->GetCoord();
-	Player& player = entity->GetPlayer();
+	PlayerKernel& player = entity->GetPlayer();
 
 	RealCoord delta = (RealCoord) next - current;
 	direction = delta.Norm();

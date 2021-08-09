@@ -2,8 +2,8 @@
 #include "../../strx/Map.hpp"
 #include "../../strx/MapMine.hpp"
 #include "../../strx/TechTree.hpp"
-#include "../game/Player.hpp"
-#include "Entity.hpp"
+#include "../game/PlayerKernel.hpp"
+#include "EntityKernel.hpp"
 #include "FeatureMove.hpp"
 
 #include "FeatureCollect.hpp"
@@ -13,7 +13,7 @@ namespace strx
 {
 static const float mineSelectionRadius = 10;
 
-FeatureCollect::FeatureCollect(const FeatureInfo* featureInfo, Entity* entity)
+FeatureCollect::FeatureCollect(const FeatureInfo* featureInfo, EntityKernel* entity)
         : Feature(entity)
         , info(dynamic_cast<const CollectFeatureInfo*>(featureInfo))
         , load(0)
@@ -87,7 +87,7 @@ void FeatureCollect::Collect(MapCoord coord)
 
 void FeatureCollect::MoveToCollector()
 {
-	if (Entity* collector = entity->GetPlayer().FindCollector(entity->GetCoord()))
+	if (EntityKernel* collector = entity->GetPlayer().FindCollector(entity->GetCoord()))
 	{
 		entity->Do<FeatureMove>().Move(collector->GetCoord(), info->radius, this);
 		isMovingToCollector = true;
@@ -98,7 +98,7 @@ MapMine* FeatureCollect::SelectMine()
 {
 	if (load < capacity)
 	{
-		Player& player = entity->GetPlayer();
+		PlayerKernel& player = entity->GetPlayer();
 		auto mine = player.GetMine(coord);
 		if (mine) return mine;
 

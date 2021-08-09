@@ -15,7 +15,7 @@ class FeatureCollect : public Feature
 	bool isMovingToCollector;              ///< to collector | from collector
 
 public:
-	FeatureCollect(const FeatureInfo* featureInfo, Entity* entity);
+	FeatureCollect(const FeatureInfo* featureInfo, EntityKernel* entity);
 
 	bool Collect(MapCoord coord, const string& resourceName);
 

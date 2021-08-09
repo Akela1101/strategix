@@ -7,10 +7,10 @@
 namespace strx
 {
 
-class Entity : boost::noncopyable
+class EntityKernel : boost::noncopyable
 {
-	Game& game;                  ///< link to game
-	Player& player;              ///< link to owner
+	GameKernel& game;            ///< link to game
+	PlayerKernel& player;        ///< link to owner
 	const IdType id;             ///< unique id
 	const EntityInfo& entiInfo;  ///< link to tree
 	RealCoord coord;             ///< real coordinate
@@ -23,11 +23,11 @@ class Entity : boost::noncopyable
 	vector<Feature*> passiveTasks;  ///< entity routines like recovery or poison
 
 public:
-	Entity(Game& game, Player& player, IdType id, const EntityInfo& entiInfo, RealCoord coord);
-	~Entity();
+	EntityKernel(GameKernel& game, PlayerKernel& player, IdType id, const EntityInfo& entiInfo, RealCoord coord);
+	~EntityKernel();
 
-	Game& GetGame() const { return game; }
-	Player& GetPlayer() const { return player; }
+	GameKernel& GetGame() const { return game; }
+	PlayerKernel& GetPlayer() const { return player; }
 	const EntityInfo& GetInfo() const { return entiInfo; }
 	int GetId() const { return id; }
 	RealCoord GetCoord() const { return coord; }

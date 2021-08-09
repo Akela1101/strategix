@@ -12,9 +12,9 @@
 #include "../../strx/Message.hpp"
 #include "../../strx/Resources.hpp"
 #include "../../strx/TechTree.hpp"
-#include "../entity/Entity.hpp"
-#include "../game/Game.hpp"
-#include "../game/Player.hpp"
+#include "../entity/EntityKernel.hpp"
+#include "../game/GameKernel.hpp"
+#include "../game/PlayerKernel.hpp"
 #include "../network/Server.hpp"
 #include "ConfigManager.hpp"
 
@@ -32,7 +32,7 @@ static const auto minTick = 42ms;
 
 // Variables
 static umap<int, s_p<GameMessage>> games;    // list of games
-static s_p<Game> game;                       // single game
+static s_p<GameKernel> game;                 // single game
 static u_p<thread> kernelThread;             // main kernel thread
 static u_p<st_timer> timer;                  // tick timer
 static atomic<PlayerId> currentPlayerId{0};  // incrementing player id
@@ -238,7 +238,7 @@ void Kernel::AddGame(s_p<Message> message, ConnectionId connectionId)
 
 	gameMessage->id = 1;
 	gameMessage->started = false;
-	game = make_s<Game>(gameMessage->mapName);
+	game = make_s<GameKernel>(gameMessage->mapName);
 	games.emplace(1, gameMessage);
 
 	Server::SendMessageAll(move(gameMessage));
