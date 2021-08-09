@@ -126,6 +126,7 @@ void Kernel::OnReceiveMessage(s_p<Message> message, ConnectionId connectionId)
 		switch (message->GetType())
 		{
 			case Message::Type::CONTEXT: ContextRequested(connectionId); break;
+			case Message::Type::GAME: AddGame(move(message), connectionId); break;
 			default: game->ReceiveMessage(move(message), connectionId);
 		}
 	}
@@ -195,9 +196,6 @@ void Kernel::Init(const string& configPath)
 {
 	ConfigManager::ParseConfig(configPath);
 
-	//TODO: one game is created by default (should be done from client)
-	AddGame("small", "root");
-
 	Server::Run(ConfigManager::GetServerPort());
 
 	timer.reset(new st_timer(eventLoop));
@@ -231,17 +229,19 @@ void Kernel::ContextRequested(ConnectionId connectionId)
 	Server::SendMessageOne(gamesMessage, connectionId);
 }
 
-void Kernel::AddGame(const string& mapName, const string& creatorName)
+void Kernel::AddGame(s_p<Message> message, ConnectionId connectionId)
 {
-	trace_log << "new game on: " << mapName << ", created by: " << creatorName;
-	game = make_s<Game>(mapName);
+	auto gameMessage = dp_cast<GameMessage>(message);
+	if (!gameMessage) nya_throw << "Wrong type of GameMessage from " << connectionId;
 
-	auto gameMessage = make_s<GameMessage>();
+	trace_log << "new game on: " << gameMessage->mapName << ", created by: " << gameMessage->creatorName;
+
 	gameMessage->id = 1;
 	gameMessage->started = false;
-	gameMessage->mapName = mapName;
-	gameMessage->creatorName = creatorName;
-	games.emplace(1, move(gameMessage));
+	game = make_s<Game>(gameMessage->mapName);
+	games.emplace(1, gameMessage);
+
+	Server::SendMessageAll(move(gameMessage));
 }
 
 }  // namespace strx

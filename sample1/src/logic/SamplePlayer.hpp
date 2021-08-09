@@ -1,7 +1,7 @@
 #pragma once
 
 #include <QObject>
-#include <Sample_fwd.hpp>
+#include <sample1_fwd.hpp>
 #include <strx/PlayerSlot.hpp>
 
 namespace sample1

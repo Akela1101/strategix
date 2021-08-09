@@ -1,9 +1,9 @@
 #include <QtGui>
 
 #include <MapInfo.hpp>
-#include <slots/SampleEntity.hpp>
-#include <slots/SampleGame.hpp>
-#include <slots/SamplePlayer.hpp>
+#include <logic/SampleEntity.hpp>
+#include <logic/SampleGame.hpp>
+#include <logic/SamplePlayer.hpp>
 #include <strx/MapMine.hpp>
 #include <strx/MapObject.hpp>
 

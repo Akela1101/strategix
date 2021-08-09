@@ -1,7 +1,7 @@
 #pragma once
 
 #include <MapWidget.hpp>
-#include <Sample_fwd.hpp>
+#include <sample1_fwd.hpp>
 #include <strx/strx_fwd.hpp>
 
 

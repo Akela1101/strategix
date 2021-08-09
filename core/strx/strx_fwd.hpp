@@ -37,6 +37,7 @@ class PlayerSlot;
 class Server;
 class TechTree;
 class TechTreesBuilder;
+class User;
 
 using namespace std;  // only in my namespace, so it won't affect foreign headers
 }  // namespace strx

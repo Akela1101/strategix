@@ -8,20 +8,7 @@
 
 namespace strx
 {
-GameSlot::GameSlot()
-{
-	Client::StartSession(this);
-}
-
-GameSlot::~GameSlot()
-{
-	Client::StopSession();
-}
-
-EntitySlot& GameSlot::GetEntitySlot(IdType id)
-{
-	return *entities[id];
-}
+GameSlot::~GameSlot() = default;
 
 void GameSlot::SendMessageOne(s_p<Message> message)
 {
@@ -41,24 +28,6 @@ void GameSlot::ReceiveMessage(s_p<Message> message)
 
 	switch (type)
 	{
-		case Message::Type::VECTOR:
-		{
-			for (auto& element : *sp_cast<MessageVector>(message)) { ReceiveMessage(move(element)); }
-			break;
-		}
-		case Message::Type::CONTEXT:
-		{
-			trace_log << "context received";
-			resourceInfos = sp_cast<ContextMessage>(message)->resourceInfos;
-			break;
-		}
-		case Message::Type::GAME:
-		{
-			auto&& gameMessage = sp_cast<GameMessage>(message);
-			trace_log << "game received";
-			GameUpdated(gameMessage->id, gameMessage.get());
-			break;
-		}
 		case Message::Type::PLAYER:
 		{
 			auto&& playerMessage = sp_cast<PlayerMessage>(message);

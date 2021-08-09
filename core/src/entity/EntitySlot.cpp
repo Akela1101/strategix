@@ -1,5 +1,6 @@
 #include "../../strx/GameSlot.hpp"
 #include "../../strx/Message.hpp"
+#include "../../strx/PlayerSlot.hpp"
 
 #include "../../strx/EntitySlot.hpp"
 #include "Entity.hpp"

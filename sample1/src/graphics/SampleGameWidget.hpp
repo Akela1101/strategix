@@ -1,7 +1,7 @@
 #pragma once
 
 #include <GameWidget.hpp>
-#include <Sample_fwd.hpp>
+#include <sample1_fwd.hpp>
 
 class QWidget;
 class QLabel;

@@ -2,8 +2,8 @@
 #include <memory>
 #include <utility>
 
-#include "../../strx/GameSlot.hpp"
 #include "../../strx/Message.hpp"
+#include "../../strx/User.hpp"
 
 #include "Client.hpp"
 #include "Connection.hpp"
@@ -11,14 +11,14 @@
 
 namespace strx
 {
-static GameSlot* game = nullptr;    // current game
+static User* user = nullptr;        // current user
 static u_p<thread> clientThread;    // client thread
 static u_p<tcp::socket> socket;     // client socket
 static u_p<Connection> connection;  // single client connection
 
-void Client::StartSession(GameSlot* game)
+void Client::StartSession(User* user)
 {
-	strx::game = game;
+	strx::user = user;
 	socket = std::make_unique<tcp::socket>(eventLoop);
 	auto iEndpoint = tcp::resolver(eventLoop).resolve({"localhost", "10101"});
 
@@ -60,7 +60,7 @@ void Client::StopSession()
 	});
 
 	if (clientThread) clientThread->join();
-	game = nullptr;
+	user = nullptr;
 }
 
 void Client::SendMessageOne(s_p<Message> message)
@@ -70,6 +70,6 @@ void Client::SendMessageOne(s_p<Message> message)
 
 void Client::ReceiveMessage(s_p<Message> message, PlayerId)
 {
-	game->MessageReceived(move(message));
+	user->MessageReceived(move(message));
 }
 }  // namespace strx

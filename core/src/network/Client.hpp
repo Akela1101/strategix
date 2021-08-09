@@ -10,11 +10,11 @@ namespace strx
 {
 class Client : public nya::static_invoker<Client, boost::asio::io_context>
 {
-	friend class GameSlot;
+	friend class User;
 	Client() = delete;
 
 public:
-	static void StartSession(GameSlot* game);
+	static void StartSession(User* user);
 	static void StopSession();
 
 	static void SendMessageOne(s_p<Message> message);

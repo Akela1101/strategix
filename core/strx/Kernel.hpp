@@ -38,6 +38,6 @@ private:
 	static void Init(const string& configPath);
 	static void RunImpl();
 	static void ContextRequested(ConnectionId connectionId);
-	static void AddGame(const string& mapName, const string& creatorName);
+	static void AddGame(s_p<Message> message, ConnectionId connectionId);
 };
 }  // namespace strx

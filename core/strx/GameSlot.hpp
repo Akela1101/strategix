@@ -23,32 +23,20 @@ class GameSlot : boost::noncopyable
 	umap<IdType, u_p<EntitySlot>> entities;
 
 public:
-	GameSlot();
+	GameSlot(ResourceInfosType resourceInfos) : resourceInfos(move(resourceInfos)) {}
 	virtual ~GameSlot();
 
 	const ResourceInfosType& GetResourceInfos() const { return resourceInfos; }
-	EntitySlot& GetEntitySlot(IdType id);
+	EntitySlot& GetEntitySlot(IdType id) { return *entities[id]; }
 
 	static void SendMessageOne(s_p<Message> message);
 
 	/**
-	 * Called in network thread, thus should call ReceiveMessage() in game thread.
-	 */
-	virtual void MessageReceived(s_p<Message> message) = 0;
-
-protected:
-	/**
-	 * Must be called from MessageReceived().
+	 * @param game related message
 	 */
 	void ReceiveMessage(s_p<Message> message);
 
-	/**
-	 * Update one game in the list of open games.
-	 * @param gameId game id
-	 * @param gameMessage game information, null if removed.
-	 */
-	virtual void GameUpdated(GameId gameId, const GameMessage* gameMessage) = 0;
-
+protected:
 	/**
 	 * Start new game.
 	 * @param mapMessage map holder

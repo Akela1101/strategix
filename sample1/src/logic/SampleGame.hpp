@@ -1,7 +1,7 @@
 #pragma once
 
 #include <QObject>
-#include <Sample_fwd.hpp>
+#include <sample1_fwd.hpp>
 #include <strx/GameSlot.hpp>
 
 namespace sample1
@@ -16,14 +16,10 @@ class SampleGame
 	int playerSpot;  ///< spot on map
 
 public:
-	SampleGame(int playerSpot);
+	SampleGame(int playerSpot, ResourceInfosType resourceInfos);
 	~SampleGame() override;
 
-	static void Configure();
-
 private:
-	void MessageReceived(s_p<Message> message) override;
-	void GameUpdated(GameId gameId, const GameMessage* gameMessage) override;
 	void StartGame(s_p<Map> map) override;
 	u_p<PlayerSlot> AddPlayer(s_p<PlayerMessage> playerMessage) override;
 	u_p<EntitySlot> AddEntity(s_p<EntityMessage> entityMessage) override;

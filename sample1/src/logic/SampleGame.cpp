@@ -1,9 +1,8 @@
 #include <GameWidget.hpp>
-#include <MapInfo.hpp>
 #include <graphics/SampleGameWidget.hpp>
 #include <graphics/SampleMapWidget.hpp>
-#include <slots/SampleEntity.hpp>
-#include <slots/SamplePlayer.hpp>
+#include <logic/SampleEntity.hpp>
+#include <logic/SamplePlayer.hpp>
 #include <strx/strx.hpp>
 
 #include "SampleGame.hpp"
@@ -11,44 +10,11 @@
 
 namespace sample1
 {
-SampleGame::SampleGame(int playerSpot) : gameWidget(nullptr), mapWidget(nullptr), playerSpot(playerSpot) {}
+SampleGame::SampleGame(int playerSpot, ResourceInfosType resourceInfos)
+        : GameSlot(move(resourceInfos)), gameWidget(nullptr), mapWidget(nullptr), playerSpot(playerSpot)
+{}
 
 SampleGame::~SampleGame() = default;
-
-void SampleGame::Configure()
-{
-	using namespace map_info;
-	MapInfo::QRegisterTypes();
-	MapInfo::LoadTerrainTools();
-	MapInfo::LoadObjectTools();
-}
-
-void SampleGame::MessageReceived(s_p<Message> message)
-{
-	qInvoke(this, [this, message] {
-		Message::Type type = message->GetType();
-		try
-		{
-			ReceiveMessage(move(message));
-		}
-		catch (exception& e)
-		{
-			error_log << "Error while handling message %s: %s"s % type.c_str() % e.what();
-		}
-	});
-}
-
-void SampleGame::GameUpdated(GameId gameId, const GameMessage* gameMessage)
-{
-	// @#~ start first available game
-	if (gameMessage)
-	{
-		SendMessageOne(make_s<PlayerMessage>(gameId, PlayerType::HUMAN));
-
-		// @#~ start right away
-		SendMessageOne(make_s<EmptyMessage>(Message::Type::START));
-	}
-}
 
 void SampleGame::StartGame(s_p<Map> map)
 {
