@@ -1,11 +1,11 @@
-#include <strx/entity/Entity.h>
 #include <strx/common/EntityInfo.h>
+#include <strx/common/TechTree.h>
+#include <strx/entity/Entity.h>
 #include <strx/entity/EntitySlot.h>
 #include <strx/feature/FeatureMove.h>
 #include <strx/map/Map.h>
 #include <strx/map/MapMine.h>
 #include <strx/player/Player.h>
-#include <strx/common/TechTree.h>
 
 #include "FeatureCollect.h"
 
@@ -18,7 +18,8 @@ FeatureCollect::FeatureCollect(const FeatureInfo* featureInfo, Entity* entity)
         : Feature(entity)
         , info(dynamic_cast<const CollectFeatureInfo*>(featureInfo))
         , load(0)
-        , isMovingToCollector(false) {}
+        , isMovingToCollector(false)
+{}
 
 bool FeatureCollect::Collect(MapCoord coord, const string& resourceName)
 {
@@ -30,7 +31,7 @@ bool FeatureCollect::Collect(MapCoord coord, const string& resourceName)
 		this->resourceName = resourceName;
 		this->capacity = info->capacities->at(resourceName);
 
-		if (load != 0) load = 0; // throw out current resource
+		if (load != 0) load = 0;  // throw out current resource
 	}
 	Collect(coord);
 	return true;
@@ -54,9 +55,9 @@ void FeatureCollect::Stop()
 
 void FeatureCollect::Completed(bool done)
 {
-	if (!done) return; // @#~ move failed — probably it needs some wakeup timer to retry move
+	if (!done) return;  // @#~ move failed — probably it needs some wakeup timer to retry move
 
-	if (isMovingToCollector) // near the collector, so unload
+	if (isMovingToCollector)  // near the collector, so unload
 	{
 		//@#~entity->GetSlot().OnBringStop();
 		entity->GetPlayer().AddResource(Resource(resourceName, load));
@@ -67,7 +68,7 @@ void FeatureCollect::Completed(bool done)
 		return;
 	}
 
-	if (SelectMine()) // near the mine, so try to load
+	if (SelectMine())  // near the mine, so try to load
 	{
 		//@#~entity->GetSlot().OnCollectStart();
 		entity->AssignTask(this);
@@ -104,7 +105,7 @@ MapMine* FeatureCollect::SelectMine()
 
 		if (mine = player.FindMine(entity->GetCoord(), resourceName, mineSelectionRadius))
 		{
-			Collect(mine->coord); // change current mine
+			Collect(mine->coord);  // change current mine
 		}
 		return nullptr;
 	}
@@ -112,4 +113,4 @@ MapMine* FeatureCollect::SelectMine()
 	return nullptr;
 }
 
-}
+}  // namespace strx

@@ -13,12 +13,12 @@ class EditorMapWidget : public MapWidget
 
 	using MapWidget::MapWidget;
 
-	ToolInfo* tool = nullptr;     // current tool
-	int playerSpot = 0;             // current player
+	ToolInfo* tool = nullptr;  // current tool
+	int playerSpot = 0;        // current player
 
-	bool isHighlight = false;     // highlight cell under cursor
-	MapCoord lastCoord;           // last cursor position in map coords
-	QRect lastRc;                 // last rect under cursor
+	bool isHighlight = false;  // highlight cell under cursor
+	MapCoord lastCoord;        // last cursor position in map coords
+	QRect lastRc;              // last rect under cursor
 
 public slots:
 	void CurrentToolChanged(ToolInfo* tool);
@@ -34,4 +34,4 @@ private:
 	void ChangeTerrain(MapCoord coord);
 	void ChangeObject(MapCoord coord);
 };
-}
+}  // namespace map_editor

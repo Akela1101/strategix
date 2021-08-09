@@ -1,30 +1,30 @@
 #pragma once
 
-#include <nya/enum.hpp>
 #include <Strategix_fwd.h>
+#include <nya/enum.hpp>
 
 namespace strx
 {
 struct Message : boost::noncopyable
 {
-#   define MessageTypeEnumDef(K, V) \
-	    K(VECTOR)          /* vector of messages */ \
-	    K(COMMAND)         /* command to entity */ \
-	    K(EXIT)            /* exit from client */ \
-	    K(CONTEXT)         /* game context */ \
-	    K(START)           /* start game */ \
-	    K(GAME)            /* game description */ \
-	    K(PLAYER)          /* player description */ \
-	    K(MAP)             /* map description */ \
-	    K(ENTITY)          /* entity description */ \
-	    K(RESOURCES)       /* player resources */ \
-	    K(MINE_AMOUNT)     /* mine amount changed */ \
-	    K(OBJECT_REMOVED)  /* object removed */ \
-	    K(MOVE)            /* entity map placing change */ \
-	    K(REAL_MOVE)       /* entity precise coordinate move */ \
-	    K(COLLECT)         /* collect mine */ \
-	    K(ATTACK)          /* attack other entity */ \
-	    K(HP)              /* hit points change */
+#define MessageTypeEnumDef(K, V)                           \
+	K(VECTOR)         /* vector of messages */             \
+	K(COMMAND)        /* command to entity */              \
+	K(EXIT)           /* exit from client */               \
+	K(CONTEXT)        /* game context */                   \
+	K(START)          /* start game */                     \
+	K(GAME)           /* game description */               \
+	K(PLAYER)         /* player description */             \
+	K(MAP)            /* map description */                \
+	K(ENTITY)         /* entity description */             \
+	K(RESOURCES)      /* player resources */               \
+	K(MINE_AMOUNT)    /* mine amount changed */            \
+	K(OBJECT_REMOVED) /* object removed */                 \
+	K(MOVE)           /* entity map placing change */      \
+	K(REAL_MOVE)      /* entity precise coordinate move */ \
+	K(COLLECT)        /* collect mine */                   \
+	K(ATTACK)         /* attack other entity */            \
+	K(HP)             /* hit points change */
 	nya_enum(Type, MessageTypeEnumDef);
 
 	virtual ~Message() = default;
@@ -34,7 +34,9 @@ struct Message : boost::noncopyable
 	static void Serialize(s_p<Message> message, string& buffer);
 };
 
-struct MessageVector : Message, vector<s_p<Message>>
+struct MessageVector
+        : Message
+        , vector<s_p<Message>>
 {
 	Type GetType() const override { return Type::VECTOR; }
 };
@@ -67,9 +69,11 @@ struct GameMessage : Message
 
 	GameMessage() = default;
 	GameMessage(const GameMessage& other)
-	    : id(other.id), started(other.started), mapName(other.mapName), creatorName(other.creatorName) {}
+	        : id(other.id), started(other.started), mapName(other.mapName), creatorName(other.creatorName)
+	{}
 	GameMessage(int id, bool started, string mapName, string creatorName)
-	    : id(id), started(started), mapName(move(mapName)), creatorName(move(creatorName)) {}
+	        : id(id), started(started), mapName(move(mapName)), creatorName(move(creatorName))
+	{}
 	Type GetType() const override { return Type::GAME; }
 };
 
@@ -82,8 +86,7 @@ struct PlayerMessage : Message
 	string race;
 
 	PlayerMessage() = default;
-	PlayerMessage(GameId gameId, PlayerType type)
-	    : gameId(gameId), type(type), spot(0) {}
+	PlayerMessage(GameId gameId, PlayerType type) : gameId(gameId), type(type), spot(0) {}
 	Type GetType() const override { return Type::PLAYER; }
 };
 
@@ -103,8 +106,7 @@ struct EntityMessage : Message
 	HpType maxHp;
 
 	EntityMessage() = default;
-	EntityMessage(int playerSpot, IdType id, HpType maxHp)
-	    : playerSpot(playerSpot), id(id), maxHp(maxHp) {}
+	EntityMessage(int playerSpot, IdType id, HpType maxHp) : playerSpot(playerSpot), id(id), maxHp(maxHp) {}
 	Type GetType() const override { return Type::ENTITY; }
 };
 
@@ -175,7 +177,8 @@ struct CollectMessage : CommandMessage
 
 	CollectMessage() = default;
 	CollectMessage(IdType id, MapCoord coord, string resourceName)
-	    : CommandMessage(id), coord(coord), resourceName(move(resourceName)) {}
+	        : CommandMessage(id), coord(coord), resourceName(move(resourceName))
+	{}
 	Type GetType() const override { return Type::COLLECT; }
 };
 
@@ -197,4 +200,4 @@ struct HpMessage : CommandMessage
 	Type GetType() const override { return Type::HP; }
 };
 
-}
+}  // namespace strx

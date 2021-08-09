@@ -32,7 +32,7 @@ public:
 	using TerrainsType = s_p<umap<string, u_p<Terrain>>>;
 
 private:
-	static IdType lastObjectId; ///< holder of the last unique id
+	static IdType lastObjectId;  ///< holder of the last unique id
 
 	string name;
 	int width;
@@ -72,4 +72,4 @@ private:
 	void Load(istream& is);
 	void CheckDimentions();
 };
-}
+}  // namespace strx

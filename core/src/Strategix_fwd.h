@@ -38,8 +38,8 @@ class Server;
 class TechTree;
 class TechTreesBuilder;
 
-using namespace std; // only in my namespace, so it won't affect foreign headers
-}
+using namespace std;  // only in my namespace, so it won't affect foreign headers
+}  // namespace strx
 
 #include <strx/common/CoordStructs.h>
 #include <strx/common/Resources.h>

@@ -7,8 +7,7 @@ namespace sample1
 {
 
 SampleEntity::SampleEntity(s_p<EntityMessage> entityMessage, SampleMapWidget* mapWidget)
-        : EntitySlot(move(entityMessage))
-        , mapWidget(mapWidget)
+        : EntitySlot(move(entityMessage)), mapWidget(mapWidget)
 {}
 
 void SampleEntity::Moved(RealCoord coord)
@@ -26,4 +25,4 @@ void SampleEntity::HpChanged(HpType hp)
 	mapWidget->OnEntityHpChanged(GetId(), hp);
 }
 
-}
+}  // namespace sample1

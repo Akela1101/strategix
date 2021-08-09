@@ -28,4 +28,4 @@ public:
 	/// @return [human | ai | net]
 	PlayerType GetType() const;
 };
-}
+}  // namespace strx

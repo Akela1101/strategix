@@ -2,11 +2,11 @@
 
 #define ELPP_QT_LOGGING
 
-#include <nya/api.hpp>
-#include <strx/map/Map.h>
 #include <MapInfo_fwd.h>
 #include <QPixmap>
 #include <QString>
+#include <nya/api.hpp>
+#include <strx/map/Map.h>
 
 
 namespace map_info
@@ -35,4 +35,4 @@ struct MapInfo
 	static QPixmap LoadPixmap(const string& path);
 };
 
-}
+}  // namespace map_info

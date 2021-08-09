@@ -25,4 +25,4 @@ public:
 	static const TechTreesType& GetTechTrees();
 };
 
-}
+}  // namespace strx

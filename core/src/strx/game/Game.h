@@ -9,14 +9,14 @@ using Players = umap<PlayerId, u_p<Player>>;
 class Game : boost::noncopyable
 {
 	using PlannedPlayers = vector<s_p<PlayerMessage>>;
-	
-	s_p<Map> map;                    ///< global map
-	umap<int, PlayerId> spotIds;     ///< { spot - id }
-	PlannedPlayers plannedPlayers;   ///< players going to join
-	uset<PlayerId> readyPlayers;     ///< players ready to start
-	Players players;                 ///< players in game
+
+	s_p<Map> map;                        ///< global map
+	umap<int, PlayerId> spotIds;         ///< { spot - id }
+	PlannedPlayers plannedPlayers;       ///< players going to join
+	uset<PlayerId> readyPlayers;         ///< players ready to start
+	Players players;                     ///< players in game
 	umap<IdType, s_p<Entity>> entities;  ///< all entities
-	vector<IdType> removedEntities;  ///< entities removed at the end of Tick
+	vector<IdType> removedEntities;      ///< entities removed at the end of Tick
 
 public:
 	Game(const string& mapName);
@@ -37,4 +37,4 @@ private:
 	void Start();
 };
 
-}
+}  // namespace strx

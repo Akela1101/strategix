@@ -1,8 +1,8 @@
-#include <boost/iostreams/stream.hpp>
 #include <boost/iostreams/device/back_inserter.hpp>
+#include <boost/iostreams/stream.hpp>
 
-#include "Serialization.h"
 #include "Message.h"
+#include "Serialization.h"
 
 
 namespace strx
@@ -28,4 +28,4 @@ void Message::Serialize(s_p<Message> message, string& buffer)
 	oa << message;
 }
 
-}
+}  // namespace strx

@@ -3,14 +3,13 @@
 
 namespace strx
 {
-#ifndef _MSC_VER // GCC
+#ifndef _MSC_VER  // GCC
 
-template<>
-MapCoord::operator RealCoord() const
+template<> MapCoord::operator RealCoord() const
 {
-	return RealCoord(0.5 + x, 0.5 + y); // Center object in cell
+	return RealCoord(0.5 + x, 0.5 + y);  // Center object in cell
 }
 
 #endif
 
-}
+}  // namespace strx

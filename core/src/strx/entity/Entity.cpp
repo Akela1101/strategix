@@ -1,34 +1,25 @@
 #include <boost/core/demangle.hpp>
 #include <strx/common/EntityInfo.h>
-#include <strx/feature/FeatureMove.h>
+#include <strx/feature/FeatureAttack.h>
 #include <strx/feature/FeatureCollect.h>
 #include <strx/feature/FeatureHealth.h>
-#include <strx/feature/FeatureAttack.h>
+#include <strx/feature/FeatureMove.h>
 #include <strx/kernel/Kernel.h>
 #include <strx/kernel/Message.h>
 #include <strx/map/Map.h>
 #include <strx/map/MapObject.h>
 #include <strx/player/Player.h>
 
-#include "EntitySlot.h"
 #include "Entity.h"
+#include "EntitySlot.h"
 
 
 namespace strx
 {
 Entity::Entity(Game& game, Player& player, IdType id, const EntityInfo& entiInfo, RealCoord coord)
-        : game(game)
-        , player(player)
-        , id(id)
-        , entiInfo(entiInfo)
-        , coord(coord)
-        , mapCoord(coord)
-        , task(nullptr)
+        : game(game), player(player), id(id), entiInfo(entiInfo), coord(coord), mapCoord(coord), task(nullptr)
 {
-	for (auto&& pa : entiInfo.featureInfos)
-	{
-		AddFeature(pa.first, pa.second.get());
-	}
+	for (auto&& pa : entiInfo.featureInfos) { AddFeature(pa.first, pa.second.get()); }
 }
 
 HpType Entity::GetMaxHp() const
@@ -47,27 +38,27 @@ void Entity::ReceiveMessage(s_p<CommandMessage> message)
 {
 	switch (message->GetType())
 	{
-	case Message::Type::MOVE:
-	{
-		const auto& command = sp_cast<MoveMessage>(message);
-		Do<FeatureMove>().Move(command->coord, 0, nullptr);
-		break;
-	}
-	case Message::Type::COLLECT:
-	{
-		const auto& command = sp_cast<CollectMessage>(message);
-		Do<FeatureCollect>().Collect(command->coord, command->resourceName);
-		break;
-	}
-	case Message::Type::ATTACK:
-	{
-		const auto& command = sp_cast<AttackMessage>(message);
-		Do<FeatureAttack>().Attack(command->targetId);
-		break;
-	}
-	default:
-		const char* t = message->GetType().c_str();
-		nya_throw << "Unable to handle message with type: " << (t[0] == '!' ? message->GetType() : t);
+		case Message::Type::MOVE:
+		{
+			const auto& command = sp_cast<MoveMessage>(message);
+			Do<FeatureMove>().Move(command->coord, 0, nullptr);
+			break;
+		}
+		case Message::Type::COLLECT:
+		{
+			const auto& command = sp_cast<CollectMessage>(message);
+			Do<FeatureCollect>().Collect(command->coord, command->resourceName);
+			break;
+		}
+		case Message::Type::ATTACK:
+		{
+			const auto& command = sp_cast<AttackMessage>(message);
+			Do<FeatureAttack>().Attack(command->targetId);
+			break;
+		}
+		default:
+			const char* t = message->GetType().c_str();
+			nya_throw << "Unable to handle message with type: " << (t[0] == '!' ? message->GetType() : t);
 	}
 }
 
@@ -89,7 +80,7 @@ Feature& Entity::GetFeature(type_index type) const
 
 void Entity::AddFeature(const string& name, const FeatureInfo* featureInfo)
 {
-	if (name == "move")
+	if (name == "move")  //
 	{
 		features[typeid(FeatureMove)].reset(new FeatureMove(featureInfo, this));
 	}
@@ -117,10 +108,8 @@ bool Entity::SetMapCoord(MapCoord newCoord)
 	{
 		auto& currentObject = player.GetMapObject(mapCoord);
 		auto& object = player.GetMapObject(newCoord);
-		if (object)
-		{
-			return currentObject == object;
-		}
+		if (object) return currentObject == object;
+
 		object = move(currentObject);
 
 		Kernel::SendMessageAll(make_s<MapMoveMessage>(GetId(), mapCoord, newCoord));
@@ -131,10 +120,7 @@ bool Entity::SetMapCoord(MapCoord newCoord)
 
 void Entity::Tick(float seconds)
 {
-	for (auto&& feature : passiveTasks)
-	{
-		feature->Tick(seconds);
-	}
+	for (auto&& feature : passiveTasks) feature->Tick(seconds);
 
 	if (task) task->Tick(seconds);
 }
@@ -151,4 +137,4 @@ void Entity::AssignPassiveTask(Feature* feature)
 	passiveTasks.push_back(feature);
 }
 
-}
+}  // namespace strx

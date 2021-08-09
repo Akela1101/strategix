@@ -1,10 +1,10 @@
 #pragma once
 
-#include <functional>
 #include <Strategix_fwd.h>
-#include <strx/network/NetworkCommon.h>
 #include <boost/asio.hpp>
+#include <functional>
 #include <nya/invoker.hpp>
+#include <strx/network/NetworkCommon.h>
 
 
 namespace strx
@@ -35,4 +35,4 @@ private:
 	void Read();
 	void Close();
 };
-}
+}  // namespace strx

@@ -3,16 +3,19 @@
 #include "ui_DialogNew.h"
 
 
-namespace map_editor { class MainForm; }
+namespace map_editor
+{
+class MainForm;
+}
 
 class DialogNew : public QDialog
 {
-Q_OBJECT
-	
+	Q_OBJECT
+
 	friend class map_editor::MainForm;
-	
+
 	Ui::DialogNew widget;
-	
+
 	QString mapName;
 	int mapWidth, mapHeight;
 

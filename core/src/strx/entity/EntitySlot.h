@@ -24,4 +24,4 @@ public:
 	virtual void MapMoved(MapCoord from, MapCoord to) {}
 	virtual void HpChanged(HpType hp) {}
 };
-}
+}  // namespace strx

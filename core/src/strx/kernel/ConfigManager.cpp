@@ -2,9 +2,9 @@
 #include <strx/common/TechTree.h>
 
 #define BOOST_BIND_GLOBAL_PLACEHOLDERS
-#include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/json_parser.hpp>
 #include <boost/filesystem.hpp>
+#include <boost/property_tree/json_parser.hpp>
+#include <boost/property_tree/ptree.hpp>
 
 #include "ConfigManager.h"
 
@@ -88,13 +88,10 @@ struct ConfigurationManagerImpl
 			eim->kind = entityPropTree.get<string>("kind");
 			eim->resources = ParseResources(entityPropTree.get_child("resources"));
 
-			for (auto&& name_tree : entityPropTree.get_child("features", pt::ptree())) // Empty if no features
+			for (auto&& name_tree : entityPropTree.get_child("features", pt::ptree()))  // Empty if no features
 			{
 				const string& name = name_tree.first;
-				if (auto&& feature = ParseFeature(name, name_tree.second))
-				{
-					eim->featureInfos[name] = move(feature);
-				}
+				if (auto&& feature = ParseFeature(name, name_tree.second)) eim->featureInfos[name] = move(feature);
 			}
 			return eim;
 		}
@@ -153,11 +150,10 @@ struct ConfigurationManagerImpl
 			auto resources = make_u<Resources>();
 			for (auto&& name_tree : resourcesPropTree)
 			{
-				const string& resourceName = name_tree.first; // gold or something else
+				const string& resourceName = name_tree.first;  // gold or something else
 				if (find(nya_all(*resourceInfos), resourceName) == resourceInfos->end())
 				{
-					info_log << "Wrong resource [%s] in configuration file: %s"s
-					        % resourceName % configFileName;
+					info_log << "Wrong resource [%s] in configuration file: %s"s % resourceName % configFileName;
 					continue;
 				}
 
@@ -183,9 +179,21 @@ void ConfigManager::ParseConfig(string configFileName)
 	impl->ParseConfig();
 }
 
-ushort ConfigManager::GetServerPort() { return impl->serverPort; }
-const string& ConfigManager::GetMapsPath() {return impl->mapsPath; }
-const ResourceInfosType& ConfigManager::GetResourceInfos() { return  impl->resourceInfos; }
-const TechTreesType& ConfigManager::GetTechTrees() { return impl->techTrees; }
-
+ushort ConfigManager::GetServerPort()
+{
+	return impl->serverPort;
 }
+const string& ConfigManager::GetMapsPath()
+{
+	return impl->mapsPath;
+}
+const ResourceInfosType& ConfigManager::GetResourceInfos()
+{
+	return impl->resourceInfos;
+}
+const TechTreesType& ConfigManager::GetTechTrees()
+{
+	return impl->techTrees;
+}
+
+}  // namespace strx

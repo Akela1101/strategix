@@ -1,6 +1,6 @@
-#include <exception>
 #include <QApplication>
 #include <QMessageBox>
+#include <exception>
 
 #include <forms/MainForm.h>
 
@@ -11,9 +11,9 @@ INITIALIZE_EASYLOGGINGPP
 int main(int argc, char* argv[])
 {
 	using namespace map_editor;
-	
+
 	nya::init_logs("config/log.conf");
-	
+
 	QApplication app(argc, argv);
 	try
 	{

@@ -7,7 +7,7 @@ namespace strx
 {
 class FeatureHealth : public Feature
 {
-	const HealthFeatureInfo* const info; ///< Link to tree
+	const HealthFeatureInfo* const info;  ///< Link to tree
 	HpType hp;
 
 public:
@@ -25,4 +25,4 @@ public:
 	 */
 	bool ChangeHp(HpType deltaHp);
 };
-}
+}  // namespace strx

@@ -1,9 +1,9 @@
 #pragma once
 
-#include <nya.hpp>
-#include <Strategix_fwd.h>
 #include <MapInfo_fwd.h>
 #include <QScrollArea>
+#include <Strategix_fwd.h>
+#include <nya.hpp>
 
 
 class QWheelEvent;
@@ -15,7 +15,7 @@ class GameWidget : public QScrollArea
 public:
 	GameWidget(QWidget* parent = nullptr);
 	~GameWidget() override;
-	
+
 	template<typename T> T* CreateMapWidget()
 	{
 		auto mapWidget = new T(this);
@@ -27,4 +27,4 @@ protected:
 	void wheelEvent(QWheelEvent* event);
 };
 
-}
+}  // namespace map_info

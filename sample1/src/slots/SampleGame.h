@@ -1,17 +1,19 @@
 #pragma once
 
-#include <strx/game/GameSlot.h>
-#include <Sample_fwd.h>
 #include <QObject>
+#include <Sample_fwd.h>
+#include <strx/game/GameSlot.h>
 
 namespace sample1
 {
-class SampleGame : public QObject, public GameSlot
+class SampleGame
+        : public QObject
+        , public GameSlot
 {
 	u_p<SampleGameWidget> gameWidget;
 	SampleMapWidget* mapWidget;
 
-	int playerSpot; ///< spot on map
+	int playerSpot;  ///< spot on map
 
 public:
 	SampleGame(int playerSpot);
@@ -29,4 +31,4 @@ private:
 	void ObjectRemoved(IdType id) override;
 };
 
-}
+}  // namespace sample1

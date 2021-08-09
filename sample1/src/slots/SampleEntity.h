@@ -18,4 +18,4 @@ private:
 	void MapMoved(MapCoord from, MapCoord to) override;
 	void HpChanged(HpType hp) override;
 };
-}
+}  // namespace sample1

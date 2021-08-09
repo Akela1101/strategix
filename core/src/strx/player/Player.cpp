@@ -1,13 +1,13 @@
-#include <strx/entity/Entity.h>
 #include <strx/common/EntityInfo.h>
+#include <strx/entity/Entity.h>
 #include <strx/entity/EntitySlot.h>
 #include <strx/kernel/Kernel.h>
+#include <strx/kernel/Message.h>
 #include <strx/map/Map.h>
 #include <strx/map/MapMine.h>
 #include <strx/map/MapObject.h>
 #include <strx/map/MapPath.h>
 #include <strx/map/PathFinder.h>
-#include <strx/kernel/Message.h>
 #include <strx/player/PlayerSlot.h>
 
 #include "Player.h"
@@ -26,7 +26,8 @@ Player::Player(Game& game, PlayerId id, const PlayerMessage& playerMessage, Map&
         , map(map)
         , pathFinder(new PathFinder(map))
         , resources(Kernel::MakeResources())
-        , techTree(Kernel::GetTechTree(race)) {}
+        , techTree(Kernel::GetTechTree(race))
+{}
 
 Player::~Player() = default;
 
@@ -70,10 +71,7 @@ void Player::EntityRemoved(IdType id)
 void Player::AddResource(const Resource& deltaResource)
 {
 	*resources += deltaResource;
-	if (GetType() == PlayerType::HUMAN)
-	{
-		Kernel::SendMessageOne(make_s<ResourcesMessage>(*resources), id);
-	}
+	if (GetType() == PlayerType::HUMAN) Kernel::SendMessageOne(make_s<ResourcesMessage>(*resources), id);
 }
 
 Entity* Player::FindCollector(MapCoord coord) const
@@ -83,7 +81,7 @@ Entity* Player::FindCollector(MapCoord coord) const
 
 	for (auto& entity : entities | nya::map_values)
 	{
-		if (entity->GetInfo().kind == "building") // @#~ should be building type check
+		if (entity->GetInfo().kind == "building")  // @#~ should be building type check
 		{
 			return entity.get();
 		}
@@ -98,7 +96,7 @@ MapMine* Player::FindMine(MapCoord coord, string resourceName, int squareRadius)
 	// check concentric squares from smallest to largest
 	for (int r : boost::irange(1, squareRadius))
 	{
-		MapCoord froms[] = { { -r, -r }, { -r + 1, r }, { -r, -r + 1 }, { r, -r } }; // h,h,v,v
+		MapCoord froms[] = {{-r, -r}, {-r + 1, r}, {-r, -r + 1}, {r, -r}};  // h,h,v,v
 		for (int i : boost::irange(0, 4))
 		{
 			MapCoord from = coord + froms[i];
@@ -109,10 +107,7 @@ MapMine* Player::FindMine(MapCoord coord, string resourceName, int squareRadius)
 				if (map.IsCell(from))
 				{
 					auto mine = dynamic_cast<MapMine*>(map.GetCell(from).object.get());
-					if (mine && mine->name == resourceName)
-					{
-						return mine;
-					}
+					if (mine && mine->name == resourceName) return mine;
 				}
 			}
 		}
@@ -139,4 +134,4 @@ void Player::ObjectRemoved(IdType id, MapCoord coord)
 	map.ChangeObject(map.GetCell(coord), nullptr);
 	Kernel::SendMessageAll(make_s<ObjectRemovedMessage>(id));
 }
-}
+}  // namespace strx

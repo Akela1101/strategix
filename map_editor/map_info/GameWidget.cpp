@@ -6,8 +6,7 @@
 
 namespace map_info
 {
-GameWidget::GameWidget(QWidget* parent)
-		: QScrollArea(parent)
+GameWidget::GameWidget(QWidget* parent) : QScrollArea(parent)
 {
 	setAlignment(Qt::AlignCenter);
 }
@@ -19,4 +18,4 @@ void GameWidget::wheelEvent(QWheelEvent* event)
 	event->ignore();
 }
 
-}
+}  // namespace map_info

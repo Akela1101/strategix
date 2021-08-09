@@ -1,7 +1,7 @@
 #include <MapInfo.h>
-#include <graphics/SampleMapWidget.h>
-#include <QLabel>
 #include <QHBoxLayout>
+#include <QLabel>
+#include <graphics/SampleMapWidget.h>
 
 #include "SampleGameWidget.h"
 
@@ -13,8 +13,7 @@ using namespace map_info;
 static const int len = 32;
 
 SampleGameWidget::SampleGameWidget(const ResourceInfosType& resourceInfos)
-        : GameWidget()
-        , resourcesWidget(new QWidget(this))
+        : GameWidget(), resourcesWidget(new QWidget(this))
 {
 	resize(800, 600);
 	resourcesWidget->setMaximumHeight(len + 4);
@@ -49,4 +48,4 @@ void SampleGameWidget::OnResourcesChanged(Resources newResources)
 	resourcesWidget->adjustSize();
 }
 
-}
+}  // namespace sample1

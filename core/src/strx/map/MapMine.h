@@ -1,7 +1,7 @@
 #pragma once
 
-#include <Strategix_fwd.h>
 #include "MapObject.h"
+#include <Strategix_fwd.h>
 
 
 namespace strx
@@ -12,10 +12,11 @@ struct MapMine : MapObject
 
 public:
 	MapMine(IdType id, string name, RealCoord coord, ResourceUnit amount)
-	    : MapObject(id, move(name), coord), amount(amount) {}
+	        : MapObject(id, move(name), coord), amount(amount)
+	{}
 	MapMine(const MapMine& other) : MapObject(other), amount(other.amount) {}
 	MapMine* clone() override { return new MapMine(*this); }
 
 	ResourceUnit PickResource(ResourceUnit amountChange);
 };
-}
+}  // namespace strx

@@ -1,8 +1,8 @@
 #pragma once
 
 #include <Strategix_fwd.h>
-#include <strx/network/NetworkCommon.h>
 #include <nya/invoker.hpp>
+#include <strx/network/NetworkCommon.h>
 
 /**
  * Main functionality is here.
@@ -28,8 +28,8 @@ public:
 
 	static bool CheckResource(const string& name);
 	static const TechTree& GetTechTree(const string& raceName);
-	static vector <string> GetMapNames();
-	static vector <string> GetRaceNames();
+	static vector<string> GetMapNames();
+	static vector<string> GetRaceNames();
 	static const ResourceInfosType& GetResourceInfos();
 	static u_p<Resources> MakeResources();
 
@@ -39,4 +39,4 @@ private:
 	static void ContextRequested(ConnectionId connectionId);
 	static void AddGame(const string& mapName, const string& creatorName);
 };
-}
+}  // namespace strx

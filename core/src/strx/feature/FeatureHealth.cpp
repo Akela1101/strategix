@@ -12,8 +12,7 @@ namespace strx
 {
 
 FeatureHealth::FeatureHealth(const FeatureInfo* featureInfo, Entity* entity)
-        : Feature(entity), info(dynamic_cast<const HealthFeatureInfo*>(featureInfo))
-        , hp(info->hp)
+        : Feature(entity), info(dynamic_cast<const HealthFeatureInfo*>(featureInfo)), hp(info->hp)
 {}
 
 void FeatureHealth::Tick(float seconds)
@@ -28,21 +27,21 @@ const HpType FeatureHealth::GetMaxHp() const
 
 bool FeatureHealth::ChangeHp(HpType deltaHp)
 {
-	if (hp == 0) return false; // prevent destroing more than once
+	if (hp == 0) return false;  // prevent destroing more than once
 
 	hp += deltaHp;
 
 	if (hp <= 0)
 	{
-		hp = 0; // destroied
+		hp = 0;  // destroied
 		entity->GetGame().RemoveEntity(entity->GetId());
 	}
 	else if (hp > info->hp)
 	{
-		hp = info->hp; // stop recovery
+		hp = info->hp;  // stop recovery
 	}
 	Kernel::SendMessageAll(make_s<HpMessage>(entity->GetId(), hp));
 	return hp != 0;
 }
 
-}
+}  // namespace strx

@@ -8,7 +8,7 @@ namespace strx
 class Feature : boost::noncopyable
 {
 protected:
-	Entity* entity; // Link to entity
+	Entity* entity;  // Link to entity
 
 public:
 	Feature(Entity* entity) : entity(entity) {}
@@ -18,4 +18,4 @@ public:
 	virtual void Stop() {}
 	virtual void Completed(bool done) {}
 };
-}
+}  // namespace strx

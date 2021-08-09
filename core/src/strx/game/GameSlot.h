@@ -10,9 +10,9 @@ namespace strx
  */
 class GameSlot : boost::noncopyable
 {
-#   define GameStageEnumDef(K, V) \
-	    K(NONE)          /* no game started */ \
-	    K(STARTED)       /* started */
+#define GameStageEnumDef(K, V)       \
+	K(NONE)    /* no game started */ \
+	K(STARTED) /* started */
 	nya_enum(GameStage, GameStageEnumDef);
 
 	GameStage stage = GameStage::NONE;
@@ -72,4 +72,4 @@ protected:
 private:
 	bool CheckGameStage(const Message& message);
 };
-}
+}  // namespace strx

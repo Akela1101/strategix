@@ -1,8 +1,8 @@
-#include <strx/map/MapObject.h>
-#include <strx/map/MapMine.h>
 #include <MapInfo.h>
-#include <QtGui>
 #include <QScrollArea>
+#include <QtGui>
+#include <strx/map/MapMine.h>
+#include <strx/map/MapObject.h>
 
 #include "EditorMapWidget.h"
 
@@ -49,11 +49,9 @@ void EditorMapWidget::mouseMoveEvent(QMouseEvent* event)
 
 void EditorMapWidget::mousePressEvent(QMouseEvent* event)
 {
-	if (event->buttons() & Qt::LeftButton)
-	{
-		grabMouse();
-	}
-	UpdateUnderMouse(event); // single mouse click
+	if (event->buttons() & Qt::LeftButton) grabMouse();
+
+	UpdateUnderMouse(event);  // single mouse click
 
 	MapWidget::mousePressEvent(event);
 }
@@ -69,7 +67,7 @@ void EditorMapWidget::UpdateUnderMouse(QMouseEvent* event)
 	QRect rc = QRect(coord.x * tileLen, coord.y * tileLen, tileLen, tileLen);
 
 	// Draw objects, if LMB and current item is valid.
-	if (!(event->buttons() & Qt::LeftButton))
+	if (!(event->buttons() & Qt::LeftButton))  //
 	{
 		isHighlight = true;
 	}
@@ -78,7 +76,7 @@ void EditorMapWidget::UpdateUnderMouse(QMouseEvent* event)
 		isHighlight = false;
 		if (tool)
 		{
-			if (tool->type == ToolType::TERRAIN)
+			if (tool->type == ToolType::TERRAIN)  //
 			{
 				ChangeTerrain(coord);
 			}
@@ -117,12 +115,9 @@ void EditorMapWidget::ChangeObject(MapCoord coord)
 	IdType id = Map::GetNextId();
 	switch (tool->type)
 	{
-	case ToolType::ENTITY:
-		map->ChangeObject(cell, make_u<MapEntity>(id, tool->name, coord, playerSpot));
-	case ToolType::MINE:
-		map->ChangeObject(cell, make_u<MapMine>(id, tool->name, coord, 1000));
+		case ToolType::ENTITY: map->ChangeObject(cell, make_u<MapEntity>(id, tool->name, coord, playerSpot));
+		case ToolType::MINE: map->ChangeObject(cell, make_u<MapMine>(id, tool->name, coord, 1000));
 	}
 }
 
-}
-
+}  // namespace map_editor

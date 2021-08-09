@@ -11,11 +11,11 @@ namespace strx
 {
 namespace
 {
-	u_p<thread> serverThread;                         // server thread
-	u_p<tcp::socket> socket;                          // socket for the next connection
-	u_p<tcp::acceptor> acceptor;                      // connection listener
-	umap<ConnectionId, u_p<Connection>> connections;  // connections
-}
+u_p<thread> serverThread;                         // server thread
+u_p<tcp::socket> socket;                          // socket for the next connection
+u_p<tcp::acceptor> acceptor;                      // connection listener
+umap<ConnectionId, u_p<Connection>> connections;  // connections
+}  // namespace
 
 
 void Server::Run(ushort port)
@@ -24,8 +24,7 @@ void Server::Run(ushort port)
 	socket.reset(new tcp::socket(eventLoop));
 	AcceptConnection();
 
-	serverThread.reset(new thread([]()
-	{
+	serverThread.reset(new thread([]() {
 		nya_thread_name("_serv_");
 		trace_log << "starting server";
 
@@ -53,8 +52,7 @@ void Server::Finish()
 
 void Server::AcceptConnection()
 {
-	acceptor->async_accept(*socket, [](boost::system::error_code ec)
-	{
+	acceptor->async_accept(*socket, [](boost::system::error_code ec) {
 		if (!ec)
 		{
 			auto connection = make_u<Connection>(move(*socket), ReceiveMessage, ConnectionClosed);
@@ -83,10 +81,7 @@ void Server::SendMessageOne(s_p<Message> message, ConnectionId id)
 
 void Server::SendMessageAll(s_p<Message> message)
 {
-	for (const auto& connection : connections | nya::map_values)
-	{
-		connection->Write(message);
-	}
+	for (const auto& connection : connections | nya::map_values) connection->Write(message);
 }
 
 void Server::ConnectionClosed(ConnectionId id)
@@ -94,4 +89,4 @@ void Server::ConnectionClosed(ConnectionId id)
 	connections.erase(id);
 }
 
-}
+}  // namespace strx

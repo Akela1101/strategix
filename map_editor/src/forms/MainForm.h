@@ -1,7 +1,7 @@
 #pragma once
 
-#include <Strategix_fwd.h>
 #include <MapInfo_fwd.h>
+#include <Strategix_fwd.h>
 #include <ui_MainForm.h>
 
 
@@ -14,7 +14,7 @@ class EditorMapWidget;
 
 class MainForm : public QMainWindow
 {
-Q_OBJECT
+	Q_OBJECT
 
 	Ui::MainForm widget;
 	EditorMapWidget* mapWidget;
@@ -56,4 +56,4 @@ signals:
 	void CurrentPlayerChanged(int playerNumber);
 };
 
-}
+}  // namespace map_editor

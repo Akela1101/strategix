@@ -1,15 +1,15 @@
 #pragma once
 
-#include <Strategix_fwd.h>
-#include <Sample_fwd.h>
 #include <MapWidget.h>
+#include <Sample_fwd.h>
+#include <Strategix_fwd.h>
 
 
 namespace sample1
 {
 class SampleMapWidget : public map_info::MapWidget
 {
-Q_OBJECT
+	Q_OBJECT
 	SampleGame* game = nullptr;
 	SamplePlayer* player = nullptr;
 	int playerSpot = 0;
@@ -41,4 +41,4 @@ private:
 	void ChangeSelection(MapEntity* entity);
 };
 
-}
+}  // namespace sample1

@@ -1,17 +1,15 @@
-#include <strx/map/MapObject.h>
 #include <MapInfo.h>
-#include <QtGui>
 #include <QScrollArea>
 #include <QScrollBar>
+#include <QtGui>
+#include <strx/map/MapObject.h>
 
 #include "MapWidget.h"
 
 
 namespace map_info
 {
-MapWidget::MapWidget(QScrollArea* parent)
-        : QWidget(parent)
-        , scrollArea(parent)
+MapWidget::MapWidget(QScrollArea* parent) : QWidget(parent), scrollArea(parent)
 {
 	setMouseTracking(true);
 }
@@ -37,10 +35,7 @@ void MapWidget::SetMap(s_p<Map> newMap)
 			const auto& tool = MapInfo::terrainTools[cell.terrain->name];
 			DrawTerrain(tool.image, rc);
 
-			if (cell.object)
-			{
-				ObjectAdded(cell.object.get());
-			}
+			if (cell.object) { ObjectAdded(cell.object.get()); }
 		}
 	}
 
@@ -134,10 +129,7 @@ void MapWidget::mouseMoveEvent(QMouseEvent* event)
 void MapWidget::mousePressEvent(QMouseEvent* event)
 {
 	lastGlobalPos = event->globalPos();
-	if (event->buttons() & Qt::RightButton)
-	{
-		grabMouse(QCursor(Qt::ClosedHandCursor));
-	}
+	if (event->buttons() & Qt::RightButton) { grabMouse(QCursor(Qt::ClosedHandCursor)); }
 }
 
 #include <QApplication>
@@ -146,7 +138,8 @@ void MapWidget::mouseReleaseEvent(QMouseEvent* event)
 	if (!(event->buttons() & Qt::RightButton))
 	{
 		releaseMouse();
-		QApplication::setOverrideCursor(QCursor(Qt::ArrowCursor)); // @#~ should do it automatically on releaseMouse() < qt-5.10 bug? >
+		QApplication::setOverrideCursor(
+		        QCursor(Qt::ArrowCursor));  // @#~ should do it automatically on releaseMouse() < qt-5.10 bug? >
 	}
 }
 
@@ -165,7 +158,7 @@ void MapWidget::DrawObject(MapObject* object, QPainter& painter)
 	QRect rc = GetBaseRect(object->coord);
 	painter.drawPixmap(rc, tool.image);
 
-	if (auto mapEntity = dynamic_cast<MapEntity*>(object)) // player geo-tag
+	if (auto mapEntity = dynamic_cast<MapEntity*>(object))  // player geo-tag
 	{
 		int w = rc.width(), h = rc.height();
 		QRect markRc = rc.adjusted(0, 0, -w / 2, -h / 2);
@@ -185,5 +178,4 @@ QRect MapWidget::GetBaseRect(RealCoord coord)
 	return QRect((coord.x - 0.5) * baseTileLen, (coord.y - 0.5) * baseTileLen, baseTileLen, baseTileLen);
 }
 
-}
-
+}  // namespace map_info

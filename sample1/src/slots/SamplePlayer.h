@@ -1,16 +1,18 @@
 #pragma once
 
-#include <strx/player/PlayerSlot.h>
-#include <Sample_fwd.h>
 #include <QObject>
+#include <Sample_fwd.h>
+#include <strx/player/PlayerSlot.h>
 
 namespace sample1
 {
 class SampleEntity;
 
-class SamplePlayer : public QObject, public PlayerSlot
+class SamplePlayer
+        : public QObject
+        , public PlayerSlot
 {
 public:
 	SamplePlayer(s_p<PlayerMessage> playerMessage) : PlayerSlot(playerMessage) {}
 };
-}
+}  // namespace sample1

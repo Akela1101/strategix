@@ -1,5 +1,5 @@
-#include <boost/filesystem.hpp>
 #include <QBitmap>
+#include <boost/filesystem.hpp>
 #include <nya/io.hpp>
 
 #include "MapInfo.h"
@@ -24,8 +24,7 @@ vector<QPixmap> MapInfo::playerMarks;
 
 const QPixmap& MapInfo::GetPlayerMark(int playerNumber)
 {
-	if (playerMarks.empty())
-		nya_throw << "Call LoadObjectTools() first.";
+	if (playerMarks.empty()) nya_throw << "Call LoadObjectTools() first.";
 
 	return playerMarks[playerNumber < playerMarks.size() ? playerNumber : 0];
 }
@@ -48,10 +47,7 @@ void MapInfo::LoadTerrainTools()
 	// definition
 	path fileName = path(mapConfigPath) / terrainsDefFileName;
 	ifstream fin(fileName.string());
-	if (!fin)
-	{
-		nya_throw << "%s could not be loaded."s % fileName;
-	}
+	if (!fin) nya_throw << "%s could not be loaded."s % fileName;
 
 	std::string terrainsImageFileName;
 	nya_getline(fin, terrainsImageFileName);
@@ -89,10 +85,7 @@ void MapInfo::LoadObjectTools()
 
 	path fileName = path(mapConfigPath) / objectsDefFileName;
 	ifstream fin(fileName.string());
-	if (!fin)
-	{
-		nya_throw << "%s could not be loaded."s % fileName;
-	}
+	if (!fin) nya_throw << "%s could not be loaded."s % fileName;
 
 	for (;;)
 	{
@@ -103,14 +96,9 @@ void MapInfo::LoadObjectTools()
 		ToolType type = typeName;
 		switch (type)
 		{
-		    case ToolType::MINE:
-			    imageSubdir = "mines/";
-			    break;
-		    case ToolType::ENTITY:
-			    imageSubdir = "objects/";
-			    break;
-		    default:
-			    nya_throw << "Cannot handle map object of type: " << typeName;
+			case ToolType::MINE: imageSubdir = "mines/"; break;
+			case ToolType::ENTITY: imageSubdir = "objects/"; break;
+			default: nya_throw << "Cannot handle map object of type: " << typeName;
 		}
 
 		string name = path(imageFileName).stem().string();
@@ -138,11 +126,9 @@ void MapInfo::LoadObjectTools()
 QPixmap MapInfo::LoadPixmap(const string& path)
 {
 	QPixmap pixmap;
-	if (!pixmap.load(path.c_str()))
-	{
-		nya_throw << "The image files could not be loaded from " << path;
-	}
+	if (!pixmap.load(path.c_str())) nya_throw << "The image files could not be loaded from " << path;
+
 	return pixmap;
 }
 
-}
+}  // namespace map_info

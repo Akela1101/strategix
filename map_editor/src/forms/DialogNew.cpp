@@ -19,9 +19,9 @@ void DialogNew::accept()
 		QMessageBox::information(this, tr("Warning!"), tr("<b>Give a name for the map!</b>"));
 		return;
 	}
-	
+
 	mapWidth = widget.horizontalSlider->sliderPosition();
 	mapHeight = widget.verticalSlider->sliderPosition();
-	
+
 	QDialog::accept();
 }

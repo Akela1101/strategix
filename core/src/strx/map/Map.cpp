@@ -1,10 +1,10 @@
-#include <iomanip>
-#include <fstream>
-#include <sstream>
 #include <boost/filesystem.hpp>
+#include <fstream>
+#include <iomanip>
 #include <nya/io.hpp>
-#include <strx/map/MapObject.h>
+#include <sstream>
 #include <strx/map/MapMine.h>
+#include <strx/map/MapObject.h>
 
 #include "Map.h"
 
@@ -17,57 +17,39 @@ const char mapFormatVersion[] = "0.0.1";
 IdType Map::lastObjectId = 0;
 
 
-Cell::Cell(Terrain* terrain, MapObject* object)
-        : terrain(terrain)
-        , object(object) {}
+Cell::Cell(Terrain* terrain, MapObject* object) : terrain(terrain), object(object) {}
 
-Cell::Cell(const Cell& other)
-        : terrain(other.terrain)
-        , object(other.object ? other.object->clone() : nullptr) {}
+Cell::Cell(const Cell& other) : terrain(other.terrain), object(other.object ? other.object->clone() : nullptr) {}
 
 
 Map::Map(string name, int width, int height, TerrainsType terrains)
-        : name(move(name))
-        , width(width)
-        , length(length)
-        , terrains(move(terrains))
+        : name(move(name)), width(width), length(length), terrains(move(terrains))
 {
-    CheckDimentions();
+	CheckDimentions();
 
 	cells.reserve(height);
 	for (int row = 0; row < height; ++row)
 	{
 		auto& t = cells.emplace_back();
 		t.reserve(width);
-		for (int col = 0; col < width; ++col)
-		{
-			t.emplace_back(this->terrains->at("none").get(), nullptr);
-		}
+		for (int col = 0; col < width; ++col) { t.emplace_back(this->terrains->at("none").get(), nullptr); }
 	}
 }
 
-Map::Map(string name, const string& data)
-    : name(move(name))
-    , terrains(new umap<string, u_p<Terrain>>())
+Map::Map(string name, const string& data) : name(move(name)), terrains(new umap<string, u_p<Terrain>>())
 {
-    LoadFromString(data);
+	LoadFromString(data);
 }
 
 Map::Map(const string& path)
-        : name(boost::filesystem::path(path).stem().string())
-        , terrains(new umap<string, u_p<Terrain>>())
+        : name(boost::filesystem::path(path).stem().string()), terrains(new umap<string, u_p<Terrain>>())
 {
-    LoadFromFile(path);
+	LoadFromFile(path);
 }
 
 Map::Map(const Map& other)
-        : name(other.name)
-        , width(other.width)
-        , length(other.length)
-        , terrains(other.terrains)
-        , cells(other.cells)
-{
-}
+        : name(other.name), width(other.width), length(other.length), terrains(other.terrains), cells(other.cells)
+{}
 
 Map::~Map() = default;
 
@@ -83,7 +65,7 @@ void Map::UpdateTerrains(const TerrainsType& newTerrains)
 		int id = newTerrain.id;
 		string name = newTerrain.name;
 		auto i = terrains->find(name);
-		if (i == terrains->end())
+		if (i == terrains->end())  //
 		{
 			terrains->emplace(name, make_u<Terrain>(id, name, newTerrain.quality));
 		}
@@ -123,8 +105,7 @@ string Map::SaveToString() const
 void Map::SaveToFile(const string& path) const
 {
 	ofstream ofs(path);
-	if (!ofs)
-		nya_throw << "Unable to save to " << path;
+	if (!ofs) nya_throw << "Unable to save to " << path;
 
 	// prevent exceptions from corrupting the file
 	ofs << SaveToString();
@@ -133,7 +114,11 @@ void Map::SaveToFile(const string& path) const
 void Map::LoadFromString(const string& data)
 {
 	istringstream iss(data);
-	try { Load(iss); } catch (exception& e)
+	try
+	{
+		Load(iss);
+	}
+	catch (exception& e)
 	{
 		nya_throw << "Failed to load map from data.\n\t" << e.what();
 	}
@@ -142,10 +127,13 @@ void Map::LoadFromString(const string& data)
 void Map::LoadFromFile(const string& path)
 {
 	ifstream ifs(path);
-	if (!ifs)
-		nya_throw << "Unable to open map file " << path;
+	if (!ifs) nya_throw << "Unable to open map file " << path;
 
-	try { Load(ifs); } catch (exception& e)
+	try
+	{
+		Load(ifs);
+	}
+	catch (exception& e)
 	{
 		nya_throw << "Failed to load map file " << path << "\n\t" << e.what();
 	}
@@ -156,11 +144,12 @@ void Map::Save(ostream& os) const
 {
 	// top string and version
 	os << mapFileTopString << "\n"
-	     << mapFormatVersion << "\n"
-	     << "\n";
+	   << mapFormatVersion << "\n"
+	   << "\n";
 
 	// terrain descriptions
-	vector<Terrain*> sortedTerrains; sortedTerrains.reserve(terrains->size());
+	vector<Terrain*> sortedTerrains;
+	sortedTerrains.reserve(terrains->size());
 	transform(nya_all(*terrains), back_inserter(sortedTerrains), [](auto& pa) { return pa.second.get(); });
 	sort(nya_all(sortedTerrains), [](auto& a, auto& b) { return a->id < b->id; });
 	//
@@ -206,8 +195,8 @@ void Map::Save(ostream& os) const
 	os << objects.size() << "\n";
 	for (auto&& pos_info : objects)
 	{
-		os << pos_info.first.x << " " << pos_info.first.y << " "
-		     << pos_info.second->name << " " << pos_info.second->ownerSpot << "\n";
+		os << pos_info.first.x << " " << pos_info.first.y << " " << pos_info.second->name << " "
+		   << pos_info.second->ownerSpot << "\n";
 	}
 	os << "\n";
 
@@ -215,8 +204,8 @@ void Map::Save(ostream& os) const
 	os << mines.size() << "\n";
 	for (auto&& pos_info : mines)
 	{
-		os << pos_info.first.x << " " << pos_info.first.y << " "
-		     << pos_info.second->name << " " << pos_info.second->amount << "\n";
+		os << pos_info.first.x << " " << pos_info.first.y << " " << pos_info.second->name << " "
+		   << pos_info.second->amount << "\n";
 	}
 	os.flush();
 }
@@ -227,8 +216,7 @@ void Map::Load(istream& is)
 
 	// top string
 	nya_getline(is, oneString);
-	if (oneString != mapFileTopString)
-		nya_throw << "First string should be " << mapFileTopString;
+	if (oneString != mapFileTopString) nya_throw << "First string should be " << mapFileTopString;
 
 	// version
 	nya_getline(is, oneString);
@@ -267,10 +255,8 @@ void Map::Load(istream& is)
 		{
 			int id;
 			is >> id;
-			if (!nya_in(id, id_terrains))
-			{
-				nya_throw << "Terrain with id [%d] is not found"s % id;
-			}
+			if (!nya_in(id, id_terrains)) nya_throw << "Terrain with id [%d] is not found"s % id;
+
 			auto terrain = id_terrains[id];
 			cell.emplace_back(terrain, nullptr);
 		}
@@ -286,7 +272,7 @@ void Map::Load(istream& is)
 		is >> col >> row >> name >> owner;
 
 		MapCoord coord(col, row);
-		GetCell(col, row).object.reset(new MapEntity{ ++lastObjectId, name, coord, owner });
+		GetCell(col, row).object.reset(new MapEntity{++lastObjectId, name, coord, owner});
 
 		auto iSpot = find(nya_all(playerSpots), owner);
 		if (iSpot == playerSpots.end()) playerSpots.push_back(owner);
@@ -304,17 +290,15 @@ void Map::Load(istream& is)
 		is >> col >> row >> name >> amount;
 
 		MapCoord coord(col, row);
-		GetCell(col, row).object.reset(new MapMine{ ++lastObjectId, name, coord, amount });
+		GetCell(col, row).object.reset(new MapMine{++lastObjectId, name, coord, amount});
 	}
 	if (!is.good()) nya_throw << "map resource mines are wrong";
 }
 
 void Map::CheckDimentions()
 {
-	if (width < 10 || length < 10)
-		nya_throw << "Minimum map dimensions (10x10) exceeded: %dx%d"s % width % length;
-	if (width > 200 || length > 200)
-		nya_throw << "Maximum map dimensions (200x200) exceeded: %dx%d"s % width % length;
+	if (width < 10 || length < 10) nya_throw << "Minimum map dimensions (10x10) exceeded: %dx%d"s % width % length;
+	if (width > 200 || length > 200) nya_throw << "Maximum map dimensions (200x200) exceeded: %dx%d"s % width % length;
 }
 
-}
+}  // namespace strx

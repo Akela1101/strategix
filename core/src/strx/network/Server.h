@@ -1,8 +1,8 @@
 #pragma once
 
+#include "NetworkCommon.h"
 #include <Strategix_fwd.h>
 #include <nya/invoker.hpp>
-#include "NetworkCommon.h"
 
 
 namespace strx
@@ -24,4 +24,4 @@ private:
 	static void SendMessageAll(s_p<Message> message);
 	static void ConnectionClosed(ConnectionId id);
 };
-}
+}  // namespace strx

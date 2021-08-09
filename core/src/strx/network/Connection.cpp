@@ -1,5 +1,5 @@
-#include <istream>
 #include <boost/endian/conversion.hpp>
+#include <istream>
 #include <strx/kernel/Message.h>
 
 #include "Connection.h"
@@ -9,7 +9,7 @@ namespace strx
 {
 namespace
 {
-	atomic<ConnectionId> lastConnectionId {0};
+atomic<ConnectionId> lastConnectionId{0};
 }
 
 Connection::Connection(tcp::socket socket, ReceiveCallback receiveCallback, ClosedCallback closedCallback)
@@ -41,65 +41,63 @@ void Connection::Write(s_p<Message> message)
 	if (ec)
 	{
 		error_log << "socket write error: %d (%s)"s % ec.value() % ec.message();
-        Close();
+		Close();
 		return;
 	}
 	asio::write(socket, asio::buffer(writeBuffer.data(), writeBuffer.size()), ec);
 	if (ec)
 	{
 		error_log << "socket write error: %d (%s)"s % ec.value() % ec.message();
-        Close();
+		Close();
 		return;
 	}
 }
 
 void Connection::Read()
 {
-	asio::async_read(socket, asio::buffer((char*)&expectedSize, sizeof(int))
-	        , [this](boost::system::error_code ec, size_t)
-	        {
+	asio::async_read(socket, asio::buffer((char*) &expectedSize, sizeof(int)),
+	        [this](boost::system::error_code ec, size_t) {
 		        if (ec)
-				{
-					if (ec != asio::error::eof && ec != asio::error::operation_aborted)
-					{
-						error_log << "socket read error: %d (%s)"s % ec.value() % ec.message();
-					}
-					Close();
-					return;
-				}
-				boost::endian::little_to_native_inplace(expectedSize);
-				readBuffer.resize(expectedSize);
-				size_t messageSize = asio::read(socket, asio::buffer(readBuffer.data(), expectedSize));
-				if (messageSize != expectedSize)
-				{
-					error_log << "unable to read the whole buffer";
-					Close();
-					return;
-				}
+		        {
+			        if (ec != asio::error::eof && ec != asio::error::operation_aborted)
+			        {
+				        error_log << "socket read error: %d (%s)"s % ec.value() % ec.message();
+			        }
+			        Close();
+			        return;
+		        }
+		        boost::endian::little_to_native_inplace(expectedSize);
+		        readBuffer.resize(expectedSize);
+		        size_t messageSize = asio::read(socket, asio::buffer(readBuffer.data(), expectedSize));
+		        if (messageSize != expectedSize)
+		        {
+			        error_log << "unable to read the whole buffer";
+			        Close();
+			        return;
+		        }
 
-				try
-				{
-					auto&& message = Message::Parse(readBuffer);
-					if (auto&& exitMessage = dp_cast<EmptyMessage>(message)
-					        ; exitMessage && exitMessage->type == Message::Type::EXIT)
-					{
-						Close();
-						return;
-					}
-					receiveCallback(move(message), id);
-				}
-				catch (exception& e)
-				{
-					error_log << "Parse message error: " << e.what() << ", size: " << readBuffer.size();
-				}
-				Read();
+		        try
+		        {
+			        auto&& message = Message::Parse(readBuffer);
+			        if (auto&& exitMessage = dp_cast<EmptyMessage>(message);
+			                exitMessage && exitMessage->type == Message::Type::EXIT)
+			        {
+				        Close();
+				        return;
+			        }
+			        receiveCallback(move(message), id);
+		        }
+		        catch (exception& e)
+		        {
+			        error_log << "Parse message error: " << e.what() << ", size: " << readBuffer.size();
+		        }
+		        Read();
 	        });
 }
 
 void Connection::Close()
 {
-    if (closedCallback) closedCallback(id);
+	if (closedCallback) closedCallback(id);
 }
 
-}
-
+}  // namespace strx

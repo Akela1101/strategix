@@ -1,8 +1,8 @@
 #pragma once
 
 #include <MapInfo_fwd.h>
-#include <Strategix_fwd.h>
 #include <QWidget>
+#include <Strategix_fwd.h>
 
 
 class QScrollArea;
@@ -11,18 +11,18 @@ namespace map_info
 {
 class MapWidget : public QWidget
 {
-Q_OBJECT
+	Q_OBJECT
 protected:
 	static constexpr int minZoom = 4;
 	static constexpr int maxZoom = 64;
-	static constexpr int baseTileLen = 64; // size of cell pixmap
+	static constexpr int baseTileLen = 64;  // size of cell pixmap
 
-	s_p<Map> map;                 // map related operations
-	QScrollArea* scrollArea;      // back link to scroll area
+	s_p<Map> map;             // map related operations
+	QScrollArea* scrollArea;  // back link to scroll area
 
-	u_p<QPixmap> groundPixmap;    // terrain pixmap
-	int tileLen = 0;              // cell width | height
-	QPoint lastGlobalPos;         // global position used for scrolling
+	u_p<QPixmap> groundPixmap;  // terrain pixmap
+	int tileLen = 0;            // cell width | height
+	QPoint lastGlobalPos;       // global position used for scrolling
 
 public:
 	MapWidget(QScrollArea* parent);
@@ -47,4 +47,4 @@ signals:
 	void MapChanged(bool yes = true);
 };
 
-}
+}  // namespace map_info

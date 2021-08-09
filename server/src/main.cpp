@@ -8,7 +8,11 @@ int main()
 
 	nya::init_logs("config/log.conf");
 
-	try { Kernel::Run("config/strategix.json"); } catch (exception& e)
+	try
+	{
+		Kernel::Run("config/strategix.json");
+	}
+	catch (exception& e)
 	{
 		error_log << "\n\t" << e.what();
 	}

@@ -1,13 +1,13 @@
-#include <fstream>
-#include <boost/filesystem.hpp>
 #include <EditorMapWidget.h>
 #include <MapInfo.h>
-#include <strx/map/Map.h>
 #include <QFileDialog>
 #include <QMessageBox>
-#include <QStandardPaths>
 #include <QPushButton>
+#include <QStandardPaths>
+#include <boost/filesystem.hpp>
+#include <fstream>
 #include <nya/io.hpp>
+#include <strx/map/Map.h>
 
 #include "DialogNew.h"
 #include "MainForm.h"
@@ -19,11 +19,13 @@ using namespace map_info;
 
 static const char editorTitle[] = "Strategix Map Editor";
 
-static const char* str(const QString& message) { return message.toUtf8().data(); }
+static const char* str(const QString& message)
+{
+	return message.toUtf8().data();
+}
 
 
-MainForm::MainForm()
-        : isMapOpened(false)
+MainForm::MainForm() : isMapOpened(false)
 {
 	widget.setupUi(this);
 
@@ -68,8 +70,7 @@ MainForm::~MainForm() = default;
 
 void MainForm::FileNew()
 {
-	if (!TrySaveMap())
-		return;
+	if (!TrySaveMap()) return;
 
 	DialogNew dialogNew;
 	if (dialogNew.exec() == QDialog::Accepted)
@@ -105,8 +106,7 @@ void MainForm::FileLoad()
 	string lastLocationPath = (path(configPath) / "last_path.conf").string();
 	string lastPath;
 	ifstream fin(lastLocationPath);
-	if (fin)
-		nya_getline(fin, lastPath);
+	if (fin) nya_getline(fin, lastPath);
 
 	fin.close();
 
@@ -132,8 +132,7 @@ void MainForm::FileLoad()
 	// save location
 	boost::filesystem::create_directories(configPath);
 	ofstream fout(lastLocationPath, ios::trunc);
-	if (fout)
-		fout << mapPath.toStdString();
+	if (fout) fout << mapPath.toStdString();
 }
 
 void MainForm::FileExit()
@@ -144,10 +143,8 @@ void MainForm::FileExit()
 
 void MainForm::HelpAbout()
 {
-	QMessageBox::about(this, editorTitle, QString("Version: %1 \n(C) 2010-%2 %3")
-	        .arg(mapFormatVersion)
-	        .arg(__DATE__ + 7)
-	        .arg("Akela1101"));
+	QMessageBox::about(this, editorTitle,
+	        QString("Version: %1 \n(C) 2010-%2 %3").arg(mapFormatVersion).arg(__DATE__ + 7).arg("Akela1101"));
 }
 
 void MainForm::CurrentItemChanged(QListWidgetItem* current, QListWidgetItem* previous)
@@ -219,22 +216,22 @@ void MainForm::ListWidgetFill(ToolType type, const std::string& name, QListWidge
 	ToolInfo* tool = nullptr;
 	switch (type)
 	{
-	    case ToolType::TERRAIN:
-	    {
-		    tool = &MapInfo::terrainTools[name];
+		case ToolType::TERRAIN:
+		{
+			tool = &MapInfo::terrainTools[name];
 			break;
-	    }
-	    case ToolType::MINE:
-	    case ToolType::ENTITY:
-	    {
-		    tool = &MapInfo::objectTools[name];
+		}
+		case ToolType::MINE:
+		case ToolType::ENTITY:
+		{
+			tool = &MapInfo::objectTools[name];
 			break;
-	    }
-	    default:
-	    {
-		    error_log << "Unable to handle %s tool"s % type.c_str();
+		}
+		default:
+		{
+			error_log << "Unable to handle %s tool"s % type.c_str();
 			return;
-	    }
+		}
 	}
 
 	QListWidgetItem* newItem = AddToListWidget(name, tool->image, listWidget);
@@ -254,9 +251,9 @@ bool MainForm::TrySaveMap()
 	// Trying to save previous opened map
 	if (isMapOpened && !isMapSaved)
 	{
-		if (QMessageBox::Yes ==
-		        QMessageBox::question(this, "Map wasn't saved", "Save changes?", QMessageBox::Yes | QMessageBox::No
-		                , QMessageBox::No))
+		if (QMessageBox::Yes
+		        == QMessageBox::question(this, "Map wasn't saved", "Save changes?", QMessageBox::Yes | QMessageBox::No,
+		                QMessageBox::No))
 		{
 			if (SaveMap().isEmpty())
 			{
@@ -267,7 +264,7 @@ bool MainForm::TrySaveMap()
 		}
 		// else user don't want to save map
 	}
-	mapPath.clear(); // !!! allow open save dialog for new map
+	mapPath.clear();  // !!! allow open save dialog for new map
 	return true;
 }
 
@@ -281,8 +278,7 @@ QString MainForm::SaveMap()
 		statusBar()->showMessage(mapPath, 3000);
 
 		// if user reconsider saving
-		if (mapPath.isEmpty())
-			return mapPath;
+		if (mapPath.isEmpty()) return mapPath;
 	}
 	// Write file
 	try
@@ -303,10 +299,7 @@ void MainForm::MapChanged(bool yes)
 	isMapSaved = !yes;
 	widget.actionSave->setEnabled(yes);
 	QString mapName = map->GetName().c_str();
-	setWindowTitle(QString("%1 %2- %3")
-	        .arg(mapName)
-	        .arg(yes ? "(*) " : "")
-	        .arg(editorTitle));
+	setWindowTitle(QString("%1 %2- %3").arg(mapName).arg(yes ? "(*) " : "").arg(editorTitle));
 }
 
-}
+}  // namespace map_editor

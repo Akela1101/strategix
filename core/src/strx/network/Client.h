@@ -1,8 +1,8 @@
 #pragma once
 
+#include "NetworkCommon.h"
 #include <Strategix_fwd.h>
 #include <nya/invoker.hpp>
-#include "NetworkCommon.h"
 
 namespace strx
 {
@@ -18,4 +18,4 @@ public:
 	static void SendMessageOne(s_p<Message> message);
 	static void ReceiveMessage(s_p<Message> message, PlayerId id);
 };
-}
+}  // namespace strx

@@ -1,20 +1,20 @@
 #include <atomic>
-#include <future>
-#include <memory>
-#include <thread>
 #include <boost/asio/steady_timer.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/range/adaptors.hpp>
+#include <future>
+#include <memory>
 #include <nya/invoker.hpp>
+#include <thread>
 
+#include <strx/common/EntityInfo.h>
 #include <strx/common/Resources.h>
 #include <strx/common/TechTree.h>
 #include <strx/entity/Entity.h>
-#include <strx/common/EntityInfo.h>
 #include <strx/game/Game.h>
 #include <strx/kernel/ConfigManager.h>
-#include <strx/map/Map.h>
 #include <strx/kernel/Message.h>
+#include <strx/map/Map.h>
 #include <strx/network/Server.h>
 #include <strx/player/Player.h>
 
@@ -31,11 +31,11 @@ using st_clock = chrono::steady_clock;
 static const auto minTick = 42ms;
 
 // Variables
-static umap<int, s_p<GameMessage>> games;            // list of games
-static s_p<Game> game;                               // single game
-static u_p<thread> kernelThread;                     // main kernel thread
-static u_p<st_timer> timer;                          // tick timer
-static atomic<PlayerId> currentPlayerId {0};         // incrementing player id
+static umap<int, s_p<GameMessage>> games;    // list of games
+static s_p<Game> game;                       // single game
+static u_p<thread> kernelThread;             // main kernel thread
+static u_p<st_timer> timer;                  // tick timer
+static atomic<PlayerId> currentPlayerId{0};  // incrementing player id
 
 
 void TimerHandler(const boost::system::error_code& error)
@@ -50,7 +50,7 @@ void TimerHandler(const boost::system::error_code& error)
 		auto dms = duration_cast<milliseconds>(now - lastTime);
 		lastTime = now;
 
-		Kernel::Tick((double)dms.count() / 1000);
+		Kernel::Tick((double) dms.count() / 1000);
 
 		if (timer) timer->async_wait(TimerHandler);
 	}
@@ -94,16 +94,10 @@ void Kernel::Tick(float seconds)
 void Kernel::PrintInfo()
 {
 	cout << "\nMaps: " << endl;
-	for (auto&& mapName : GetMapNames())
-	{
-		cout << mapName << endl;
-	}
+	for (auto&& mapName : GetMapNames()) cout << mapName << endl;
 
 	cout << "\nRace names: " << endl;
-	for (auto&& raceName : GetRaceNames())
-	{
-		cout << raceName << endl;
-	}
+	for (auto&& raceName : GetRaceNames()) cout << raceName << endl;
 }
 
 PlayerId Kernel::GetNextPlayerId()
@@ -131,8 +125,8 @@ void Kernel::OnReceiveMessage(s_p<Message> message, ConnectionId connectionId)
 	{
 		switch (message->GetType())
 		{
-		case Message::Type::CONTEXT: ContextRequested(connectionId); break;
-		default: game->ReceiveMessage(move(message), connectionId);
+			case Message::Type::CONTEXT: ContextRequested(connectionId); break;
+			default: game->ReceiveMessage(move(message), connectionId);
 		}
 	}
 	catch (exception& e)
@@ -168,10 +162,7 @@ vector<string> Kernel::GetMapNames()
 		for (; it != eod; ++it)
 		{
 			const fs::path& p = *it;
-			if (fs::is_regular_file(p) && fs::extension(p) == ".map")
-			{
-				mapNames.push_back(p.stem().string());
-			}
+			if (fs::is_regular_file(p) && fs::extension(p) == ".map") mapNames.push_back(p.stem().string());
 		}
 	}
 	catch (fs::filesystem_error& e)
@@ -184,10 +175,7 @@ vector<string> Kernel::GetMapNames()
 vector<string> Kernel::GetRaceNames()
 {
 	vector<string> raceNames;
-	for (auto&& name_tree : ConfigManager::GetTechTrees())
-	{
-		raceNames.push_back(name_tree.second->GetRaceName());
-	}
+	for (auto&& name_tree : ConfigManager::GetTechTrees()) raceNames.push_back(name_tree.second->GetRaceName());
 	return raceNames;
 }
 
@@ -199,10 +187,7 @@ const ResourceInfosType& Kernel::GetResourceInfos()
 u_p<Resources> Kernel::MakeResources()
 {
 	auto resources = make_u<Resources>();
-	for (auto&& resourceName : *GetResourceInfos())
-	{
-		*resources += Resource(resourceName, 0);
-	}
+	for (auto&& resourceName : *GetResourceInfos()) *resources += Resource(resourceName, 0);
 	return resources;
 }
 
@@ -222,7 +207,11 @@ void Kernel::Init(const string& configPath)
 void Kernel::RunImpl()
 {
 	nya_thread_name("_kern_");
-	try { eventLoop.run(); } catch (exception& e)
+	try
+	{
+		eventLoop.run();
+	}
+	catch (exception& e)
 	{
 		error_log << "Unexpected error in strategix: " << e.what();
 		// @#~ should call game to stop
@@ -237,10 +226,8 @@ void Kernel::ContextRequested(ConnectionId connectionId)
 	Server::SendMessageOne(contextMessage, connectionId);
 
 	auto gamesMessage = make_s<MessageVector>();
-	for (auto& gameMessage : games | nya::map_values)
-	{
-		gamesMessage->push_back(gameMessage);
-	}
+	for (auto& gameMessage : games | nya::map_values) gamesMessage->push_back(gameMessage);
+
 	Server::SendMessageOne(gamesMessage, connectionId);
 }
 
@@ -257,4 +244,4 @@ void Kernel::AddGame(const string& mapName, const string& creatorName)
 	games.emplace(1, move(gameMessage));
 }
 
-}
+}  // namespace strx

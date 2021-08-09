@@ -1,7 +1,7 @@
 #include <strx/entity/Entity.h>
 #include <strx/entity/EntitySlot.h>
-#include <strx/feature/FeatureInfo.h>
 #include <strx/feature/FeatureHealth.h>
+#include <strx/feature/FeatureInfo.h>
 #include <strx/feature/FeatureMove.h>
 #include <strx/game/Game.h>
 #include <strx/player/Player.h>
@@ -12,8 +12,7 @@ namespace strx
 {
 
 FeatureAttack::FeatureAttack(const FeatureInfo* featureInfo, Entity* entity)
-        : Feature(entity)
-        , info(dynamic_cast<const AttackFeatureInfo*>(featureInfo))
+        : Feature(entity), info(dynamic_cast<const AttackFeatureInfo*>(featureInfo))
 {}
 
 bool FeatureAttack::Attack(IdType targetId)
@@ -27,7 +26,7 @@ bool FeatureAttack::Attack(IdType targetId)
 		return false;
 	}
 
-	hitProgress = 1.0; // first hit is instant, if near the target
+	hitProgress = 1.0;  // first hit is instant, if near the target
 
 	entity->AssignTask(this);
 	return true;
@@ -60,7 +59,7 @@ void FeatureAttack::Tick(float seconds)
 	--hitProgress;
 	if (!target->Do<FeatureHealth>().ChangeHp(-info->damage))
 	{
-		entity->AssignTask(nullptr); // target destroied
+		entity->AssignTask(nullptr);  // target destroied
 	}
 }
 
@@ -74,10 +73,7 @@ void FeatureAttack::Completed(bool done)
 {
 	if (!done) return;
 
-	if (target = movingTarget.lock())
-	{
-		entity->AssignTask(this);
-	}
+	if (target = movingTarget.lock()) entity->AssignTask(this);
 }
 
-}
+}  // namespace strx

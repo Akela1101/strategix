@@ -1,5 +1,5 @@
-#include <slots/SampleGame.h>
 #include <QApplication>
+#include <slots/SampleGame.h>
 
 
 INITIALIZE_EASYLOGGINGPP
@@ -14,10 +14,10 @@ int main(int argc, char* argv[])
 
 	SampleGame::Configure();
 
-	try // run a game
+	try  // run a game
 	{
 		// connect to server asynchronously
-		SampleGame game(argc == 1 ? 1 : 3); //TODO: select player in gui
+		SampleGame game(argc == 1 ? 1 : 3);  //TODO: select player in gui
 
 		// start graphics
 		return app.exec();

@@ -1,29 +1,28 @@
-#include <utility>
-#include <memory>
 #include <boost/asio.hpp>
+#include <memory>
+#include <utility>
 
 #include <strx/game/GameSlot.h>
 #include <strx/kernel/Message.h>
 
-#include "Connection.h"
 #include "Client.h"
+#include "Connection.h"
 
 
 namespace strx
 {
-static GameSlot* game = nullptr;              // current game
-static u_p<thread> clientThread;              // client thread
-static u_p<tcp::socket> socket;               // client socket
-static u_p<Connection> connection;            // single client connection
+static GameSlot* game = nullptr;    // current game
+static u_p<thread> clientThread;    // client thread
+static u_p<tcp::socket> socket;     // client socket
+static u_p<Connection> connection;  // single client connection
 
 void Client::StartSession(GameSlot* game)
 {
 	strx::game = game;
 	socket = std::make_unique<tcp::socket>(eventLoop);
-	auto iEndpoint = tcp::resolver(eventLoop).resolve({ "localhost", "10101" });
+	auto iEndpoint = tcp::resolver(eventLoop).resolve({"localhost", "10101"});
 
-	asio::async_connect(*socket, iEndpoint, [](const boost::system::error_code& ec, const tcp::endpoint&)
-	{
+	asio::async_connect(*socket, iEndpoint, [](const boost::system::error_code& ec, const tcp::endpoint&) {
 		if (!ec)
 		{
 			connection = std::make_unique<Connection>(move(*socket), ReceiveMessage);
@@ -33,8 +32,7 @@ void Client::StartSession(GameSlot* game)
 		}
 	});
 
-	clientThread = std::make_unique<thread>([]()
-	{
+	clientThread = std::make_unique<thread>([]() {
 		nya_thread_name("_clnt_");
 		trace_log << "Starting client";
 
@@ -56,8 +54,7 @@ void Client::StartSession(GameSlot* game)
 
 void Client::StopSession()
 {
-	invoke([]
-	{
+	invoke([] {
 		SendMessageOne(make_s<EmptyMessage>(Message::Type::EXIT));
 		connection.reset();
 	});
@@ -75,4 +72,4 @@ void Client::ReceiveMessage(s_p<Message> message, PlayerId)
 {
 	game->MessageReceived(move(message));
 }
-}
+}  // namespace strx

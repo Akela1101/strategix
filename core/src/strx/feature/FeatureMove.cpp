@@ -22,8 +22,8 @@ FeatureMove::~FeatureMove() = default;
 
 void FeatureMove::Move(s_p<Entity> target, float radius, Feature* mover)
 {
-    this->target = move(target);
-    Move(this->target->GetMapCoord(), radius, mover);
+	this->target = move(target);
+	Move(this->target->GetMapCoord(), radius, mover);
 }
 
 void FeatureMove::Move(MapCoord coord, float radius, Feature* mover)
@@ -72,7 +72,7 @@ bool FeatureMove::NextPoint()
 	auto current = entity->GetCoord();
 	Player& player = entity->GetPlayer();
 
-	RealCoord delta = (RealCoord)next - current;
+	RealCoord delta = (RealCoord) next - current;
 	direction = delta.Norm();
 	distance += delta.Len();
 	terrainQuality = 0.5 * (player.GetTerrain(current)->quality + player.GetTerrain(next)->quality);
@@ -90,4 +90,4 @@ void FeatureMove::RebuildPath()
 	}
 }
 
-}
+}  // namespace strx

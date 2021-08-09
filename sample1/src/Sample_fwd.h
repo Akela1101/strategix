@@ -1,7 +1,7 @@
 #pragma once
 
-#include <nya/api.hpp>
 #include <Strategix_fwd.h>
+#include <nya/api.hpp>
 
 #define qInvoke QMetaObject::invokeMethod
 
@@ -16,4 +16,4 @@ class SampleGameWidget;
 class SampleMapWidget;
 
 using namespace strx;
-}
+}  // namespace sample1

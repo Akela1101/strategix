@@ -10,4 +10,4 @@ class EditorGameWidget : public GameWidget
 {
 	using GameWidget::GameWidget;
 };
-}
+}  // namespace map_editor

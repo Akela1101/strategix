@@ -10,9 +10,7 @@
 namespace strx
 {
 
-EntitySlot::EntitySlot(s_p<EntityMessage> entityMessage)
-    : entityMessage(move(entityMessage))
-{}
+EntitySlot::EntitySlot(s_p<EntityMessage> entityMessage) : entityMessage(move(entityMessage)) {}
 
 IdType EntitySlot::GetId() const
 {
@@ -39,4 +37,4 @@ void EntitySlot::Attack(IdType targetId)
 	GameSlot::SendMessageOne(make_s<AttackMessage>(GetId(), targetId));
 }
 
-}
+}  // namespace strx
