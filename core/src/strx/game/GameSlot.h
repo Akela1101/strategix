@@ -13,7 +13,7 @@ class GameSlot : boost::noncopyable
 #   define GameStageEnumDef(K, V) \
 	    K(NONE)          /* no game started */ \
 	    K(STARTED)       /* started */
-	nya_enum(GameStage, GameStageEnumDef)
+	nya_enum(GameStage, GameStageEnumDef);
 
 	GameStage stage = GameStage::NONE;
 	ResourceInfosType resourceInfos;

@@ -25,7 +25,7 @@ struct Message : boost::noncopyable
 	    K(COLLECT)         /* collect mine */ \
 	    K(ATTACK)          /* attack other entity */ \
 	    K(HP)              /* hit points change */
-	nya_enum(Type, MessageTypeEnumDef)
+	nya_enum(Type, MessageTypeEnumDef);
 
 	virtual ~Message() = default;
 	virtual Type GetType() const = 0;

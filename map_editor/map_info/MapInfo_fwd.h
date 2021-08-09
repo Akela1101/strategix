@@ -16,8 +16,7 @@ class MapWidget;
 	K(TERRAIN)  /* terrain */                  \
 	K(ENTITY)   /* player's entity */          \
 	K(MINE)     /* resource mine */
-nya_enum(ToolType, ToolTypeDef
-)
+nya_enum(ToolType, ToolTypeDef);
 
 using namespace strx;
 }
