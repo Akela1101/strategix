@@ -1,5 +1,5 @@
 #include <QApplication>
-#include <slots/SampleGame.h>
+#include <slots/SampleGame.hpp>
 
 
 INITIALIZE_EASYLOGGINGPP

@@ -1,9 +1,10 @@
-#include <MapInfo.h>
 #include <QHBoxLayout>
 #include <QLabel>
-#include <graphics/SampleMapWidget.h>
 
-#include "SampleGameWidget.h"
+#include <MapInfo.hpp>
+
+#include "SampleMapWidget.hpp"
+#include "SampleGameWidget.hpp"
 
 
 namespace sample1

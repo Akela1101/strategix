@@ -1,12 +1,12 @@
-#include <GameWidget.h>
-#include <MapInfo.h>
-#include <Strategix.h>
-#include <graphics/SampleGameWidget.h>
-#include <graphics/SampleMapWidget.h>
-#include <slots/SampleEntity.h>
-#include <slots/SamplePlayer.h>
+#include <GameWidget.hpp>
+#include <MapInfo.hpp>
+#include <graphics/SampleGameWidget.hpp>
+#include <graphics/SampleMapWidget.hpp>
+#include <slots/SampleEntity.hpp>
+#include <slots/SamplePlayer.hpp>
+#include <strx/strx.hpp>
 
-#include "SampleGame.h"
+#include "SampleGame.hpp"
 
 
 namespace sample1

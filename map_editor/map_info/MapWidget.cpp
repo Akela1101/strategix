@@ -1,10 +1,11 @@
-#include <MapInfo.h>
 #include <QScrollArea>
 #include <QScrollBar>
 #include <QtGui>
-#include <strx/map/MapObject.h>
 
-#include "MapWidget.h"
+#include <strx/MapObject.hpp>
+
+#include "MapInfo.hpp"
+#include "MapWidget.hpp"
 
 
 namespace map_info

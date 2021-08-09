@@ -7,11 +7,11 @@ find_package(Boost 1.67 REQUIRED filesystem serialization
 		# transitive
 		date_time regex)
 
-file(GLOB_RECURSE SOURCES src/*.cpp src/*.h src/*.hpp)
+file(GLOB_RECURSE sources src/*.cpp src/*.hpp strx/*.hpp)
 
-add_library(${PROJECT_NAME} STATIC ${SOURCES})
+add_library(${PROJECT_NAME} STATIC ${sources})
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
-target_include_directories(${PROJECT_NAME} PUBLIC src)
+target_include_directories(${PROJECT_NAME} INTERFACE .)
 target_link_libraries(${PROJECT_NAME}
 		nya
 		easyloggingpp

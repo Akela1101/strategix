@@ -1,4 +1,4 @@
-#include "SamplePlayer.h"
+#include "SamplePlayer.hpp"
 
 
 namespace sample1

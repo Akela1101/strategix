@@ -1,12 +1,13 @@
-#include <MapInfo.h>
 #include <QtGui>
-#include <slots/SampleEntity.h>
-#include <slots/SampleGame.h>
-#include <slots/SamplePlayer.h>
-#include <strx/map/MapMine.h>
-#include <strx/map/MapObject.h>
 
-#include "SampleMapWidget.h"
+#include <MapInfo.hpp>
+#include <slots/SampleEntity.hpp>
+#include <slots/SampleGame.hpp>
+#include <slots/SamplePlayer.hpp>
+#include <strx/MapMine.hpp>
+#include <strx/MapObject.hpp>
+
+#include "SampleMapWidget.hpp"
 
 
 namespace sample1

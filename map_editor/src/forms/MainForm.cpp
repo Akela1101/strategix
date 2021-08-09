@@ -1,5 +1,3 @@
-#include <EditorMapWidget.h>
-#include <MapInfo.h>
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QPushButton>
@@ -7,10 +5,14 @@
 #include <boost/filesystem.hpp>
 #include <fstream>
 #include <nya/io.hpp>
-#include <strx/map/Map.h>
 
-#include "DialogNew.h"
-#include "MainForm.h"
+#include <EditorMapWidget.hpp>
+#include <MapInfo.hpp>
+#include <strx/Map.hpp>
+
+
+#include "DialogNew.hpp"
+#include "MainForm.hpp"
 
 
 namespace map_editor

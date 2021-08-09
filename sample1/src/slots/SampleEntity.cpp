@@ -1,6 +1,6 @@
-#include <graphics/SampleMapWidget.h>
+#include <graphics/SampleMapWidget.hpp>
 
-#include "SampleEntity.h"
+#include "SampleEntity.hpp"
 
 
 namespace sample1

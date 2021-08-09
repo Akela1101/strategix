@@ -1,4 +1,4 @@
-#include <strx/kernel/Kernel.h>
+#include <strx/Kernel.hpp>
 
 INITIALIZE_EASYLOGGINGPP
 

@@ -1,7 +1,8 @@
-#include <MapWidget.h>
 #include <QWheelEvent>
 
-#include "GameWidget.h"
+#include "MapWidget.hpp"
+
+#include "GameWidget.hpp"
 
 
 namespace map_info

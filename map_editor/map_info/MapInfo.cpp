@@ -2,7 +2,7 @@
 #include <boost/filesystem.hpp>
 #include <nya/io.hpp>
 
-#include "MapInfo.h"
+#include "MapInfo.hpp"
 
 
 namespace map_info

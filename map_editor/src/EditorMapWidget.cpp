@@ -1,10 +1,11 @@
-#include <MapInfo.h>
 #include <QScrollArea>
 #include <QtGui>
-#include <strx/map/MapMine.h>
-#include <strx/map/MapObject.h>
 
-#include "EditorMapWidget.h"
+#include <MapInfo.hpp>
+#include <strx/MapMine.hpp>
+#include <strx/MapObject.hpp>
+
+#include "EditorMapWidget.hpp"
 
 
 namespace map_editor

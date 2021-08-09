@@ -1,6 +1,6 @@
-#include <EditorMapWidget.h>
+#include <EditorMapWidget.hpp>
 
-#include "EditorGameWidget.h"
+#include "EditorGameWidget.hpp"
 
 
 namespace map_editor

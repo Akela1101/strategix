@@ -2,7 +2,7 @@
 #include <QMessageBox>
 #include <exception>
 
-#include <forms/MainForm.h>
+#include <forms/MainForm.hpp>
 
 
 INITIALIZE_EASYLOGGINGPP
