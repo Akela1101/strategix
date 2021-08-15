@@ -12,7 +12,7 @@
 
 
 #include "DialogNew.hpp"
-#include "MainForm.hpp"
+#include "MapForm.hpp"
 
 
 namespace map_editor
@@ -27,7 +27,7 @@ static const char* str(const QString& message)
 }
 
 
-MainForm::MainForm() : isMapOpened(false)
+MapForm::MapForm() : isMapOpened(false)
 {
 	widget.setupUi(this);
 
@@ -63,14 +63,14 @@ MainForm::MainForm() : isMapOpened(false)
 
 	//
 	mapWidget = widget.gameWidget->CreateMapWidget<EditorMapWidget>();
-	connect(this, &MainForm::CurrentToolChanged, mapWidget, &EditorMapWidget::CurrentToolChanged);
-	connect(this, &MainForm::CurrentPlayerChanged, mapWidget, &EditorMapWidget::CurrentPlayerChanged);
-	connect(mapWidget, &EditorMapWidget::MapChanged, this, &MainForm::MapChanged);
+	connect(this, &MapForm::CurrentToolChanged, mapWidget, &EditorMapWidget::CurrentToolChanged);
+	connect(this, &MapForm::CurrentPlayerChanged, mapWidget, &EditorMapWidget::CurrentPlayerChanged);
+	connect(mapWidget, &EditorMapWidget::MapChanged, this, &MapForm::MapChanged);
 }
 
-MainForm::~MainForm() = default;
+MapForm::~MapForm() = default;
 
-void MainForm::FileNew()
+void MapForm::FileNew()
 {
 	if (!TrySaveMap()) return;
 
@@ -92,12 +92,12 @@ void MainForm::FileNew()
 	}
 }
 
-void MainForm::FileSave()
+void MapForm::FileSave()
 {
 	SaveMap();
 }
 
-void MainForm::FileLoad()
+void MapForm::FileLoad()
 {
 	using path = boost::filesystem::path;
 
@@ -137,19 +137,19 @@ void MainForm::FileLoad()
 	if (fout) fout << mapPath.toStdString();
 }
 
-void MainForm::FileExit()
+void MapForm::FileExit()
 {
 	// Setted to close() by Designer
 	// Change it. And ask for save, if not saved
 }
 
-void MainForm::HelpAbout()
+void MapForm::HelpAbout()
 {
 	QMessageBox::about(this, editorTitle,
 	        QString("Version: %1 \n(C) 2010-%2 %3").arg(mapFormatVersion).arg(__DATE__ + 7).arg("Akela1101"));
 }
 
-void MainForm::CurrentItemChanged(QListWidgetItem* current, QListWidgetItem* previous)
+void MapForm::CurrentItemChanged(QListWidgetItem* current, QListWidgetItem* previous)
 {
 	Q_UNUSED(previous);
 
@@ -161,7 +161,7 @@ void MainForm::CurrentItemChanged(QListWidgetItem* current, QListWidgetItem* pre
 	emit CurrentToolChanged(toolFromItem[current]);
 }
 
-void MainForm::CurrentToolboxItemChanged(int index)
+void MapForm::CurrentToolboxItemChanged(int index)
 {
 	if (auto listWidget = dynamic_cast<QListWidget*>(widget.toolBox->widget(index)->children().last()))
 	{
@@ -169,13 +169,13 @@ void MainForm::CurrentToolboxItemChanged(int index)
 	}
 }
 
-void MainForm::PlayerButtonToggled(bool on)
+void MapForm::PlayerButtonToggled(bool on)
 {
 	int playerNumber = playerNumbers[(QPushButton*) sender()];
 	emit CurrentPlayerChanged(playerNumber);
 }
 
-void MainForm::PlacePlayerMarks()
+void MapForm::PlacePlayerMarks()
 {
 	auto layout = new QHBoxLayout();
 	layout->setMargin(0);
@@ -197,12 +197,12 @@ void MainForm::PlacePlayerMarks()
 			button->setChecked(true);
 		}
 		playerNumbers.emplace(button, i++);
-		connect(button, &QPushButton::toggled, this, &MainForm::PlayerButtonToggled);
+		connect(button, &QPushButton::toggled, this, &MapForm::PlayerButtonToggled);
 	}
 	widget.playersGroupBox->setLayout(layout);
 }
 
-void MainForm::ListWidgetFillMark(const string& filePath, QListWidget* listWidget)
+void MapForm::ListWidgetFillMark(const string& filePath, QListWidget* listWidget)
 {
 	using path = boost::filesystem::path;
 
@@ -213,7 +213,7 @@ void MainForm::ListWidgetFillMark(const string& filePath, QListWidget* listWidge
 	toolFromItem.emplace(newItem, nullptr);
 }
 
-void MainForm::ListWidgetFill(ToolType type, const std::string& name, QListWidget* listWidget)
+void MapForm::ListWidgetFill(ToolType type, const std::string& name, QListWidget* listWidget)
 {
 	ToolInfo* tool = nullptr;
 	switch (type)
@@ -240,7 +240,7 @@ void MainForm::ListWidgetFill(ToolType type, const std::string& name, QListWidge
 	toolFromItem.emplace(newItem, tool);
 }
 
-QListWidgetItem* MainForm::AddToListWidget(const string& name, const QPixmap& pixmap, QListWidget* listWidget)
+QListWidgetItem* MapForm::AddToListWidget(const string& name, const QPixmap& pixmap, QListWidget* listWidget)
 {
 	QString title = QString(name.c_str()).replace('_', ' ');
 	QListWidgetItem* newItem = new QListWidgetItem(QIcon(pixmap), title);
@@ -248,7 +248,7 @@ QListWidgetItem* MainForm::AddToListWidget(const string& name, const QPixmap& pi
 	return newItem;
 }
 
-bool MainForm::TrySaveMap()
+bool MapForm::TrySaveMap()
 {
 	// Trying to save previous opened map
 	if (isMapOpened && !isMapSaved)
@@ -270,7 +270,7 @@ bool MainForm::TrySaveMap()
 	return true;
 }
 
-QString MainForm::SaveMap()
+QString MapForm::SaveMap()
 {
 	if (mapPath.isEmpty())
 	{
@@ -296,7 +296,7 @@ QString MainForm::SaveMap()
 	return mapPath;
 }
 
-void MainForm::MapChanged(bool yes)
+void MapForm::MapChanged(bool yes)
 {
 	isMapSaved = !yes;
 	widget.actionSave->setEnabled(yes);

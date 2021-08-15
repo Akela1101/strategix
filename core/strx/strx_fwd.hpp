@@ -2,12 +2,18 @@
 
 #include <nya/api.hpp>
 
+#include "CoordStructs.hpp"
+#include "Resources.hpp"
+
 namespace strx
 {
+using namespace std;  // only in strx namespace, so it won't affect foreign headers
+
 struct AttackFeatureInfo;
 struct Cell;
 struct CollectFeatureInfo;
 struct CommandMessage;
+struct ContextMessage;
 struct EntityInfo;
 struct EntityMessage;
 struct FeatureInfo;
@@ -29,19 +35,32 @@ class Feature;
 class GameKernel;
 class Game;
 class Map;
-class MapManager;
 class MapPath;
 class PathFinder;
 class PlayerKernel;
 class Player;
 class Server;
 class TechTree;
-class TechTreesBuilder;
 class User;
 
-using namespace std;  // only in my namespace, so it won't affect foreign headers
-}  // namespace strx
+using IdType = int;
+using HpType = int;
+using GameId = int;
+using PlayerId = int;
+using ResourcesContext = s_p<vector<string>>;
+using TechTreesType = umap<string, u_p<TechTree>>;
 
-#include "CoordStructs.hpp"
-#include "Resources.hpp"
-#include "strx_common.hpp"
+enum class PlayerType
+{
+	HUMAN,
+	AI
+};
+
+struct MapContext
+{
+	string name;
+	int width;
+	int height;
+	int playersNumber;
+};
+}  // namespace strx

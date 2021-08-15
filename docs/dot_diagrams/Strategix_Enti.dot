@@ -38,14 +38,6 @@ digraph G
 		"Resources**"
 	}
 
-	subgraph cluster4
-	{
-		label = "[MapManager]"
-		color = blue;		
-		"Entis**"
-		Resources
-	}
-
 	Resources -> "Resources*" [arrowhead = none, style = dotted]
 	"Resources*" -> "Resources**" [arrowhead = none, style = dotted]
 	Entis -> "Entis*" [arrowhead = none, style = dotted]

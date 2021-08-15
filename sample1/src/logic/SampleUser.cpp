@@ -1,18 +1,25 @@
 #include <MapInfo.hpp>
 #include <strx/strx.hpp>
 
+#include "../ui/MainWidget.hpp"
 #include "SampleGame.hpp"
+
 #include "SampleUser.hpp"
 
 
 namespace sample1
 {
-void SampleUser::Configure()
+SampleUser::SampleUser() : mainWidget(new MainWidget())
 {
 	using namespace map_info;
 	MapInfo::QRegisterTypes();
 	MapInfo::LoadTerrainTools();
 	MapInfo::LoadObjectTools();
+
+	connect(mainWidget.get(), &MainWidget::createGame, [this](const QString& mapName) { AddGame(mapName.toStdString()); });
+	connect(mainWidget.get(), &MainWidget::joinGame, [this](GameId id) { JoinGame(id); });
+
+	mainWidget->show();
 }
 
 SampleUser::~SampleUser() = default;
@@ -32,29 +39,27 @@ void SampleUser::MessageReceived(s_p<Message> message)
 	});
 }
 
-void SampleUser::HandleContext()
+void SampleUser::HandleContext(const ContextMessage* message)
 {
-	//todo: add game from gui
-	if (userId == 1)
-	{
-		auto gameMessage = make_s<GameMessage>();
-		gameMessage->mapName = "small";
-		gameMessage->creatorName = "user 1";
-		SendMessageOne(move(gameMessage));
-	}
+	mainWidget->SetMaps(message->mapContexts);
 }
 
-void SampleUser::GameUpdated(GameId gameId, const GameMessage* gameMessage)
+void SampleUser::HandleGame(const GameMessage* gameMessage)
 {
-	//
+	mainWidget->AddGame(gameMessage);
 }
 
-u_p<Game> SampleUser::AddGame(GameId gameId, ResourceInfosType resourceInfos)
+u_p<Game> SampleUser::CreateGame(ResourcesContext resourcesContext)
 {
-	SendMessageOne(make_s<PlayerMessage>(gameId, PlayerType::HUMAN));
-	SendMessageOne(make_s<EmptyMessage>(Message::Type::START));
+	return make_u<SampleGame>(1, move(resourcesContext));
+}
 
-	return make_u<SampleGame>(userId, move(resourceInfos));
+void SampleUser::AddGame(const string& mapName)
+{
+	auto gameMessage = make_s<GameMessage>();
+	gameMessage->mapName = mapName;
+	gameMessage->creatorName = "user 1";
+	SendMessageOne(move(gameMessage));
 }
 
 }  // namespace sample1

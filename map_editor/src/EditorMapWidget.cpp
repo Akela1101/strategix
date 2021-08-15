@@ -113,11 +113,10 @@ void EditorMapWidget::ChangeTerrain(MapCoord coord)
 void EditorMapWidget::ChangeObject(MapCoord coord)
 {
 	auto& cell = map->GetCell(coord);
-	IdType id = Map::GetNextId();
 	switch (tool->type)
 	{
-		case ToolType::ENTITY: map->ChangeObject(cell, make_u<MapEntity>(id, tool->name, coord, playerSpot));
-		case ToolType::MINE: map->ChangeObject(cell, make_u<MapMine>(id, tool->name, coord, 1000));
+		case ToolType::ENTITY: map->ChangeObject(cell, make_u<MapEntity>(0, tool->name, coord, playerSpot));
+		case ToolType::MINE: map->ChangeObject(cell, make_u<MapMine>(0, tool->name, coord, 1000));
 	}
 }
 

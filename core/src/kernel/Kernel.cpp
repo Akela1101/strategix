@@ -27,16 +27,19 @@ namespace fs = boost::filesystem;
 using st_timer = asio::steady_timer;
 using st_clock = chrono::steady_clock;
 
+namespace
+{
 // Constants
-static const auto minTick = 42ms;
+const auto minTick = 42ms;
 
 // Variables
-static umap<int, s_p<GameMessage>> games;    // list of games
-static s_p<GameKernel> game;                 // single game
-static u_p<thread> kernelThread;             // main kernel thread
-static u_p<st_timer> timer;                  // tick timer
-static atomic<PlayerId> currentPlayerId{0};  // incrementing player id
-
+s_p<vector<MapContext>> mapContexts;  // list of maps
+umap<int, s_p<GameMessage>> games;    // list of games
+s_p<GameKernel> game;                 // single game
+u_p<thread> kernelThread;             // main kernel thread
+u_p<st_timer> timer;                  // tick timer
+atomic<PlayerId> currentPlayerId{0};  // incrementing player id
+}  // namespace
 
 void TimerHandler(const boost::system::error_code& error)
 {
@@ -94,10 +97,10 @@ void Kernel::Tick(float seconds)
 void Kernel::PrintInfo()
 {
 	cout << "\nMaps: " << endl;
-	for (auto&& mapName : GetMapNames()) cout << mapName << endl;
+	for (const auto& mapContext : *mapContexts) cout << mapContext.name << endl;
 
 	cout << "\nRace names: " << endl;
-	for (auto&& raceName : GetRaceNames()) cout << raceName << endl;
+	for (const auto& raceName : GetRaceNames()) cout << raceName << endl;
 }
 
 PlayerId Kernel::GetNextPlayerId()
@@ -138,39 +141,18 @@ void Kernel::OnReceiveMessage(s_p<Message> message, ConnectionId connectionId)
 
 bool Kernel::CheckResource(const string& name)
 {
-	auto&& resourceInfos = ConfigManager::GetResourceInfos();
-	return find(nya_all(*resourceInfos), name) != resourceInfos->end();
+	auto&& resourcesContext = ConfigManager::GetResourcesContext();
+	return find(nya_all(*resourcesContext), name) != resourcesContext->end();
 }
 
 const TechTree& Kernel::GetTechTree(const string& raceName)
+try
 {
-	try
-	{
-		return *ConfigManager::GetTechTrees().at(raceName);
-	}
-	catch (out_of_range&)
-	{
-		nya_throw << "No race [%s] in the tech tree."s % raceName;
-	}
+	return *ConfigManager::GetTechTrees().at(raceName);
 }
-
-vector<string> Kernel::GetMapNames()
+catch (out_of_range&)
 {
-	vector<string> mapNames;
-	try
-	{
-		fs::recursive_directory_iterator it(ConfigManager::GetMapsPath()), eod;
-		for (; it != eod; ++it)
-		{
-			const fs::path& p = *it;
-			if (fs::is_regular_file(p) && fs::extension(p) == ".map") mapNames.push_back(p.stem().string());
-		}
-	}
-	catch (fs::filesystem_error& e)
-	{
-		error_log << e.what();
-	}
-	return mapNames;
+	nya_throw << "No race [%s] in the tech tree."s % raceName;
 }
 
 vector<string> Kernel::GetRaceNames()
@@ -180,26 +162,47 @@ vector<string> Kernel::GetRaceNames()
 	return raceNames;
 }
 
-const ResourceInfosType& Kernel::GetResourceInfos()
+const ResourcesContext& Kernel::GetResourcesContext()
 {
-	return ConfigManager::GetResourceInfos();
+	return ConfigManager::GetResourcesContext();
 }
 
 u_p<Resources> Kernel::MakeResources()
 {
 	auto resources = make_u<Resources>();
-	for (auto&& resourceName : *GetResourceInfos()) *resources += Resource(resourceName, 0);
+	for (auto&& resourceName : *GetResourcesContext()) *resources += Resource(resourceName, 0);
 	return resources;
 }
 
 void Kernel::Init(const string& configPath)
 {
 	ConfigManager::ParseConfig(configPath);
+	LoadMapContexts();
 
 	Server::Run(ConfigManager::GetServerPort());
 
 	timer.reset(new st_timer(eventLoop));
 	timer->async_wait(TimerHandler);
+}
+
+void Kernel::LoadMapContexts()
+try
+{
+	mapContexts = make_s<vector<MapContext>>();
+	fs::recursive_directory_iterator it(ConfigManager::GetMapsPath()), eod;
+	for (; it != eod; ++it)
+	{
+		const fs::path& p = *it;
+		if (fs::is_regular_file(p) && fs::extension(p) == ".map")
+		{
+			Map map(p.string());
+			mapContexts->push_back({map.GetName(), map.GetWidth(), map.GetLength(), int(map.GetPlayerSpots().size())});
+		}
+	}
+}
+catch (fs::filesystem_error& e)
+{
+	error_log << e.what();
 }
 
 void Kernel::RunImpl()
@@ -220,7 +223,7 @@ void Kernel::ContextRequested(ConnectionId connectionId)
 {
 	trace_log << "context requested from: " << connectionId;
 
-	auto contextMessage = make_s<ContextMessage>(ConfigManager::GetResourceInfos());
+	auto contextMessage = make_s<ContextMessage>(ConfigManager::GetResourcesContext(), mapContexts);
 	Server::SendMessageOne(contextMessage, connectionId);
 
 	auto gamesMessage = make_s<MessageVector>();

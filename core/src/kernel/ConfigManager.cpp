@@ -20,7 +20,7 @@ struct ConfigurationManagerImpl
 	const string configFileName;
 	ushort serverPort;
 	string mapsPath;
-	ResourceInfosType resourceInfos = make_s<vector<string>>();
+	ResourcesContext resourcesContext = make_s<vector<string>>();
 	TechTreesType techTrees;
 
 	ConfigurationManagerImpl(string configFileName) : configFileName(configFileName) {}
@@ -38,7 +38,7 @@ struct ConfigurationManagerImpl
 			for (auto&& tree : propTree.get_child("resource_types") | nya::map_values)
 			{
 				const string& resourceName = tree.get_value<string>();
-				resourceInfos->push_back(resourceName);
+				resourcesContext->push_back(resourceName);
 			}
 
 			for (auto&& tree : propTree.get_child("races") | nya::map_values)
@@ -151,7 +151,7 @@ struct ConfigurationManagerImpl
 			for (auto&& name_tree : resourcesPropTree)
 			{
 				const string& resourceName = name_tree.first;  // gold or something else
-				if (find(nya_all(*resourceInfos), resourceName) == resourceInfos->end())
+				if (find(nya_all(*resourcesContext), resourceName) == resourcesContext->end())
 				{
 					info_log << "Wrong resource [%s] in configuration file: %s"s % resourceName % configFileName;
 					continue;
@@ -187,9 +187,9 @@ const string& ConfigManager::GetMapsPath()
 {
 	return impl->mapsPath;
 }
-const ResourceInfosType& ConfigManager::GetResourceInfos()
+const ResourcesContext& ConfigManager::GetResourcesContext()
 {
-	return impl->resourceInfos;
+	return impl->resourcesContext;
 }
 const TechTreesType& ConfigManager::GetTechTrees()
 {

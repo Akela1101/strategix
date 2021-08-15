@@ -32,14 +32,13 @@ public:
 	using TerrainsType = s_p<umap<string, u_p<Terrain>>>;
 
 private:
-	static IdType lastObjectId;  ///< holder of the last unique id
-
 	string name;
 	int width;
 	int length;
 	TerrainsType terrains;    ///< terrain descriptions
 	CellsType cells;          ///< [rows][columns] (i.e. [y][x])
 	vector<int> playerSpots;  ///< sorted list of player spots
+	IdType lastObjectId = 0;  ///< holder of the last unique id
 
 public:
 	Map(string name, int width, int height, TerrainsType terrains);
@@ -48,7 +47,6 @@ public:
 	Map(const Map& other);
 	virtual ~Map();
 
-	static IdType GetNextId() { return ++lastObjectId; }
 	const string& GetName() const { return name; }
 	int GetWidth() const { return width; }
 	int GetLength() const { return length; }

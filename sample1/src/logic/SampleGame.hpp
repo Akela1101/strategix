@@ -1,8 +1,9 @@
 #pragma once
 
 #include <QObject>
-#include <sample1_fwd.hpp>
 #include <strx/Game.hpp>
+
+#include "../sample1_fwd.hpp"
 
 namespace sample1
 {
@@ -16,7 +17,7 @@ class SampleGame
 	int playerSpot;  ///< spot on map
 
 public:
-	SampleGame(int playerSpot, ResourceInfosType resourceInfos);
+	SampleGame(int playerSpot, ResourcesContext resourcesContext);
 	~SampleGame() override;
 
 private:

@@ -16,4 +16,5 @@ class SampleGameWidget;
 class SampleMapWidget;
 
 using namespace strx;
+using namespace std;
 }  // namespace sample1

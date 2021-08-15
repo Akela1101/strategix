@@ -1,9 +1,9 @@
 #pragma once
 
 #include <MapWidget.hpp>
-#include <sample1_fwd.hpp>
 #include <strx/strx_fwd.hpp>
 
+#include "../sample1_fwd.hpp"
 
 namespace sample1
 {

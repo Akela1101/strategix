@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainForm</class>
- <widget class="QMainWindow" name="MainForm">
+ <class>MapForm</class>
+ <widget class="QMainWindow" name="MapForm">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -195,7 +195,7 @@
   <connection>
    <sender>actionNew</sender>
    <signal>triggered()</signal>
-   <receiver>MainForm</receiver>
+   <receiver>MapForm</receiver>
    <slot>FileNew()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -211,7 +211,7 @@
   <connection>
    <sender>terrainListWidget</sender>
    <signal>currentItemChanged(QListWidgetItem*,QListWidgetItem*)</signal>
-   <receiver>MainForm</receiver>
+   <receiver>MapForm</receiver>
    <slot>CurrentItemChanged(QListWidgetItem*,QListWidgetItem*)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -227,7 +227,7 @@
   <connection>
    <sender>toolBox</sender>
    <signal>currentChanged(int)</signal>
-   <receiver>MainForm</receiver>
+   <receiver>MapForm</receiver>
    <slot>CurrentToolboxItemChanged(int)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -243,7 +243,7 @@
   <connection>
    <sender>actionSave</sender>
    <signal>triggered()</signal>
-   <receiver>MainForm</receiver>
+   <receiver>MapForm</receiver>
    <slot>FileSave()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -259,7 +259,7 @@
   <connection>
    <sender>actionLoad</sender>
    <signal>triggered()</signal>
-   <receiver>MainForm</receiver>
+   <receiver>MapForm</receiver>
    <slot>FileLoad()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -275,7 +275,7 @@
   <connection>
    <sender>actionExit</sender>
    <signal>triggered()</signal>
-   <receiver>MainForm</receiver>
+   <receiver>MapForm</receiver>
    <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -291,7 +291,7 @@
   <connection>
    <sender>actionAbout</sender>
    <signal>triggered()</signal>
-   <receiver>MainForm</receiver>
+   <receiver>MapForm</receiver>
    <slot>HelpAbout()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -307,7 +307,7 @@
   <connection>
    <sender>toolsListWidget</sender>
    <signal>currentItemChanged(QListWidgetItem*,QListWidgetItem*)</signal>
-   <receiver>MainForm</receiver>
+   <receiver>MapForm</receiver>
    <slot>CurrentItemChanged(QListWidgetItem*,QListWidgetItem*)</slot>
    <hints>
     <hint type="sourcelabel">

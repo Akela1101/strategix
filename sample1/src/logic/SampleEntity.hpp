@@ -1,7 +1,8 @@
 #pragma once
 
-#include <sample1_fwd.hpp>
 #include <strx/Entity.hpp>
+
+#include "../sample1_fwd.hpp"
 
 
 namespace sample1

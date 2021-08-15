@@ -29,13 +29,13 @@ public:
 
 	static bool CheckResource(const string& name);
 	static const TechTree& GetTechTree(const string& raceName);
-	static vector<string> GetMapNames();
 	static vector<string> GetRaceNames();
-	static const ResourceInfosType& GetResourceInfos();
+	static const ResourcesContext& GetResourcesContext();
 	static u_p<Resources> MakeResources();
 
 private:
 	static void Init(const string& configPath);
+	static void LoadMapContexts();
 	static void RunImpl();
 	static void ContextRequested(ConnectionId connectionId);
 	static void AddGame(s_p<Message> message, ConnectionId connectionId);

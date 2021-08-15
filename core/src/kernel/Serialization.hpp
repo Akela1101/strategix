@@ -31,6 +31,15 @@
 	BOOST_CLASS_IMPLEMENTATION(M, boost::serialization::object_serializable)
 
 
+StrxSerializationSimple(strx::MapContext)
+{
+	ar& m.name;
+	ar& m.width;
+	ar& m.height;
+	ar& m.playersNumber;
+}
+}
+}
 StrxSerializationSimple(strx::MapCoord)
 {
 	ar& m.x;
@@ -77,7 +86,8 @@ StrxSerialization(strx::EmptyMessage)
 StrxSerialization(strx::ContextMessage)
 {
 	ar& base_object<strx::Message>(m);
-	ar& m.resourceInfos;
+	ar& m.resourcesContext;
+	ar& m.mapContexts;
 }
 }
 }

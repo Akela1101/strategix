@@ -1,4 +1,5 @@
 #include <boost/filesystem.hpp>
+#include <random>
 
 #include "../../strx/EntityInfo.hpp"
 #include "../../strx/Kernel.hpp"
@@ -133,7 +134,8 @@ void GameKernel::AddPlayer(s_p<Message> message, PlayerId playerId)
 
 	if (playerMessage->race.empty())
 	{
-		playerMessage->race = "az";  //todo: fill it random
+		auto races = Kernel::GetRaceNames();
+		std::sample(nya_all(races), &playerMessage->race, 1, std::mt19937(std::time(0)));
 	}
 
 	if (playerMessage->name.empty()) playerMessage->name = ("Player%d"s % playerId).str();

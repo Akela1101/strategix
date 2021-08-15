@@ -39,18 +39,16 @@ void User::ReceiveMessage(s_p<Message> message)
 		case Message::Type::CONTEXT:
 		{
 			trace_log << "context received";
-			resourceInfos = sp_cast<ContextMessage>(message)->resourceInfos;
-			HandleContext();
+			auto contextMessage = sp_cast<ContextMessage>(message);
+			resourcesContext = contextMessage->resourcesContext;
+			HandleContext(contextMessage.get());
 			break;
 		}
 		case Message::Type::GAME:
 		{
 			auto&& gameMessage = sp_cast<GameMessage>(message);
 			trace_log << "game received";
-			GameUpdated(gameMessage->id, gameMessage.get());
-
-			//todo: select game - now it starts first available game
-			game = AddGame(gameMessage->id, resourceInfos);
+			HandleGame(gameMessage.get());
 			break;
 		}
 		default:
@@ -65,6 +63,13 @@ void User::ReceiveMessage(s_p<Message> message)
 			}
 		}
 	}
+}
+
+void User::JoinGame(GameId gameId)
+{
+	game = CreateGame(resourcesContext);
+
+	SendMessageOne(make_s<PlayerMessage>(gameId, PlayerType::HUMAN));
 }
 
 }  // namespace strx

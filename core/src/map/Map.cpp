@@ -15,8 +15,6 @@ namespace strx
 const char mapFileTopString[] = "Strategix Map";
 const char mapFormatVersion[] = "0.0.1";
 
-IdType Map::lastObjectId = 0;
-
 
 Cell::Cell(Terrain* terrain, MapObject* object) : terrain(terrain), object(object) {}
 
@@ -93,6 +91,7 @@ void Map::ChangeTerrain(Cell& cell, const string& terrainName)
 
 void Map::ChangeObject(Cell& cell, u_p<MapObject> object)
 {
+	if (object && !object->id) object->id = ++lastObjectId;
 	cell.object = move(object);
 }
 
@@ -264,6 +263,7 @@ void Map::Load(istream& is)
 	}
 
 	// objects
+	lastObjectId = 0;
 	int n;
 	is >> n;
 	for (int i = 0; i < n; ++i)

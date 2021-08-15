@@ -10,8 +10,7 @@ try
 	QApplication app(argc, argv);
 	nya::init_logs("config/log.conf");
 
-	sample1::SampleUser::Configure();
-	sample1::SampleUser user(argc == 1 ? 1 : 3);
+	sample1::SampleUser user;
 
 	return app.exec();
 }

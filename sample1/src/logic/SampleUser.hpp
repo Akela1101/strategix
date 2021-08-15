@@ -1,29 +1,31 @@
 #pragma once
 
 #include <QObject>
-#include <sample1_fwd.hpp>
 #include <strx/User.hpp>
+
+#include "../sample1_fwd.hpp"
 
 namespace sample1
 {
+class MainWidget;
+
 class SampleUser
         : public QObject
         , public User
 {
-	int userId;  //todo: replace with gui selector
+	u_p<MainWidget> mainWidget;
 
 public:
-	static void Configure();
-
-public:
-	SampleUser(int userId) : userId(userId) {}
+	SampleUser();
 	~SampleUser() override;
 
 private:
 	void MessageReceived(s_p<Message> message) override;
-	void HandleContext() override;
-	void GameUpdated(GameId gameId, const GameMessage* gameMessage) override;
-	u_p<Game> AddGame(GameId gameId, ResourceInfosType resourceInfos) override;
+	void HandleContext(const ContextMessage* message) override;
+	void HandleGame(const GameMessage* gameMessage) override;
+	u_p<Game> CreateGame(ResourcesContext resourcesContext) override;
+
+	void AddGame(const string& mapName);
 };
 
 }  // namespace sample1

@@ -1,24 +1,25 @@
 #include <GameWidget.hpp>
-#include <graphics/SampleGameWidget.hpp>
-#include <graphics/SampleMapWidget.hpp>
 #include <logic/SampleEntity.hpp>
 #include <logic/SamplePlayer.hpp>
 #include <strx/strx.hpp>
+
+#include "../ui/SampleGameWidget.hpp"
+#include "../ui/SampleMapWidget.hpp"
 
 #include "SampleGame.hpp"
 
 
 namespace sample1
 {
-SampleGame::SampleGame(int playerSpot, ResourceInfosType resourceInfos)
-        : Game(move(resourceInfos)), gameWidget(nullptr), mapWidget(nullptr), playerSpot(playerSpot)
+SampleGame::SampleGame(int playerSpot, ResourcesContext resourcesContext)
+        : Game(move(resourcesContext)), gameWidget(nullptr), mapWidget(nullptr), playerSpot(playerSpot)
 {}
 
 SampleGame::~SampleGame() = default;
 
 void SampleGame::StartGame(s_p<Map> map)
 {
-	gameWidget.reset(new SampleGameWidget(GetResourceInfos()));
+	gameWidget.reset(new SampleGameWidget(GetResourcesContext()));
 	mapWidget = gameWidget->CreateMapWidget<SampleMapWidget>();
 	mapWidget->SetMap(move(map));
 

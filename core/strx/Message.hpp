@@ -53,10 +53,13 @@ struct EmptyMessage : Message
 
 struct ContextMessage : Message
 {
-	ResourceInfosType resourceInfos;
+	ResourcesContext resourcesContext;
+	s_p<vector<MapContext>> mapContexts;
 
 	ContextMessage() = default;
-	ContextMessage(const ResourceInfosType& resourceInfos) : resourceInfos(resourceInfos) {}
+	ContextMessage(const ResourcesContext& resourcesContext, const s_p<vector<MapContext>>& mapContexts)
+	        : resourcesContext(resourcesContext), mapContexts(mapContexts)
+	{}
 	Type GetType() const override { return Type::CONTEXT; }
 };
 

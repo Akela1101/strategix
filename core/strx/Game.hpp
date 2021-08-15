@@ -17,16 +17,16 @@ class Game : boost::noncopyable
 	nya_enum(GameStage, GameStageEnumDef);
 
 	GameStage stage = GameStage::NONE;
-	ResourceInfosType resourceInfos;
+	ResourcesContext resourcesContext;
 	umap<int, s_p<PlayerMessage>> registeredPlayers;
 	umap<int, u_p<Player>> players;
 	umap<IdType, u_p<Entity>> entities;
 
 public:
-	Game(ResourceInfosType resourceInfos) : resourceInfos(move(resourceInfos)) {}
+	Game(ResourcesContext resourcesContext) : resourcesContext(move(resourcesContext)) {}
 	virtual ~Game();
 
-	const ResourceInfosType& GetResourceInfos() const { return resourceInfos; }
+	const ResourcesContext& GetResourcesContext() const { return resourcesContext; }
 	Entity& GetEntitySlot(IdType id) { return *entities[id]; }
 
 	static void SendMessageOne(s_p<Message> message);

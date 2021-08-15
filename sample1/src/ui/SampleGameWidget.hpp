@@ -1,7 +1,8 @@
 #pragma once
 
 #include <GameWidget.hpp>
-#include <sample1_fwd.hpp>
+
+#include "../sample1_fwd.hpp"
 
 class QWidget;
 class QLabel;
@@ -15,7 +16,7 @@ class SampleGameWidget : public map_info::GameWidget
 	umap<string, QLabel*> resourceAmountLabels;
 
 public:
-	SampleGameWidget(const ResourceInfosType& resourceInfos);
+	SampleGameWidget(const ResourcesContext& resourcesContext);
 
 public slots:
 	void OnResourcesChanged(Resources newResources);

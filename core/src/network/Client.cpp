@@ -54,10 +54,8 @@ void Client::StartSession(User* user)
 
 void Client::StopSession()
 {
-	invoke([] {
-		SendMessageOne(make_s<EmptyMessage>(Message::Type::EXIT));
-		connection.reset();
-	});
+	SendMessageOne(make_s<EmptyMessage>(Message::Type::EXIT));
+	connection.reset();
 
 	if (clientThread) clientThread->join();
 	user = nullptr;

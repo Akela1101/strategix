@@ -1,4 +1,4 @@
-#include <graphics/SampleMapWidget.hpp>
+#include "../ui/SampleMapWidget.hpp"
 
 #include "SampleEntity.hpp"
 

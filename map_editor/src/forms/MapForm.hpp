@@ -1,7 +1,7 @@
 #pragma once
 
 #include <strx/strx_fwd.hpp>
-#include <ui_MainForm.h>
+#include <ui_MapForm.h>
 
 #include "MapInfo_fwd.hpp"
 
@@ -13,11 +13,11 @@ using namespace map_info;
 
 class EditorMapWidget;
 
-class MainForm : public QMainWindow
+class MapForm : public QMainWindow
 {
 	Q_OBJECT
 
-	Ui::MainForm widget;
+	Ui::MapForm widget;
 	EditorMapWidget* mapWidget;
 
 	bool isMapOpened, isMapSaved;
@@ -27,8 +27,8 @@ class MainForm : public QMainWindow
 	s_p<strx::Map> map;
 
 public:
-	MainForm();
-	~MainForm();
+	MapForm();
+	~MapForm();
 
 public slots:
 	void MapChanged(bool yes = true);

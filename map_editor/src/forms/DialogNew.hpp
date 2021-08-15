@@ -5,14 +5,14 @@
 
 namespace map_editor
 {
-class MainForm;
+class MapForm;
 }
 
 class DialogNew : public QDialog
 {
 	Q_OBJECT
 
-	friend class map_editor::MainForm;
+	friend class map_editor::MapForm;
 
 	Ui::DialogNew widget;
 

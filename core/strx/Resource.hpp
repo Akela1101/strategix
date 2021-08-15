@@ -1,14 +1,14 @@
 #pragma once
 
 #include <boost/operators.hpp>
-
-#include "strx_fwd.hpp"
+#include <nya.hpp>
+#include <string>
+#include <unordered_map>
 
 namespace strx
 {
-
 using ResourceUnit = int;
-using ResourcesType = umap<string, ResourceUnit>;
+using ResourcesType = umap<std::string, ResourceUnit>;
 using ResourceType = ResourcesType::value_type;
 
 struct Resource
@@ -18,7 +18,7 @@ struct Resource
 	using ResourceType::ResourceType;
 	Resource(const ResourceType& other) : ResourceType(other) {}
 
-	const string& GetName() const { return first; }
+	const std::string& GetName() const { return first; }
 	operator ResourceUnit&() { return second; }
 	operator ResourceUnit() const { return second; }
 

@@ -11,7 +11,7 @@ namespace strx
  */
 class User : boost::noncopyable
 {
-	ResourceInfosType resourceInfos;
+	ResourcesContext resourcesContext;
 
 	u_p<Game> game;
 
@@ -34,22 +34,27 @@ protected:
 	void ReceiveMessage(s_p<Message> message);
 
 	/**
+	 * Join the game.
+	 * @param gameId game id
+	 */
+	void JoinGame(GameId gameId);
+
+	/**
 	 * Add available maps and games to user interface.
 	 */
-	virtual void HandleContext() = 0;
+	virtual void HandleContext(const ContextMessage* message) = 0;
 
 	/**
 	 * Update one game in the list of open games.
-	 * @param gameId game id
-	 * @param gameMessage game information, null if removed.
+	 * @param gameMessage game information
 	 */
-	virtual void GameUpdated(GameId gameId, const GameMessage* gameMessage) = 0;
+	virtual void HandleGame(const GameMessage* gameMessage) = 0;
 
 	/**
-	 * Add game.
-	 * @param gameId game id
+	 * Create game.
+	 * @param resourcesContext resource infos
 	 * @return game object
 	 */
-	virtual u_p<Game> AddGame(GameId gameId, ResourceInfosType resourceInfos) = 0;
+	virtual u_p<Game> CreateGame(ResourcesContext resourcesContext) = 0;
 };
 }  // namespace strx

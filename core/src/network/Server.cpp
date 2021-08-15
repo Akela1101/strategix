@@ -87,7 +87,7 @@ void Server::SendMessageAll(s_p<Message> message)
 
 void Server::ConnectionClosed(ConnectionId id)
 {
-	connections.erase(id);
+	invoke([id] { connections.erase(id); });
 }
 
 }  // namespace strx

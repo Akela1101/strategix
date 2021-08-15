@@ -2,7 +2,7 @@
 #include <QMessageBox>
 #include <exception>
 
-#include <forms/MainForm.hpp>
+#include <forms/MapForm.hpp>
 
 
 INITIALIZE_EASYLOGGINGPP
@@ -17,7 +17,7 @@ int main(int argc, char* argv[])
 	QApplication app(argc, argv);
 	try
 	{
-		MainForm mainForm;
+		MapForm mainForm;
 		mainForm.show();
 		return app.exec();
 	}

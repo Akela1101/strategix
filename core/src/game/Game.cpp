@@ -34,6 +34,8 @@ void Game::ReceiveMessage(s_p<Message> message)
 			trace_log << "player added";
 			int spot = playerMessage->spot;
 			registeredPlayers.emplace(spot, move(playerMessage));
+
+			SendMessageOne(make_s<EmptyMessage>(Message::Type::START));
 			break;
 		}
 		case Message::Type::MAP:

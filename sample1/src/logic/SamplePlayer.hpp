@@ -1,8 +1,9 @@
 #pragma once
 
 #include <QObject>
-#include <sample1_fwd.hpp>
 #include <strx/Player.hpp>
+
+#include "../sample1_fwd.hpp"
 
 namespace sample1
 {

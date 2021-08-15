@@ -21,7 +21,7 @@ public:
 
 	static ushort GetServerPort();
 	static const string& GetMapsPath();
-	static const ResourceInfosType& GetResourceInfos();
+	static const ResourcesContext& GetResourcesContext();
 	static const TechTreesType& GetTechTrees();
 };
 

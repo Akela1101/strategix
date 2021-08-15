@@ -13,7 +13,7 @@ using namespace map_info;
 
 static const int len = 32;
 
-SampleGameWidget::SampleGameWidget(const ResourceInfosType& resourceInfos)
+SampleGameWidget::SampleGameWidget(const ResourcesContext& resourcesContext)
         : GameWidget(), resourcesWidget(new QWidget(this))
 {
 	resize(800, 600);
@@ -23,7 +23,7 @@ SampleGameWidget::SampleGameWidget(const ResourceInfosType& resourceInfos)
 
 	auto layout = new QHBoxLayout();
 	layout->setMargin(0);
-	for (auto&& resourceInfo : *resourceInfos)
+	for (auto&& resourceInfo : *resourcesContext)
 	{
 		auto imageLabel = new QLabel();
 		imageLabel->setFixedSize(len, len);
