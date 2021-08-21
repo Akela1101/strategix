@@ -11,32 +11,37 @@
 
 namespace sample1
 {
-SampleGame::SampleGame(int playerSpot, ResourcesContext resourcesContext)
-        : Game(move(resourcesContext)), gameWidget(nullptr), mapWidget(nullptr), playerSpot(playerSpot)
+SampleGame::SampleGame(ResourcesContext resourcesContext)
+        : Game(move(resourcesContext)), gameWidget(nullptr), mapWidget(nullptr)
 {}
 
 SampleGame::~SampleGame() = default;
 
-void SampleGame::StartGame(s_p<Map> map)
+void SampleGame::OnMapReceived(s_p<Map> map)
 {
-	gameWidget.reset(new SampleGameWidget(GetResourcesContext()));
+	gameWidget = new SampleGameWidget(GetResourcesContext());
+	emit GameWidgetCreated(gameWidget);
+
 	mapWidget = gameWidget->CreateMapWidget<SampleMapWidget>();
 	mapWidget->SetMap(move(map));
 
-	Game::StartGame(nullptr);  //@#~
-
-	gameWidget->show();
+	Game::OnMapReceived(nullptr);  //@#~
 }
 
-u_p<Player> SampleGame::AddPlayer(s_p<PlayerMessage> playerMessage)
+void SampleGame::OnGameStarted()
+{
+	emit GameStarted();
+}
+
+u_p<Player> SampleGame::OnPlayerAdded(s_p<PlayerMessage> playerMessage)
 {
 	auto player = make_u<SamplePlayer>(move(playerMessage));
 
-	if (player->GetType() == PlayerType::HUMAN) { mapWidget->Init(this, player.get()); }
+	if (player->GetType() == PlayerType::SELF) { mapWidget->Init(this, player.get()); }
 	return player;
 }
 
-u_p<Entity> SampleGame::AddEntity(s_p<EntityMessage> entityMessage)
+u_p<Entity> SampleGame::OnEntityAdded(s_p<EntityMessage> entityMessage)
 {
 	auto entity = make_u<SampleEntity>(move(entityMessage), mapWidget);
 	auto mapEntity = (MapEntity*) mapWidget->GetMapObject(entity->GetId());
@@ -44,12 +49,12 @@ u_p<Entity> SampleGame::AddEntity(s_p<EntityMessage> entityMessage)
 	return entity;
 }
 
-void SampleGame::ResourcesChanged(const Resources& newResources)
+void SampleGame::OnResourcesChanged(const Resources& newResources)
 {
 	gameWidget->OnResourcesChanged(newResources);
 }
 
-void SampleGame::ObjectRemoved(IdType id)
+void SampleGame::OnObjectRemoved(IdType id)
 {
 	mapWidget->ObjectRemoved(id);
 }

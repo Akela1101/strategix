@@ -20,37 +20,33 @@ void Game::SendMessageOne(s_p<Message> message)
 void Game::ReceiveMessage(s_p<Message> message)
 {
 	Message::Type type = message->GetType();
-	if (!CheckGameStage(*message))
-	{
-		error_log << "Message of type: " << type.c_str() << " is not accepted on stage: " << stage.c_str();
-		return;
-	}
-
 	switch (type)
 	{
 		case Message::Type::PLAYER:
 		{
 			auto&& playerMessage = sp_cast<PlayerMessage>(message);
-			trace_log << "player added";
 			int spot = playerMessage->spot;
+			trace_log << "player added: " << spot << (playerMessage->type == PlayerType::SELF ? "*" : "");
 			registeredPlayers.emplace(spot, move(playerMessage));
-
-			SendMessageOne(make_s<EmptyMessage>(Message::Type::START));
 			break;
 		}
 		case Message::Type::MAP:
 		{
 			trace_log << "map received";
-			StartGame(sp_cast<MapMessage>(message)->map);
-
-			stage = GameStage::STARTED;
+			OnMapReceived(sp_cast<MapMessage>(message)->map);
+			break;
+		}
+		case Message::Type::START:
+		{
+			trace_log << "game started";
+			OnGameStarted();
 			break;
 		}
 		case Message::Type::ENTITY:
 		{
 			auto&& entityMessage = sp_cast<EntityMessage>(message);
-			trace_log << "entity added";
-			auto&& entity = AddEntity(move(entityMessage));
+			trace_log << "entity added: " << entityMessage->id;
+			auto&& entity = OnEntityAdded(move(entityMessage));
 			entities.emplace(entity->GetId(), move(entity));
 			break;
 		}
@@ -58,21 +54,21 @@ void Game::ReceiveMessage(s_p<Message> message)
 		{
 			const auto& resourcesMessage = sp_cast<ResourcesMessage>(message);
 			trace_log << "resources updated";
-			ResourcesChanged(resourcesMessage->resources);
+			OnResourcesChanged(resourcesMessage->resources);
 			break;
 		}
 		case Message::Type::MINE_AMOUNT:
 		{
 			const auto& mineAmountMessage = sp_cast<MineAmountMessage>(message);
 			trace_log << "mine info updated: " << mineAmountMessage->id << " = " << mineAmountMessage->amount;
-			MineAmountChanged(mineAmountMessage->id, mineAmountMessage->amount);
+			OnMineAmountChanged(mineAmountMessage->id, mineAmountMessage->amount);
 			break;
 		}
 		case Message::Type::OBJECT_REMOVED:
 		{
 			const auto& removalMessage = sp_cast<ObjectRemovedMessage>(message);
 			trace_log << "object removed: " << removalMessage->id;
-			ObjectRemoved(removalMessage->id);
+			OnObjectRemoved(removalMessage->id);
 			break;
 		}
 		case Message::Type::MOVE:
@@ -100,21 +96,14 @@ void Game::ReceiveMessage(s_p<Message> message)
 	}
 }
 
-void Game::StartGame(s_p<Map> map)
+void Game::OnMapReceived(s_p<Map> map)
 {
 	for (auto&& playerMessage : registeredPlayers | nya::map_values)
 	{
-		auto&& player = AddPlayer(move(playerMessage));
+		auto&& player = OnPlayerAdded(move(playerMessage));
 		players.emplace(player->GetSpot(), move(player));
 	}
 	registeredPlayers.clear();
-}
-
-bool Game::CheckGameStage(const Message& message)
-{
-	Message::Type type = message.GetType();
-	return (stage == GameStage::NONE && type < Message::Type::ENTITY)
-	       || (stage == GameStage::STARTED && type >= Message::Type::ENTITY);
 }
 
 }  // namespace strx

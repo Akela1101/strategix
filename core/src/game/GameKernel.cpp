@@ -34,7 +34,7 @@ void GameKernel::ReceiveMessage(s_p<Message> message, PlayerId playerId)
 	switch (message->GetType())
 	{
 		case Message::Type::PLAYER: AddPlayer(move(message), playerId); break;
-		case Message::Type::START: Ready(playerId); break;
+		case Message::Type::JOIN: HandleJoin(playerId); break;
 		default:
 			auto&& command = dp_cast<CommandMessage>(message);
 			if (!command) nya_throw << "Unknown message: " << message->GetType().c_str();
@@ -102,7 +102,7 @@ void GameKernel::AddPlayer(s_p<Message> message, PlayerId playerId)
 	trace_log << "add player: " << playerId;
 
 	auto playerMessage = sp_cast<PlayerMessage>(message);
-	if (playerMessage->type != PlayerType::HUMAN)
+	if (playerMessage->type == PlayerType::AI)
 	{
 		playerId = Kernel::GetNextPlayerId();  // id for AI
 	}
@@ -143,19 +143,23 @@ void GameKernel::AddPlayer(s_p<Message> message, PlayerId playerId)
 	spotIds.emplace(playerSpot, playerId);
 	plannedPlayers.push_back(playerMessage);
 
-	Kernel::SendMessageAll(move(playerMessage));
+	auto humanMessage = make_s<PlayerMessage>(*playerMessage);
+	Kernel::SendMessageOne(move(playerMessage), playerId);
+
+	humanMessage->type = PlayerType::HUMAN;
+	Kernel::SendMessageAll(move(humanMessage));
 }
 
-void GameKernel::Ready(PlayerId playerId)
+void GameKernel::HandleJoin(PlayerId playerId)
 {
-	trace_log << "player is ready: " << playerId;
-	readyPlayers.insert(playerId);
+	trace_log << "player joined: " << playerId;
+	joinedPlayers.insert(playerId);
 
-	// wait for all human players to be ready
+	// wait all human players joined
 	for (const auto& plannedPlayer : plannedPlayers)
 	{
 		PlayerId id = spotIds.at(plannedPlayer->spot);
-		if (plannedPlayer->type == PlayerType::HUMAN && !nya_in(id, readyPlayers)) return;
+		if (plannedPlayer->type == PlayerType::HUMAN && !nya_in(id, joinedPlayers)) return;
 	}
 	Start();
 }
@@ -170,7 +174,7 @@ void GameKernel::Start()
 
 		// map
 		auto&& mapMessage = CreateMapMessage(playerMessage->spot);
-		if (playerMessage->type == PlayerType::HUMAN) Kernel::SendMessageOne(move(mapMessage), id);
+		if (playerMessage->type == PlayerType::SELF) Kernel::SendMessageOne(move(mapMessage), id);
 
 		// player
 		auto player = make_u<PlayerKernel>(*this, id, *playerMessage, *map);
@@ -187,6 +191,7 @@ void GameKernel::Start()
 			if (auto mapEntity = dynamic_cast<MapEntity*>(object)) AddEntity(mapEntity);
 		}
 	}
+	Kernel::SendMessageAll(make_s<EmptyMessage>(Message::Type::START));
 }
 
 }  // namespace strx

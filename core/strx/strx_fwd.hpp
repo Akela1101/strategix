@@ -52,8 +52,9 @@ using TechTreesType = umap<string, u_p<TechTree>>;
 
 enum class PlayerType
 {
-	HUMAN,
-	AI
+	SELF,   // human player controlling gui
+	HUMAN,  // other human players
+	AI,     // AI
 };
 
 struct MapContext

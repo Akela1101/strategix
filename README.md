@@ -41,9 +41,25 @@ make
 | ---                | ---                  | ---     |
 | **Init**           |                      | Load Map info, etc |
 |                    | **Init**             | Startup GUI and connect |
-| **Context**        | \>>>                 | Get available Maps and Games |             
-| <                  | **Add Game**         | Only one Client does it |
-| <<<                | **Add Player**       | Select spot on the map, etc, thus showing that player is ready|
-| **Start Game**     | \>>>                 | Send Map, Entities, etc |
-| <<<                | \>>>                 | Commands exchange |
-| **Stop Game**      | \>>>                 | Send winner, score, etc |
+| <                  | **GET_CONTEXT**      | Request kernel context |
+| **CONTEXT**        | \>                   | Get Maps list and other info |
+| **GAME []**        | \>                   | Get created Games |
+||||
+| <                  | **GAME**             | Add a Game to list of created |
+| **GAME**           | \>>>                 | Other users get created Game info |
+||||
+| <                  | **PLAYER**           | Select spot on the Map and other parameters |
+| **PLAYER**         | \>>>                 | Confirm / reject Player |
+||||
+| <                  | **JOIN**             | Join Game (waiting all human players) |
+| **PLAYER []**      | \>>>                 | Send generated Players information |
+| **MAP**            | \>>>                 | Send Map |
+| **ENTITY []**      | \>>>                 | Send Entities |
+| **START**          | \>>>                 | Start receiving commands |
+||||
+| <                  | \>                   | Commands exchange |
+||||
+| **GAME**           | \>>>                 | Finish Game |
+
+* `< >` - single receiver
+* `>>>` - multicast

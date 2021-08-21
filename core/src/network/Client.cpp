@@ -28,7 +28,7 @@ void Client::StartSession(User* user)
 			connection = std::make_unique<Connection>(move(*socket), ReceiveMessage);
 			socket.reset();
 
-			connection->Write(make_s<EmptyMessage>(Message::Type::CONTEXT));
+			connection->Write(make_s<EmptyMessage>(Message::Type::GET_CONTEXT));
 		}
 	});
 

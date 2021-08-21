@@ -13,7 +13,7 @@ class GameKernel : boost::noncopyable
 	s_p<Map> map;                              ///< global map
 	umap<int, PlayerId> spotIds;               ///< { spot - id }
 	PlannedPlayers plannedPlayers;             ///< players going to join
-	uset<PlayerId> readyPlayers;               ///< players ready to start
+	uset<PlayerId> joinedPlayers;               ///< players ready to start
 	Players players;                           ///< players in game
 	umap<IdType, s_p<EntityKernel>> entities;  ///< all entities
 	vector<IdType> removedEntities;            ///< entities removed at the end of Tick
@@ -33,7 +33,7 @@ private:
 	s_p<MapMessage> CreateMapMessage(int playerSpot);
 	void LoadMap(const string& mapName);
 	void AddPlayer(s_p<Message> message, PlayerId playerId);
-	void Ready(PlayerId playerId);
+	void HandleJoin(PlayerId playerId);
 	void Start();
 };
 

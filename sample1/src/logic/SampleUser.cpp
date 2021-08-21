@@ -16,8 +16,10 @@ SampleUser::SampleUser() : mainWidget(new MainWidget())
 	MapInfo::LoadTerrainTools();
 	MapInfo::LoadObjectTools();
 
-	connect(mainWidget.get(), &MainWidget::createGame, [this](const QString& mapName) { AddGame(mapName.toStdString()); });
-	connect(mainWidget.get(), &MainWidget::joinGame, [this](GameId id) { JoinGame(id); });
+	connect(mainWidget.get(), &MainWidget::CreateGameClicked,
+	        [this](const QString& mapName) { AddGame(mapName.toStdString()); });
+	connect(mainWidget.get(), &MainWidget::GameSelected, [this](GameId id) { SelectGame(id); });
+	connect(mainWidget.get(), &MainWidget::JoinGameClicked, [this]() { JoinGame(); });
 
 	mainWidget->show();
 }
@@ -46,20 +48,16 @@ void SampleUser::HandleContext(const ContextMessage* message)
 
 void SampleUser::HandleGame(const GameMessage* gameMessage)
 {
-	mainWidget->AddGame(gameMessage);
+	mainWidget->AddGameContext(gameMessage);
 }
 
 u_p<Game> SampleUser::CreateGame(ResourcesContext resourcesContext)
 {
-	return make_u<SampleGame>(1, move(resourcesContext));
-}
-
-void SampleUser::AddGame(const string& mapName)
-{
-	auto gameMessage = make_s<GameMessage>();
-	gameMessage->mapName = mapName;
-	gameMessage->creatorName = "user 1";
-	SendMessageOne(move(gameMessage));
+	auto game = make_u<SampleGame>(move(resourcesContext));
+	connect(game.get(), &SampleGame::GameWidgetCreated,
+	        [this](QWidget* gameWidget) { mainWidget->PrepareGamePage(gameWidget); });
+	connect(game.get(), &SampleGame::GameStarted, [this]() { mainWidget->StartGamePage(); });
+	return game;
 }
 
 }  // namespace sample1

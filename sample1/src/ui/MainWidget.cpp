@@ -23,21 +23,20 @@ MainWidget::MainWidget(QWidget* parent) : QWidget(parent), ui(new Ui::MainWidget
 	                                       << "Started";
 	ui->gamesTableWidget->setColumnCount(gamesHeaderLabels.size());
 	ui->gamesTableWidget->setHorizontalHeaderLabels(gamesHeaderLabels);
-	ui->listsStackedWidget->setCurrentIndex(0);
+	ui->listsTabWidget->setCurrentIndex(0);
+	ui->joinButton->hide();
 
-	connect(ui->modeButton, &QPushButton::clicked, [this] {
-		bool isOn = ui->modeButton->isChecked();
-		ui->listsStackedWidget->setCurrentIndex(isOn ? 1 : 0);
-		ui->modeButton->setText(isOn ? "Create Game" : "Join Game");
-	});
 	connect(ui->mapsTableWidget, &QTableWidget::cellDoubleClicked, [this](int row, int col) {
 		auto mapName = ui->mapsTableWidget->item(row, 0)->text();
-		emit createGame(mapName);
+		emit CreateGameClicked(mapName);
+		ui->listsTabWidget->setCurrentIndex(1);
 	});
 	connect(ui->gamesTableWidget, &QTableWidget::cellDoubleClicked, [this](int row, int col) {
 		auto gameId = ui->gamesTableWidget->item(row, 0)->data(Qt::UserRole).toInt();
-		emit joinGame(gameId);
+		emit GameSelected(gameId);
+		ui->joinButton->show();
 	});
+	connect(ui->joinButton, &QPushButton::clicked, [this]() { emit JoinGameClicked(); });
 }
 
 MainWidget::~MainWidget()
@@ -57,12 +56,23 @@ void MainWidget::SetMaps(s_p<vector<MapContext>> maps)
 	}
 }
 
-void MainWidget::AddGame(const GameMessage* gameMessage)
+void MainWidget::AddGameContext(const GameMessage* gameMessage)
 {
 	int row = ui->gamesTableWidget->rowCount();
 	ui->gamesTableWidget->setRowCount(row + 1);
 	auto firstItem = new QTableWidgetItem(gameMessage->mapName.c_str());
 	firstItem->setData(Qt::UserRole, gameMessage->id);
 	ui->gamesTableWidget->setItem(row, 0, firstItem);
+}
+
+void MainWidget::PrepareGamePage(QWidget* gameWidget)
+{
+	ui->gamePage->setLayout(new QVBoxLayout);
+	ui->gamePage->layout()->addWidget(gameWidget);
+}
+
+void MainWidget::StartGamePage()
+{
+	ui->mainStackedWidget->setCurrentWidget(ui->gamePage);
 }
 }  // namespace sample1

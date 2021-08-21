@@ -24,8 +24,6 @@ private:
 	void HandleContext(const ContextMessage* message) override;
 	void HandleGame(const GameMessage* gameMessage) override;
 	u_p<Game> CreateGame(ResourcesContext resourcesContext) override;
-
-	void AddGame(const string& mapName);
 };
 
 }  // namespace sample1

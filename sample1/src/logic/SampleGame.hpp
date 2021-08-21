@@ -1,7 +1,9 @@
 #pragma once
 
 #include <QObject>
+#include <strx/Entity.hpp>
 #include <strx/Game.hpp>
+#include <strx/Player.hpp>
 
 #include "../sample1_fwd.hpp"
 
@@ -11,21 +13,25 @@ class SampleGame
         : public QObject
         , public Game
 {
-	u_p<SampleGameWidget> gameWidget;
+	Q_OBJECT
+	SampleGameWidget* gameWidget;
 	SampleMapWidget* mapWidget;
 
-	int playerSpot;  ///< spot on map
-
 public:
-	SampleGame(int playerSpot, ResourcesContext resourcesContext);
+	SampleGame(ResourcesContext resourcesContext);
 	~SampleGame() override;
 
 private:
-	void StartGame(s_p<Map> map) override;
-	u_p<Player> AddPlayer(s_p<PlayerMessage> playerMessage) override;
-	u_p<Entity> AddEntity(s_p<EntityMessage> entityMessage) override;
-	void ResourcesChanged(const Resources& newResources) override;
-	void ObjectRemoved(IdType id) override;
+	void OnMapReceived(s_p<Map> map) override;
+	void OnGameStarted() override;
+	u_p<Player> OnPlayerAdded(s_p<PlayerMessage> playerMessage) override;
+	u_p<Entity> OnEntityAdded(s_p<EntityMessage> entityMessage) override;
+	void OnResourcesChanged(const Resources& newResources) override;
+	void OnObjectRemoved(IdType id) override;
+
+signals:
+	void GameWidgetCreated(QWidget* gameWidget);
+	void GameStarted();
 };
 
 }  // namespace sample1

@@ -9,14 +9,15 @@ struct Message : boost::noncopyable
 {
 #define MessageTypeEnumDef(K, V)                           \
 	K(VECTOR)         /* vector of messages */             \
-	K(COMMAND)        /* command to entity */              \
 	K(EXIT)           /* exit from client */               \
-	K(CONTEXT)        /* game context */                   \
-	K(START)          /* start game */                     \
+	K(GET_CONTEXT)    /* request kernel context */         \
+	K(CONTEXT)        /* kernel context */                 \
 	K(GAME)           /* game description */               \
 	K(PLAYER)         /* player description */             \
+	K(JOIN)           /* join game */                      \
 	K(MAP)            /* map description */                \
 	K(ENTITY)         /* entity description */             \
+	K(START)          /* start game */                     \
 	K(RESOURCES)      /* player resources */               \
 	K(MINE_AMOUNT)    /* mine amount changed */            \
 	K(OBJECT_REMOVED) /* object removed */                 \
@@ -89,6 +90,9 @@ struct PlayerMessage : Message
 	string race;
 
 	PlayerMessage() = default;
+	PlayerMessage(const PlayerMessage& other)
+	        : gameId(other.gameId), type(other.type), spot(other.spot), name(other.name), race(other.race)
+	{}
 	PlayerMessage(GameId gameId, PlayerType type) : gameId(gameId), type(type), spot(0) {}
 	Type GetType() const override { return Type::PLAYER; }
 };

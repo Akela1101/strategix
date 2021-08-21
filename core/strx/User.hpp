@@ -34,10 +34,21 @@ protected:
 	void ReceiveMessage(s_p<Message> message);
 
 	/**
-	 * Join the game.
+	 * Add a new game.
+	 * @param mapName map name
+	 */
+	void AddGame(const string& mapName);
+
+	/**
+	 * Select game.
 	 * @param gameId game id
 	 */
-	void JoinGame(GameId gameId);
+	void SelectGame(GameId gameId);
+
+	/**
+	 * Start selected game.
+	 */
+	void JoinGame();
 
 	/**
 	 * Add available maps and games to user interface.

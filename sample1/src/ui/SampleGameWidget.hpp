@@ -16,7 +16,7 @@ class SampleGameWidget : public map_info::GameWidget
 	umap<string, QLabel*> resourceAmountLabels;
 
 public:
-	SampleGameWidget(const ResourcesContext& resourcesContext);
+	SampleGameWidget(const ResourcesContext& resourcesContext, QWidget* parent = nullptr);
 
 public slots:
 	void OnResourcesChanged(Resources newResources);

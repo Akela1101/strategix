@@ -128,7 +128,7 @@ void Kernel::OnReceiveMessage(s_p<Message> message, ConnectionId connectionId)
 	{
 		switch (message->GetType())
 		{
-			case Message::Type::CONTEXT: ContextRequested(connectionId); break;
+			case Message::Type::GET_CONTEXT: ContextRequested(connectionId); break;
 			case Message::Type::GAME: AddGame(move(message), connectionId); break;
 			default: game->ReceiveMessage(move(message), connectionId);
 		}

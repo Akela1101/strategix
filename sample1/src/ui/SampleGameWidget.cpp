@@ -13,8 +13,8 @@ using namespace map_info;
 
 static const int len = 32;
 
-SampleGameWidget::SampleGameWidget(const ResourcesContext& resourcesContext)
-        : GameWidget(), resourcesWidget(new QWidget(this))
+SampleGameWidget::SampleGameWidget(const ResourcesContext& resourcesContext, QWidget* parent)
+        : GameWidget(parent), resourcesWidget(new QWidget(this))
 {
 	resize(800, 600);
 	resourcesWidget->setMaximumHeight(len + 4);

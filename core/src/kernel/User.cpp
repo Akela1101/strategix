@@ -53,23 +53,31 @@ void User::ReceiveMessage(s_p<Message> message)
 		}
 		default:
 		{
-			if (game)  //
-			{
+			if (game)
 				game->ReceiveMessage(move(message));
-			}
 			else
-			{
 				error_log << "Unable to handle message: " << message->GetType().c_str();
-			}
 		}
 	}
 }
 
-void User::JoinGame(GameId gameId)
+void User::AddGame(const string& mapName)
+{
+	auto gameMessage = make_s<GameMessage>();
+	gameMessage->mapName = mapName;
+	gameMessage->creatorName = "user 1";
+	SendMessageOne(move(gameMessage));
+}
+
+void User::SelectGame(GameId gameId)
 {
 	game = CreateGame(resourcesContext);
+	SendMessageOne(make_s<PlayerMessage>(gameId, PlayerType::SELF));
+}
 
-	SendMessageOne(make_s<PlayerMessage>(gameId, PlayerType::HUMAN));
+void User::JoinGame()
+{
+	SendMessageOne(make_s<EmptyMessage>(Message::Type::JOIN));
 }
 
 }  // namespace strx

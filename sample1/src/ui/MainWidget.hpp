@@ -23,10 +23,13 @@ public:
 	~MainWidget() override;
 
 	void SetMaps(s_p<vector<MapContext>> maps);
-	void AddGame(const GameMessage* gameMessage);
+	void AddGameContext(const GameMessage* gameMessage);
+	void PrepareGamePage(QWidget* gameWidget);
+	void StartGamePage();
 
 signals:
-	void createGame(const QString& mapName);
-	void joinGame(GameId id);
+	void CreateGameClicked(const QString& mapName);
+	void GameSelected(GameId id);
+	void JoinGameClicked();
 };
 }  // namespace sample1
